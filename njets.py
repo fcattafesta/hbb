@@ -28,9 +28,12 @@ def njet(path, njets, outpath):
     h_pre.GetYaxis().SetTitle("Events")
     h_pre.GetYaxis().SetTitleSize(0.04)
     h_pre.SetFillColorAlpha(ROOT.kBlue - 3, 0.5)
+    h_pre.SetLineColor(ROOT.kBlue - 3)
     h_pre.SetLineWidth(2)
 
+
     h_post.SetFillColorAlpha(ROOT.kOrange + 7, 0.2)
+    h_post.SetLineColor(ROOT.kOrange + 7)
     h_post.SetLineWidth(2)
 
     h_pre.DrawClone("hist")
