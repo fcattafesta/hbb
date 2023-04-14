@@ -22,12 +22,13 @@ def njet(path, njets, var, outpath):
     c = ROOT.TCanvas("c", "c", 800, 700)
     c.SetLeftMargin(0.15)
     c.SetLogy()
-    
+
     h_pre.SetTitle("")
     h_pre.GetXaxis().SetTitle(f"{var}")
     h_pre.GetXaxis().SetTitleSize(0.04)
     h_pre.GetYaxis().SetTitle("Events")
     h_pre.GetYaxis().SetTitleSize(0.04)
+    h_pre.GetYaxis().SetLimits(0.1, 1e6)
     h_pre.SetFillColorAlpha(ROOT.kBlue - 3, 0.5)
     h_pre.SetLineColor(ROOT.kBlue - 3)
     h_pre.SetLineWidth(2)
