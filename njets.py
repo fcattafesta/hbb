@@ -11,7 +11,7 @@ def njet(path, njets, var, outpath):
 
     h_pre = df.Histo1D(("pre", "pre", 5, -0.5, 4.5), f"{var}")
 
-    df = lhe_njets(df, njets)
+    df = lhe_njets(df, njets, var)
 
     h_post = df.Histo1D(("post", "post", 5, -0.5, 4.5), f"{var}")
 
