@@ -29,7 +29,6 @@ def njet(path, njets, outpath):
     h_pre.GetYaxis().SetTitleSize(0.04)
     h_pre.SetFillColorAlpha(ROOT.kBlue - 3, 0.5)
     h_pre.SetLineWidth(2)
-    h_pre.SetLineStyle(2)
 
     h_post.SetFillColorAlpha(ROOT.kOrange + 7, 0.2)
     h_post.SetLineWidth(2)
@@ -42,8 +41,8 @@ def njet(path, njets, outpath):
     legend.SetFillStyle(0)
     legend.SetBorderSize(0)
     legend.SetTextSize(0.02)
-    legend.AddEntry(h_pre, "precut", "f")
-    legend.AddEntry(h_post, "postcut", "f")
+    legend.AddEntry("pre", "precut", "f")
+    legend.AddEntry("post", "postcut", "f")
     legend.DrawClone("NDC NB")
 
     cms_label = ROOT.TLatex()
