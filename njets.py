@@ -2,7 +2,7 @@ import ROOT
 
 
 def lhe_njets(df, njets):
-    df.Define("LHE_selectedNjets", f"LHE_Njets={njets}")
+    df.Define("LHE_selectedNjets", f"LHE_Njets=={njets}")
     return df
 
 
