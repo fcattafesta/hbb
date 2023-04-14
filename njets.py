@@ -9,11 +9,11 @@ def lhe_njets(df, njets):
 def njet(path, njets, outpath):
     df = ROOT.RDataFrame("Events", path)
 
-    h_pre = df.Histo1D(("pre", "pre", 4, -0.5, 4.5), "LHE_Njets")
+    h_pre = df.Histo1D(("pre", "pre", 5, -0.5, 4.5), "LHE_Njets")
 
     df = lhe_njets(df, njets)
 
-    h_post = df.Histo1D(("post", "post", 4, -0.5, 4.5), "LHE_selectedNjets")
+    h_post = df.Histo1D(("post", "post", 5, -0.5, 4.5), "LHE_selectedNjets")
 
     # plot
     ROOT.gStyle.SetOptFit(0)
