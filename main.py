@@ -1,5 +1,6 @@
 import os 
 import njets
+import zpt
 
 root = "/gpfs/ddn/srm/cms/store/mc/RunIISummer20UL18NanoAODv9/"
 sample = "DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8"
@@ -17,4 +18,6 @@ files_paths = [os.path.join(path, f) for f in files]
 
 print(files_paths[0])
 
-njets.njet(path=files_paths[0], njets=2, var="LHE_NpNLO", outpath="DY_2J_LHE_NpNLO.png")
+# njets.njet(path=files_paths[0], njets=2, var="LHE_NpNLO", outpath="DY_2J_LHE_NpNLO.png")
+
+zpt.zpt(path=files_paths[0], zpt=0, outpath="DY_Zpt.png")
