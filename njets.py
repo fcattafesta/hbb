@@ -2,7 +2,7 @@ import ROOT
 
 
 def lhe_njets(df, njets):
-    df.Define("LHE_selectedNjets", f"LHE_Njets=={njets}")
+    df = df.Define("LHE_selectedNjets", f"LHE_Njets=={njets}")
     return df
 
 
@@ -13,7 +13,7 @@ def njet(path, njets, outpath):
 
     df = lhe_njets(df, njets)
 
-    h_post = df.Histo1D("LHE_selectedNjets")
+    h_post = df.Histo1D(("post", "post", 5, 0, 5), "LHE_selectedNjets")
 
     # plot
     ROOT.gStyle.SetOptFit(0)
