@@ -1,19 +1,19 @@
 import ROOT
 
 
-def lhe_njets(df, njets):
-    df = df.Filter(f"LHE_NpNLO == {njets}")
+def lhe_njets(df, njets, var):
+    df = df.Filter(f"{var} == {njets}")
     return df
 
 
-def njet(path, njets, outpath):
+def njet(path, njets, var, outpath):
     df = ROOT.RDataFrame("Events", path)
 
-    h_pre = df.Histo1D(("pre", "pre", 5, -0.5, 4.5), "LHE_Njets")
+    h_pre = df.Histo1D(("pre", "pre", 5, -0.5, 4.5), f"{var}")
 
     df = lhe_njets(df, njets)
 
-    h_post = df.Histo1D(("post", "post", 5, -0.5, 4.5), "LHE_Njets")
+    h_post = df.Histo1D(("post", "post", 5, -0.5, 4.5), f"{var}")
 
     # plot
     ROOT.gStyle.SetOptFit(0)
@@ -23,7 +23,7 @@ def njet(path, njets, outpath):
     c.SetLeftMargin(0.15)
 
     h_pre.SetTitle("")
-    h_pre.GetXaxis().SetTitle("LHE_Njets")
+    h_pre.GetXaxis().SetTitle(f"{var}")
     h_pre.GetXaxis().SetTitleSize(0.04)
     h_pre.GetYaxis().SetTitle("Events")
     h_pre.GetYaxis().SetTitleSize(0.04)
