@@ -2,6 +2,7 @@ import ROOT
 
 
 def lhe_njets(df, njets):
+    print(f"Selecting {njets} jets")
     df = df.Define("LHE_selectedNjets", f"LHE_Njets=={njets}")
     return df
 
