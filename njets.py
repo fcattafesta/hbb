@@ -2,7 +2,7 @@ import ROOT
 
 
 def lhe_njets(df, njets):
-    df = df.Filter(f"LHE_NpLO == {njets}")
+    df = df.Filter(f"LHE_NpNLO == {njets}")
     return df
 
 
