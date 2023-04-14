@@ -2,10 +2,7 @@ import ROOT
 
 
 def lhe_njets(df, njets):
-    
-    df = df.Define("LHE_selectedNjetsMask", f"LHE_Njets=={njets}")\
-           .Define("LHE_selectedNjets", "LHE_Njets[LHE_selectedNjetsMask]")
-
+    df = df.Define("LHE_selectedNjets", f"LHE_Njets[LHE_Njets=={njets}]")
     return df
 
 
