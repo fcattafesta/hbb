@@ -2,8 +2,9 @@ import ROOT
 
 
 def lhe_njets(df, njets):
-    print(f"Selecting {njets} jets")
-    df = df.Define("LHE_selectedNjets", f"LHE_Njets=={njets}")
+    df = df.Define("LHE_selectedNjetsMask", f"LHE_Njets=={njets}").Define(
+        "LHE_selectedNjets", "LHE_sNjets[LHE_selectedNjetsMask]"
+    )
     return df
 
 
@@ -31,7 +32,6 @@ def njet(path, njets, outpath):
     h_pre.SetFillColorAlpha(ROOT.kBlue - 3, 0.5)
     h_pre.SetLineColor(ROOT.kBlue - 3)
     h_pre.SetLineWidth(2)
-
 
     h_post.SetFillColorAlpha(ROOT.kOrange + 7, 0.2)
     h_post.SetLineColor(ROOT.kOrange + 7)
