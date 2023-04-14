@@ -21,7 +21,8 @@ def njet(path, njets, var, outpath):
     ROOT.gStyle.SetTextFont(42)
     c = ROOT.TCanvas("c", "c", 800, 700)
     c.SetLeftMargin(0.15)
-
+    c.SetLogy()
+    
     h_pre.SetTitle("")
     h_pre.GetXaxis().SetTitle(f"{var}")
     h_pre.GetXaxis().SetTitleSize(0.04)
