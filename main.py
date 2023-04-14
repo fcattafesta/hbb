@@ -17,4 +17,4 @@ files_paths = [os.path.join(path, f) for f in files]
 
 print(files_paths[0])
 
-njets.njet(path=files_paths[0], njets=3, var="LHE_NpNLO", outpath="DY_3J_LHE_NpNLO.png")
+njets.njet(path=files_paths[0], njets=2, var="LHE_NpNLO", outpath="DY_2J_LHE_NpNLO.png")
