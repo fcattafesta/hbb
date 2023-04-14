@@ -20,4 +20,4 @@ print(files_paths[0])
 
 # njets.njet(path=files_paths[0], njets=2, var="LHE_NpNLO", outpath="DY_2J_LHE_NpNLO.png")
 
-zpt.zpt(path=files_paths[0], zpt=0, outpath="DY_Zpt.png")
+zpt.zpt(path=files_paths[0], zpt=200, outpath="DY_Zpt_200.png")
