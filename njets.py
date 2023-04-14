@@ -28,7 +28,7 @@ def njet(path, njets, var, outpath):
     h_pre.GetXaxis().SetTitleSize(0.04)
     h_pre.GetYaxis().SetTitle("Events")
     h_pre.GetYaxis().SetTitleSize(0.04)
-    h_pre.GetYaxis().SetLimits(0.1, 1e6)
+    h_pre.GetYaxis().SetRangeUser(0.1, 1e6)
     h_pre.SetFillColorAlpha(ROOT.kBlue - 3, 0.5)
     h_pre.SetLineColor(ROOT.kBlue - 3)
     h_pre.SetLineWidth(2)
