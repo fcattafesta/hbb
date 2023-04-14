@@ -1,6 +1,6 @@
 import ROOT
 
-ROOT.gInterpreter.ProcessLine("#include utils.h")
+ROOT.gInterpreter.ProcessLine('#include "utils.h"')
 
 
 def lhe_zpt(df, zpt):
