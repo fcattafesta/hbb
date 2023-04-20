@@ -68,11 +68,14 @@ rdf= (
     .Define("lepton_inv_mass", "(Lepton_fourvec[0]+Lepton_fourvec[1]).M()")
 )
 
-rdf_empty = rdf.Filter(" LHE_Vpt<50 || LHE_Vpt > 100")
+rdf_empty = rdf.Filter(" LHE_Vpt<50 || LHE_Vpt > 100 || lepton_inv_mass <50")
 empty_histos = rdf_empty.Histo1D(("lepton_inv_mass_empty", "lepton_inv_mass_empty", 200, -10, 200),"lepton_inv_mass")
 c=ROOT.TCanvas()
 empty_histos.Draw()
 c.SaveAs("empty.png")
+# print elemts of rdf_empty
+for val in rdf_empty.AsNumpy()["lepton_inv_mass"]:
+    print(val)
 
 histo_lep=rdf.Histo1D(("lepton_inv_mass", "lepton_inv_mass", 200, 0., 200),"lepton_inv_mass")
 c2=ROOT.TCanvas()
