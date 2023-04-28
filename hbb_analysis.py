@@ -3,7 +3,7 @@ import psutil
 from hbb_samples import samples
 import copy
 import sys
-from nail import *
+from nail.nail import *
 import ROOT
 import traceback
 nthreads = 50
