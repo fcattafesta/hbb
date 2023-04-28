@@ -9,3 +9,9 @@ samples = {
     'DYZpt-400To650': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix, 'xsec': 0.7},
     'DYZpt-650ToInf': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix, 'xsec': 0.1},
 }
+
+import os, glob
+for sample in samples :
+    if 'folder' in samples[sample].keys() :
+        samples[sample]['files']= [x for x in glob.glob(samples[sample]['folder']+'/*.root')]
+
