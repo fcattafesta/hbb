@@ -1,4 +1,4 @@
-from samples import *
+from hbb_samples import *
 
 name="Test"
 

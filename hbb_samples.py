@@ -1,6 +1,6 @@
 main_dir='/gpfs/ddn/srm/cms/store/mc/RunIISummer20UL18NanoAODv9/'
 suffix='/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/'
-sample = {
+samples = {
     'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix, 'xsec':5765.4},
     'DYZpt-0To50': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix, 'xsec': 5028.9},
     'DYZpt-50To100': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix, 'xsec': 581.4},
