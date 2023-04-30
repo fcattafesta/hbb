@@ -14,13 +14,12 @@ flow = SampleProcessing( "DYJetsToLL", "/scratchnvme/malucchi/1574B1FB-8C40-A24E
 flow.CentralWeight("genWeight")  # add a central weight
 
 flow.binningRules = [
-    (".*_pt", "50,0,1000"),
-    (".*_HT", "100,0,3000"),
-    (".*drop", "25,0,500"),
-    (".*QCD", "25,0,1"),
-
+    (".*_pt", "500,0,1000"),
     ]
+
 flow.Define("Z_pt", "LHE_Vpt")
+#flow.Selection("NotZeroZ_pt","Z_pt > 0")
+
 histosPerSelection = {
     "": [ "Z_pt" ],
 }
