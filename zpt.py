@@ -50,6 +50,8 @@ def mass(df, outpath):
     c.Update()
     c.SaveAs(f"mass_{outpath}")
 
+    return df
+
 
 def zpt(path, zpt, outpath):
     df = ROOT.RDataFrame("Events", path)
