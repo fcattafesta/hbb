@@ -19,12 +19,24 @@ flow.binningRules = [
     (".*_pt", "500,0,1000"),
     ]
 
-flow.Define("Z_pt", "LHE_Vpt")
+flow.Define("LHE_Zpt", "LHE_Vpt")
+flow.SubCollection("SelectedMuon","Muon",sel="Muon_iso < 0.25 && Muon_mediumId && Muon_pt > 20. && abs(Muon_eta) < 2.4")
+flow.Selection("twoMuons","nSelectedMuon==2")
+flow.Define("SelectedMuon_p4","@p4v(SelectedMuon)")
+
+flow.Distinct("MuMu","SelectedMuon")
+flow.Define("OppositeSignMuMu","Nonzero(MuMu0_charge != MuMu1_charge)",requires=["twoMuons"])
+flow.Selection("twoOppositeSignMuons","OppositeSignMuMu.size() > 0")
+flow.TakePair("Mu","SelectedMuon","MuMu","At(OppositeSignMuMu,0,-200)",requires=["twoOppositeSignMuons"])
+flow.Define("Z","Mu0_p4+Mu1_p4")
+flow.Define("Z_pt","Z.Pt()")
 #flow.Selection("NotZeroZ_pt","Z_pt > 0")
 
 histosPerSelection = {
-    "": [ "Z_pt" ],
+    "": [ "LHE_Zpt" ],
+    "twoOppositeSignMuons": [ "LHE_Zpt" , 'Z_pt'],
 }
+
 proc=flow.CreateProcessor("eventProcessor",[],histosPerSelection,[],"",nthreads)
 
 def sumwsents(files):

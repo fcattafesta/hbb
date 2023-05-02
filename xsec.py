@@ -11,6 +11,8 @@ filters=[
     'LHE_Vpt > 650 ',
 ]
 
+xsec_tot=5765.4
+
 ROOT.ROOT.EnableImplicitMT(200)
 thread_size = ROOT.ROOT.GetThreadPoolSize()
 print(">>> Thread pool size for parallel processing: %s", thread_size)
@@ -19,11 +21,13 @@ print(">>> Thread pool size for parallel processing: %s", thread_size)
 files= "../1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
 rdf = ROOT.RDataFrame("Events", files)
 
-rdf=rdf.Define("weight", "genWeight/abs(genWeight)")
+rdf=rdf.Define("weight", "TMath::Sign(1, genWeight)")
 num_tot=rdf.Histo1D("LHE_Vpt").GetSumOfWeights()
 print("num_tot",  " = ", num_tot)
 num_tot_w=rdf.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
 print("tot_weight",  " = ", num_tot_w, "\n")
+
+print(rdf.Sum("weight").GetValue())
 
 for filter in filters:
     rdf_cut=rdf.Filter(filter)
@@ -31,9 +35,12 @@ for filter in filters:
     print("num_cut ", filter,  " = ", num_cut)
     num_cut_w=rdf_cut.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
     print("cut_weight ", filter, " = ", num_cut_w)
-    print("xsec %s = %.2f \n" %(filter,  num_cut_w/num_tot_w*5765.4))
+    print("xsec %s = %.2f \n" %(filter,  num_cut_w/num_tot_w*xsec_tot))
 
 
 #c2=ROOT.TCanvas()
 #histo_lep.Draw()
 #c2.SaveAs("inv_mass.png")
+
+
+# 1063268.0
