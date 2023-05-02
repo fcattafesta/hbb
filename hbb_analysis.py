@@ -20,6 +20,7 @@ flow.binningRules = [
     ]
 
 flow.Define("LHE_Zpt", "LHE_Vpt")
+
 flow.Define("Muon_iso","(Muon_pfRelIso04_all)")
 flow.SubCollection("SelectedMuon","Muon",sel="Muon_iso < 0.25 && Muon_mediumId && Muon_pt > 20. && abs(Muon_eta) < 2.4")
 flow.Selection("twoMuons","nSelectedMuon==2")
@@ -29,7 +30,7 @@ flow.Define("OppositeSignMuMu","Nonzero(MuMu0_charge != MuMu1_charge)",requires=
 flow.Selection("twoOppositeSignMuons","OppositeSignMuMu.size() > 0")
 flow.TakePair("Mu","SelectedMuon","MuMu","At(OppositeSignMuMu,0,-200)",requires=["twoOppositeSignMuons"])
 flow.Define("Z","Mu0_p4+Mu1_p4")
-flow.Define("Z_pt","Z.Pt()")
+flow.Define("Reco_Zpt","Z.Pt()")
 
 # reco Z form GENParticles
 flow.SubCollection("GenMuon","GenPart", sel="abs(GenPart_pdgId) == 13 && GenPart_status == 1 && GenPart_pt > 20. && abs(GenPart_eta) < 2.4")
@@ -41,14 +42,16 @@ flow.Define("OppositeSignGenMuMu","Nonzero(GenMuMu0_charge != GenMuMu1_charge)",
 flow.Selection("twoOppositeSignGenMuons","OppositeSignGenMuMu.size() > 0")
 flow.TakePair("GenMu","GenMuon","GenMuMu","At(OppositeSignGenMuMu,0,-200)",requires=["twoOppositeSignGenMuons"])
 flow.Define("GenZ","GenMu0_p4+GenMu1_p4")
-flow.Define("GenZ_pt","GenZ.Pt()")
+flow.Define("Gen_Zpt","GenZ.Pt()")
 
 #flow.Selection("NotZeroZ_pt","Z_pt > 0")
 
 histosPerSelection = {
     "": [ "LHE_Zpt" ],
-    "twoOppositeSignMuons": [ "LHE_Zpt" , 'Z_pt'],
+    "twoOppositeSignMuons": [ "LHE_Zpt" , 'Reco_Zpt'],
+    "twoOppositeSignGenMuons": [ "LHE_Zpt" , 'Gen_Zpt'],
 }
+
 
 proc=flow.CreateProcessor("eventProcessor",[],histosPerSelection,[],"",nthreads)
 
