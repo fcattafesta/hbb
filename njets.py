@@ -2,7 +2,7 @@ import ROOT
 
 
 def lhe_njets(df, njets, var):
-    df = df.Filter(f"{var} == {njets}")
+    df = df.Filter(f"{var} >= {njets}")
     return df
 
 
