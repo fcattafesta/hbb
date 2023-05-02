@@ -6,9 +6,11 @@ import sys
 from nail.nail import *
 import ROOT
 import traceback
+import time
+
 nthreads = 50
 nprocesses = 7
-
+start=time.time()
 
 flow = SampleProcessing( "DYJetsToLL", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root")
 flow.CentralWeight("genWeight")  # add a central weight
@@ -162,3 +164,5 @@ else:
 
 print ("Results", results)
 print ("To resubmit", [x[1] for x in results if x[0]])
+
+print("time:  ", time.time()-start)

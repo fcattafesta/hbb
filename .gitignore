@@ -134,3 +134,5 @@ dmypy.json
 nail/
 out/
 figure*/
+to_do.txt
+core*
