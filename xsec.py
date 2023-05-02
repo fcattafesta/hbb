@@ -24,7 +24,7 @@ rdf = ROOT.RDataFrame("Events", files)
 rdf=rdf.Define("weight", "TMath::Sign(1, genWeight)")
 num_tot=rdf.Histo1D("LHE_Vpt").GetSumOfWeights()
 print("num_tot",  " = ", num_tot)
-num_tot_w=rdf.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
+num_tot_w=rdf.Sum("weight").GetValue() #rdf.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
 print("tot_weight",  " = ", num_tot_w, "\n")
 
 print(rdf.Sum("weight").GetValue())
@@ -33,14 +33,9 @@ for filter in filters:
     rdf_cut=rdf.Filter(filter)
     num_cut=rdf_cut.Histo1D("LHE_Vpt").GetSumOfWeights()
     print("num_cut ", filter,  " = ", num_cut)
-    num_cut_w=rdf_cut.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
+    num_cut_w=rdf_cut.Sum("weight").GetValue()# rdf_cut.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
     print("cut_weight ", filter, " = ", num_cut_w)
     print("xsec %s = %.2f \n" %(filter,  num_cut_w/num_tot_w*xsec_tot))
-
-
-#c2=ROOT.TCanvas()
-#histo_lep.Draw()
-#c2.SaveAs("inv_mass.png")
 
 
 # 1063268.0
