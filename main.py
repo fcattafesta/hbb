@@ -5,7 +5,7 @@ import mass
 
 root = "/gpfs/ddn/srm/cms/store/mc/RunIISummer20UL18NanoAODv9"
 sample = "/DYBJetsToLL_M-50_Zpt-100to200_TuneCP5_13TeV-madgraphMLM-pythia8"
-aod = "/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/"
+aod = "/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/"
 
 path = root + sample + aod
 
