@@ -132,3 +132,5 @@ dmypy.json
 *.ods#
 *.png
 nail/
+out/
+figure*/
