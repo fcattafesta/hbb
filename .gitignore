@@ -132,7 +132,7 @@ dmypy.json
 *.ods#
 *.png
 nail/
-out/
+out*/
 figure*/
 to_do.txt
 core*
