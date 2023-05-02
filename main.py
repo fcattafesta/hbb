@@ -21,6 +21,6 @@ print(files_paths[0])
 
 # njets.njet(path=files_paths[0], njets=2, var="LHE_NpNLO", outpath="DY_2J_LHE_NpNLO.png")
 
-zpt.zpt(path=files_paths[0], zpt=200, outpath="DYB_Zpt_200.png")
+zpt.zpt(path=files_paths[0], zpt=100, outpath="DYB_Zpt_200.png")
 
 # mass.mass(path=files_paths[0], outpath="DY_M-50_incl.png")
