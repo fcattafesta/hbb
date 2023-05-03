@@ -9,6 +9,14 @@ filters=[
     'LHE_Vpt > 250 && LHE_Vpt < 400',
     'LHE_Vpt > 400 && LHE_Vpt < 650',
     'LHE_Vpt > 650 ',
+    'LHE_HT > 70 && LHE_HT < 100',
+    'LHE_HT > 100 && LHE_HT < 200',
+    'LHE_HT > 200 && LHE_HT < 400',
+    'LHE_HT > 400 && LHE_HT < 600',
+    'LHE_HT > 600 && LHE_HT < 800',
+    'LHE_HT > 800 && LHE_HT < 1200',
+    'LHE_HT > 1200 && LHE_HT < 2500',
+    'LHE_HT > 2500',
 ]
 
 xsec_tot=5765.4
