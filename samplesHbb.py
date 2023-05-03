@@ -1,13 +1,12 @@
 main_dir='/gpfs/ddn/srm/cms/store/mc/RunIISummer20UL18NanoAODv9/'
 suffix='_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix2='_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
-suffix3='_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v'
-
+suffix3='_TuneCP5_13TeV_powheg_pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
+suffix4='_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
+suffix5='_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 flavourSplitting= {
           'bb' : "isBB",
         }
-
-
 
 samples = {
     # 'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40, 'subsamples': flavourSplitting },
@@ -37,18 +36,18 @@ samples = {
     # 'ST_t-channel_antitop_5f_ID': {'folder': main_dir+'ST_t-channel_antitop_5f_InclusiveDecays'+suffix3+'1/', 'xsec': 0}, #80.95
     # 'ST_s-channel_4f_LD': {'folder': main_dir+'ST_s-channel_4f_LeptonDecays'+suffix3+'1/', 'xsec': 3.36},
 
-    # 'TTTo2L2Nu': {'folder': main_dir+'TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 85.65},
-    # 'TTToSemiLeptonic': {'folder': main_dir+'TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 356.19},
-    # 'TTToHadronic': {'folder': main_dir+'TTToHadronic_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 366.20},
+    # 'TTTo2L2Nu': {'folder': main_dir+'TTTo2L2Nu'+suffix3+'1/', 'xsec': 85.65},
+    # 'TTToSemiLeptonic': {'folder': main_dir+'TTToSemiLeptonic'+suffix3+'1/', 'xsec': 356.19},
+    # 'TTToHadronic': {'folder': main_dir+'TTToHadronic'+suffix3+'1/', 'xsec': 366.20},
 
-    # 'WZTo2Q2L': {'folder': main_dir+'WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix3+'1/', 'xsec': 47.13 * 6.729 * 67.41 / 10000},
-    # 'WZTo3LNu': {'folder': main_dir+'WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix3+'1/', 'xsec': 47.13 * 21.34 * 10.099 / 10000.},
-    # 'WWTo2L2Nu': {'folder': main_dir+'WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 118.7 * 21.34 * 21.34 / 10000.},
-    # 'ZZTo2L2Nu': {'folder': main_dir+'ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8'+suffix3+'1/', 'xsec': 16.523 * 20.000 * 10.099 / 10000.},
-    # 'ZZTo2Q2L': {'folder': main_dir+'ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix3+'1/', 'xsec': 16.523 * 2. * 6.729 * 69.91 / 10000.},
-    'ZZTo4L': {'folder': main_dir+'ZZTo4L_TuneCP5_13TeV_powheg_pythia8'+suffix3+'1/', 'xsec': 16.523 * 10.099 * 10.099 / 10000.},
+    # 'WZTo2Q2L': {'folder': main_dir+'WZTo2Q2L'+suffix5+'1/', 'xsec': 47.13 * 6.729 * 67.41 / 10000},
+    # 'WZTo3LNu': {'folder': main_dir+'WZTo3LNu'+suffix3+'1/', 'xsec': 47.13 * 21.34 * 10.099 / 10000.},
+    # 'WWTo2L2Nu': {'folder': main_dir+'WWTo2L2Nu'+suffix3+'1/', 'xsec': 118.7 * 21.34 * 21.34 / 10000.},
+    # 'ZZTo2L2Nu': {'folder': main_dir+'ZZTo2L2Nu'+suffix3+'1/', 'xsec': 16.523 * 20.000 * 10.099 / 10000.},
+     'ZZTo2Q2L': {'folder': main_dir+'ZZTo2Q2L'+suffix5+'1/', 'xsec': 16.523 * 2. * 6.729 * 69.91 / 10000.},
+    #'ZZTo4L': {'folder': main_dir+'ZZTo4L'+suffix3+'2/', 'xsec': 16.523 * 10.099 * 10.099 / 10000.},
 
-    #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
+    #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
 
 }
 

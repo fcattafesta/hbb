@@ -37,6 +37,7 @@ flow.Selection("twoOppositeSignMuons","OppositeSignMuMu.size() > 0")
 flow.TakePair("Mu","SelectedMuon","MuMu","At(OppositeSignMuMu,0,-200)",requires=["twoOppositeSignMuons"])
 flow.Define("Z","Mu0_p4+Mu1_p4")
 flow.Define("Reco_Zpt","Z.Pt()")
+flow.Define("Reco_ZMass","Z.M()")
 
 # reco Z form GENParticles
 flow.SubCollection("GenMuon","GenPart", sel="abs(GenPart_pdgId) == 13 && GenPart_status == 1 && GenPart_pt > 20. && abs(GenPart_eta) < 2.4")
@@ -49,13 +50,14 @@ flow.Selection("twoOppositeSignGenMuons","OppositeSignGenMuMu.size() > 0")
 flow.TakePair("GenMu","GenMuon","GenMuMu","At(OppositeSignGenMuMu,0,-200)",requires=["twoOppositeSignGenMuons"])
 flow.Define("GenZ","GenMu0_p4+GenMu1_p4")
 flow.Define("Gen_Zpt","GenZ.Pt()")
+flow.Define("Gen_ZMass","GenZ.M()")
 
 #flow.Selection("NotZeroZ_pt","Z_pt > 0")
 
 histosPerSelection = {
     "": [ "LHE_Zpt" ],
-    "twoOppositeSignMuons": [ "LHE_Zpt" , 'Reco_Zpt'],
-    "twoOppositeSignGenMuons": [ "LHE_Zpt" , 'Gen_Zpt'],
+    "twoOppositeSignMuons": [ "LHE_Zpt" , 'Reco_Zpt', 'Reco_ZMass'],
+    "twoOppositeSignGenMuons": [ "LHE_Zpt" , 'Gen_Zpt', 'Gen_ZMass'],
 }
 
 

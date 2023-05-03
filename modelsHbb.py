@@ -76,7 +76,7 @@ backgroundSorted = backgroundSortedForLegend
 signalSortedForLegend = []
 signalSorted = signalSortedForLegend
 
-from rebinning import *
+from rebinningHbb import *
 
 systematicsToPlot = []
 systematicDetail = {}
