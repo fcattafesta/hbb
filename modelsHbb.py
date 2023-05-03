@@ -1,4 +1,4 @@
-from hbb_samples import *
+from samplesHbb import *
 
 name = 'DY_test'
 

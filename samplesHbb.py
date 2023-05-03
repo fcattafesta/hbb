@@ -2,8 +2,15 @@ main_dir='/gpfs/ddn/srm/cms/store/mc/RunIISummer20UL18NanoAODv9/'
 suffix='_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix2='_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix3='_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v'
+
+flavourSplitting= {
+          'bb' : "isBB",
+        }
+
+
+
 samples = {
-    'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40},
+    'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40, 'subsamples': flavourSplitting },
     'DYZpt-0To50': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20'+suffix+'1/', 'xsec': 1341.42},
     'DYZpt-50To100': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20'+suffix+'1/', 'xsec': 359.52},
     'DYZpt-100To250': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20'+suffix+'1/', 'xsec': 88.36},
@@ -23,9 +30,18 @@ samples = {
 }
 
 import os, glob
+addSubSamples={}
 for sample in samples :
+    if 'subsamples' in samples[sample].keys() :
+        for ss in samples[sample]['subsamples'] :
+            addSubSamples["%s_%s"%(sample,ss)]={'xsec':samples[sample]['xsec']}
     if 'folder' in samples[sample].keys() :
-        samples[sample]['files']= [x for x in glob.glob(samples[sample]['folder']+'/**/*.root', recursive=True)]
+        samples[sample]['files']= [x for x in glob.glob(samples[sample]['folder']+'/*.root')]
+samples.update(addSubSamples)
+
+
+
+
 
 
 '''

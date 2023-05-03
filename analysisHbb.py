@@ -12,12 +12,18 @@ nthreads = 50
 nprocesses = 7
 start=time.time()
 
-flow = SampleProcessing( "DYJetsToLL", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root")
+flow = SampleProcessing( "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root")
 flow.CentralWeight("genWeight")  # add a central weight
 
 flow.binningRules = [
     (".*_pt", "500,0,1000"),
+    (".*_HT", "100,0,3000"),
+    (".*drop", "25,0,500"),
+    (".*QCD", "25,0,1"),
     ]
+
+
+flow.Define("isBB", "true")
 
 flow.Define("LHE_Zpt", "LHE_Vpt")
 
@@ -53,7 +59,7 @@ histosPerSelection = {
 }
 
 
-proc=flow.CreateProcessor("eventProcessor",[],histosPerSelection,[],"",nthreads)
+proc=flow.CreateProcessor("eventProcessor",["isBB"],histosPerSelection,[],"",nthreads)
 
 def sumwsents(files):
    sumws=1e-9
@@ -89,6 +95,7 @@ def runSample(ar):
         sumws, LHEPdfSumw = 1., []
 #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)  # .Range(10000)
+    subs={}
     if rdf:
         try:
             #add customizations here
@@ -98,8 +105,10 @@ def runSample(ar):
                 rdf = rdf.Define("isMC", "false")
                 out = procData(rdf)
             else:
+                if "subsamples" in samples[s].keys():
+                    subs=samples[s]["subsamples"]
                 rdf = rdf.Define("isMC", "true")
-                out = proc(rdf)
+                out = proc(rdf,subs)
 
             snaplist = ["run", "event"]
             branchList = ROOT.vector('string')()
@@ -110,17 +119,32 @@ def runSample(ar):
             outFile = ROOT.TFile.Open("out/%sHistos.root" % (s), "recreate")
             ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.
+
             for h in out.histos:
                 hname = h.GetName()
                 h.GetValue()
                 outFile.cd()
                 h.Scale(1./normalization/sumws)
                 h.Write()
-
             sumWeights = getattr(ROOT, "TParameter<double>")("sumWeights", sumws)
             sumWeights.Write()
             outFile.Write()
             outFile.Close()
+
+            for subname in subs :
+              outFile = ROOT.TFile.Open("out/%s_%sHistos.root" % (s,subname), "recreate")
+              for h in out.histosOutSplit[subname]:
+                hname = h.GetName()
+                h.GetValue()
+                outFile.cd()
+                h.Scale(1./normalization/sumws)
+                h.Write()
+              sumWeights = getattr(ROOT, "TParameter<double>")("sumWeights", sumws)
+              sumWeights.Write()
+              outFile.Write()
+              outFile.Close()
+
+
             return 0
         except Exception as e:
             print(e)
@@ -138,7 +162,7 @@ print(samples.keys())
 sams = samples.keys()
 
 #check that at least the first file exists
-toproc = [(s, samples[s]["files"]) for s in sams if os.path.exists(samples[s]["files"][0])]
+toproc = [(s, samples[s]["files"]) for s in sams if "files" in samples[s].keys() and os.path.exists(samples[s]["files"][0])]
 
 #sort by sample size, start heaviest first
 toproc = sorted(toproc, key=lambda x: sum(map(lambda x: (
