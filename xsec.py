@@ -35,8 +35,6 @@ print("num_tot",  " = ", num_tot)
 num_tot_w=rdf.Sum("weight").GetValue() #rdf.Histo1D("LHE_Vpt", "weight").GetSumOfWeights()
 print("tot_weight",  " = ", num_tot_w, "\n")
 
-print(rdf.Sum("weight").GetValue())
-
 for filter in filters:
     rdf_cut=rdf.Filter(filter)
     num_cut=rdf_cut.Histo1D("LHE_Vpt").GetSumOfWeights()

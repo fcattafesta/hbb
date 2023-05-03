@@ -10,23 +10,46 @@ flavourSplitting= {
 
 
 samples = {
-    'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40, 'subsamples': flavourSplitting },
-    'DYZpt-0To50': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20'+suffix+'1/', 'xsec': 1341.42},
-    'DYZpt-50To100': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20'+suffix+'1/', 'xsec': 359.52},
-    'DYZpt-100To250': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20'+suffix+'1/', 'xsec': 88.36},
-    'DYZpt-250To400': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-250To400_MatchEWPDG20'+suffix+'1/', 'xsec': 3.52},
-    'DYZpt-400To650': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20'+suffix+'1/', 'xsec': 0.49},
-    'DYZpt-650ToInf': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20'+suffix+'1/', 'xsec': 0.05},
-    # 'DYHT-70To100': {'folder': main_dir+'DYJetsToLL_M-50_HT-70to100'+suffix2+'1/', 'xsec': 345.7},
-    # 'DYHT-100To200': {'folder': main_dir+'DYJetsToLL_M-50_HT-100to200'+suffix2+'1/', 'xsec': 406.0},
-    # 'DYHT-200To400': {'folder': main_dir+'DYJetsToLL_M-50_HT-200to400'+suffix2+'1/', 'xsec': 84.7},
-    # 'DYHT-400To600': {'folder': main_dir+'DYJetsToLL_M-50_HT-400to600'+suffix2+'1/', 'xsec': 8.2},
-    # 'DYHT-600To800': {'folder': main_dir+'DYJetsToLL_M-50_HT-600to800'+suffix2+'1/', 'xsec': 1.7},
-    # 'DYHT-800To1200': {'folder': main_dir+'DYJetsToLL_M-50_HT-800to1200'+suffix2+'1/', 'xsec': 0.6},
-    # 'DYHT-1200To2500': {'folder': main_dir+'DYJetsToLL_M-50_HT-1200to2500'+suffix2+'1/', 'xsec': 0.1},
-    # 'DYHT-2500ToInf': {'folder': main_dir+'DYJetsToLL_M-50_HT-2500toInf'+suffix2+'1/', 'xsec': 0.0},
-    'ST_tW_antitop_5f_NoFullyHadronicDecays': {'folder': main_dir+'ST_tW_antitop_5f_NoFullyHadronicDecays'+suffix3+'1/', 'xsec': 0},
-    #'S'
+    # 'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40, 'subsamples': flavourSplitting },
+
+    # 'DYZpt-0To50': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20'+suffix+'1/', 'xsec': 1341.42},
+    # 'DYZpt-50To100': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20'+suffix+'1/', 'xsec': 359.52},
+    # 'DYZpt-100To250': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20'+suffix+'1/', 'xsec': 88.36},
+    # 'DYZpt-250To400': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-250To400_MatchEWPDG20'+suffix+'1/', 'xsec': 3.52},
+    # 'DYZpt-400To650': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20'+suffix+'1/', 'xsec': 0.49},
+    # 'DYZpt-650ToInf': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20'+suffix+'1/', 'xsec': 0.05},
+
+    # # 'DYHT-70To100': {'folder': main_dir+'DYJetsToLL_M-50_HT-70to100'+suffix2+'1/', 'xsec': 196.20},
+    # # 'DYHT-100To200': {'folder': main_dir+'DYJetsToLL_M-50_HT-100to200'+suffix2+'1/', 'xsec': 190.13},
+    # # 'DYHT-200To400': {'folder': main_dir+'DYJetsToLL_M-50_HT-200to400'+suffix2+'1/', 'xsec': 43.45},
+    # # 'DYHT-400To600': {'folder': main_dir+'DYJetsToLL_M-50_HT-400to600'+suffix2+'1/', 'xsec': 5.45},
+    # # 'DYHT-600To800': {'folder': main_dir+'DYJetsToLL_M-50_HT-600to800'+suffix2+'1/', 'xsec': 1.11},
+    # # 'DYHT-800To1200': {'folder': main_dir+'DYJetsToLL_M-50_HT-800to1200'+suffix2+'1/', 'xsec': 0.47},
+    # # 'DYHT-1200To2500': {'folder': main_dir+'DYJetsToLL_M-50_HT-1200to2500'+suffix2+'1/', 'xsec': 0.12},
+    # # 'DYHT-2500ToInf': {'folder': main_dir+'DYJetsToLL_M-50_HT-2500toInf'+suffix2+'1/', 'xsec': 0.0},
+
+    # 'ST_tW_antitop_5f_NFHD': {'folder': main_dir+'ST_tW_antitop_5f_NoFullyHadronicDecays'+suffix3+'1/', 'xsec': 19.56},
+    # 'ST_tW_antitop_5f_ID': {'folder': main_dir+'ST_tW_antitop_5f_InclusiveDecays'+suffix3+'1/', 'xsec': 35.85},
+    # 'ST_tW_top_5f_NFHD': {'folder': main_dir+'ST_tW_top_5f_NoFullyHadronicDecays'+suffix3+'1/', 'xsec': 19.56},
+    # 'ST_tW_top_5f_ID': {'folder': main_dir+'ST_tW_top_5f_InclusiveDecays'+suffix3+'1/', 'xsec': 35.85},
+    # 'ST_t-channel_antitop_4f_ID': {'folder': main_dir+'ST_t-channel_antitop_4f_InclusiveDecays'+suffix3+'1/', 'xsec': 80.95},
+    # 'ST_t-channel_top_4f_ID': {'folder': main_dir+'ST_t-channel_top_4f_InclusiveDecays'+suffix3+'1/', 'xsec': 136.02},
+    # 'ST_t-channel_antitop_5f_ID': {'folder': main_dir+'ST_t-channel_antitop_5f_InclusiveDecays'+suffix3+'1/', 'xsec': 0}, #80.95
+    # 'ST_s-channel_4f_LD': {'folder': main_dir+'ST_s-channel_4f_LeptonDecays'+suffix3+'1/', 'xsec': 3.36},
+
+    # 'TTTo2L2Nu': {'folder': main_dir+'TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 85.65},
+    # 'TTToSemiLeptonic': {'folder': main_dir+'TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 356.19},
+    # 'TTToHadronic': {'folder': main_dir+'TTToHadronic_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 366.20},
+
+    # 'WZTo2Q2L': {'folder': main_dir+'WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix3+'1/', 'xsec': 47.13 * 6.729 * 67.41 / 10000},
+    # 'WZTo3LNu': {'folder': main_dir+'WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix3+'1/', 'xsec': 47.13 * 21.34 * 10.099 / 10000.},
+    # 'WWTo2L2Nu': {'folder': main_dir+'WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8'+suffix3+'1/', 'xsec': 118.7 * 21.34 * 21.34 / 10000.},
+    # 'ZZTo2L2Nu': {'folder': main_dir+'ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8'+suffix3+'1/', 'xsec': 16.523 * 20.000 * 10.099 / 10000.},
+    # 'ZZTo2Q2L': {'folder': main_dir+'ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8'+suffix3+'1/', 'xsec': 16.523 * 2. * 6.729 * 69.91 / 10000.},
+    'ZZTo4L': {'folder': main_dir+'ZZTo4L_TuneCP5_13TeV_powheg_pythia8'+suffix3+'1/', 'xsec': 16.523 * 10.099 * 10.099 / 10000.},
+
+    #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125_13TeV_powheg_pythia8'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
+
 }
 
 import os, glob
@@ -36,7 +59,7 @@ for sample in samples :
         for ss in samples[sample]['subsamples'] :
             addSubSamples["%s_%s"%(sample,ss)]={'xsec':samples[sample]['xsec']}
     if 'folder' in samples[sample].keys() :
-        samples[sample]['files']= [x for x in glob.glob(samples[sample]['folder']+'/*.root')]
+        samples[sample]['files']= [x for x in glob.glob(samples[sample]['folder']+'/**/*.root', recursive=True)]
 samples.update(addSubSamples)
 
 
