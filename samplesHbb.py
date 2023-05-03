@@ -18,8 +18,8 @@ samples = {
     # 'DYHT-800To1200': {'folder': main_dir+'DYJetsToLL_M-50_HT-800to1200'+suffix2+'1/', 'xsec': 0.6},
     # 'DYHT-1200To2500': {'folder': main_dir+'DYJetsToLL_M-50_HT-1200to2500'+suffix2+'1/', 'xsec': 0.1},
     # 'DYHT-2500ToInf': {'folder': main_dir+'DYJetsToLL_M-50_HT-2500toInf'+suffix2+'1/', 'xsec': 0.0},
-    'ST_tW_antitop_5f_NoFullyHadronicDecays': {'folder': main_dir+'ST_tW_antitop_5f_NoFullyHadronicDecays'+suffix3+'1/', 'xsec': },
-    'S'
+    'ST_tW_antitop_5f_NoFullyHadronicDecays': {'folder': main_dir+'ST_tW_antitop_5f_NoFullyHadronicDecays'+suffix3+'1/', 'xsec': 0},
+    #'S'
 }
 
 import os, glob

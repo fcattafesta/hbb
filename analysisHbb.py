@@ -1,6 +1,6 @@
 from multiprocessing import Pool
 import psutil
-from hbb_samples import samples
+from samplesHbb import samples
 import copy
 import sys
 from nail.nail import *
