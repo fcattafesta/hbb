@@ -1,7 +1,0 @@
-rdf0,LHE_Zpt,LHE_Zpt,2000,0,2000,LHE_Zpt,Weight__Central
-selection_twoOppositeSignMuons,LHE_Zpt,LHE_Zpt,2000,0,2000,LHE_Zpt,twoOppositeSignMuonsWeight__Central
-selection_twoOppositeSignMuons,Reco_Zpt,Reco_Zpt,2000,0,2000,Reco_Zpt,twoOppositeSignMuonsWeight__Central
-selection_twoOppositeSignMuons,Reco_ZMass,Reco_ZMass,2000,0,2000,Reco_ZMass,twoOppositeSignMuonsWeight__Central
-selection_twoOppositeSignGenMuons,LHE_Zpt,LHE_Zpt,2000,0,2000,LHE_Zpt,twoOppositeSignGenMuonsWeight__Central
-selection_twoOppositeSignGenMuons,Gen_Zpt,Gen_Zpt,2000,0,2000,Gen_Zpt,twoOppositeSignGenMuonsWeight__Central
-selection_twoOppositeSignGenMuons,Gen_ZMass,Gen_ZMass,2000,0,2000,Gen_ZMass,twoOppositeSignGenMuonsWeight__Central
