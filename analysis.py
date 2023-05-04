@@ -85,7 +85,7 @@ flow.Define("GenZ", "GenMu0_p4+GenMu1_p4")
 flow.Define("Gen_Zpt", "GenZ.Pt()")
 flow.Define("Gen_ZMass", "GenZ.M()")
 
-flow.Selection("LowMass", "Gen_ZMass < 50")
+flow.Selection("lowMass", "Gen_ZMass < 50")
 
 # flow.Selection("NotZeroZ_pt","Z_pt > 0")
 
