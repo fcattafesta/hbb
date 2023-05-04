@@ -879,13 +879,15 @@ def fill_datasum(
     return h
 
 
+date_time = time.strftime("%m%d-%H%M%S")
+
+
 def makeplot(hn, saveintegrals=True):
     if "__syst__" not in hn:
         dictLegendBackground = dict()
         dictLegendSignal = dict()
         myLegend = makeLegend(0.4, 0.9)
         myLegend_sy = makeLegend(0.1, 0.15 + 0.015 * len(systematicsSetToUse))
-        date_time = time.strftime("%m%d-%H%M%S")
         outpath = (
             f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
         )
