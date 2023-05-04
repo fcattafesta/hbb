@@ -11,6 +11,7 @@
 |`ZZ TuneCP5 13TeV-pythia8` | - | 16.523 | 14.6 |
 |`ZZTo2L2Q mllmin4p0 TuneCP5 13TeV amcatnloFXFX pythia8` (different from AN)|  $2 \cdot \sigma \cdot BR_{ll} \cdot 69.91$ | 2.33 | 10.88 |
 |`ZZTo4L 13TeV powheg pythia8` | $ \sigma \cdot (BR_{ll})^2$ | 0.1685 | 2.038|
-|`ZH HToBB ZToLL M125 13TeV powheg pythia8` |  $ \sigma \cdot BR_{ll} * 0.5809$  $m_H=125.09$ GeV  $\sigma_{ZH}=0.880$| 0.0516 | 0.04718 |
+|`ZH HToBB ZToLL M125 13TeV powheg pythia8` |  $ \sigma \cdot BR_{ll} * 0.5809$  $m_H=125.09$ GeV  $\sigma_{ZH}=0.758$| 0.04403 | 0.04718 |
+|`ggZH HToBB ZToLL M125 13TeV powheg pythia8` |  $ \sigma \cdot BR_{ll} * 0.5809$  $m_H=125.09$ GeV  $\sigma_{ZH}=0.123$| 0.00714 | 0.01437 |
 
 
