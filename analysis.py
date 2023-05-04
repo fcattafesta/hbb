@@ -84,10 +84,11 @@ flow.TakePair(
 flow.Define("GenZ", "GenMu0_p4+GenMu1_p4")
 flow.Define("Gen_Zpt", "GenZ.Pt()")
 flow.Define("Gen_ZMass", "GenZ.M()")
+flow.Selection("lowMass", "Gen_ZMass < 50 && twoOppositeSignGenMuons")
 
-flow.Selection("lowMass", "Gen_ZMass < 50")
-
-# flow.Selection("NotZeroZ_pt","Z_pt > 0")
+# signal region
+flow.Selection("SR", "Reco_ZMass > 75 && Reco_ZMass < 105")
+flow
 
 
 proc = flow.CreateProcessor(
