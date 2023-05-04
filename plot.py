@@ -1025,7 +1025,7 @@ def makeplot(hn, saveintegrals=True):
         firstBlind = 100000
         lastBlind = -1
 
-        if histosSig:
+        if model.signal:
             for i in range(histosSig[hn].GetStack().Last().GetNbinsX() + 1):
                 if (
                     histosSig[hn].GetStack().Last().GetBinContent(i)
