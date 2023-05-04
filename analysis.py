@@ -7,9 +7,11 @@ from nail.nail import *
 import ROOT
 import traceback
 import time
+import os
 
 from histobinning import binningRules
 from histograms import histosPerSelection
+from args import args
 
 nthreads = 50
 nprocesses = 7
@@ -151,10 +153,10 @@ def runSample(ar):
             map(lambda x: branchList.push_back(x), snaplist)
             if "training" in samples[s].keys() and samples[s]["training"]:
                 out.rdf["PreSel"].Snapshot(
-                    "Events", "out/%sSnapshot.root" % (s), branchList
+                    "Events", f"{args.histfolder}/{s}Snapshot.root", branchList
                 )
 
-            outFile = ROOT.TFile.Open("out/%sHistos.root" % (s), "recreate")
+            outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
             ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
 
@@ -171,7 +173,7 @@ def runSample(ar):
 
             for subname in subs:
                 outFile = ROOT.TFile.Open(
-                    "out/%s_%sHistos.root" % (s, subname), "recreate"
+                    f"{args.histfodler}/{s}_{subname}Histos.root", "recreate"
                 )
                 for h in out.histosOutSplit[subname]:
                     hname = h.GetName()
@@ -227,7 +229,7 @@ if len(sys.argv[2:]):
         for s in sss:
             if os.path.exists(samples[s]["files"][0]):
                 try:
-                    ff = ROOT.TFile.Open("out/%sHistos.root" % s)
+                    ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
                     if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
                         print("zombie or zero keys", s)
                         toproc.append((s, samples[s]["files"]))
