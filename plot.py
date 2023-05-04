@@ -6,25 +6,14 @@ import ROOT
 import sys
 import os
 import importlib
+import time
 
 # import postfitPlot
 import argparse
 import copy
 import ctypes
 
-parser = argparse.ArgumentParser()
-parser.add_argument("model", help="model to plot")
-parser.add_argument("-p", "--postfit", help="plot postfit plot", action="store_true")
-parser.add_argument("-v", "--variablesToFit", nargs="*")
-parser.add_argument("-f", "--folder", default="out/", help="input folder")
-parser.add_argument(
-    "-o", "--outfolder", default="figure/", help="fgure output folder folder"
-)
-parser.add_argument(
-    "-w", "--workspace", default="workspace/", help="workspace output folder"
-)
-parser.print_help()
-args = parser.parse_args()
+from args import args
 
 outdir = args.workspace
 
@@ -531,7 +520,7 @@ def makeEnvelopeShapeOld(hn, sy, f, d, model):
 
 
 f = {}
-folder = args.folder
+folder = args.inputfolder
 for group in model.signal:
     for s in model.signal[group]:
         f[s] = ROOT.TFile.Open(folder + "%sHistos.root" % s)
@@ -896,9 +885,12 @@ def makeplot(hn, saveintegrals=True):
         dictLegendSignal = dict()
         myLegend = makeLegend(0.4, 0.9)
         myLegend_sy = makeLegend(0.1, 0.15 + 0.015 * len(systematicsSetToUse))
-        outpath = args.outfolder + "/%s/%s" % (year, model.name)
+        date_time = time.strftime("%m%d-%H%M%S")
+        outpath = (
+            f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
+        )
         os.system("mkdir -p " + outpath)
-        os.system("cp " + args.folder + "/description.txt " + outpath)
+        os.system("cp " + args.inputfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
         #        os.system("git diff HEAD > "+outpath+"/git_diff.txt")
         #        os.system("git status HEAD > "+outpath+"/git_status.txt")
