@@ -151,10 +151,6 @@ def runSample(ar):
             snaplist = ["run", "event"]
             branchList = ROOT.vector("string")()
             map(lambda x: branchList.push_back(x), snaplist)
-            print("\n\n b \n")
-            if not os.path.exists(args.histfolder):
-                print("\n\naaaa\n\n")
-                os.makedirs(args.histfolder)
             if "training" in samples[s].keys() and samples[s]["training"]:
                 out.rdf["PreSel"].Snapshot(
                     "Events", f"{args.histfolder}/{s}Snapshot.root", branchList
@@ -223,6 +219,9 @@ toproc = sorted(
 )
 print("To process", [x[0] for x in toproc])
 
+if not os.path.exists(args.histfolder):
+    os.makedirs(args.histfolder)
+    
 if len(sys.argv[2:]):
     if sys.argv[2] == "fix":
         toproc = []
