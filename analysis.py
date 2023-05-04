@@ -151,6 +151,8 @@ def runSample(ar):
             snaplist = ["run", "event"]
             branchList = ROOT.vector("string")()
             map(lambda x: branchList.push_back(x), snaplist)
+            if os.isdir(f"{args.histfolder}") == False:
+                os.mkdir(f"{args.histfolder}")
             if "training" in samples[s].keys() and samples[s]["training"]:
                 out.rdf["PreSel"].Snapshot(
                     "Events", f"{args.histfolder}/{s}Snapshot.root", branchList
