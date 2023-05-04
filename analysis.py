@@ -17,6 +17,9 @@ nthreads = 50
 nprocesses = 7
 start = time.time()
 
+if not os.path.exists(args.histfolder):
+    os.makedirs(args.histfolder)
+
 # Start flow definition
 flow = SampleProcessing(
     "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
