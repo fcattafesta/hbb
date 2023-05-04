@@ -1,6 +1,8 @@
-from samplesHbb import *
+from samples import *
 
 name = "DY_test"
+
+# Drell-Yan
 
 background = {
     "DYZpt": [
@@ -22,8 +24,8 @@ background = {
         "DYHT-2500toInf",
     ],
 }
-# DY_background=['DYZpt-0To50', 'DYZpt-50To100', 'DYZpt-100To250', 'DYZpt-250To400', 'DYZpt-400To650', 'DYZpt-650ToInf' ]
-# background={x: [x] for x in DY_background}
+
+# TOP
 
 background.update(
     {
@@ -43,25 +45,22 @@ background.update(
     }
 )
 
+# Diboson
+
 background.update(
-    {
-        "VV":
-            [
-            "WWTo2L2Nu",
-            "WZTo2Q2L",
-            "WZTo3LNu",
-            "ZZTo2L2Nu",
-            "ZZTo2Q2L",
-            "ZZTo4L"
-            ]
-    }
+    {"VV": ["WWTo2L2Nu", "WZTo2Q2L", "WZTo3LNu", "ZZTo2L2Nu", "ZZTo2Q2L", "ZZTo4L"]}
 )
 
+# To be added
+
 data = {}
+
 
 signal = {"ZHJet": ["ZHJet"]}
 
 import ROOT
+
+# Color palette
 
 fillcolor = {
     "DY": ROOT.kBlue,
@@ -83,7 +82,7 @@ backgroundSorted = backgroundSortedForLegend
 signalSortedForLegend = []
 signalSorted = signalSortedForLegend
 
-from rebinningHbb import *
+from rebinning import *
 
 systematicsToPlot = []
 systematicDetail = {}
