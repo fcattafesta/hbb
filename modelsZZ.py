@@ -56,7 +56,7 @@ background=    {
 
 data = {}
 
-signal = {"ZHJet": ["ZZTo2Q2L"]}
+signal = {}
 
 import ROOT
 
