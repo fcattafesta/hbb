@@ -91,6 +91,9 @@ flow.Define("Gen_ZMass", "GenZ.M()")
 proc = flow.CreateProcessor(
     "eventProcessor", ["isBB"], histosPerSelection, [], "", nthreads
 )
+procData = flow.CreateProcessor(
+    "eventProcessorData", ["isBB"], histosPerSelection, [], "", nthreads
+)
 
 
 def sumwsents(files):
@@ -224,7 +227,7 @@ print("To process", [x[0] for x in toproc])
 
 if not os.path.exists(args.histfolder):
     os.makedirs(args.histfolder)
-    
+
 if len(sys.argv[2:]):
     if sys.argv[2] == "fix":
         toproc = []
