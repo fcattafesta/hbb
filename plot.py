@@ -1093,7 +1093,7 @@ def makeplot(hn, saveintegrals=True):
         t1.Draw()
         t2.Draw()
         t3.Draw()
-        td.Draw()
+        # td.Draw()
         if hn in datasum.keys():
             datasum[hn].SetMarkerStyle(10)
             canvas[hn].Update()
