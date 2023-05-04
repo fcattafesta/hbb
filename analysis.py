@@ -11,7 +11,7 @@ import os
 
 from histobinning import binningRules
 from histograms import histosPerSelection
-from args import args
+from args_analysis import args
 
 nthreads = 50
 nprocesses = 7
