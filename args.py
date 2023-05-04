@@ -14,7 +14,7 @@ parser.add_argument(
     "-w", "--workspace", default="workspace/", help="Workspace output folder"
 )
 parser.add_argument(
-    "-fsub", "-foldersuffix", default="", help="Folder suffix for annotations"
+    "-fsub", "--foldersuffix", default="", help="Folder suffix for annotations"
 )
 
 
