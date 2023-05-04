@@ -1025,23 +1025,24 @@ def makeplot(hn, saveintegrals=True):
         firstBlind = 100000
         lastBlind = -1
 
-        for i in range(histosSig[hn].GetStack().Last().GetNbinsX() + 1):
-            if (
-                histosSig[hn].GetStack().Last().GetBinContent(i)
-                > 0.1 * sqrt(abs(histos[hn].GetStack().Last().GetBinContent(i)))
-                and histosSig[hn].GetStack().Last().GetBinContent(i)
-                / (0.001 + abs(histos[hn].GetStack().Last().GetBinContent(i)))
-                > 0.05
-            ):
-                # print "to blind",hn,i,abs(histos[hn].GetStack().Last().GetBinContent(i)), histosSig[hn].GetStack().Last().GetBinContent(i)
-                if i < firstBlind:
-                    firstBlind = i
-                lastBlind = i
-        if False:  # blind!
-            for i in range(firstBlind, lastBlind + 1):
-                datastack[hn].GetStack().Last().SetBinContent(i, 0)
-                datasum[hn].SetBinContent(i, 0)
-                # print "blinded",i,hn
+        if histosSig:
+            for i in range(histosSig[hn].GetStack().Last().GetNbinsX() + 1):
+                if (
+                    histosSig[hn].GetStack().Last().GetBinContent(i)
+                    > 0.1 * sqrt(abs(histos[hn].GetStack().Last().GetBinContent(i)))
+                    and histosSig[hn].GetStack().Last().GetBinContent(i)
+                    / (0.001 + abs(histos[hn].GetStack().Last().GetBinContent(i)))
+                    > 0.05
+                ):
+                    # print "to blind",hn,i,abs(histos[hn].GetStack().Last().GetBinContent(i)), histosSig[hn].GetStack().Last().GetBinContent(i)
+                    if i < firstBlind:
+                        firstBlind = i
+                    lastBlind = i
+            if False:  # blind!
+                for i in range(firstBlind, lastBlind + 1):
+                    datastack[hn].GetStack().Last().SetBinContent(i, 0)
+                    datasum[hn].SetBinContent(i, 0)
+                    # print "blinded",i,hn
 
         myLegend.Draw()  # NEW
         canvas[hn].cd(1)
