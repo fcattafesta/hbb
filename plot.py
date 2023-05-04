@@ -13,7 +13,7 @@ import argparse
 import copy
 import ctypes
 
-from args import args
+from args_plot import args
 
 outdir = args.workspace
 
