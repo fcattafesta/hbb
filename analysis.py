@@ -8,7 +8,7 @@ import ROOT
 import traceback
 import time
 
-from histobinning import binningrules
+from histobinning import binningRules
 from histograms import histosPerSelection
 
 nthreads = 50
@@ -22,7 +22,7 @@ flow = SampleProcessing(
 flow.CentralWeight("genWeight")  # add a central weight
 
 # Add binning rules
-flow.binningRules = binningrules
+flow.binningRules = binningRules
 
 
 flow.Define("isBB", "true")
