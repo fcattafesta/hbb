@@ -4,7 +4,6 @@ suffix2='_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_upgrade201
 suffix3='_TuneCP5_13TeV_powheg_pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix4='_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix5='_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
-
 flavourSplitting= {
           'bb' : "isBB",
         }
@@ -48,7 +47,7 @@ samples = {
      'ZZTo2Q2L': {'folder': main_dir+'ZZTo2Q2L'+suffix5+'1/', 'xsec': 16.523 * 2. * 10.099 * 69.91 / 10000.},
     #'ZZTo4L': {'folder': main_dir+'ZZTo4L'+suffix3+'2/', 'xsec': 16.523 * 10.099 * 10.099 / 10000.},
 
-    #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.758*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
+    #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
     #'ggZH': {'folder': main_dir+'ggZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.123*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.01437 (AN)
 
 }

@@ -128,11 +128,33 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# vscode
 *.code-workspace
-*.ods#
+.vscode/
+
+# figures
 *.png
-nail/
-out*/
-figure*/
-to_do.txt
+*.pdf
+
+# root files
+*.root
 core*
+
+# csv
+*.csv
+
+# NAIL
+nail/
+out/
+tmp-data.txt
+tmp.C
+eventProcessor_autogen.so
+eventProcessor_autogen.C
+libNailExternals.so
+
+
+o Matteo personal stuff
+to_do.txt
+
+
+
