@@ -146,6 +146,15 @@ core*
 # NAIL
 nail/
 out/
+tmp-data.txt
+tmp.C
+eventProcessor_autogen.so
+eventProcessor_autogen.C
+libNailExternals.so
 
-# Matteo personal stuff
+
+o Matteo personal stuff
 to_do.txt
+
+
+
