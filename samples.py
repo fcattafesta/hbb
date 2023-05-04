@@ -4,6 +4,9 @@ suffix2='_TuneCP5_PSweights_13TeV-madgraphMLM-pythia8/NANOAODSIM/106X_upgrade201
 suffix3='_TuneCP5_13TeV_powheg_pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix4='_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix5='_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
+main_dir1='/gpfs/ddn/srm/cms/store/data/Run2018'
+suffix6='SingleMuon/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/'
+
 flavourSplitting= {
           'bb' : "isBB",
         }
@@ -50,6 +53,8 @@ samples = {
     #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
     #'ggZH': {'folder': main_dir+'ggZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.123*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.01437 (AN)
 
+    'SingleMuon': {'folders': [main_dir1+'A'+suffix6+'1/', main_dir1+'B'+suffix6+'1/', main_dir1+'C'+suffix6+'1/', main_dir1+'D'+suffix6+'1/'], 'lumi': 59970},
+
 }
 
 import os, glob
@@ -60,6 +65,11 @@ for sample in samples :
             addSubSamples["%s_%s"%(sample,ss)]={'xsec':samples[sample]['xsec']}
     if 'folder' in samples[sample].keys() :
         samples[sample]['files']= [x for x in glob.glob(samples[sample]['folder']+'/**/*.root', recursive=True)]
+    if 'folders' in samples[sample].keys() :
+        samples[sample]['files']= []
+        for folder in samples[sample]['folders'] :
+            samples[sample]['files'].extend([x for x in glob.glob(folder+'/**/*.root', recursive=True)])
+            
 samples.update(addSubSamples)
 
 
