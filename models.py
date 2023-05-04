@@ -1,6 +1,6 @@
 from samples import *
 
-name = "DY_test"
+name = "HBB"
 
 # Drell-Yan
 
@@ -56,7 +56,10 @@ background.update(
 data = {}
 
 
-signal = {"ZHJet": ["ZHJet"]}
+signal = {
+    "ZH": ["ZH"],
+    "ggZH": ["ggZH"],
+}
 
 import ROOT
 
@@ -66,9 +69,9 @@ fillcolor = {
     "DY": ROOT.kBlue,
     "TOP": ROOT.kRed,
     "VV": ROOT.kGreen,
-    "ZHJet": ROOT.kOrange,
+    "ZH": ROOT.kOrange,
+    "ggZH": ROOT.kOrange - 3,
 }
-# fillcolor.update({x: ROOT.kBlue + i - 3 for i, x in enumerate(background)})
 linecolor = fillcolor
 markercolor = fillcolor
 
