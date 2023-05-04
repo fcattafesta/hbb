@@ -53,7 +53,7 @@ samples = {
     #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)
     #'ggZH': {'folder': main_dir+'ggZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.123*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.01437 (AN)
 
-    'SingleMuon': {'folders': [main_dir1+'A'+suffix6+'1/', main_dir1+'B'+suffix6+'1/', main_dir1+'C'+suffix6+'1/', main_dir1+'D'+suffix6+'1/'], 'lumi': 59970},
+    'SingleMuon': {'folders': [main_dir1+'A'+suffix6, main_dir1+'B'+suffix6, main_dir1+'C'+suffix6, main_dir1+'D'+suffix6], 'lumi': 59970},
 
 }
 
