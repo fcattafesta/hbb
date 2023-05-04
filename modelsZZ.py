@@ -43,23 +43,20 @@ background.update(
     }
 )
 
-background.update(
-    {
-        "VV":
-            [
-            "WWTo2L2Nu",
-            "WZTo2Q2L",
-            "WZTo3LNu",
-            "ZZTo2L2Nu",
-            "ZZTo2Q2L",
-            "ZZTo4L"
-            ]
-    }
-)
+background=    {
+        "VV": [
+       #     "WWTo2L2Nu",
+       #     "WZTo2Q2L",
+#	    "WZTo3LNu",
+#	    "ZZTo2L2Nu",
+	    "ZZTo2Q2L",
+#	    "ZZTo4L"
+	]}
+
 
 data = {}
 
-signal = {"ZHJet": ["ZHJet"]}
+signal = {"ZHJet": ["ZZTo2Q2L"]}
 
 import ROOT
 
@@ -67,7 +64,7 @@ fillcolor = {
     "DY": ROOT.kBlue,
     "TOP": ROOT.kRed,
     "VV": ROOT.kGreen,
-    "ZHJet": ROOT.kOrange,
+    "ZHJet": 0,
 }
 # fillcolor.update({x: ROOT.kBlue + i - 3 for i, x in enumerate(background)})
 linecolor = fillcolor
