@@ -148,13 +148,10 @@ nail/
 out/
 tmp-data.txt
 tmp.C
-eventProcessor_autogen.so
-eventProcessor_autogen.C
+eventProcessor*_autogen.so
+eventProcessor*_autogen.C
 libNailExternals.so
 
 
 # Matteo personal stuff
 to_do.txt
-
-
-
