@@ -5,7 +5,7 @@ suffix3='_TuneCP5_13TeV_powheg_pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16
 suffix4='_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 suffix5='_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v'
 main_dir1='/gpfs/ddn/srm/cms/store/data/Run2018'
-suffix6='SingleMuon/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/'
+suffix6='/SingleMuon/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/'
 
 flavourSplitting= {
           'bb' : "isBB",
@@ -69,7 +69,7 @@ for sample in samples :
         samples[sample]['files']= []
         for folder in samples[sample]['folders'] :
             samples[sample]['files'].extend([x for x in glob.glob(folder+'/**/*.root', recursive=True)])
-            
+
 samples.update(addSubSamples)
 
 
