@@ -1004,13 +1004,14 @@ def makeplot(hn, saveintegrals=True):
         # histosum[hn].Add(histoSigsum[hn])
         # ftxt.write("d_value = "+d_value(histosum[hn], histoSigsum[hn]))
 
-        S = histoSigsum[hn].Clone()
-        B = histosum[hn].Clone()
-        B.Add(S)
-        R = S.Divide(B)
-        fR = ROOT.TFile.Open(outpath + "/%s_SBratio.root" % hn, "recreate")
-        S.Write()
-        fR.Close()
+        if model.signal:
+            S = histoSigsum[hn].Clone()
+            B = histosum[hn].Clone()
+            B.Add(S)
+            R = S.Divide(B)
+            fR = ROOT.TFile.Open(outpath + "/%s_SBratio.root" % hn, "recreate")
+            S.Write()
+            fR.Close()
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
