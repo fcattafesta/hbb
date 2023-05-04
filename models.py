@@ -53,7 +53,9 @@ background.update(
 
 # To be added
 
-data = {}
+data = {
+    #"SingleMuon": ["SingleMuon"],
+}
 
 
 signal = {
