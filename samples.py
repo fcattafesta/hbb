@@ -11,9 +11,9 @@ suffix6 = "/SingleMuon/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/"
 
 flavourSplitting = {
     "b": "OneB",
-    "bb": "TwoB",
-    "c": "OneC",
-    "udsg": "Light",
+    #"bb": "TwoB",
+    #"c": "OneC",
+    #"udsg": "Light",
 }
 
 samples = {
