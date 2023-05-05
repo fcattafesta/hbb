@@ -13,6 +13,8 @@ from histobinning import binningRules
 from histograms import histosPerSelection
 from args_analysis import args
 
+from eventprocessing import getFlow
+
 nthreads = 50
 nprocesses = 7
 start = time.time()
@@ -20,75 +22,10 @@ start = time.time()
 if not os.path.exists(args.histfolder):
     os.makedirs(args.histfolder)
 
-# Start flow definition
-flow = SampleProcessing(
-    "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
-)
-flow.CentralWeight("genWeight")  # add a central weight
+flow = getFlow()
 
 # Add binning rules
 flow.binningRules = binningRules
-
-
-flow.Define("isBB", "true")
-
-flow.Define("LHE_Zpt", "LHE_Vpt")
-
-flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
-flow.SubCollection(
-    "SelectedMuon",
-    "Muon",
-    sel="Muon_iso < 0.25 && Muon_mediumId && Muon_pt > 20. && abs(Muon_eta) < 2.4",
-)
-flow.Selection("twoMuons", "nSelectedMuon==2")
-flow.Define("SelectedMuon_p4", "@p4v(SelectedMuon)")
-flow.Distinct("MuMu", "SelectedMuon")
-flow.Define(
-    "OppositeSignMuMu", "Nonzero(MuMu0_charge != MuMu1_charge)", requires=["twoMuons"]
-)
-flow.Selection("twoOppositeSignMuons", "OppositeSignMuMu.size() > 0")
-flow.TakePair(
-    "Mu",
-    "SelectedMuon",
-    "MuMu",
-    "At(OppositeSignMuMu,0,-200)",
-    requires=["twoOppositeSignMuons"],
-)
-flow.Define("Z", "Mu0_p4+Mu1_p4")
-flow.Define("Reco_Zpt", "Z.Pt()")
-flow.Define("Reco_ZMass", "Z.M()")
-
-# reco Z form GENParticles
-flow.SubCollection(
-    "GenMuon",
-    "GenPart",
-    sel="abs(GenPart_pdgId) == 13 && GenPart_status == 1 && GenPart_pt > 20. && abs(GenPart_eta) < 2.4",
-)
-flow.Selection("twoGenMuons", "nGenMuon==2")
-flow.Define("GenMuon_p4", "@p4v(GenMuon)")
-flow.Define("GenMuon_charge", "-GenMuon_pdgId/abs(GenMuon_pdgId)")
-flow.Distinct("GenMuMu", "GenMuon")
-flow.Define(
-    "OppositeSignGenMuMu",
-    "Nonzero(GenMuMu0_charge != GenMuMu1_charge)",
-    requires=["twoGenMuons"],
-)
-flow.Selection("twoOppositeSignGenMuons", "OppositeSignGenMuMu.size() > 0")
-flow.TakePair(
-    "GenMu",
-    "GenMuon",
-    "GenMuMu",
-    "At(OppositeSignGenMuMu,0,-200)",
-    requires=["twoOppositeSignGenMuons"],
-)
-flow.Define("GenZ", "GenMu0_p4+GenMu1_p4")
-flow.Define("Gen_Zpt", "GenZ.Pt()")
-flow.Define("Gen_ZMass", "GenZ.M()")
-flow.Selection("lowMass", "Gen_ZMass < 50 && twoOppositeSignGenMuons")
-
-# signal region
-flow.Selection("SR", "Reco_ZMass > 75 && Reco_ZMass < 105")
-flow
 
 
 proc = flow.CreateProcessor(
