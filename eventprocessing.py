@@ -26,7 +26,9 @@ def getFlow():
     # GenJet selection: leading and subleading (pt ordered)
     flow.Selection("AtLeastTwoGenJets", "nCleanGenJet >= 2")
     flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0", requires=["AtLeastTwoGenJets"])
-    flow.ObjectAt("SubLeadingGenJet", "CleanGenJet", "1", requires=["AtLeastTwoGenJets"])
+    flow.ObjectAt(
+        "SubLeadingGenJet", "CleanGenJet", "1", requires=["AtLeastTwoGenJets"]
+    )
 
     # Defining subsamples based on flavour of the leading and subleading GenJets
     # NOTE: Defined collections are mutually exclusive, are they ok?
@@ -35,8 +37,9 @@ def getFlow():
         "(LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour != 5) || (LeadingGenJet_hadronFlavour != 5 && SubLeadingGenJet_hadronFlavour == 5)",
     )
     flow.Define(
-        "TwoB", "true",
-        #"LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
+        "TwoB",
+        "true",
+        # "LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
     )
     flow.Define(
         "OneC",
@@ -65,10 +68,8 @@ def getFlow():
         "Nonzero(MuMu0_charge != MuMu1_charge)",
         requires=["twoMuons"],
     )
-    flow.Selection(
-        "twoOppositeSignMuons",
-        "OppositeSignMuMu.size() > 0 && MuMu0_pt > 25 && MuMu1_pt > 15",  # check if this is correct
-    )
+
+    flow.Selection("twoOppositeSignMuons", "OppositeSignMuMu.size() > 0")
     flow.TakePair(
         "Mu",
         "SelectedMuon",
@@ -76,6 +77,12 @@ def getFlow():
         "At(OppositeSignMuMu,0,-200)",
         requires=["twoOppositeSignMuons"],
     )
+    flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
+
+    # reco Z from RECO particles
+    flow.Define("Zmm", "Mu0_p4+Mu1_p4", requires=["PtSelMu"])
+    flow.Define("Zmm_pt", "Zmm.Pt()", requires=["PtSelMu"])
+    flow.Define("Zmm_mass", "Zmm.M()", requires=["PtSelMu"])
 
     # Electron selection ID
     flow.Define("Electron_iso", "(Electron_pfRelIso03_all)")
@@ -94,10 +101,7 @@ def getFlow():
         "Nonzero(ElEl0_charge != ElEl1_charge)",
         requires=["twoElectrons"],
     )
-    flow.Selection(
-        "twoOppositeSignElectrons",
-        "OppositeSignElEl.size() > 0 && ElEl0_pt > 25 && ElEl1_pt > 17",  # check if this is correct
-    )
+    flow.Selection("twoOppositeSignElectrons", "OppositeSignElEl.size() > 0")
     flow.TakePair(
         "El",
         "SelectedElectron",
@@ -105,18 +109,12 @@ def getFlow():
         "At(OppositeSignElEl,0,-200)",
         requires=["twoOppositeSignElectrons"],
     )
-
+    flow.Selection("PtSelEl", "El0_pt > 25 && El1_pt > 17")
 
     # reco Z from RECO particles
-    flow.Define("Zmm", "Mu0_p4+Mu1_p4")
-    flow.Define("Zmm_pt", "Zmm.Pt()")
-    flow.Define("Zmm_mass", "Zmm.M()")
-
-    flow.Define("Zee", "El0_p4+El1_p4")
-    flow.Define("Zee_pt", "Zee.Pt()")
-    flow.Define("Zee_mass", "Zee.M()")
-
-
+    flow.Define("Zee", "El0_p4+El1_p4", requires=["PtSelEl"])
+    flow.Define("Zee_pt", "Zee.Pt()", requires=["PtSelEl"])
+    flow.Define("Zee_mass", "Zee.M()", requires=["PtSelEl"])
 
     # reco Z form GENParticles
     flow.SubCollection(
