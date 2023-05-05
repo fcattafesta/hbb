@@ -25,8 +25,8 @@ def getFlow():
 
     # GenJet selection: leading and subleading (pt ordered)
     flow.Selection("AtLeastTwoGenJets", "nCleanGenJet >= 2")
-    flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0")
-    flow.ObjectAt("SubLeadingGenJet", "CleanGenJet", "1")
+    flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0", requires=["AtLeastTwoGenJets"])
+    flow.ObjectAt("SubLeadingGenJet", "CleanGenJet", "1", requires=["AtLeastTwoGenJets"])
 
     # Defining subsamples based on flavour of the leading and subleading GenJets
     # NOTE: Defined collections are mutually exclusive, are they ok?
