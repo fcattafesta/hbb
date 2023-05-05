@@ -38,8 +38,7 @@ def getFlow():
     )
     flow.Define(
         "TwoB",
-        "true",
-        # "LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
+        "LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
     )
     flow.Define(
         "OneC",

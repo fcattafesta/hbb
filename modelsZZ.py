@@ -3,20 +3,22 @@ from samples import *
 name = "Z_test"
 
 
-background=    {
-        "VV": [
-       #     "WWTo2L2Nu",
-            "WZTo2Q2L",
-#	    "WZTo3LNu",
-#	    "ZZTo2L2Nu",
-	    "ZZTo2Q2L",
-#	    "ZZTo4L"
-	]}
+background = {
+    "VV": [
+        #     "WWTo2L2Nu",
+        "WZTo2Q2L",
+        # 	    "WZTo3LNu",
+        # 	    "ZZTo2L2Nu",
+        "ZZTo2Q2L",
+        # 	    "ZZTo4L"
+    ],
+    "DY": ["DYM50"],
+}
 
 
 data = {}
 
-signal = {"DY":  ["DYM50"   ]}
+signal = {}
 
 import ROOT
 
