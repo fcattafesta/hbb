@@ -10,8 +10,8 @@ main_dir1 = "/gpfs/ddn/srm/cms/store/data/Run2018"
 suffix6 = "/SingleMuon/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v2/"
 
 flavourSplitting = {
-    "b": "OneB",
-    #"bb": "TwoB",
+    #"b": "OneB",
+    "bb": "TwoB",
     #"c": "OneC",
     #"udsg": "Light",
 }
