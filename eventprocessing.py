@@ -14,7 +14,7 @@ def getFlow():
     flow.SubCollection(
         "GenLepton",
         "GenPart",
-        sel="abs(GenPart_pdgId) == 11 && abs(GenPart_pdgId) == 13 && abs(GenPart_pdgId) == 15",
+        sel="abs(GenPart_pdgId) == 11 || abs(GenPart_pdgId) == 13 || abs(GenPart_pdgId) == 15",
     )
     flow.MatchDeltaR("GenLepton", "GenJet")
     flow.SubCollection(
@@ -35,8 +35,8 @@ def getFlow():
         "(LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour != 5) || (LeadingGenJet_hadronFlavour != 5 && SubLeadingGenJet_hadronFlavour == 5)",
     )
     flow.Define(
-        "TwoB",
-        "LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
+        "TwoB", "true",
+        #"LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
     )
     flow.Define(
         "OneC",
@@ -115,6 +115,8 @@ def getFlow():
     flow.Define("Zee", "El0_p4+El1_p4")
     flow.Define("Zee_pt", "Zee.Pt()")
     flow.Define("Zee_mass", "Zee.M()")
+
+
 
     # reco Z form GENParticles
     flow.SubCollection(
