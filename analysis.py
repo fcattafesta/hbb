@@ -119,7 +119,7 @@ def runSample(ar):
 
             for subname in subs:
                 outFile = ROOT.TFile.Open(
-                    f"{args.histfodler}/{s}_{subname}Histos.root", "recreate"
+                    f"{args.histfolder}/{s}_{subname}Histos.root", "recreate"
                 )
                 for h in out.histosOutSplit[subname]:
                     hname = h.GetName()
