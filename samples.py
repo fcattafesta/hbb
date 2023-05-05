@@ -12,7 +12,7 @@ flavourSplitting= {
         }
 
 samples = {
-    # 'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40, 'subsamples': flavourSplitting },
+    'DYM50' : {'folder': main_dir+'DYJetsToLL_M-50'+suffix+'2/', 'xsec':5765.40, 'subsamples': flavourSplitting },
 
     # 'DYZpt-0To50': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20'+suffix+'1/', 'xsec': 1341.42},
     # 'DYZpt-50To100': {'folder': main_dir+'DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20'+suffix+'1/', 'xsec': 359.52},
@@ -43,11 +43,11 @@ samples = {
     # 'TTToSemiLeptonic': {'folder': main_dir+'TTToSemiLeptonic'+suffix3+'1/', 'xsec': 356.19}, #365.34
     # 'TTToHadronic': {'folder': main_dir+'TTToHadronic'+suffix3+'1/', 'xsec': 366.20}, #377.96
 
-    # 'WZTo2Q2L': {'folder': main_dir+'WZTo2Q2L'+suffix5+'1/', 'xsec': 47.13 * 6.729 * 67.41 / 10000},
+    'WZTo2Q2L': {'folder': main_dir+'WZTo2Q2L'+suffix5+'1/', 'xsec': 47.13 * 6.729 * 67.41 / 10000},
     # 'WZTo3LNu': {'folder': main_dir+'WZTo3LNu'+suffix3+'1/', 'xsec': 47.13 * 21.34 * 10.099 / 10000.},
     # 'WWTo2L2Nu': {'folder': main_dir+'WWTo2L2Nu'+suffix3+'1/', 'xsec': 118.7 * 21.34 * 21.34 / 10000.},
     # 'ZZTo2L2Nu': {'folder': main_dir+'ZZTo2L2Nu'+suffix3+'1/', 'xsec': 16.523 * 20.000 * 10.099 / 10000.},
-     'ZZTo2Q2L': {'folder': main_dir+'ZZTo2Q2L'+suffix5+'1/', 'xsec': 16.523 * 2. * 10.099 * 69.91 / 10000.},
+    'ZZTo2Q2L': {'folder': main_dir+'ZZTo2Q2L'+suffix5+'1/', 'xsec': 16.523 * 2. * 10.099 * 69.91 / 10000.},
     #'ZZTo4L': {'folder': main_dir+'ZZTo4L'+suffix3+'2/', 'xsec': 16.523 * 10.099 * 10.099 / 10000.},
 
     #'ZH': {'folder': main_dir+'ZH_HToBB_ZToLL_M125'+suffix3+'1/', 'xsec': 0.880*58.09*(3.3632+3.3662+3.3696)/10000.}, # 0.04718 (AN)

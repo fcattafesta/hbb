@@ -106,11 +106,15 @@ def getFlow():
         requires=["twoOppositeSignElectrons"],
     )
 
-    
 
-    flow.Define("Z", "Mu0_p4+Mu1_p4")
-    flow.Define("Reco_Zpt", "Z.Pt()")
-    flow.Define("Reco_ZMass", "Z.M()")
+    # reco Z from RECO particles
+    flow.Define("Zmm", "Mu0_p4+Mu1_p4")
+    flow.Define("Zmm_pt", "Zmm.Pt()")
+    flow.Define("Zmm_mass", "Zmm.M()")
+
+    flow.Define("Zee", "El0_p4+El1_p4")
+    flow.Define("Zee_pt", "Zee.Pt()")
+    flow.Define("Zee_mass", "Zee.M()")
 
     # reco Z form GENParticles
     flow.SubCollection(
@@ -142,4 +146,3 @@ def getFlow():
 
     # signal region
     flow.Selection("SR", "Reco_ZMass > 75 && Reco_ZMass < 105")
-    flow
