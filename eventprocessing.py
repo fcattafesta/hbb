@@ -146,3 +146,5 @@ def getFlow():
 
     # signal region
     flow.Selection("SR", "Reco_ZMass > 75 && Reco_ZMass < 105")
+
+    return flow
