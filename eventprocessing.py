@@ -29,9 +29,10 @@ def getFlow():
     flow.ObjectAt(
         "SubLeadingGenJet", "CleanGenJet", "1", requires=["AtLeastTwoGenJets"]
     )
+    # define(leading , nCleanGenJet >1 && CleanGenJet_flav[0]==5)
 
     # Defining subsamples based on flavour of the leading and subleading GenJets
-    # NOTE: Defined collections are mutually exclusive, are they ok?
+    # TODO: write them in a more compact way
     flow.Define(
         "OneB",
         "(LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour != 5) || (LeadingGenJet_hadronFlavour != 5 && SubLeadingGenJet_hadronFlavour == 5)",
@@ -51,7 +52,7 @@ def getFlow():
 
     # Muon selection ID
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
-    # NOTE: Multiple Muon Id (loose, tight), isolation (0.4 or 0.06)
+    # NOTE: Multiple Muon Id (loose, tight) for differnet purposes, isolation 0.06
     flow.SubCollection(
         "SelectedMuon",
         "Muon",
