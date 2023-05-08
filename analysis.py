@@ -65,7 +65,7 @@ def runSample(ar):
     p = psutil.Process()
     #    print("Affinity", p.cpu_affinity())
     p.cpu_affinity(list(range(psutil.cpu_count())))
-    if args.range == "":
+    if args.range == -1:
         ROOT.gROOT.ProcessLine(
             """
         ROOT::EnableImplicitMT(%s);
@@ -80,9 +80,8 @@ def runSample(ar):
         sumws, LHEPdfSumw = 1.0, []
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
-    if args.range != "":
-        num_events=int(args.range)
-        rdf=rdf.Range(num_events)
+    if args.range != -1:
+        rdf=rdf.Range(args.range)
     subs = {}
     if rdf:
         try:
@@ -107,7 +106,7 @@ def runSample(ar):
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
-            ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
+            if args.range == -1: ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
 
             for h in out.histos:
