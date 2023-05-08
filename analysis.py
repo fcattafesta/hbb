@@ -15,7 +15,7 @@ from args_analysis import args
 
 from eventprocessing import getFlow
 
-nthreads = 50
+nthreads = args.nthreads
 nprocesses = 7
 start = time.time()
 
@@ -81,7 +81,7 @@ def runSample(ar):
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
-        rdf=rdf.Range(args.range)
+        rdf=rdf.Range(int(args.range))
     subs = {}
     if rdf:
         try:

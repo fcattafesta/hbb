@@ -11,5 +11,8 @@ parser.add_argument(
 parser.add_argument(
     "-r", "--range", default=-1, help="Number of events to process", type=int,
 )
+parser.add_argument(
+    "-n", "--nthreads", default=50, help="Number of threads", type=int,
+)
 parser.print_help()
 args = parser.parse_args()

@@ -26,7 +26,7 @@ def getFlow():
     # Defining subsamples based on flavour of the leading and subleading GenJets
     flow.Define(
         "OneB",
-        "(nCleanGenJet >= 2 && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
+        "(nCleanGenJet >= 1  && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
     )
     flow.Define(
         "TwoB",
