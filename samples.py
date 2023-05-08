@@ -75,42 +75,42 @@ samples = {
         "subsamples": flavourSplitting,
     },
 }
-samples.update(
-    {
-        "DYHT-70To100": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-70to100" + suffix2 + "1/",
-            "xsec": 196.20,
-        },
-        "DYHT-100To200": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-100to200" + suffix2 + "1/",
-            "xsec": 190.13,
-        },
-        "DYHT-200To400": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-200to400" + suffix2 + "1/",
-            "xsec": 43.45,
-        },
-        "DYHT-400To600": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-400to600" + suffix2 + "1/",
-            "xsec": 5.45,
-        },
-        "DYHT-600To800": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-600to800" + suffix2 + "1/",
-            "xsec": 1.11,
-        },
-        "DYHT-800To1200": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-800to1200" + suffix2 + "1/",
-            "xsec": 0.47,
-        },
-        "DYHT-1200To2500": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-1200to2500" + suffix2 + "1/",
-            "xsec": 0.12,
-        },
-        "DYHT-2500ToInf": {
-            "folder": main_dir + "DYJetsToLL_M-50_HT-2500toInf" + suffix2 + "1/",
-            "xsec": 0.0,
-        },
-    }
-)
+# samples.update(
+#     {
+#         "DYHT-70To100": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-70to100" + suffix2 + "1/",
+#             "xsec": 196.20,
+#         },
+#         "DYHT-100To200": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-100to200" + suffix2 + "1/",
+#             "xsec": 190.13,
+#         },
+#         "DYHT-200To400": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-200to400" + suffix2 + "1/",
+#             "xsec": 43.45,
+#         },
+#         "DYHT-400To600": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-400to600" + suffix2 + "1/",
+#             "xsec": 5.45,
+#         },
+#         "DYHT-600To800": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-600to800" + suffix2 + "1/",
+#             "xsec": 1.11,
+#         },
+#         "DYHT-800To1200": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-800to1200" + suffix2 + "1/",
+#             "xsec": 0.47,
+#         },
+#         "DYHT-1200To2500": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-1200to2500" + suffix2 + "1/",
+#             "xsec": 0.12,
+#         },
+#         "DYHT-2500ToInf": {
+#             "folder": main_dir + "DYJetsToLL_M-50_HT-2500toInf" + suffix2 + "1/",
+#             "xsec": 0.0,
+#         },
+#     }
+# )
 
 samples.update(
     {
