@@ -107,35 +107,35 @@ def getFlow():
     flow.Define("Zee_pt", "Zee.Pt()", requires=["PtSelEl"])
     flow.Define("Zee_mass", "Zee.M()", requires=["PtSelEl"])
 
-    # reco Z form GENParticles
-    # flow.SubCollection(
-    #     "GenMuon",
-    #     "GenPart",
-    #     sel="abs(GenPart_pdgId) == 13 && GenPart_status == 1 && GenPart_pt > 20. && abs(GenPart_eta) < 2.4",
-    # )
-    # flow.Selection("twoGenMuons", "nGenMuon==2")
-    # flow.Define("GenMuon_p4", "@p4v(GenMuon)")
-    # flow.Define("GenMuon_charge", "-GenMuon_pdgId/abs(GenMuon_pdgId)")
-    # flow.Distinct("GenMuMu", "GenMuon")
-    # flow.Define(
-    #     "OppositeSignGenMuMu",
-    #     "Nonzero(GenMuMu0_charge != GenMuMu1_charge)",
-    #     requires=["twoGenMuons"],
-    # )
-    # flow.Selection("twoOppositeSignGenMuons", "OppositeSignGenMuMu.size() > 0")
-    # flow.TakePair(
-    #     "GenMu",
-    #     "GenMuon",
-    #     "GenMuMu",
-    #     "At(OppositeSignGenMuMu,0,-200)",
-    #     requires=["twoOppositeSignGenMuons"],
-    # )
-    # flow.Define("GenZ", "GenMu0_p4+GenMu1_p4")
-    # flow.Define("Gen_Zpt", "GenZ.Pt()")
-    # flow.Define("Gen_ZMass", "GenZ.M()")
-    # flow.Selection("lowMass", "Gen_ZMass < 50 && twoOppositeSignGenMuons")
+    # Jet selection
+
+    # NOTE: JEC?
+    # NOTE: FSR, PUId=0, JET_pt=30
+
+    flow.MatchDeltaR("SelectedElectron", "Jet")
+    flow.MatchDeltaR("SelectedMuon", "Jet")
+    flow.SubCollection(
+        "CleanJet",
+        "Jet",
+        sel="(Jet_SelectedElectronDr > 0.4 || Jet_SelectedElectronIdx==-1) && (Jet_SelectedMuonDr > 0.4 || Jet_SelectedMuonIdx==-1)",
+    )
+    flow.SubCollection(
+        "SelectedJet",
+        "CleanJet",
+        sel="CleanJet_pt > 20. && abs(CleanJet_eta) < 2.5",
+    )
+    flow.Selection("twoJets", "nSelectedJet >= 2")
+    flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
+    flow.Define("Mjj", "(SelectedJet_p4[0]+SelectedJet_p4[1]).M()", requires=["twoJets"])
+
+    flow.Selection("LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241")
+    flow.Selection("LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184")
+    flow.Selection("LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527")
+    flow.Selection("SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241")
+
 
     # signal region
-    flow.Selection("SR", "Reco_ZMass > 75 && Reco_ZMass < 105")
+    flow.Selection("SR_ee", "Zee_mass > 75 && Zee_mass < 105 && Mjj >90 && Mjj<150 && LeadingJetMedium && SubLeadingJetLoose")
+    flow.Selection("SR_mm", "Zmm_mass > 75 && Zmm_mass < 105 && Mjj >90 && Mjj<150 && LeadingJetMedium && SubLeadingJetLoose")
 
     return flow
