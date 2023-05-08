@@ -15,9 +15,9 @@ suffix10 = "_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_upgrade2018_realisti
 
 flavourSplitting = {
     "b": "OneB",
-    "bb": "TwoB",
-    "c": "OneC",
-    "udsg": "Light",
+    # "bb": "TwoB",
+    # "c": "OneC",
+    # "udsg": "Light",
 }
 
 samples = {
