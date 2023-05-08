@@ -28,7 +28,7 @@ def getFlow():
     # flow.Selection("AtLeastOneGenJet", "nCleanGenJet >= 1")
     flow.Define(
         "TwoB",
-        "CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
+        "nCleanGenJet ==2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
     )
 
     '''flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0", requires=["AtLeastTwoGenJets"])
