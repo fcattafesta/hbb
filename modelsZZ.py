@@ -4,21 +4,23 @@ name = "Z_test"
 
 
 background = {
-    # "VV": [
+     "VV": [
     #     #     "WWTo2L2Nu",
     #     "WZTo2Q2L",
     #     # 	    "WZTo3LNu",
     #     # 	    "ZZTo2L2Nu",
-    #     "ZZTo2Q2L",
+         "ZZTo2Q2L",
     #     # 	    "ZZTo4L"
-    # ],
+     ],
     "DY": ["DYM50"],
 }
 
 
 data = {}
 
-signal = {}
+signal = {
+    "ZH" : [ "ZH" ],
+}
 
 import ROOT
 
@@ -26,7 +28,7 @@ fillcolor = {
     "DY": ROOT.kBlue,
     "TOP": ROOT.kRed,
     "VV": ROOT.kGreen,
-    "ZHJet": 0,
+    "ZH": ROOT.kOrange,
 }
 # fillcolor.update({x: ROOT.kBlue + i - 3 for i, x in enumerate(background)})
 linecolor = fillcolor
