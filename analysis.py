@@ -29,10 +29,10 @@ flow.binningRules = binningRules
 
 
 proc = flow.CreateProcessor(
-    "eventProcessor", ["OneB"], histosPerSelection, [], "", nthreads #,"TwoB", "OneC", "Light"
+    "eventProcessor", ["TwoB"], histosPerSelection, [], "", nthreads #,"TwoB", "OneC", "Light"
 )
 procData = flow.CreateProcessor(
-    "eventProcessorData", ["OneB"], histosPerSelection, [], "", nthreads
+    "eventProcessorData", ["TwoB"], histosPerSelection, [], "", nthreads
 )
 
 
