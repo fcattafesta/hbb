@@ -26,54 +26,54 @@ samples = {
         "xsec": 5765.40,
         "subsamples": flavourSplitting,
     },
-    "DYZpt-0To50": {
-        "folder": main_dir
-        + "DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20"
-        + suffix
-        + "1/",
-        "xsec": 1341.42,
-        "subsamples": flavourSplitting,
-    },
-    "DYZpt-50To100": {
-        "folder": main_dir
-        + "DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20"
-        + suffix
-        + "1/",
-        "xsec": 359.52,
-        "subsamples": flavourSplitting,
-    },
-    "DYZpt-100To250": {
-        "folder": main_dir
-        + "DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20"
-        + suffix
-        + "1/",
-        "xsec": 88.36,
-        "subsamples": flavourSplitting,
-    },
-    "DYZpt-250To400": {
-        "folder": main_dir
-        + "DYJetsToLL_LHEFilterPtZ-250To400_MatchEWPDG20"
-        + suffix
-        + "1/",
-        "xsec": 3.52,
-        "subsamples": flavourSplitting,
-    },
-    "DYZpt-400To650": {
-        "folder": main_dir
-        + "DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20"
-        + suffix
-        + "1/",
-        "xsec": 0.49,
-        "subsamples": flavourSplitting,
-    },
-    "DYZpt-650ToInf": {
-        "folder": main_dir
-        + "DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20"
-        + suffix
-        + "1/",
-        "xsec": 0.05,
-        "subsamples": flavourSplitting,
-    },
+    # "DYZpt-0To50": {
+    #     "folder": main_dir
+    #     + "DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20"
+    #     + suffix
+    #     + "1/",
+    #     "xsec": 1341.42,
+    #     "subsamples": flavourSplitting,
+    # },
+    # "DYZpt-50To100": {
+    #     "folder": main_dir
+    #     + "DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20"
+    #     + suffix
+    #     + "1/",
+    #     "xsec": 359.52,
+    #     "subsamples": flavourSplitting,
+    # },
+    # "DYZpt-100To250": {
+    #     "folder": main_dir
+    #     + "DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20"
+    #     + suffix
+    #     + "1/",
+    #     "xsec": 88.36,
+    #     "subsamples": flavourSplitting,
+    # },
+    # "DYZpt-250To400": {
+    #     "folder": main_dir
+    #     + "DYJetsToLL_LHEFilterPtZ-250To400_MatchEWPDG20"
+    #     + suffix
+    #     + "1/",
+    #     "xsec": 3.52,
+    #     "subsamples": flavourSplitting,
+    # },
+    # "DYZpt-400To650": {
+    #     "folder": main_dir
+    #     + "DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20"
+    #     + suffix
+    #     + "1/",
+    #     "xsec": 0.49,
+    #     "subsamples": flavourSplitting,
+    # },
+    # "DYZpt-650ToInf": {
+    #     "folder": main_dir
+    #     + "DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20"
+    #     + suffix
+    #     + "1/",
+    #     "xsec": 0.05,
+    #     "subsamples": flavourSplitting,
+    # },
 }
 # samples.update(
 #     {
@@ -112,134 +112,134 @@ samples = {
 #     }
 # )
 
-samples.update(
-    {
-        "ST_tW_antitop_5f_NFHD": {
-            "folder": main_dir
-            + "ST_tW_antitop_5f_NoFullyHadronicDecays"
-            + suffix8
-            + "1/",
-            "xsec": 19.56,
-        },
-        "ST_tW_antitop_5f_ID": {
-            "folder": main_dir + "ST_tW_antitop_5f_inclusiveDecays" + suffix8 + "2/",
-            "xsec": 35.85,
-        },
-        "ST_tW_top_5f_NFHD": {
-            "folder": main_dir + "ST_tW_top_5f_NoFullyHadronicDecays" + suffix8 + "1/",
-            "xsec": 19.56,
-        },
-        "ST_tW_top_5f_ID": {
-            "folder": main_dir + "ST_tW_top_5f_inclusiveDecays" + suffix8 + "2/",
-            "xsec": 35.85,
-        },
-        "ST_t-channel_antitop_4f_ID": {
-            "folder": main_dir
-            + "ST_t-channel_antitop_4f_InclusiveDecays"
-            + suffix9
-            + "1/",
-            "xsec": 80.95,
-        },
-        "ST_t-channel_top_4f_ID": {
-            "folder": main_dir + "ST_t-channel_top_4f_InclusiveDecays" + suffix9 + "1/",
-            "xsec": 136.02,
-        },
-        "ST_t-channel_antitop_5f_ID": {
-            "folder": main_dir
-            + "ST_t-channel_antitop_5f_InclusiveDecays"
-            + suffix8
-            + "1/",
-            "xsec": 80.95,
-        },
-        "ST_s-channel_4f_LD": {
-            "folder": main_dir + "ST_s-channel_4f_leptonDecays" + suffix10 + "1/",
-            "xsec": 3.36,
-        },
-        "TTTo2L2Nu": {
-            "folder": main_dir + "TTTo2L2Nu" + suffix8 + "1/",
-            "xsec": 85.65,
-        },  # 88.29
-        "TTToSemiLeptonic": {
-            "folder": main_dir + "TTToSemiLeptonic" + suffix8 + "1/",
-            "xsec": 356.19,
-        },  # 365.34
-        "TTToHadronic": {
-            "folder": main_dir + "TTToHadronic" + suffix8 + "1/",
-            "xsec": 366.20,
-        },  # 377.96
-    }
-)
+# samples.update(
+#     {
+#         "ST_tW_antitop_5f_NFHD": {
+#             "folder": main_dir
+#             + "ST_tW_antitop_5f_NoFullyHadronicDecays"
+#             + suffix8
+#             + "1/",
+#             "xsec": 19.56,
+#         },
+#         "ST_tW_antitop_5f_ID": {
+#             "folder": main_dir + "ST_tW_antitop_5f_inclusiveDecays" + suffix8 + "2/",
+#             "xsec": 35.85,
+#         },
+#         "ST_tW_top_5f_NFHD": {
+#             "folder": main_dir + "ST_tW_top_5f_NoFullyHadronicDecays" + suffix8 + "1/",
+#             "xsec": 19.56,
+#         },
+#         "ST_tW_top_5f_ID": {
+#             "folder": main_dir + "ST_tW_top_5f_inclusiveDecays" + suffix8 + "2/",
+#             "xsec": 35.85,
+#         },
+#         "ST_t-channel_antitop_4f_ID": {
+#             "folder": main_dir
+#             + "ST_t-channel_antitop_4f_InclusiveDecays"
+#             + suffix9
+#             + "1/",
+#             "xsec": 80.95,
+#         },
+#         "ST_t-channel_top_4f_ID": {
+#             "folder": main_dir + "ST_t-channel_top_4f_InclusiveDecays" + suffix9 + "1/",
+#             "xsec": 136.02,
+#         },
+#         "ST_t-channel_antitop_5f_ID": {
+#             "folder": main_dir
+#             + "ST_t-channel_antitop_5f_InclusiveDecays"
+#             + suffix8
+#             + "1/",
+#             "xsec": 80.95,
+#         },
+#         "ST_s-channel_4f_LD": {
+#             "folder": main_dir + "ST_s-channel_4f_leptonDecays" + suffix10 + "1/",
+#             "xsec": 3.36,
+#         },
+#         "TTTo2L2Nu": {
+#             "folder": main_dir + "TTTo2L2Nu" + suffix8 + "1/",
+#             "xsec": 85.65,
+#         },  # 88.29
+#         "TTToSemiLeptonic": {
+#             "folder": main_dir + "TTToSemiLeptonic" + suffix8 + "1/",
+#             "xsec": 356.19,
+#         },  # 365.34
+#         "TTToHadronic": {
+#             "folder": main_dir + "TTToHadronic" + suffix8 + "1/",
+#             "xsec": 366.20,
+#         },  # 377.96
+#     }
+# )
 
-samples.update(
-    {
-        "WZTo2Q2L": {
-            "folder": main_dir + "WZTo2Q2L" + suffix5 + "1/",
-            "xsec": 47.13 * 6.729 * 67.41 / 10000,
-            "subsamples": flavourSplitting,
-        },
-        "WZTo3LNu": {
-            "folder": main_dir + "WZTo3LNu" + suffix4 + "2/",
-            "xsec": 47.13 * 21.34 * 10.099 / 10000.0,
-            "subsamples": flavourSplitting,
-        },
-        "WWTo2L2Nu": {
-            "folder": main_dir + "WWTo2L2Nu" + suffix8 + "2/",
-            "xsec": 118.7 * 21.34 * 21.34 / 10000.0,
-            "subsamples": flavourSplitting,
-        },
-        "ZZTo2L2Nu": {
-            "folder": main_dir + "ZZTo2L2Nu" + suffix3 + "1/",
-            "xsec": 16.523 * 20.000 * 10.099 / 10000.0,
-        },
-        "ZZTo2Q2L": {
-            "folder": main_dir + "ZZTo2Q2L" + suffix5 + "1/",
-            "xsec": 16.523 * 2.0 * 10.099 * 69.91 / 10000.0,
-            "subsamples": flavourSplitting,
-        },
-        "ZZTo4L": {
-            "folder": main_dir + "ZZTo4L" + suffix3 + "2/",
-            "xsec": 16.523 * 10.099 * 10.099 / 10000.0,
-        },
-    }
-)
-samples.update(
-    {
-        "ZH": {
-            "folder": main_dir + "ZH_HToBB_ZToLL_M-125" + suffix8 + "1/",
-            "xsec": 0.880 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
-        },  # 0.04718 (AN)
-        "ggZH": {
-            "folder": main_dir + "ggZH_HToBB_ZToLL_M-125" + suffix8 + "1/",
-            "xsec": 0.123 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
-        },  # 0.01437 (AN)
-    }
-)
-samples.update(
-    {
-        "SingleMuon": {
-            "folders": [
-                main_dir1 + "A" + suffix6+"2/",
-                main_dir1 + "B" + suffix6+"2/",
-                main_dir1 + "C" + suffix6+"2/",
-                main_dir1 + "D" + suffix6+"1/",
-            ],
-            "lumi": 59970,
-        },
-    }
-)
-samples.update(
-    {
-        "EGamma": {
-            "folders": [
-                main_dir1 + "A" + suffix7+"1/",
-                main_dir1 + "B" + suffix7+"1/",
-                main_dir1 + "C" + suffix7+"1/",
-                main_dir1 + "D" + suffix7+"3/",
-            ],
-            "lumi": 0,
-        },
-    }
-)
+# samples.update(
+#     {
+#         "WZTo2Q2L": {
+#             "folder": main_dir + "WZTo2Q2L" + suffix5 + "1/",
+#             "xsec": 47.13 * 6.729 * 67.41 / 10000,
+#             "subsamples": flavourSplitting,
+#         },
+#         "WZTo3LNu": {
+#             "folder": main_dir + "WZTo3LNu" + suffix4 + "2/",
+#             "xsec": 47.13 * 21.34 * 10.099 / 10000.0,
+#             "subsamples": flavourSplitting,
+#         },
+#         "WWTo2L2Nu": {
+#             "folder": main_dir + "WWTo2L2Nu" + suffix8 + "2/",
+#             "xsec": 118.7 * 21.34 * 21.34 / 10000.0,
+#             "subsamples": flavourSplitting,
+#         },
+#         "ZZTo2L2Nu": {
+#             "folder": main_dir + "ZZTo2L2Nu" + suffix3 + "1/",
+#             "xsec": 16.523 * 20.000 * 10.099 / 10000.0,
+#         },
+#         "ZZTo2Q2L": {
+#             "folder": main_dir + "ZZTo2Q2L" + suffix5 + "1/",
+#             "xsec": 16.523 * 2.0 * 10.099 * 69.91 / 10000.0,
+#             "subsamples": flavourSplitting,
+#         },
+#         "ZZTo4L": {
+#             "folder": main_dir + "ZZTo4L" + suffix3 + "2/",
+#             "xsec": 16.523 * 10.099 * 10.099 / 10000.0,
+#         },
+#     }
+# )
+# samples.update(
+#     {
+#         "ZH": {
+#             "folder": main_dir + "ZH_HToBB_ZToLL_M-125" + suffix8 + "1/",
+#             "xsec": 0.880 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
+#         },  # 0.04718 (AN)
+#         "ggZH": {
+#             "folder": main_dir + "ggZH_HToBB_ZToLL_M-125" + suffix8 + "1/",
+#             "xsec": 0.123 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
+#         },  # 0.01437 (AN)
+#     }
+# )
+# samples.update(
+#     {
+#         "SingleMuon": {
+#             "folders": [
+#                 main_dir1 + "A" + suffix6+"2/",
+#                 main_dir1 + "B" + suffix6+"2/",
+#                 main_dir1 + "C" + suffix6+"2/",
+#                 main_dir1 + "D" + suffix6+"1/",
+#             ],
+#             "lumi": 59970,
+#         },
+#     }
+# )
+# samples.update(
+#     {
+#         "EGamma": {
+#             "folders": [
+#                 main_dir1 + "A" + suffix7+"1/",
+#                 main_dir1 + "B" + suffix7+"1/",
+#                 main_dir1 + "C" + suffix7+"1/",
+#                 main_dir1 + "D" + suffix7+"3/",
+#             ],
+#             "lumi": 0,
+#         },
+#     }
+# )
 
 
 import os, glob
