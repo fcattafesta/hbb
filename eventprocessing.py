@@ -23,36 +23,23 @@ def getFlow():
         sel="GenJet_GenLeptonDr > 0.3 || GenJet_GenLeptonIdx==-1",
     )
 
-    # GenJet selection: leading and subleading (pt ordered)
-    # flow.Selection("AtLeastTwoGenJets", "nCleanGenJet >= 2")
-    # flow.Selection("AtLeastOneGenJet", "nCleanGenJet >= 1")
+    # Defining subsamples based on flavour of the leading and subleading GenJets
     flow.Define(
         "TwoB",
-        "nCleanGenJet ==2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
+        "nCleanGenJet >= 2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
     )
-
-    '''flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0", requires=["AtLeastTwoGenJets"])
-    flow.ObjectAt(
-        "SubLeadingGenJet", "CleanGenJet", "1", requires=["AtLeastTwoGenJets"]
-    )
-    #TODO: define(leading , nCleanGenJet >1 && CleanGenJet_flav[0]==5)
-    flow.SubCollection("LeadingGenJet" , "CleanGenJet","nCleanGenJet >= 1 " )
-
-    # Defining subsamples based on flavour of the leading and subleading GenJets
-    # TODO: write them in a more compact way
     flow.Define(
         "OneB",
-        "(CleanGenJet0_hadronFlavour == 5 && CleanGenJet1_hadronFlavour != 5) || (CleanGenJet0_hadronFlavour != 5 && CleanGenJet1_hadronFlavour == 5)",
-    )'''
-    # TODO: check if this is correct ( what if there are two C?)
-    '''flow.Define(
+        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))",
+    )
+    flow.Define(
         "OneC",
-        "(LeadingGenJet_hadronFlavour == 4 && SubLeadingGenJet_hadronFlavour != 5) || (LeadingGenJet_hadronFlavour != 5 && SubLeadingGenJet_hadronFlavour == 4)",
+        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
     )
     flow.Define(
         "Light",
-        "LeadingGenJet_hadronFlavour == 0 && SubLeadingGenJet_hadronFlavour == 0",
-    )'''
+        "!TwoB && !OneB && !OneC ",
+    )
 
     # Muon selection ID
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
