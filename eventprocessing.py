@@ -24,31 +24,35 @@ def getFlow():
     )
 
     # GenJet selection: leading and subleading (pt ordered)
-    flow.Selection("AtLeastTwoGenJets", "nCleanGenJet >= 2")
-    flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0", requires=["AtLeastTwoGenJets"])
+    # flow.Selection("AtLeastTwoGenJets", "nCleanGenJet >= 2")
+    # flow.Selection("AtLeastOneGenJet", "nCleanGenJet >= 1")
+    flow.Define(
+        "TwoB",
+        "CleanGenJet0_hadronFlavour == 5 && CleanGenJet1_hadronFlavour == 5",
+    )
+
+    '''flow.ObjectAt("LeadingGenJet", "CleanGenJet", "0", requires=["AtLeastTwoGenJets"])
     flow.ObjectAt(
         "SubLeadingGenJet", "CleanGenJet", "1", requires=["AtLeastTwoGenJets"]
     )
-    # define(leading , nCleanGenJet >1 && CleanGenJet_flav[0]==5)
+    #TODO: define(leading , nCleanGenJet >1 && CleanGenJet_flav[0]==5)
+    flow.SubCollection("LeadingGenJet" , "CleanGenJet","nCleanGenJet >= 1 " )
 
     # Defining subsamples based on flavour of the leading and subleading GenJets
     # TODO: write them in a more compact way
     flow.Define(
         "OneB",
-        "(LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour != 5) || (LeadingGenJet_hadronFlavour != 5 && SubLeadingGenJet_hadronFlavour == 5)",
-    )
-    flow.Define(
-        "TwoB",
-        "LeadingGenJet_hadronFlavour == 5 && SubLeadingGenJet_hadronFlavour == 5",
-    )
-    flow.Define(
+        "(CleanGenJet0_hadronFlavour == 5 && CleanGenJet1_hadronFlavour != 5) || (CleanGenJet0_hadronFlavour != 5 && CleanGenJet1_hadronFlavour == 5)",
+    )'''
+    # TODO: check if this is correct ( what if there are two C?)
+    '''flow.Define(
         "OneC",
         "(LeadingGenJet_hadronFlavour == 4 && SubLeadingGenJet_hadronFlavour != 5) || (LeadingGenJet_hadronFlavour != 5 && SubLeadingGenJet_hadronFlavour == 4)",
     )
     flow.Define(
         "Light",
         "LeadingGenJet_hadronFlavour == 0 && SubLeadingGenJet_hadronFlavour == 0",
-    )
+    )'''
 
     # Muon selection ID
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
