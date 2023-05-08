@@ -214,32 +214,32 @@ samples.update(
         },  # 0.01437 (AN)
     }
 )
-samples.update(
-    {
-        "SingleMuon": {
-            "folders": [
-                main_dir1 + "A" + suffix6+"2/",
-                main_dir1 + "B" + suffix6+"2/",
-                main_dir1 + "C" + suffix6+"2/",
-                main_dir1 + "D" + suffix6+"1/",
-            ],
-            "lumi": 59970,
-        },
-    }
-)
-samples.update(
-    {
-        "EGamma": {
-            "folders": [
-                main_dir1 + "A" + suffix7+"1/",
-                main_dir1 + "B" + suffix7+"1/",
-                main_dir1 + "C" + suffix7+"1/",
-                main_dir1 + "D" + suffix7+"3/",
-            ],
-            "lumi": 0,
-        },
-    }
-)
+# samples.update(
+#     {
+#         "SingleMuon": {
+#             "folders": [
+#                 main_dir1 + "A" + suffix6+"2/",
+#                 main_dir1 + "B" + suffix6+"2/",
+#                 main_dir1 + "C" + suffix6+"2/",
+#                 main_dir1 + "D" + suffix6+"1/",
+#             ],
+#             "lumi": 59970,
+#         },
+#     }
+# )
+# samples.update(
+#     {
+#         "EGamma": {
+#             "folders": [
+#                 main_dir1 + "A" + suffix7+"1/",
+#                 main_dir1 + "B" + suffix7+"1/",
+#                 main_dir1 + "C" + suffix7+"1/",
+#                 main_dir1 + "D" + suffix7+"3/",
+#             ],
+#             "lumi": 0,
+#         },
+#     }
+# )
 
 
 import os, glob
