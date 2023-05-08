@@ -169,87 +169,44 @@ if not os.path.exists(args.histfolder):
     os.makedirs(args.histfolder)
 
 
-if len(sys.argv[2:]):
-    if sys.argv[2] == "fix":
-        toproc = []
-        sss = sams
-        if len(sys.argv[3:]):
-            sss = [s for s in sams if s in sys.argv[3:]]
-            print("fixing", sss)
-        for s in sss:
-            if os.path.exists(samples[s]["files"][0]):
-                try:
-                    ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
-                    if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
-                        print("zombie or zero keys", s)
-                        toproc.append((s, samples[s]["files"]))
-
-                except:
-                    print("failed", s)
+if args.model == "fix":
+    toproc = []
+    sss = sams
+    if len(sys.argv[3:]):
+        sss = [s for s in sams if s in sys.argv[3:]]
+        print("fixing", sss)
+    for s in sss:
+        if os.path.exists(samples[s]["files"][0]):
+            try:
+                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
+                if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
+                    print("zombie or zero keys", s)
                     toproc.append((s, samples[s]["files"]))
-    else:
-        if sys.argv[2][:5] == "model":
-            import importlib
 
-            model = importlib.import_module(sys.argv[2])
-            # 	samples=model.samples
-            allmc = [y for x in model.background for y in model.background[x]] + [
-                y for x in model.signal for y in model.signal[x]
-            ]
-            alldata = [y for x in model.data for y in model.data[x]]
-            for x in allmc:
-                print(x, "\t", samples[x]["xsec"])
-            for x in alldata:
-                print(x, "\t", samples[x]["lumi"])
+            except:
+                print("failed", s)
+                toproc.append((s, samples[s]["files"]))
+elif args.model[:5] == "model":
+    import importlib
 
-            toproc = [
-                (s, samples[s]["files"])
-                for s in sams
-                if s in allmc + alldata + sys.argv[3:]
-            ]
+    model = importlib.import_module(args.model)
+    # 	samples=model.samples
+    allmc = [y for x in model.background for y in model.background[x]] + [
+        y for x in model.signal for y in model.signal[x]
+    ]
+    alldata = [y for x in model.data for y in model.data[x]]
+    for x in allmc:
+        print(x, "\t", samples[x]["xsec"])
+    for x in alldata:
+        print(x, "\t", samples[x]["lumi"])
 
-        else:
-            toproc = [(s, samples[s]["files"]) for s in sams if s in sys.argv[2:]]
-
-
-# if args.model == "fix":
-#     toproc = []
-#     sss = sams
-#     if len(sys.argv[3:]):
-#         sss = [s for s in sams if s in sys.argv[3:]]
-#         print("fixing", sss)
-#     for s in sss:
-#         if os.path.exists(samples[s]["files"][0]):
-#             try:
-#                 ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
-#                 if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
-#                     print("zombie or zero keys", s)
-#                     toproc.append((s, samples[s]["files"]))
-
-#             except:
-#                 print("failed", s)
-#                 toproc.append((s, samples[s]["files"]))
-# elif args.model[:5] == "model":
-#     import importlib
-
-#     model = importlib.import_module(args.model)
-#     # 	samples=model.samples
-#     allmc = [y for x in model.background for y in model.background[x]] + [
-#         y for x in model.signal for y in model.signal[x]
-#     ]
-#     alldata = [y for x in model.data for y in model.data[x]]
-#     for x in allmc:
-#         print(x, "\t", samples[x]["xsec"])
-#     for x in alldata:
-#         print(x, "\t", samples[x]["lumi"])
-
-#     toproc = [
-#         (s, samples[s]["files"])
-#         for s in sams
-#         if s in allmc + alldata #+ sys.argv[3:]
-#     ]
-# elif args.model != "":
-#     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
+    toproc = [
+        (s, samples[s]["files"])
+        for s in sams
+        if s in allmc + alldata #+ sys.argv[3:]
+    ]
+elif args.model != "":
+    toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
 print("Will process", [x[0] for x in toproc])
 
