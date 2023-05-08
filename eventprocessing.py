@@ -28,18 +28,18 @@ def getFlow():
         "OneB",
         "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))",
     )
-    flow.Define(
-        "TwoB",
-        "nCleanGenJet >= 2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
-    )
-    flow.Define(
-        "OneC",
-        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
-    )
-    flow.Define(
-        "Light",
-        "!TwoB && !OneB && !OneC ",
-    )
+    # flow.Define(
+    #     "TwoB",
+    #     "nCleanGenJet >= 2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
+    # )
+    # flow.Define(
+    #     "OneC",
+    #     "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
+    # )
+    # flow.Define(
+    #     "Light",
+    #     "!TwoB && !OneB && !OneC ",
+    # )
 
     # Muon selection ID
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
