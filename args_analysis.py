@@ -8,5 +8,8 @@ parser.add_argument(
 parser.add_argument(
     "-m", "--model", default="", help="Model to use"
 )
+parser.add_argument(
+    "-r", "--range", default="", help="Number of events to process"
+)
 parser.print_help()
 args = parser.parse_args()

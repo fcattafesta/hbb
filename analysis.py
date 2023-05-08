@@ -29,10 +29,10 @@ flow.binningRules = binningRules
 
 
 proc = flow.CreateProcessor(
-    "eventProcessor", ["TwoB"], histosPerSelection, [], "", nthreads #,"TwoB", "OneC", "Light"
+    "eventProcessor", ["OneB", "TwoB", "OneC", "Light"], histosPerSelection, [], "", nthreads
 )
 procData = flow.CreateProcessor(
-    "eventProcessorData", ["TwoB"], histosPerSelection, [], "", nthreads
+    "eventProcessorData", ["OneB", "TwoB", "OneC", "Light"], histosPerSelection, [], "", nthreads
 )
 
 
@@ -65,12 +65,13 @@ def runSample(ar):
     p = psutil.Process()
     #    print("Affinity", p.cpu_affinity())
     p.cpu_affinity(list(range(psutil.cpu_count())))
-    ROOT.gROOT.ProcessLine(
+    if args.range == "":
+        ROOT.gROOT.ProcessLine(
+            """
+        ROOT::EnableImplicitMT(%s);
         """
-     ROOT::EnableImplicitMT(%s);
-     """
-        % nthreads
-    )
+            % nthreads
+        )
     s, files = ar
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
@@ -78,7 +79,10 @@ def runSample(ar):
     else:  # is data
         sumws, LHEPdfSumw = 1.0, []
     #    import jsonreader
-    rdf = ROOT.RDataFrame("Events", files)  # .Range(10000)
+    rdf = ROOT.RDataFrame("Events", files)
+    if args.range != "":
+        num_events=int(args.range)
+        rdf=rdf.Range(num_events)
     subs = {}
     if rdf:
         try:
