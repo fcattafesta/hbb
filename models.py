@@ -12,17 +12,7 @@ background = {
         "DYZpt-250To400",
         "DYZpt-400To650",
         "DYZpt-650ToInf",
-    ],
-    "DYHT": [
-        "DYHT-70to100",
-        "DYHT-100to200",
-        "DYHT-200to400",
-        "DYHT-400to600",
-        "DYHT-600to800",
-        "DYHT-800to1200",
-        "DYHT-1200to2500",
-        "DYHT-2500toInf",
-    ],
+    ]
 }
 
 # TOP
@@ -54,7 +44,7 @@ background.update(
 # To be added
 
 data = {
-    #"SingleMuon": ["SingleMuon"],
+    # "SingleMuon": ["SingleMuon"],
 }
 
 

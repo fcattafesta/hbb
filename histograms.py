@@ -6,4 +6,7 @@ histosPerSelection = {
     # "lowMass": ["LHE_Zpt", "Gen_Zpt", "Gen_ZMass"],
     "SR_ee": ["Zee_mass", "Mjj"],
     "SR_mm": ["Zmm_mass", "Mjj"],
+    "CR_Zee_bjets": ["Zee_mass", "Mjj", "Zee_pt"],
+    "CR_Zee_lightjets": ["Zee_mass", "Mjj", "Zee_pt"],
+    "CR_ttbar": ["Zee_mass", "Mjj", "Zee_pt"],
 }

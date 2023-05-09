@@ -126,16 +126,44 @@ def getFlow():
     )
     flow.Selection("twoJets", "nSelectedJet >= 2")
     flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
-    flow.Define("Mjj", "(SelectedJet_p4[0]+SelectedJet_p4[1]).M()", requires=["twoJets"])
+    flow.Define("Dijets", "SelectedJet_p4[0]+SelectedJet_p4[1]", requires=["twoJets"])
+    flow.Define("Mjj", "Dijets.M()", requires=["twoJets"])
+
+    flow.Define("ZH_dphi", "TMath::Abs(Dijets.DeltaPhi(Zee))")
 
     flow.Selection("LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241")
     flow.Selection("LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184")
     flow.Selection("LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527")
     flow.Selection("SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241")
 
-
     # signal region
-    flow.Selection("SR_ee", "Zee_mass > 75 && Zee_mass < 105 && Mjj >90 && Mjj<150 && LeadingJetMedium && SubLeadingJetLoose")
-    flow.Selection("SR_mm", "Zmm_mass > 75 && Zmm_mass < 105 && Mjj >90 && Mjj<150 && LeadingJetMedium && SubLeadingJetLoose")
+    flow.Selection(
+        "SR_ee",
+        "Zee_mass >= 75 && Zee_mass <= 105 && Mjj >= 90 && Mjj <= 150 && Zee_pt > 75 && LeadingJetMedium && SubLeadingJetLoose",
+    )
+    flow.Selection(
+        "SR_mm",
+        "Zmm_mass >= 75 && Zmm_mass <= 105 && Mjj >= 90 && Mjj <= 150 && Zmm_pt > 75 && LeadingJetMedium && SubLeadingJetLoose",
+    )
+
+    # Control regions:
+    # Z bjets
+    flow.Selection(
+        "CR_Zee_bjets",
+        "Zee_mass >= 85 && Zee_mass <= 97 && Mjj < 90 && Mjj > 150 && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
+    )
+
+    # Z light jets
+    flow.Selection(
+        "CR_Zee_lightjets",
+        "Zee_mass >= 75 && Zee_mass <= 105 && Mjj >= 90 && Mjj <= 150 && !LeadingJetLoose && !SubLeadingJetLoose && ZH_dphi > 2.5",
+    )
+
+    # ttbar
+
+    flow.Selection(
+        "CR_ttbar",
+        "(Zee_mass >= 10 && Zee_mass <= 75  || Zee_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
+    )
 
     return flow
