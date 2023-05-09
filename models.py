@@ -95,14 +95,14 @@ import ROOT
 # Color palette
 
 fillcolor = {
-    f"Z+{flavour}": ROOT.kBlue - i for i, flavour in enumerate(flavourSplitting)
+    f"Z+{flavour}": ROOT.kGreen + i for i, flavour in zip([3, -2, -6 , -9], flavourSplitting)
 }
 fillcolor.update(
     {
-        "TT": ROOT.kRed,
-        "ST": ROOT.kRed + 2,
-        "ZH": ROOT.kOrange,
-        "ggZH": ROOT.kOrange - 3,
+        "TT": ROOT.kBlue - 4,
+        "ST": ROOT.kBlue + 2,
+        "ZH": ROOT.kRed + 2,
+        "ggZH": ROOT.kRed - 3,
     }
 )
 linecolor = fillcolor
