@@ -44,7 +44,6 @@ name = "HBB"
 # Dictionary for flavour splitting
 
 
-
 background = {
     f"Z+{flavour}": [
         f"DYZpt-0To50_{flavour}",
@@ -116,7 +115,9 @@ backgroundSortedForLegend += [
     x for x in background if x not in backgroundSortedForLegend
 ]
 backgroundSorted = backgroundSortedForLegend
+
 signalSortedForLegend = []
+signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
 signalSorted = signalSortedForLegend
 
 from rebinning import *
