@@ -14,7 +14,7 @@ plotdir="/scratchnvme/malucchi/hbb_plots/"
 suffix=$1
 
 $CMD \
+    ${model} \
     --histfolder ${histodir}${suffix}/ \
-    --model ${model} \
     --outfolder ${plotdir}${suffix}/ \
     "${@:2}"
