@@ -1,6 +1,6 @@
 from multiprocessing import Pool
 import psutil
-from samples import samples
+from samples import samples, flavourSplitting
 import copy
 import sys
 from nail.nail import *
@@ -29,10 +29,20 @@ flow.binningRules = binningRules
 
 
 proc = flow.CreateProcessor(
-    "eventProcessor", ["OneB", "TwoB", "OneC", "Light"], histosPerSelection, [], "", nthreads
+    "eventProcessor",
+    ["OneB", "TwoB", "OneC", "Light"],
+    histosPerSelection,
+    [],
+    "",
+    nthreads,
 )
 procData = flow.CreateProcessor(
-    "eventProcessorData", ["OneB", "TwoB", "OneC", "Light"], histosPerSelection, [], "", nthreads
+    "eventProcessorData",
+    ["OneB", "TwoB", "OneC", "Light"],
+    histosPerSelection,
+    [],
+    "",
+    nthreads,
 )
 
 
@@ -81,7 +91,7 @@ def runSample(ar):
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
-        rdf=rdf.Range(int(args.range))
+        rdf = rdf.Range(int(args.range))
     subs = {}
     if rdf:
         try:
@@ -106,7 +116,8 @@ def runSample(ar):
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
-            if args.range == -1: ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
+            if args.range == -1:
+                ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
 
             for h in out.histos:
@@ -194,9 +205,17 @@ elif args.model[:5] == "model":
 
     model = importlib.import_module(args.model)
     # 	samples=model.samples
-    allmc = [y.rsplit("_", 1)[0] for x in model.background for y in model.background[x]] + [
-        y for x in model.signal for y in model.signal[x]
-    ]
+
+    allmc = []
+    for x in model.background:
+        for y in model.background[x]:
+            for flavour in flavourSplitting.keys():
+                if x.endswith(f"_{flavour}"):
+                    allmc.append(y.rsplit("_", 1)[0])
+                else:
+                    allmc.append(y)
+
+    allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
     for x in allmc:
         print(x, "\t", samples[x]["xsec"])
@@ -204,9 +223,7 @@ elif args.model[:5] == "model":
         print(x, "\t", samples[x]["lumi"])
 
     toproc = [
-        (s, samples[s]["files"])
-        for s in sams
-        if s in allmc + alldata #+ sys.argv[3:]
+        (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
     ]
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]

@@ -43,7 +43,7 @@ name = "HBB"
 
 # Dictionary for flavour splitting
 
-flavourSplitting = ["bb", "b", "c", "udsg"]
+
 
 background = {
     f"Z+{flavour}": [
@@ -60,7 +60,7 @@ background = {
         f"ZZTo2Q2L_{flavour}",
         f"ZZTo4L_{flavour}",
     ]
-    for flavour in flavourSplitting
+    for flavour in flavourSplitting.keys()
 }
 
 background.update(
