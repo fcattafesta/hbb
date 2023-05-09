@@ -1,7 +1,7 @@
 from nail.nail import *
 import ROOT
 import sys
-
+import copy
 
 def getFlow():
     # Start flow definition
@@ -23,23 +23,7 @@ def getFlow():
         sel="GenJet_GenLeptonDr > 0.3 || GenJet_GenLeptonIdx==-1",
     )
 
-    # Defining subsamples based on flavour of the leading and subleading GenJets
-    flow.Define(
-        "OneB",
-        "(nCleanGenJet >= 1  && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
-    )
-    flow.Define(
-        "TwoB",
-        "nCleanGenJet >= 2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
-    )
-    flow.Define(
-        "OneC",
-        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
-    )
-    flow.Define(
-        "Light",
-        "!TwoB && !OneB && !OneC ",
-    )
+
 
     # Muon selection ID
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
@@ -166,4 +150,24 @@ def getFlow():
         "((Zee_mass >= 10 && Zee_mass <= 75)  || Zee_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
     )
 
-    return flow
+    flowData=copy.deepcopy(flow)
+
+    # Defining subsamples based on flavour of the leading and subleading GenJets
+    flow.Define(
+        "OneB",
+        "(nCleanGenJet >= 1  && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
+    )
+    flow.Define(
+        "TwoB",
+        "nCleanGenJet >= 2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
+    )
+    flow.Define(
+        "OneC",
+        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
+    )
+    flow.Define(
+        "Light",
+        "!TwoB && !OneB && !OneC ",
+    )
+
+    return flow, flowData

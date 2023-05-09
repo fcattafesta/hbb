@@ -22,7 +22,7 @@ start = time.time()
 if not os.path.exists(args.histfolder):
     os.makedirs(args.histfolder)
 
-flow = getFlow()
+flow, flowData = getFlow()
 
 # Add binning rules
 flow.binningRules = binningRules
@@ -36,7 +36,7 @@ proc = flow.CreateProcessor(
     "",
     nthreads,
 )
-procData = flow.CreateProcessor(
+procData = flowData.CreateProcessor(
     "eventProcessorData",
     ["OneB", "TwoB", "OneC", "Light"],
     histosPerSelection,
