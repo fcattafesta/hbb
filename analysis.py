@@ -212,6 +212,7 @@ elif args.model[:5] == "model":
             for flavour in flavourSplitting.keys():
                 if x.endswith(f"_{flavour}"):
                     allmc.append(y.rsplit("_", 1)[0])
+                    break
                 else:
                     allmc.append(y)
 
