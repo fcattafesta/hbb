@@ -209,7 +209,7 @@ elif args.model[:5] == "model":
     allmc = []
     for x in model.background:
         for y in model.background[x]:
-            if x.endswith(flavourSplitting.keys()):
+            if x.endswith(tuple(flavourSplitting.keys())):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
                 allmc.append(y)
