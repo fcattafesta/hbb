@@ -5,7 +5,7 @@ name = "HBB"
 # Drell-Yan
 
 background = {
-    "DYZpt": [
+    "DY": [
         "DYZpt-0To50",
         "DYZpt-50To100",
         "DYZpt-100To250",
