@@ -4,10 +4,11 @@ set -x
 
 echo "args: $@"
 
-CMD="python analysis.py"
+CMD="python plot.py"
 model="models"
 
 histodir="/scratchnvme/malucchi/hbb_out/"
+plotdir="/scratchnvme/malucchi/hbb_plots/"
 
 # set a comment via `COMMENT`
 suffix=$1
@@ -15,4 +16,5 @@ suffix=$1
 $CMD \
     --histfolder ${histodir}${suffix}/ \
     --model ${model} \
+    --outfolder ${plotdir}${suffix}/ \
     "${@:2}"
