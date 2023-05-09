@@ -210,7 +210,7 @@ elif args.model[:5] == "model":
     for x in model.background:
         for y in model.background[x]:
             for flavour in flavourSplitting.keys():
-                if x.endswith(f"_{flavour}"):
+                if x.endswith(f"+{flavour}"):
                     allmc.append(y.rsplit("_", 1)[0])
                     break
                 else:
