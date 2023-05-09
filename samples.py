@@ -238,7 +238,7 @@ samples.update(
                 main_dir1 + "C" + suffix7+"1/",
                 main_dir1 + "D" + suffix7+"3/",
             ],
-            "lumi": 0,
+            "lumi": 0, # TODO: add lumi
         },
     }
 )
