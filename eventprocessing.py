@@ -131,10 +131,10 @@ def getFlow():
 
     flow.Define("ZH_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Zee, Dijets))")
 
-    flow.Selection("LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241")
-    flow.Selection("LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184")
-    flow.Selection("LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527")
-    flow.Selection("SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241")
+    flow.Selection("LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241", requires=["twoJets"])
+    flow.Selection("LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184", requires=["twoJets"])
+    flow.Selection("LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527", requires=["twoJets"])
+    flow.Selection("SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241", requires=["twoJets"])
 
     # signal region
     flow.Selection(
@@ -163,7 +163,7 @@ def getFlow():
 
     flow.Selection(
         "CR_ttbar",
-        "(Zee_mass >= 10 && Zee_mass <= 75  || Zee_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
+        "((Zee_mass >= 10 && Zee_mass <= 75)  || Zee_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
     )
 
     return flow
