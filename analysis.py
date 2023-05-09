@@ -194,7 +194,7 @@ elif args.model[:5] == "model":
 
     model = importlib.import_module(args.model)
     # 	samples=model.samples
-    allmc = [y for x in model.background for y in model.background[x]] + [
+    allmc = [y.rsplit("_", 1)[0] for x in model.background for y in model.background[x]] + [
         y for x in model.signal for y in model.signal[x]
     ]
     alldata = [y for x in model.data for y in model.data[x]]
