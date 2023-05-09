@@ -190,6 +190,7 @@ samples.update(
         "ZZTo2L2Nu": {
             "folder": main_dir + "ZZTo2L2Nu" + suffix3 + "1/",
             "xsec": 16.523 * 20.000 * 10.099 / 10000.0,
+            "subsamples": flavourSplitting,
         },
         "ZZTo2Q2L": {
             "folder": main_dir + "ZZTo2Q2L" + suffix5 + "1/",
@@ -199,6 +200,7 @@ samples.update(
         "ZZTo4L": {
             "folder": main_dir + "ZZTo4L" + suffix3 + "2/",
             "xsec": 16.523 * 10.099 * 10.099 / 10000.0,
+            "subsamples": flavourSplitting,
         },
     }
 )
