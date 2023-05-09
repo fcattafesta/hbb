@@ -134,7 +134,7 @@ def getFlow():
     # Z bjets
     flow.Selection(
         "CR_Zee_bjets",
-        "Zee_mass >= 85 && Zee_mass <= 97 && Mjj < 90 && Mjj > 150 && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
+        "Zee_mass >= 85 && Zee_mass <= 97 && (Mjj < 90 || Mjj > 150) && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
     )
 
     # Z light jets
