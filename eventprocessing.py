@@ -129,7 +129,7 @@ def getFlow():
     flow.Define("Dijets", "SelectedJet_p4[0]+SelectedJet_p4[1]", requires=["twoJets"])
     flow.Define("Mjj", "Dijets.M()", requires=["twoJets"])
 
-    flow.Define("ZH_dphi", "TMath::Abs(Dijets.DeltaPhi(Zee))")
+    flow.Define("ZH_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Zee, Dijets))")
 
     flow.Selection("LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241")
     flow.Selection("LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184")
