@@ -127,7 +127,7 @@ def getFlow():
     flow.Selection("twoJets", "nSelectedJet >= 2")
     flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
     flow.Define("Dijets", "SelectedJet_p4[0]+SelectedJet_p4[1]", requires=["twoJets"])
-    flow.Define("Mjj", "Dijets.M()", requires=["twoJets"])
+    flow.Define("Mjj", "Dijets.M()")
 
     flow.Define("ZH_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Zee, Dijets))")
 
