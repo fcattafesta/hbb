@@ -7,6 +7,9 @@ histosPerSelection = {
     "SR_ee": ["Zee_mass", "Mjj"],
     "SR_mm": ["Zmm_mass", "Mjj"],
     "CR_Zee_bjets": ["Zee_mass", "Mjj", "Zee_pt"],
+    "CR_Zmm_bjets": ["Zmm_mass", "Mjj", "Zmm_pt"],
     "CR_Zee_lightjets": ["Zee_mass", "Mjj", "Zee_pt"],
-    "CR_ttbar": ["Zee_mass", "Mjj", "Zee_pt"],
+    "CR_Zmm_lightjets": ["Zmm_mass", "Mjj", "Zmm_pt"],
+    "CR_ee_ttbar": ["Zee_mass", "Mjj", "Zee_pt"],
+    "CR_mm_ttbar": ["Zmm_mass", "Mjj", "Zmm_pt"],
 }
