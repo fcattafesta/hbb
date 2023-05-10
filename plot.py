@@ -1102,7 +1102,7 @@ def makeplot(hn, saveintegrals=True):
         #     61,
         # )
         t1 = makeText(0.3, 0.95, "CMS", 61)
-        t2 = makeText(0.45, 0.95, str(year), 42)
+        t2 = makeText(0.5, 0.95, str(year), 42)
         t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
         # td = makeText(
         #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
