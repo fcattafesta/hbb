@@ -3,12 +3,12 @@ import ROOT
 import sys
 import copy
 
+
 def getFlow():
     # Start flow definition
     flow = SampleProcessing(
         "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
     )
-    flow.CentralWeight("genWeight")  # add a central weight
 
     # Cleaning of GenJet collection from GenLeptons
     flow.SubCollection(
@@ -22,8 +22,6 @@ def getFlow():
         "GenJet",
         sel="GenJet_GenLeptonDr > 0.3 || GenJet_GenLeptonIdx==-1",
     )
-
-
 
     # Muon selection ID
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
@@ -115,10 +113,18 @@ def getFlow():
 
     flow.Define("ZH_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Zee, Dijets))")
 
-    flow.Selection("LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241", requires=["twoJets"])
-    flow.Selection("LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184", requires=["twoJets"])
-    flow.Selection("LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527", requires=["twoJets"])
-    flow.Selection("SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241", requires=["twoJets"])
+    flow.Selection(
+        "LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241", requires=["twoJets"]
+    )
+    flow.Selection(
+        "LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184", requires=["twoJets"]
+    )
+    flow.Selection(
+        "LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527", requires=["twoJets"]
+    )
+    flow.Selection(
+        "SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241", requires=["twoJets"]
+    )
 
     # signal region
     flow.Selection(
@@ -150,7 +156,9 @@ def getFlow():
         "((Zee_mass >= 10 && Zee_mass <= 75)  || Zee_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
     )
 
-    flowData=copy.deepcopy(flow)
+    flowData = copy.deepcopy(flow)
+
+    flow.CentralWeight("genWeight")  # add a central weight
 
     # Defining subsamples based on flavour of the leading and subleading GenJets
     flow.Define(
