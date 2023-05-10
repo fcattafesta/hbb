@@ -895,7 +895,7 @@ def makeplot(hn, saveintegrals=True):
         myLegend_2 = makeLegend(0.65, 0.8, 0.6, 0.9)
 
 
-        myLegend_sy = makeLegend(0.1, 0.15 + 0.015 * len(systematicsSetToUse))
+        myLegend_sy = makeLegend(0.85, 1,  0.1, 0.15 + 0.015 * len(systematicsSetToUse))
         outpath = (
             f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
         )
