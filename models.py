@@ -81,7 +81,7 @@ background.update(
 # To be added
 
 data = {
-    "SingleMuon": ["SingleMuon"],
+    "2018": ["SingleMuon_2018"],
 }
 
 

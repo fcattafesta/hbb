@@ -218,7 +218,7 @@ samples.update(
 )
 samples.update(
     {
-        "SingleMuon": {
+        "SingleMuon_2018": {
             "folders": [
                 main_dir1 + "A" + suffix6+"2/",
                 main_dir1 + "B" + suffix6+"2/",
@@ -231,7 +231,7 @@ samples.update(
 )
 samples.update(
     {
-        "EGamma": {
+        "EGamma_2018": {
             "folders": [
                 main_dir1 + "A" + suffix7+"1/",
                 main_dir1 + "B" + suffix7+"1/",
