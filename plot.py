@@ -32,8 +32,9 @@ hnForSys = {}
 systematicsSetToUse = []
 
 
-def makeLegend(yDown, yUp, name=""):
-    myLegend = ROOT.TLegend(0.82, yDown, 1, yUp, name)
+def makeLegend(xDown, xUp, yDown, yUp, name=""):
+    myLegend = ROOT.TLegend(xDown, yDown, xUp, yUp, name)
+    myLegend.SetFillStyle(0)
     myLegend.SetFillColor(0)
     myLegend.SetBorderSize(0)
     myLegend.SetTextFont(42)
@@ -889,7 +890,11 @@ def makeplot(hn, saveintegrals=True):
     if "__syst__" not in hn:
         dictLegendBackground = dict()
         dictLegendSignal = dict()
-        myLegend = makeLegend(0.4, 0.9)
+
+        myLegend_1 = makeLegend(0.5, 0.65, 0.6, 0.9)
+        myLegend_2 = makeLegend(0.65, 0.8, 0.6, 0.9)
+
+
         myLegend_sy = makeLegend(0.1, 0.15 + 0.015 * len(systematicsSetToUse))
         outpath = (
             f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
@@ -929,7 +934,7 @@ def makeplot(hn, saveintegrals=True):
             for d in model.data[gr]:
                 lumitot += samples[d]["lumi"]
                 print("lumitot=%f" % lumitot)
-                #yr = getYear(d)
+                # yr = getYear(d)
                 yr = "2018"
                 if yr in lumis:
                     lumis[yr] += samples[d]["lumi"]
@@ -949,11 +954,11 @@ def makeplot(hn, saveintegrals=True):
                 stack=datastack,
                 stackSys=datasumSyst,
                 hn=hn,
-                myLegend=myLegend,
+                myLegend=myLegend_1,
                 ftxt=ftxt,
                 data=True,
             )
-            myLegend.AddEntry(h, "data", "PL")
+            myLegend_1.AddEntry(h, "Data", "PL")
 
         DataYieldLine = "sample,yield,uncert,fraction"
         for sy in systematicsSetToUse:
@@ -974,7 +979,7 @@ def makeplot(hn, saveintegrals=True):
                 stack=histos,
                 stackSys=histosumSyst,
                 hn=hn,
-                myLegend=myLegend,
+                myLegend=myLegend_1,
                 ftxt=ftxt,
                 lumis=lumis,
             )
@@ -989,7 +994,7 @@ def makeplot(hn, saveintegrals=True):
                 stack=histosSig,
                 stackSys=histoSigsumSyst,
                 hn=hn,
-                myLegend=myLegend,
+                myLegend=myLegend_1,
                 ftxt=ftxt,
                 lumis=lumis,
             )
@@ -997,10 +1002,10 @@ def makeplot(hn, saveintegrals=True):
 
         # myLegend.AddEntry(None, "", "")
         for gr in model.backgroundSortedForLegend:
-            myLegend.AddEntry(dictLegendBackground[gr], gr, "f")
+            myLegend_2.AddEntry(dictLegendBackground[gr], gr, "f")
         # myLegend.AddEntry(None, "", "")
         for gr in model.signalSortedForLegend:
-            myLegend.AddEntry(dictLegendSignal[gr], gr, "f")
+            myLegend_1.AddEntry(dictLegendSignal[gr], gr, "f")
         # myLegend.AddEntry(None, "", "")
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
         # if makeWorkspace : return
@@ -1025,7 +1030,7 @@ def makeplot(hn, saveintegrals=True):
             h.SetLineWidth(3)
             h.SetLineStyle(2)
             h.Scale(5000.0)
-            myLegend.AddEntry(h, gr + " x5k", "l")
+            myLegend_1.AddEntry(h, gr + " x5k", "l")
         firstBlind = 100000
         lastBlind = -1
 
@@ -1048,7 +1053,9 @@ def makeplot(hn, saveintegrals=True):
                     datasum[hn].SetBinContent(i, 0)
                     # print "blinded",i,hn
 
-        myLegend.Draw()  # NEW
+        myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "PL")
+        myLegend_1.Draw()  # NEW
+        myLegend_2.Draw()  # NEW
         canvas[hn].cd(1)
         histos[hn].SetTitle("")
         if hn in datasum.keys():
@@ -1057,7 +1064,7 @@ def makeplot(hn, saveintegrals=True):
             )  # zoom out y axis
             datasum[hn].SetMaximum(
                 max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
-            ) # zoom out y axis
+            )  # zoom out y axis
             datasum[hn].Draw("E P")
             # datastack[hn].GetXaxis().SetTitle(hn)
             setStyle(datasum[hn])
@@ -1069,7 +1076,7 @@ def makeplot(hn, saveintegrals=True):
             )  # zoom out y axis
             histos[hn].SetMaximum(
                 max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
-            ) # zoom out y axis
+            )  # zoom out y axis
             histos[hn].Draw("hist")
 
         #  histos[hn].Draw("hist")
@@ -1100,7 +1107,7 @@ def makeplot(hn, saveintegrals=True):
         # td = makeText(
         #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
         # )
-        #t0.Draw()
+        # t0.Draw()
         t1.Draw()
         t2.Draw()
         t3.Draw()
