@@ -38,7 +38,7 @@ proc = flow.CreateProcessor(
 )
 procData = flowData.CreateProcessor(
     "eventProcessorData",
-    # ["OneB", "TwoB", "OneC", "Light"],
+    [],  # ["OneB", "TwoB", "OneC", "Light"],
     histosPerSelection,
     [],
     "",
