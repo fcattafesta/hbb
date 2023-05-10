@@ -625,6 +625,7 @@ def fill_datasum(
                 h = h.Clone(hn + "rebinned")
                 if data:
                     h.SetMarkerStyle(20)
+                    h.SetMarkerColor(ROOT.kBlack)
                 else:
                     # if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
                     print(
@@ -1105,6 +1106,7 @@ def makeplot(hn, saveintegrals=True):
         # td.Draw()
         if hn in datasum.keys():
             datasum[hn].SetMarkerStyle(20)
+            datasum[hn].SetMarkerColor(ROOT.kBlack)
             canvas[hn].Update()
             ratio = datasum[hn].Clone()
             ratio.Add(histosum[hn], -1.0)
@@ -1121,11 +1123,12 @@ def makeplot(hn, saveintegrals=True):
                         ),
                     )
             ratio.SetMarkerStyle(20)
+            ratio.SetMarkerColor(ROOT.kBlack)
 
             canvas[hn].cd(2)
             setStyle(ratio, isRatio=True)
 
-            ratio.Draw()
+            ratio.Draw("E1 P")
             ratioError = makeRatioMCplot(histosum[hn])
             ratioError.Draw("same E2")
 
