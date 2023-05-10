@@ -1055,7 +1055,7 @@ def makeplot(hn, saveintegrals=True):
             datasum[hn].SetMinimum(
                 max(0.1 * datasum[hn].GetMinimum(), 0.1)
             )  # zoom out y axis
-            histos[hn].SetMaximum(
+            datasum[hn].SetMaximum(
                 max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
             ) # zoom out y axis
             datasum[hn].Draw("E P")
@@ -1153,7 +1153,7 @@ def makeplot(hn, saveintegrals=True):
 
             tchi2 = makeText(
                 0.22,
-                0.22,
+                0.25,
                 "#chi^{2}="
                 + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
                 42,
@@ -1161,7 +1161,7 @@ def makeplot(hn, saveintegrals=True):
             )
             tKS = makeText(
                 0.32,
-                0.22,
+                0.25,
                 "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                 42,
                 0.025,
