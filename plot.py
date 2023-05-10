@@ -624,7 +624,7 @@ def fill_datasum(
                     )
                 h = h.Clone(hn + "rebinned")
                 if data:
-                    h.SetMarkerStyle(10)
+                    h.SetMarkerStyle(20)
                 else:
                     # if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
                     print(
@@ -1022,8 +1022,8 @@ def makeplot(hn, saveintegrals=True):
             h.SetFillStyle(0)
             h.SetLineWidth(3)
             h.SetLineStyle(2)
-            h.Scale(10000.0)
-            myLegend.AddEntry(h, gr + " x10k", "l")
+            h.Scale(5000.0)
+            myLegend.AddEntry(h, gr + " x5k", "l")
         firstBlind = 100000
         lastBlind = -1
 
@@ -1053,6 +1053,9 @@ def makeplot(hn, saveintegrals=True):
             datasum[hn].SetMinimum(
                 max(0.1 * datasum[hn].GetMinimum(), 0.1)
             )  # zoom out y axis
+            histos[hn].SetMaximum(
+                max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
+            ) # zoom out y axis
             datasum[hn].Draw("E P")
             # datastack[hn].GetXaxis().SetTitle(hn)
             setStyle(datasum[hn])
@@ -1062,7 +1065,11 @@ def makeplot(hn, saveintegrals=True):
             histos[hn].SetMinimum(
                 max(0.1 * histos[hn].GetMinimum(), 0.1)
             )  # zoom out y axis
+            histos[hn].SetMaximum(
+                max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
+            ) # zoom out y axis
             histos[hn].Draw("hist")
+
         #  histos[hn].Draw("hist")
         histosum[hn].SetLineWidth(0)
         histosum[hn].SetFillColor(ROOT.kBlack)
@@ -1077,17 +1084,17 @@ def makeplot(hn, saveintegrals=True):
         for gr in model.signal:
             histosSignal[hn][gr].Draw("hist same")
 
-        t0 = makeText(
-            0.65,
-            0.85,
-            labelRegion[hn.split("___")[1]]
-            if hn.split("___")[1] in list(labelRegion.keys())
-            else hn.split("___")[1],
-            61,
-        )
-        t1 = makeText(0.25, 0.91, "CMS", 61)
-        t2 = makeText(0.32, 0.91, str(year), 42)
-        t3 = makeText(0.90, 0.91, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+        # t0 = makeText(
+        #     0.65,
+        #     0.85,
+        #     labelRegion[hn.split("___")[1]]
+        #     if hn.split("___")[1] in list(labelRegion.keys())
+        #     else hn.split("___")[1],
+        #     61,
+        # )
+        t1 = makeText(0.15, 0.95, "CMS", 61)
+        t2 = makeText(0.35, 0.95, str(year), 42)
+        t3 = makeText(0.90, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
         # td = makeText(
         #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
         # )
@@ -1097,7 +1104,7 @@ def makeplot(hn, saveintegrals=True):
         t3.Draw()
         # td.Draw()
         if hn in datasum.keys():
-            datasum[hn].SetMarkerStyle(10)
+            datasum[hn].SetMarkerStyle(20)
             canvas[hn].Update()
             ratio = datasum[hn].Clone()
             ratio.Add(histosum[hn], -1.0)
@@ -1113,7 +1120,7 @@ def makeplot(hn, saveintegrals=True):
                             else datasum[hn].GetBinContent(n)
                         ),
                     )
-            ratio.SetMarkerStyle(10)
+            ratio.SetMarkerStyle(20)
 
             canvas[hn].cd(2)
             setStyle(ratio, isRatio=True)
