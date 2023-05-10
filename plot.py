@@ -1094,9 +1094,9 @@ def makeplot(hn, saveintegrals=True):
         #     else hn.split("___")[1],
         #     61,
         # )
-        t1 = makeText(0.15, 0.95, "CMS", 61)
-        t2 = makeText(0.35, 0.95, str(year), 42)
-        t3 = makeText(0.90, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+        t1 = makeText(0.25, 0.95, "CMS", 61)
+        t2 = makeText(0.45, 0.95, str(year), 42)
+        t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
         # td = makeText(
         #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
         # )
@@ -1153,7 +1153,7 @@ def makeplot(hn, saveintegrals=True):
 
             tchi2 = makeText(
                 0.22,
-                0.25,
+                0.27,
                 "#chi^{2}="
                 + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
                 42,
@@ -1161,7 +1161,7 @@ def makeplot(hn, saveintegrals=True):
             )
             tKS = makeText(
                 0.32,
-                0.25,
+                0.27,
                 "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                 42,
                 0.025,
