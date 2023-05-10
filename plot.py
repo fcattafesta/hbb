@@ -38,7 +38,7 @@ def makeLegend(xDown, xUp, yDown, yUp, name=""):
     myLegend.SetFillColor(0)
     myLegend.SetBorderSize(0)
     myLegend.SetTextFont(42)
-    myLegend.SetTextSize(0.025)
+    myLegend.SetTextSize(0.02)
     return myLegend
 
 
@@ -891,8 +891,8 @@ def makeplot(hn, saveintegrals=True):
         dictLegendBackground = dict()
         dictLegendSignal = dict()
 
-        myLegend_1 = makeLegend(0.5, 0.65, 0.6, 0.9)
-        myLegend_2 = makeLegend(0.65, 0.8, 0.6, 0.9)
+        myLegend_1 = makeLegend(0.6, 0.7, 0.8, 1)
+        myLegend_2 = makeLegend(0.7, 0.8, 0.8, 1)
 
 
         myLegend_sy = makeLegend(0.85, 1,  0.1, 0.15 + 0.015 * len(systematicsSetToUse))
