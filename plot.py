@@ -1053,7 +1053,7 @@ def makeplot(hn, saveintegrals=True):
                     datasum[hn].SetBinContent(i, 0)
                     # print "blinded",i,hn
 
-        myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "PL")
+        myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
         myLegend_1.Draw()  # NEW
         myLegend_2.Draw()  # NEW
         canvas[hn].cd(1)

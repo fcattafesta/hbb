@@ -106,7 +106,7 @@ fillcolor.update(
         "ggZH": ROOT.kRed - 3,
     }
 )
-linecolor = {key: ROOT.kBlack for key in fillcolor.keys()}
+linecolor = fillcolor # {key: ROOT.kBlack for key in fillcolor.keys()}
 markercolor = fillcolor
 
 
