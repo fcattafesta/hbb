@@ -912,8 +912,9 @@ def makeplot(hn, saveintegrals=True):
         histosSig[hn] = ROOT.THStack(hn, "")
         datastack[hn] = ROOT.THStack(hn, "")
 
-        # canvas[hn]=ROOT.TCanvas("canvas_"+hn,"",900,750)
-        canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
+        canvas[hn]=ROOT.TCanvas("canvas_"+hn,"",900,750)
+        canvas[hn].SetLeftMargin(0.15)
+        #canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
         # canvas[hn].SetRightMargin(.0);
         canvas[hn].Divide(1, 2)
         canvas[hn].GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
