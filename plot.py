@@ -1152,16 +1152,16 @@ def makeplot(hn, saveintegrals=True):
             myLegend_sy.Draw()
 
             tchi2 = makeText(
-                0.22,
-                0.27,
+                0.25,
+                0.26,
                 "#chi^{2}="
                 + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
                 42,
                 0.025,
             )
             tKS = makeText(
-                0.32,
-                0.27,
+                0.35,
+                0.26,
                 "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                 42,
                 0.025,
