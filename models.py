@@ -95,7 +95,8 @@ import ROOT
 # Color palette
 
 fillcolor = {
-    f"Z+{flavour}": ROOT.kGreen + i for i, flavour in zip([3, -2, -6 , -9], flavourSplitting)
+    f"Z+{flavour}": ROOT.kGreen + i
+    for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
 }
 fillcolor.update(
     {
@@ -105,7 +106,7 @@ fillcolor.update(
         "ggZH": ROOT.kRed - 3,
     }
 )
-linecolor = fillcolor
+linecolor = {fillcolor[key]: ROOT.kBlack for key in fillcolor.keys()}
 markercolor = fillcolor
 
 
