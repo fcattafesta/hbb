@@ -913,13 +913,14 @@ def makeplot(hn, saveintegrals=True):
         datastack[hn] = ROOT.THStack(hn, "")
 
         # canvas[hn]=ROOT.TCanvas("canvas_"+hn,"",900,750)
+        # canvas[hn].SetLeftMargin(0.2)
         canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
         # canvas[hn].SetRightMargin(.0);
         canvas[hn].Divide(1, 2)
         canvas[hn].GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
         canvas[hn].GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
 
-        ROOT.gStyle.SetPadLeftMargin(0.15)
+        ROOT.gStyle.SetPadLeftMargin(0.2)
         canvas[hn].GetPad(2).SetBottomMargin(0.35)
         canvas[hn].GetPad(2).SetTopMargin(0.0)
 
