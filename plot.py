@@ -626,6 +626,7 @@ def fill_datasum(
                 if data:
                     h.SetMarkerStyle(20)
                     h.SetMarkerColor(ROOT.kBlack)
+                    h.SetLineColor(ROOT.kBlack)
                 else:
                     # if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
                     print(
@@ -1107,6 +1108,7 @@ def makeplot(hn, saveintegrals=True):
         if hn in datasum.keys():
             datasum[hn].SetMarkerStyle(20)
             datasum[hn].SetMarkerColor(ROOT.kBlack)
+            datasum[hn].SetLineColor(ROOT.kBlack)
             canvas[hn].Update()
             ratio = datasum[hn].Clone()
             ratio.Add(histosum[hn], -1.0)
@@ -1124,6 +1126,7 @@ def makeplot(hn, saveintegrals=True):
                     )
             ratio.SetMarkerStyle(20)
             ratio.SetMarkerColor(ROOT.kBlack)
+            ratio.SetLineColor(ROOT.kBlack)
 
             canvas[hn].cd(2)
             setStyle(ratio, isRatio=True)
