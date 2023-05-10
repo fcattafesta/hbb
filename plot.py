@@ -1022,15 +1022,15 @@ def makeplot(hn, saveintegrals=True):
             S.Write()
             fR.Close()
 
-        for gr in model.signalSortedForLegend:
-            h = histosSignal[hn][gr]
-            histos[hn].Add(h.Clone())
-            h.SetLineColor(model.linecolor[gr])
-            h.SetFillStyle(0)
-            h.SetLineWidth(3)
-            h.SetLineStyle(2)
-            h.Scale(5000.0)
-            myLegend_1.AddEntry(h, gr + " x5k", "l")
+        # for gr in model.signalSortedForLegend:
+        #     h = histosSignal[hn][gr]
+        #     histos[hn].Add(h.Clone())
+        #     h.SetLineColor(model.linecolor[gr])
+        #     h.SetFillStyle(0)
+        #     h.SetLineWidth(3)
+        #     h.SetLineStyle(2)
+        #     h.Scale(5000.0)
+        #     myLegend_1.AddEntry(h, gr + " x5k", "l")
         firstBlind = 100000
         lastBlind = -1
 
