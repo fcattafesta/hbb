@@ -7,7 +7,7 @@ echo "args: $@"
 CMD="python analysis.py"
 model="models"
 
-histodir="/scratchnvme/malucchi/hbb_out/"
+histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"
 
 # set a comment via `COMMENT`
 suffix=$1
