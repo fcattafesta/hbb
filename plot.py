@@ -891,11 +891,10 @@ def makeplot(hn, saveintegrals=True):
         dictLegendBackground = dict()
         dictLegendSignal = dict()
 
-        myLegend_1 = makeLegend(0.6, 0.7, 0.8, 1)
-        myLegend_2 = makeLegend(0.7, 0.8, 0.8, 1)
+        myLegend_1 = makeLegend(0.58, 0.68, 0.75, 0.92)
+        myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
-
-        myLegend_sy = makeLegend(0.85, 1,  0.1, 0.15 + 0.015 * len(systematicsSetToUse))
+        myLegend_sy = makeLegend(0.85, 1, 0.1, 0.15 + 0.015 * len(systematicsSetToUse))
         outpath = (
             f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
         )
