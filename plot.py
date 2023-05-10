@@ -1098,7 +1098,7 @@ def makeplot(hn, saveintegrals=True):
         # td = makeText(
         #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
         # )
-        t0.Draw()
+        #t0.Draw()
         t1.Draw()
         t2.Draw()
         t3.Draw()
