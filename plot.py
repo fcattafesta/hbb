@@ -1001,10 +1001,10 @@ def makeplot(hn, saveintegrals=True):
 
         # myLegend.AddEntry(None, "", "")
         for gr in model.backgroundSortedForLegend:
-            myLegend_2.AddEntry(dictLegendBackground[gr], gr, "FL")
+            myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         for gr in model.signalSortedForLegend:
-            myLegend_1.AddEntry(dictLegendSignal[gr], gr, "FL")
+            myLegend_1.AddEntry(dictLegendSignal[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
         # if makeWorkspace : return
@@ -1155,7 +1155,7 @@ def makeplot(hn, saveintegrals=True):
                 ratiosy[-1].Draw("same hist")
                 # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
             canvas[hn].cd()
-            myLegend_sy.Draw()
+            # myLegend_sy.Draw()
 
             tchi2 = makeText(
                 0.25,
