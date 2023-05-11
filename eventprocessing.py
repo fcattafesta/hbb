@@ -211,4 +211,11 @@ def getFlow():
         "!TwoB && !OneB && !OneC ",
     )
 
+    # Flavour splitting for Diboson processes
+    flow.Define(
+        "HF",
+        "OneB || TwoB || OneC",
+    )
+    flow.Define("LF", "!HF")
+
     return flow, flowData

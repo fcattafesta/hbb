@@ -1,6 +1,6 @@
 from multiprocessing import Pool
 import psutil
-from samples import samples, flavourSplitting
+from samples import samples, flavourSplitting, flavourVVSplitting
 import copy
 import sys
 from nail.nail import *
@@ -30,7 +30,7 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    ["OneB", "TwoB", "OneC", "Light"],
+    ["OneB", "TwoB", "OneC", "Light", "HF", "LF"],
     histosPerSelection,
     [],
     "",
@@ -209,7 +209,9 @@ elif args.model[:5] == "model":
     allmc = []
     for x in model.background:
         for y in model.background[x]:
-            if x.endswith(tuple(flavourSplitting.keys())):
+            if x.endswith(
+                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
+            ):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
                 allmc.append(y)

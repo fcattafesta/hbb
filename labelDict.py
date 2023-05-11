@@ -25,4 +25,6 @@ labelLegend = {
     "Z+b": "Z+b",
     "Z+bb": "Z+b#bar{b}",
     "Z+c": "Z+c",
+    "VVHF": "VVHF",
+    "VVLF": "VVLF",
 }

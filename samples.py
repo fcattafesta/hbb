@@ -9,15 +9,24 @@ suffix5 = "_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade
 main_dir1 = "/gpfs/ddn/srm/cms/store/data/Run2018"
 suffix6 = "/SingleMuon/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v"
 suffix7 = "/EGamma/NANOAOD/UL2018_MiniAODv2_NanoAODv9-v"
-suffix8 = "_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v"
+suffix8 = (
+    "_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v"
+)
 suffix9 = "_TuneCP5_13TeV-powheg-madspin-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v"
-suffix10 = "_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v"
+suffix10 = (
+    "_TuneCP5_13TeV-amcatnlo-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v"
+)
 
 flavourSplitting = {
     "b": "OneB",
     "bb": "TwoB",
     "c": "OneC",
     "udsg": "Light",
+}
+
+flavourVVSplitting = {
+    "HF": "HF",
+    "LF": "LF",
 }
 
 samples = {
@@ -175,32 +184,32 @@ samples.update(
         "WZTo2Q2L": {
             "folder": main_dir + "WZTo2Q2L" + suffix5 + "1/",
             "xsec": 47.13 * 6.729 * 67.41 / 10000,
-            "subsamples": flavourSplitting,
+            "subsamples": flavourVVSplitting,
         },
         "WZTo3LNu": {
             "folder": main_dir + "WZTo3LNu" + suffix4 + "2/",
             "xsec": 47.13 * 21.34 * 10.099 / 10000.0,
-            "subsamples": flavourSplitting,
+            "subsamples": flavourVVSplitting,
         },
         "WWTo2L2Nu": {
             "folder": main_dir + "WWTo2L2Nu" + suffix8 + "2/",
             "xsec": 118.7 * 21.34 * 21.34 / 10000.0,
-            "subsamples": flavourSplitting,
+            "subsamples": flavourVVSplitting,
         },
         "ZZTo2L2Nu": {
             "folder": main_dir + "ZZTo2L2Nu" + suffix3 + "1/",
             "xsec": 16.523 * 20.000 * 10.099 / 10000.0,
-            "subsamples": flavourSplitting,
+            "subsamples": flavourVVSplitting,
         },
         "ZZTo2Q2L": {
             "folder": main_dir + "ZZTo2Q2L" + suffix5 + "1/",
             "xsec": 16.523 * 2.0 * 10.099 * 69.91 / 10000.0,
-            "subsamples": flavourSplitting,
+            "subsamples": flavourVVSplitting,
         },
         "ZZTo4L": {
             "folder": main_dir + "ZZTo4L" + suffix3 + "2/",
             "xsec": 16.523 * 10.099 * 10.099 / 10000.0,
-            "subsamples": flavourSplitting,
+            "subsamples": flavourVVSplitting,
         },
     }
 )
@@ -220,10 +229,10 @@ samples.update(
     {
         "SingleMuon_2018": {
             "folders": [
-                main_dir1 + "A" + suffix6+"2/",
-                main_dir1 + "B" + suffix6+"2/",
-                main_dir1 + "C" + suffix6+"2/",
-                main_dir1 + "D" + suffix6+"1/",
+                main_dir1 + "A" + suffix6 + "2/",
+                main_dir1 + "B" + suffix6 + "2/",
+                main_dir1 + "C" + suffix6 + "2/",
+                main_dir1 + "D" + suffix6 + "1/",
             ],
             "lumi": 59970,
         },
@@ -233,18 +242,19 @@ samples.update(
     {
         "EGamma_2018": {
             "folders": [
-                main_dir1 + "A" + suffix7+"1/",
-                main_dir1 + "B" + suffix7+"1/",
-                main_dir1 + "C" + suffix7+"1/",
-                main_dir1 + "D" + suffix7+"3/",
+                main_dir1 + "A" + suffix7 + "1/",
+                main_dir1 + "B" + suffix7 + "1/",
+                main_dir1 + "C" + suffix7 + "1/",
+                main_dir1 + "D" + suffix7 + "3/",
             ],
-            "lumi": 0, # TODO: add lumi
+            "lumi": 0,  # TODO: add lumi
         },
     }
 )
 
 
 import os, glob
+
 addSubSamples = {}
 # get the files from the directory named as the sample name with the suffix /scratchnvme/malucchi/hbb_samples/
 for sample in samples:
@@ -252,7 +262,10 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     samples[sample]["files"] = [
-        x for x in glob.glob("/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample, recursive=True)
+        x
+        for x in glob.glob(
+            "/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample, recursive=True
+        )
     ]
 samples.update(addSubSamples)
 
@@ -268,7 +281,9 @@ if __name__ == "__main__":
         elif "folders" in samples[sample].keys():
             os.system("mkdir -p /scratchnvme/malucchi/hbb_samples/%s" % sample)
             for folder in samples[sample]["folders"]:
-                os.system("cp -r %s /scratchnvme/malucchi/hbb_samples/%s/" % (folder, sample))
+                os.system(
+                    "cp -r %s /scratchnvme/malucchi/hbb_samples/%s/" % (folder, sample)
+                )
 
 # for sample in samples:
 #     if "folder" in samples[sample].keys():
