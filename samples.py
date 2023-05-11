@@ -247,7 +247,7 @@ samples.update(
                 main_dir1 + "C" + suffix7 + "1/",
                 main_dir1 + "D" + suffix7 + "3/",
             ],
-            "lumi": 0,  # TODO: add lumi
+            "lumi": 59970,  # NOTE this is the same as for muons but it is an approximation
         },
     }
 )
