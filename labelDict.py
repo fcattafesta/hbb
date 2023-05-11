@@ -9,11 +9,25 @@ labelRegion = {
 labelVariable = {
     "Zee_mass": "m_{ee}",
     "Zmm_mass": "m_{#mu#mu}",
+    "Z_mass": "m_{ll}",
     "Zee_pt": "p_{T}(ee)",
     "Zmm_pt": "p_{T}(#mu#mu)",
-    "Mjj": "m_{jj}",
-    "LeadJet_pt": "p_{T}(jet lead)",
-    "LeadJet_eta": "#eta(jet lead)",
+    "Z_pt": "p_{T}(ll)",
+    "Dijets_mass": "m_{jj}",
+    "Dijets_pt": "p_{T}(jj)",
+    "MET_pt": "p_{T}^{miss}",
+    "ZH_dphi": "#Delta#phi(Z,jj)",
+    "ZH_deta": "#Delta#eta(Z,jj)",
+    "ZH_dr": "#DeltaR(Z,jj)",
+    "HZ_ptRatio": "p_{T}(jj)/p_{T}(Z)",
+    "btag_max": "btag_{max} WP",
+    "btag_min": "btag_{min} WP",
+    "jj_dphi": "#Delta#phi(jj)",
+    "jj_deta": "#Delta#eta(jj)",
+    "jj_dr": "#DeltaR(jj)",
+    "LeadingJet_pt": "p_{T}^{max}",
+    "SubLeadingJet_pt": "p_{T}^{min}",
+    "SoftActivityJetNjets5": "N_{jets}^{soft} (p_{T} > 5 GeV)",
 }
 
 labelLegend = {
