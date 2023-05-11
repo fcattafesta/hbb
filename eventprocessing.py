@@ -216,7 +216,7 @@ def getFlow():
     flow.Distinct("LPair", "Lepton")
     flow.Define(
         "isOSSF",
-        "LPair0_charge != LPair1_charge && LPair0_pid == LPair1_pid",
+        "LPair0_charge != LPair1_charge && LPair0_pdgId == LPair1_pdgId",
         requires=["twoLeptons"],
     )
     flow.Selection("hasOSSF", "Sum(isOSSF) > 0")
