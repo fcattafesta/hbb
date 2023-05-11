@@ -144,6 +144,11 @@ def getFlow():
     flow.Define(
         "ZH_mm_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Zmm, Dijets))"
     )
+    flow.Define("ZH__mm_deta", "TMath::Abs(Zmm.Eta() - Dijets.Eta())")
+    flow.Define(
+        "ZH_mm_dr", "TMath::Sqrt(ZH_mm_dphi*ZH_mm_dphi + ZH_mm_deta*ZH_mm_deta)"
+    )
+    flow.Define("HZ_mm_ptRatio", "Dijets_pt/Zmm_pt")
 
     # Common pre-selection for signal and control regions
     flow.Selection("CommonSelEle", "Zee_pt > 75 && Dijets_mass > 50")
@@ -207,7 +212,6 @@ def getFlow():
         requires=["CommonSelMu"],
     )
 
-
     ### All leptons collection ###
 
     flow.MergeCollections("Lepton", ["SelectedElectron", "SelectedMuon"])
@@ -216,7 +220,7 @@ def getFlow():
     flow.Distinct("LPair", "Lepton")
     flow.Define(
         "isOSSF",
-        "LPair0_charge != LPair1_charge && LPair0_pdgId == LPair1_pdgId",
+        "LPair0_pdgId == - LPair1_pdgId",
         requires=["twoLeptons"],
     )
     flow.Selection("hasOSSF", "Sum(isOSSF) > 0")
