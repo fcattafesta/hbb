@@ -1,24 +1,22 @@
-histos = (
-    [
-        "Z_mass",
-        "Z_pt",
-        "Dijets_mass",
-        "Dijets_pt",
-        "MET_pt",
-        "ZH_dphi",
-        "ZH_deta",
-        "ZH_dr",
-        "HZ_ptRatio",
-        "btag_max",
-        "btag_min",
-        "jj_dphi",
-        "jj_deta",
-        "jj_dr",
-        "LeadingJet_pt",
-        "SubLeadingJet_pt",
-        "SoftActivityJetNjets5",
-    ],
-)
+histos = [
+    "Z_mass",
+    "Z_pt",
+    "Dijets_mass",
+    "Dijets_pt",
+    "MET_pt",
+    "ZH_dphi",
+    "ZH_deta",
+    "ZH_dr",
+    "HZ_ptRatio",
+    "btag_max",
+    "btag_min",
+    "jj_dphi",
+    "jj_deta",
+    "jj_dr",
+    "LeadingJet_pt",
+    "SubLeadingJet_pt",
+    "SoftActivityJetNjets5",
+]
 sels = ["SR", "CR_Z_bjets", "CR_Z_lightjets", "CR_ttbar"]
 
 histosPerSelection = {sel: histos for sel in sels}
