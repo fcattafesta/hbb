@@ -141,12 +141,20 @@ def findSyst(hn, sy, f, silent=False):
 
 
 def writeYields(ftxt, gr, integral, error, dataEvents):
-    line = "%s,%s,%s,%s " % (
-        gr,
-        round(integral[gr]["nom"], 5),
-        round(error[gr], 5),
-        round(integral[gr]["nom"] / dataEvents, 5),
-    )
+    if dataEvents != 0:
+        line = "%s,%s,%s,%s " % (
+            gr,
+            round(integral[gr]["nom"], 5),
+            round(error[gr], 5),
+            round(integral[gr]["nom"] / dataEvents, 5),
+        )
+    else:
+        line = "%s,%s,%s,%s " % (
+            gr,
+            round(integral[gr]["nom"], 5),
+            round(error[gr], 5),
+            0,
+        )
     # line = "%s\t%s +- %s\t%s "%(gr,round(integral[gr]["nom"],5), round(error[gr],5),round(integral[gr]["nom"]/dataEvents,5))
     for sy in sorted(integral[gr].keys()):
         if sy != "nom":
