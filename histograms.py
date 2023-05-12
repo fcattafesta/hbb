@@ -17,9 +17,14 @@ histos = [
     "SubLeadingJet_pt",
     "SoftActivityJetNjets5",
 ]
-sels = ["SR", "CR_Z_bjets", "CR_Z_lightjets", "CR_ttbar"]
+# sels = ["SR", "CR_Z_bjets", "CR_Z_lightjets", "CR_ttbar"]
+
+sels = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
 
 histosPerSelection = {sel: histos for sel in sels}
+
+
+
 
 
 # histosPerSelection = {

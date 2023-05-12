@@ -13,7 +13,8 @@ from histobinning import binningRules
 from histograms import histosPerSelection
 from args_analysis import args
 
-from eventprocessing import getFlow
+# from eventprocessing import getFlow
+from eventprocessingMuons import getFlowMuon as getFlow # Only for muons
 
 nthreads = args.nthreads
 nprocesses = 7
