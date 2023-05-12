@@ -1064,139 +1064,164 @@ def makeplot(hn, saveintegrals=True):
         myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
         myLegend_1.Draw()  # NEW
         myLegend_2.Draw()  # NEW
-        canvas[hn].cd(1)
-        histos[hn].SetTitle("")
-        if hn in datasum.keys():
-            datasum[hn].SetMinimum(
-                max(0.1 * datasum[hn].GetMinimum(), 0.1)
-            )  # zoom out y axis
-            datasum[hn].SetMaximum(
-                max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
-            )  # zoom out y axis
-            datasum[hn].Draw("E P")
-            # datastack[hn].GetXaxis().SetTitle(hn)
-            setStyle(datasum[hn])
-            datasum[hn].Draw("E P")
-            histos[hn].Draw("hist same")
-        else:
-            histos[hn].SetMinimum(
-                max(0.1 * histos[hn].GetMinimum(), 0.1)
-            )  # zoom out y axis
-            histos[hn].SetMaximum(
-                max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
-            )  # zoom out y axis
-            histos[hn].Draw("hist")
 
-        #  histos[hn].Draw("hist")
-        histosum[hn].SetLineWidth(0)
-        histosum[hn].SetFillColor(ROOT.kBlack)
-        histosum[hn].SetFillStyle(3004)
-        setStyle(histos[hn].GetStack().Last())
-        canvas[hn].Update()
-        histosum[hn].Draw("same E2")
+        canvas_log = canvas[hn].Clone()
+        canvas_tuple = (canvas[hn], canvas_log)
 
-        if hn in datasum.keys():
-            datasum[hn].Draw("E P sameaxis")
-            datasum[hn].Draw("E P same")
-        for gr in model.signal:
-            histosSignal[hn][gr].Draw("hist same")
+        for i, c in enumerate(canvas_tuple):
+            c.cd(1)
 
-        # t0 = makeText(
-        #     0.65,
-        #     0.85,
-        #     labelRegion[hn.split("___")[1]]
-        #     if hn.split("___")[1] in list(labelRegion.keys())
-        #     else hn.split("___")[1],
-        #     61,
-        # )
-        t1 = makeText(0.3, 0.95, "CMS", 61)
-        t2 = makeText(0.5, 0.95, str(year), 42)
-        t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
-        # td = makeText(
-        #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
-        # )
-        # t0.Draw()
-        t1.Draw()
-        t2.Draw()
-        t3.Draw()
-        # td.Draw()
-        if hn in datasum.keys():
-            datasum[hn].SetMarkerStyle(20)
-            datasum[hn].SetMarkerColor(ROOT.kBlack)
-            datasum[hn].SetLineColor(ROOT.kBlack)
-            canvas[hn].Update()
-            ratio = datasum[hn].Clone()
-            ratio.Add(histosum[hn], -1.0)
-            ratio.Divide(histosum[hn])
-            for n in range(datasum[hn].GetNbinsX() + 2):
-                if datasum[hn].GetBinContent(n) > 0:
-                    ratio.SetBinError(
-                        n,
-                        datasum[hn].GetBinError(n)
-                        / (
-                            histosum[hn].GetBinContent(n)
-                            if histosum[hn].GetBinContent(n) > 0
-                            else datasum[hn].GetBinContent(n)
-                        ),
+            histos[hn].SetTitle("")
+            if hn in datasum.keys():
+                datasum[hn].SetMinimum(
+                    max(0.1 * datasum[hn].GetMinimum(), 0.1)
+                )  # zoom out y axis
+                if i == 0:
+                    datasum[hn].SetMaximum(
+                        max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
+                    )  # zoom out y axis
+                else:
+                    datasum[hn].SetMaximum(
+                        max(
+                            (datasum[hn].GetMaximum()) ** 2,
+                            (histosum[hn].GetMaximum()) ** 2,
+                        )
+                    )  # zoom out y axis
+
+                datasum[hn].Draw("E P")
+                # datastack[hn].GetXaxis().SetTitle(hn)
+                setStyle(datasum[hn])
+                datasum[hn].Draw("E P")
+                histos[hn].Draw("hist same")
+            else:
+                histos[hn].SetMinimum(
+                    max(0.1 * histos[hn].GetMinimum(), 0.1)
+                )  # zoom out y axis
+                if i == 0:
+                    histos[hn].SetMaximum(
+                        max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
                     )
-            ratio.SetMarkerStyle(20)
-            ratio.SetMarkerColor(ROOT.kBlack)
-            ratio.SetLineColor(ROOT.kBlack)
+                else:
+                    histos[hn].SetMaximum(
+                        max(
+                            (datasum[hn].GetMaximum()) ** 2,
+                            (histosum[hn].GetMaximum()) ** 2,
+                        )
+                    )
+                histos[hn].Draw("hist")
 
-            canvas[hn].cd(2)
-            setStyle(ratio, isRatio=True)
+            #  histos[hn].Draw("hist")
+            histosum[hn].SetLineWidth(0)
+            histosum[hn].SetFillColor(ROOT.kBlack)
+            histosum[hn].SetFillStyle(3004)
+            setStyle(histos[hn].GetStack().Last())
+            c.Update()
+            histosum[hn].Draw("same E2")
 
-            ratio.Draw("E1 P")
-            ratioError = makeRatioMCplot(histosum[hn])
-            ratioError.Draw("same E2")
+            if hn in datasum.keys():
+                datasum[hn].Draw("E P sameaxis")
+                datasum[hn].Draw("E P same")
+            for gr in model.signal:
+                histosSignal[hn][gr].Draw("hist same")
 
-            ratio.SetAxisRange(-0.5, 0.5, "Y")
-            ratio.GetYaxis().SetNdivisions(5)
-            ratiosy = []
-            for j, sy in enumerate(systematicsSetToUse):
-                ratiosy.append(histosumSyst[hn][sy].Clone())
-                ratiosy[-1].Add(histosum[hn], -1.0)
-                ratiosy[-1].Divide(histosum[hn])
-                ratiosy[-1].SetLineColor(1 + j)
-                # ratiosy[-1].SetLineStyle(j)
-                ratiosy[-1].SetFillStyle(0)
-                myLegend_sy.AddEntry(ratiosy[-1], sy, "LE")
-                ratiosy[-1].Draw("same hist")
-                # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
-            canvas[hn].cd()
-            # myLegend_sy.Draw()
+            # t0 = makeText(
+            #     0.65,
+            #     0.85,
+            #     labelRegion[hn.split("___")[1]]
+            #     if hn.split("___")[1] in list(labelRegion.keys())
+            #     else hn.split("___")[1],
+            #     61,
+            # )
+            t1 = makeText(0.3, 0.95, "CMS", 61)
+            t2 = makeText(0.5, 0.95, str(year), 42)
+            t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            # td = makeText(
+            #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
+            # )
+            # t0.Draw()
+            t1.Draw()
+            t2.Draw()
+            t3.Draw()
+            # td.Draw()
+            if hn in datasum.keys():
+                datasum[hn].SetMarkerStyle(20)
+                datasum[hn].SetMarkerColor(ROOT.kBlack)
+                datasum[hn].SetLineColor(ROOT.kBlack)
+                c.Update()
+                ratio = datasum[hn].Clone()
+                ratio.Add(histosum[hn], -1.0)
+                ratio.Divide(histosum[hn])
+                for n in range(datasum[hn].GetNbinsX() + 2):
+                    if datasum[hn].GetBinContent(n) > 0:
+                        ratio.SetBinError(
+                            n,
+                            datasum[hn].GetBinError(n)
+                            / (
+                                histosum[hn].GetBinContent(n)
+                                if histosum[hn].GetBinContent(n) > 0
+                                else datasum[hn].GetBinContent(n)
+                            ),
+                        )
+                ratio.SetMarkerStyle(20)
+                ratio.SetMarkerColor(ROOT.kBlack)
+                ratio.SetLineColor(ROOT.kBlack)
 
-            tchi2 = makeText(
-                0.25,
-                0.26,
-                "#chi^{2}="
-                + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
-                42,
-                0.025,
-            )
-            tKS = makeText(
-                0.35,
-                0.26,
-                "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
-                42,
-                0.025,
-            )
-            tchi2.Draw()
-            tKS.Draw()
+                c.cd(2)
+                setStyle(ratio, isRatio=True)
 
-        canvas[hn].GetPad(2).SetGridy()
-        if postfit:
-            canvas[hn].SaveAs(outpath + "/%s_postFit.png" % hn)
-        else:
-            canvas[hn].SaveAs(outpath + "/%s.png" % hn)
-            canvas[hn].SaveAs(outpath + "/%s.root" % hn)
-        # canvas[hn].SaveAs("%s.root"%hn)
-        canvas[hn].GetPad(1).SetLogy(True)
-        if postfit:
-            canvas[hn].SaveAs(outpath + "/%s_log_postFit.png" % hn)
-        else:
-            canvas[hn].SaveAs(outpath + "/%s_log.png" % hn)
-            canvas[hn].SaveAs(outpath + "/%s_log.root" % hn)
+                ratio.Draw("E1 P")
+                ratioError = makeRatioMCplot(histosum[hn])
+                ratioError.Draw("same E2")
+
+                ratio.SetAxisRange(-0.5, 0.5, "Y")
+                ratio.GetYaxis().SetNdivisions(5)
+                ratiosy = []
+                for j, sy in enumerate(systematicsSetToUse):
+                    ratiosy.append(histosumSyst[hn][sy].Clone())
+                    ratiosy[-1].Add(histosum[hn], -1.0)
+                    ratiosy[-1].Divide(histosum[hn])
+                    ratiosy[-1].SetLineColor(1 + j)
+                    # ratiosy[-1].SetLineStyle(j)
+                    ratiosy[-1].SetFillStyle(0)
+                    myLegend_sy.AddEntry(ratiosy[-1], sy, "LE")
+                    ratiosy[-1].Draw("same hist")
+                    # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
+                c.cd()
+                # myLegend_sy.Draw()
+
+                tchi2 = makeText(
+                    0.25,
+                    0.26,
+                    "#chi^{2}="
+                    + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
+                    42,
+                    0.025,
+                )
+                tKS = makeText(
+                    0.35,
+                    0.26,
+                    "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
+                    42,
+                    0.025,
+                )
+                tchi2.Draw()
+                tKS.Draw()
+
+            c.GetPad(2).SetGridy()
+            if i == 0:
+                if postfit:
+                    c.SaveAs(outpath + "/%s_postFit.png" % hn)
+                else:
+                    c.SaveAs(outpath + "/%s.png" % hn)
+                    c.SaveAs(outpath + "/%s.root" % hn)
+            # c.SaveAs("%s.root"%hn)
+            else:
+                c.GetPad(1).SetLogy(True)
+                if postfit:
+                    c.SaveAs(outpath + "/%s_log_postFit.png" % hn)
+                else:
+                    c.SaveAs(outpath + "/%s_log.png" % hn)
+                    c.SaveAs(outpath + "/%s_log.root" % hn)
 
 
 variablesToFit = []
