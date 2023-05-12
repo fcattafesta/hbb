@@ -2,11 +2,11 @@ labelRegion = {
     "SR_ee": "Signal Region",
     "CR_Zee_bjets": "Z+bjets Region",
     "CR_Zee_lightjets": "Z+lightjets Region",
-    "CR_ttbar": "t#bar{t} Region",
+    "CR_ee_ttbar": "t#bar{t} Region",
     "SR_mm": "Signal Region",
     "CR_Zmm_bjets": "Z+bjets Region",
     "CR_Zmm_lightjets": "Z+lightjets Region",
-    "CR_Zmm_ttbar": "t#bar{t} Region",
+    "CR_mm_ttbar": "t#bar{t} Region",
 }
 
 
