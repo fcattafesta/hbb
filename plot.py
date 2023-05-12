@@ -1129,21 +1129,22 @@ def makeplot(hn, saveintegrals=True):
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
 
-            # t0 = makeText(
-            #     0.65,
-            #     0.85,
-            #     labelRegion[hn.split("___")[1]]
-            #     if hn.split("___")[1] in list(labelRegion.keys())
-            #     else hn.split("___")[1],
-            #     61,
-            # )
+            t0 = makeText(
+                0.15,
+                0.9,
+                labelRegion[hn.split("___")[1]]
+                if hn.split("___")[1] in list(labelRegion.keys())
+                else hn.split("___")[1],
+                42,
+                size=0.04,
+            )
             t1 = makeText(0.3, 0.95, "CMS", 61)
             t2 = makeText(0.5, 0.95, str(year), 42)
             t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             # td = makeText(
             #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
             # )
-            # t0.Draw()
+            t0.Draw()
             t1.Draw()
             t2.Draw()
             t3.Draw()
@@ -1228,6 +1229,7 @@ def makeplot(hn, saveintegrals=True):
                     c.SaveAs(outpath + "/%s_log.png" % hn)
                     c.SaveAs(outpath + "/%s_log.root" % hn)
             del c
+
 
 variablesToFit = []
 makeWorkspace = False
