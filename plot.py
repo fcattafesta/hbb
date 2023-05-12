@@ -922,15 +922,6 @@ def makeplot(hn, saveintegrals=True):
 
         # canvas[hn]=ROOT.TCanvas("canvas_"+hn,"",900,750)
         # canvas[hn].SetLeftMargin(0.2)
-        canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
-        # canvas[hn].SetRightMargin(.0);
-        canvas[hn].Divide(1, 2)
-        canvas[hn].GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
-        canvas[hn].GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
-
-        ROOT.gStyle.SetPadLeftMargin(0.2)
-        canvas[hn].GetPad(2).SetBottomMargin(0.35)
-        canvas[hn].GetPad(2).SetTopMargin(0.0)
 
         if makeWorkspace:
             all_histo_all_syst[hn] = {}
@@ -1062,13 +1053,27 @@ def makeplot(hn, saveintegrals=True):
                     # print "blinded",i,hn
 
         myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
-        myLegend_1.Draw()  # NEW
-        myLegend_2.Draw()  # NEW
 
-        canvas_log = canvas[hn].Clone()
+        canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
+        # canvas[hn].SetRightMargin(.0);
+        canvas_log = ROOT.TCanvas("canvas_log_" + hn, "", 1200, 1000)
+        # canvas[hn].SetRightMargin(.0);
         canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
+            c.Divide(1, 2)
+            c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
+            c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
+
+            ROOT.gStyle.SetPadLeftMargin(0.2)
+            c.GetPad(2).SetBottomMargin(0.35)
+            c.GetPad(2).SetTopMargin(0.0)
+
+            c.cd()
+            
+            myLegend_1.Draw()  # NEW
+            myLegend_2.Draw()  # NEW
+
             c.cd(1)
 
             histos[hn].SetTitle("")
