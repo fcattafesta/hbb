@@ -14,7 +14,7 @@ elif [ "$1" == "el" ]; then
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
 
-lep="$1"
+lep=$1
 # set a comment via `COMMENT`
 suffix=$2
 
