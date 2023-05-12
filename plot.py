@@ -1130,7 +1130,7 @@ def makeplot(hn, saveintegrals=True):
                 histosSignal[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.5,
+                0.4,
                 0.8,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
