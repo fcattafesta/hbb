@@ -6,21 +6,22 @@ echo "args: $@"
 
 CMD="python plot.py"
 
-if [ "$1" == "mu" ]; then
+lep=$1
+suffix=$2
+
+if [ "$lep" == "mu" ]; then
     model="modelsMuon"
-elif [ "$1" == "el" ]; then
+elif [ "$lep" == "el" ]; then
     model="modelsElectron"
+fi
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
 
-lep=$1
-# set a comment via `COMMENT`
-suffix=$2
+
 
 $CMD \
     ${model} \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --outfolder ${plotdir}/${lep}/${suffix}/ \
-    --foldersuffix ${suffix} \
     "${@:3}"
