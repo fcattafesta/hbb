@@ -19,6 +19,7 @@ suffix=$2
 
 $CMD \
     ${model} \
-    --histfolder ${histodir}/${suffix}/ \
-    --outfolder ${plotdir}/${suffix}/ \
-    "${@:2}"
+    --histfolder ${histodir}/"$1"/${suffix}/ \
+    --outfolder ${plotdir}/"$1"/${suffix}/ \
+    --foldersuffix ${suffix} \
+    "${@:3}"

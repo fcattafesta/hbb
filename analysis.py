@@ -14,7 +14,13 @@ from histograms import histosPerSelection
 from args_analysis import args
 
 # from eventprocessing import getFlow
-from eventprocessingMuons import getFlowMuon as getFlow # Only for muons
+if args.lep == "mu":
+    from eventprocessingMuons import getFlowMuon as getFlow
+elif args.lep == "el":
+    from eventprocessingElectrons import getFlowElectron as getFlow
+else:
+    print("Lepton channel must be 'mu' or 'el'")
+    sys.exit(1)
 
 nthreads = args.nthreads
 nprocesses = 7
@@ -39,7 +45,7 @@ proc = flow.CreateProcessor(
 )
 procData = flowData.CreateProcessor(
     "eventProcessorData",
-    [],  # ["OneB", "TwoB", "OneC", "Light"],
+    [], 
     histosPerSelection,
     [],
     "",

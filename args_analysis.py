@@ -14,5 +14,8 @@ parser.add_argument(
 parser.add_argument(
     "-n", "--nthreads", default=50, help="Number of threads", type=int,
 )
+parser.add_argument(
+    "-l", "--lep", default="mu", help="Lepton channel"
+)
 parser.print_help()
 args = parser.parse_args()

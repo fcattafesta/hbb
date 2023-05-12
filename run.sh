@@ -18,6 +18,7 @@ histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 suffix=$2
 
 $CMD \
-    --histfolder ${histodir}/${suffix}/ \
+    --histfolder ${histodir}/"$1"/${suffix}/ \
     --model ${model} \
-    "${@:2}"
+    --lep "$1" \
+    "${@:3}"
