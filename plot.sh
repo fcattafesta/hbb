@@ -14,12 +14,13 @@ elif [ "$1" == "el" ]; then
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
 
+lep="$1"
 # set a comment via `COMMENT`
 suffix=$2
 
 $CMD \
     ${model} \
-    --histfolder ${histodir}/"$1"/${suffix}/ \
-    --outfolder ${plotdir}/"$1"/${suffix}/ \
+    --histfolder ${histodir}/${lep}/${suffix}/ \
+    --outfolder ${plotdir}/${lep}/${suffix}/ \
     --foldersuffix ${suffix} \
     "${@:3}"

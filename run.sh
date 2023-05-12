@@ -13,12 +13,12 @@ elif [ "$1" == "el" ]; then
 
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
-
+lep="$1"
 # set a comment via `COMMENT`
 suffix=$2
 
 $CMD \
-    --histfolder ${histodir}/"$1"/${suffix}/ \
+    --histfolder ${histodir}/${lep}/${suffix}/ \
     --model ${model} \
-    --lep "$1" \
+    --lep ${lep} \
     "${@:3}"
