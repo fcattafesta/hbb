@@ -5,14 +5,19 @@ set -x
 echo "args: $@"
 
 CMD="python analysis.py"
-model="models"
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"
+if [ "$1" == "mu" ]; then
+    model="modelsMuon"
+elif [ "$1" == "el" ]; then
+    model="modelsElectron"
+
+
+histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 
 # set a comment via `COMMENT`
-suffix=$1
+suffix=$2
 
 $CMD \
-    --histfolder ${histodir}${suffix}/ \
+    --histfolder ${histodir}/${suffix}/ \
     --model ${model} \
     "${@:2}"
