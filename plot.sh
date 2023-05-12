@@ -24,5 +24,4 @@ $CMD \
     ${model} \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --outfolder ${plotdir}/${lep}/${suffix}/ \
-    --foldersuffix ${suffix} \
     "${@:3}"
