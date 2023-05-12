@@ -899,8 +899,8 @@ def makeplot(hn, saveintegrals=True):
         dictLegendBackground = dict()
         dictLegendSignal = dict()
 
-        myLegend_1 = makeLegend(0.48, 0.63, 0.75, 0.92)
-        myLegend_2 = makeLegend(0.63, 0.78, 0.75, 0.92)
+        myLegend_1 = makeLegend(0.58, 0.68, 0.75, 0.92)
+        myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
         myLegend_sy = makeLegend(0.85, 1, 0.1, 0.15 + 0.015 * len(systematicsSetToUse))
         outpath = (
@@ -1130,7 +1130,7 @@ def makeplot(hn, saveintegrals=True):
                 histosSignal[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.3,
+                0.5,
                 0.8,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
