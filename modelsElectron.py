@@ -3,6 +3,18 @@ from samples import *
 name = "HBB"
 
 background = {
+    f"VV{flavour}": [
+        f"WWTo2L2Nu_{flavour}",
+        f"WZTo2Q2L_{flavour}",
+        f"WZTo3LNu_{flavour}",
+        f"ZZTo2L2Nu_{flavour}",
+        f"ZZTo2Q2L_{flavour}",
+        f"ZZTo4L_{flavour}",
+    ]
+    for flavour in flavourVVSplitting.keys()
+}
+
+background.update = {
     f"Z+{flavour}": [
         f"DYZpt-0To50_{flavour}",
         f"DYZpt-50To100_{flavour}",
@@ -13,20 +25,6 @@ background = {
     ]
     for flavour in flavourSplitting.keys()
 }
-
-background.update(
-    {
-        f"VV{flavour}": [
-            f"WWTo2L2Nu_{flavour}",
-            f"WZTo2Q2L_{flavour}",
-            f"WZTo3LNu_{flavour}",
-            f"ZZTo2L2Nu_{flavour}",
-            f"ZZTo2Q2L_{flavour}",
-            f"ZZTo4L_{flavour}",
-        ]
-        for flavour in flavourVVSplitting.keys()
-    }
-)
 
 background.update(
     {
