@@ -10,13 +10,17 @@ import time
 import os
 
 from histobinning import binningRules
-from histograms import histosPerSelection
 from args_analysis import args
 
-# from eventprocessing import getFlow
+from eventprocessingCommon import getFlowCommon
+from eventprocessingMC import getFlowMC
+
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuon as getFlow
+    from histograms import histosPerSelectionMuon as histosPerSelection
+
 elif args.lep == "el":
+    from histograms import histosPerSelectionElectron as histosPerSelection
     from eventprocessingElectrons import getFlowElectron as getFlow
 else:
     print("Lepton channel must be 'mu' or 'el'")
@@ -29,7 +33,16 @@ start = time.time()
 if not os.path.exists(args.histfolder):
     os.makedirs(args.histfolder)
 
-flow, flowData = getFlow()
+# Create the flow
+flow = SampleProcessing(
+    "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
+)
+# Flow for data
+flowData = getFlowCommon(flow)
+flowData = getFlow(flowData)
+# Final flow for MC
+flow = copy.deepcopy(flowData)
+flow = getFlowMC(flow)
 
 # Add binning rules
 flow.binningRules = binningRules
@@ -45,7 +58,7 @@ proc = flow.CreateProcessor(
 )
 procData = flowData.CreateProcessor(
     "eventProcessorData",
-    [], 
+    [],
     histosPerSelection,
     [],
     "",

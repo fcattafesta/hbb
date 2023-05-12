@@ -46,9 +46,7 @@ background.update(
 
 # To be added
 
-data = {
-    "2018": ["SingleMuon_2018"], # "EGamma_2018"],
-}
+data = {"2018": ["SingleMuon_2018"]}
 
 
 signal = {

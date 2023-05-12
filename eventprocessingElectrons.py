@@ -4,32 +4,32 @@ import sys
 import copy
 
 
-def getFlowMuons(flow):
-    ### Analysis for muons ###
+def getFlowElectrons(flow):
+    ### Analysis for electrons ###
 
-    ## Muon pair selection ##
-    flow.Selection("twoMuons", "nSelectedMuon==2")
-    flow.Define("SelectedMuon_p4", "@p4v(SelectedMuon)")
-    flow.Distinct("MuMu", "SelectedMuon")
+    ## Electron pair selection ##
+    flow.Selection("twoElectrons", "nSelectedElectron==2")
+    flow.Define("SelectedElectron_p4", "@p4v(SelectedElectron)")
+    flow.Distinct("ElEl", "SelectedElectron")
     flow.Define(
-        "OppositeSignMuMu",
-        "Nonzero(MuMu0_charge != MuMu1_charge)",
-        requires=["twoMuons"],
+        "OppositeSignElEl",
+        "Nonzero(ElEl0_charge != ElEl1_charge)",
+        requires=["twoElectrons"],
     )
-    flow.Selection("twoOppositeSignMuons", "OppositeSignMuMu.size() > 0")
+    flow.Selection("twoOppositeSignElectrons", "OppositeSignElEl.size() > 0")
     flow.TakePair(
-        "Mu",
-        "SelectedMuon",
-        "MuMu",
-        "At(OppositeSignMuMu,0,-200)",
-        requires=["twoOppositeSignMuons"],
+        "El",
+        "SelectedElectron",
+        "ElEl",
+        "At(OppositeSignElEl,0,-200)",
+        requires=["twoOppositeSignElectrons"],
     )
-    flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
+    flow.Selection("PtSelEl", "El0_pt > 25 && El1_pt > 17")
 
-    ### Z boson from muons ###
-    flow.Define("Z", "Mu0_p4+Mu1_p4", requires=["PtSelMu"])
-    flow.Define("Z_pt", "Z.Pt()", requires=["PtSelMu"])
-    flow.Define("Z_mass", "Z.M()", requires=["PtSelMu"])
+    ### Z boson from electrons ###
+    flow.Define("Z", "El0_p4+El1_p4", requires=["PtSelEl"])
+    flow.Define("Z_pt", "Z.Pt()", requires=["PtSelEl"])
+    flow.Define("Z_mass", "Z.M()", requires=["PtSelEl"])
 
     # Relative kinematic and topological properties bewtween Z and Dijet
     flow.Define("ZH_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Z, Dijets))")
@@ -38,35 +38,35 @@ def getFlowMuons(flow):
     flow.Define("HZ_ptRatio", "Dijets_pt/Z_pt")
 
     # Common pre-selection for signal and control regions
-    flow.Selection("CommonSelMu", "Z_pt > 75 && Dijets_mass > 50")
+    flow.Selection("CommonSelEle", "Z_pt > 75 && Dijets_mass > 50")
 
     ### Signal regions ###
     flow.Selection(
-        "SR_mm",
+        "SR_ee",
         "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && LeadingJetMedium && SubLeadingJetLoose",
-        requires=["CommonSelMu"],
+        requires=["CommonSelEle"],
     )
 
     ### Control regions ###
-    ## Z+bjets ##
+    ## Z+bjets  ##
     flow.Selection(
-        "CR_Zmm_bjets",
+        "CR_Zee_bjets",
         "Z_mass >= 85 && Z_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
-        requires=["CommonSelMu"],
+        requires=["CommonSelEle"],
     )
+
     ## Z+light jets ##
-    # Muons
     flow.Selection(
-        "CR_Zmm_lightjets",
+        "CR_Zee_lightjets",
         "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !LeadingJetLoose && !SubLeadingJetLoose && ZH_dphi > 2.5",
-        requires=["CommonSelMu"],
+        requires=["CommonSelEle"],
     )
+
     ## ttbar ##
-    # Muons
     flow.Selection(
-        "CR_mm_ttbar",
+        "CR_ee_ttbar",
         "((Z_mass >= 10 && Z_mass <= 75)  || Z_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
-        requires=["CommonSelMu"],
+        requires=["CommonSelEle"],
     )
 
     return flow
