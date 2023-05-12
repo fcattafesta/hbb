@@ -1070,7 +1070,7 @@ def makeplot(hn, saveintegrals=True):
             c.GetPad(2).SetTopMargin(0.0)
 
             c.cd()
-            
+
             myLegend_1.Draw()  # NEW
             myLegend_2.Draw()  # NEW
 
@@ -1227,8 +1227,7 @@ def makeplot(hn, saveintegrals=True):
                 else:
                     c.SaveAs(outpath + "/%s_log.png" % hn)
                     c.SaveAs(outpath + "/%s_log.root" % hn)
-            c.Delete()
-
+            del c
 
 variablesToFit = []
 makeWorkspace = False
