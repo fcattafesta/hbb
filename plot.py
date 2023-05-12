@@ -1222,6 +1222,7 @@ def makeplot(hn, saveintegrals=True):
                 else:
                     c.SaveAs(outpath + "/%s_log.png" % hn)
                     c.SaveAs(outpath + "/%s_log.root" % hn)
+            c.Delete()
 
 
 variablesToFit = []
