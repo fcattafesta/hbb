@@ -6,18 +6,16 @@ echo "args: $@"
 
 CMD="python analysis.py"
 
-if [ "$1" == "mu" ]; then
+lep=$1
+suffix=$2
+
+if [[ "$lep" == "mu" ]]; then
     model="modelsMuon"
-elif [ "$1" == "el" ]; then
+elif [[ "$lep" == "el" ]]; then
     model="modelsElectron"
-echo $model
+fi
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
-lep=$1
-echo $lep
-# set a comment via `COMMENT`
-suffix=$2
-echo $suffix
 
 $CMD \
     --histfolder ${histodir}/${lep}/${suffix}/ \
