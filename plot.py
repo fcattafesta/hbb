@@ -1066,7 +1066,7 @@ def makeplot(hn, saveintegrals=True):
         myLegend_2.Draw()  # NEW
 
         canvas_log = canvas[hn].Clone()
-        canvas_tuple = (canvas[hn], canvas_log)
+        canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
             c.cd(1)
