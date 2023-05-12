@@ -40,9 +40,9 @@ def getFlowMuon():
     flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
 
     # Z boson from muons
-    flow.Define("Zmm", "Mu0_p4+Mu1_p4", requires=["PtSelMu"])
-    flow.Define("Zmm_pt", "Zmm.Pt()", requires=["PtSelMu"])
-    flow.Define("Zmm_mass", "Zmm.M()", requires=["PtSelMu"])
+    flow.Define("Z", "Mu0_p4+Mu1_p4", requires=["PtSelMu"])
+    flow.Define("Z_pt", "Z.Pt()", requires=["PtSelMu"])
+    flow.Define("Z_mass", "Z.M()", requires=["PtSelMu"])
 
     ### Electrons ###
 
@@ -113,22 +113,18 @@ def getFlowMuon():
     flow.Define("SubLeadingJet_pt", "SelectedJet_pt[1]")
 
     # Relative properties bewteen Z and dijet
-    flow.Define(
-        "ZH_mm_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Zmm, Dijets))"
-    )
-    flow.Define("ZH__mm_deta", "TMath::Abs(Zmm.Eta() - Dijets.Eta())")
-    flow.Define(
-        "ZH_mm_dr", "TMath::Sqrt(ZH_mm_dphi*ZH_mm_dphi + ZH_mm_deta*ZH_mm_deta)"
-    )
-    flow.Define("HZ_mm_ptRatio", "Dijets_pt/Zmm_pt")
+    flow.Define("ZH_dphi", "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(Z, Dijets))")
+    flow.Define("ZH_deta", "TMath::Abs(Z.Eta() - Dijets.Eta())")
+    flow.Define("ZH_dr", "TMath::Sqrt(ZH_dphi*ZH_dphi + ZH_deta*ZH_deta)")
+    flow.Define("HZ_ptRatio", "Dijets_pt/Z_pt")
 
     # Common pre-selection for signal and control regions
-    flow.Selection("CommonSelMu", "Zmm_pt > 75 && Dijets_mass > 50")
+    flow.Selection("CommonSelMu", "Z_pt > 75 && Dijets_mass > 50")
 
     ### Signal regions ###
     flow.Selection(
         "SR_mm",
-        "Zmm_mass >= 75 && Zmm_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && LeadingJetMedium && SubLeadingJetLoose",
+        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && LeadingJetMedium && SubLeadingJetLoose",
         requires=["CommonSelMu"],
     )
 
@@ -136,21 +132,21 @@ def getFlowMuon():
     ## Z+bjets ##
     flow.Selection(
         "CR_Zmm_bjets",
-        "Zmm_mass >= 85 && Zmm_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_mm_dphi > 2.5",
+        "Z_mass >= 85 && Z_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
         requires=["CommonSelMu"],
     )
     ## Z+light jets ##
     # Muons
     flow.Selection(
         "CR_Zmm_lightjets",
-        "Zmm_mass >= 75 && Zmm_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !LeadingJetLoose && !SubLeadingJetLoose && ZH_mm_dphi > 2.5",
+        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !LeadingJetLoose && !SubLeadingJetLoose && ZH_dphi > 2.5",
         requires=["CommonSelMu"],
     )
     ## ttbar ##
     # Muons
     flow.Selection(
         "CR_mm_ttbar",
-        "((Zmm_mass >= 10 && Zmm_mass <= 75)  || Zmm_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
+        "((Z_mass >= 10 && Z_mass <= 75)  || Z_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
         requires=["CommonSelMu"],
     )
 
