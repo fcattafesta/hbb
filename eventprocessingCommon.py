@@ -54,6 +54,9 @@ def getFlowCommon(flow):
         requires=["twoJets"],
     )
 
+    # Define p4 
+    flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
+
     # Order by btag score
     flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_btagDeepFlavB)")
     flow.ObjectAt(
@@ -71,8 +74,6 @@ def getFlowCommon(flow):
 
     ### Dijet ###
     ## Jet pair selection ##
-    flow.Define("JetBtagMax_p4", "@p4v(JetBtagMax)")
-    flow.Define("JetBtagMin_p4", "@p4v(JetBtagMin)")
     flow.Define("Dijets", "JetBtagMax_p4+JetBtagMin_p4")
     flow.Define("Dijets_mass", "Dijets.M()")
     flow.Define("Dijets_pt", "Dijets.Pt()")
