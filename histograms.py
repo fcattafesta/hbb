@@ -14,8 +14,8 @@ histos = [
     "jj_dphi",
     "jj_deta",
     "jj_dr",
-    "LeadingJet_pt",
-    "SubLeadingJet_pt",
+    "JetBtagMax_pt",
+    "JetBtagMin_pt",
     "SoftActivityJetNjets5",
 ]
 

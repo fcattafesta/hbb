@@ -43,7 +43,7 @@ def getFlowElectrons(flow):
     ### Signal regions ###
     flow.Selection(
         "SR_ee",
-        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && LeadingJetMedium && SubLeadingJetLoose",
+        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && JetBtagMaxMedium && JetBtagMinLoose",
         requires=["CommonSelEle"],
     )
 
@@ -51,21 +51,21 @@ def getFlowElectrons(flow):
     ## Z+bjets  ##
     flow.Selection(
         "CR_Zee_bjets",
-        "Z_mass >= 85 && Z_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
+        "Z_mass >= 85 && Z_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && JetBtagMaxMedium && JetBtagMinLoose && ZH_dphi > 2.5",
         requires=["CommonSelEle"],
     )
 
     ## Z+light jets ##
     flow.Selection(
         "CR_Zee_lightjets",
-        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !LeadingJetLoose && !SubLeadingJetLoose && ZH_dphi > 2.5",
+        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !JetBtagMaxLoose && !JetBtagMinLoose && ZH_dphi > 2.5",
         requires=["CommonSelEle"],
     )
 
     ## ttbar ##
     flow.Selection(
         "CR_ee_ttbar",
-        "((Z_mass >= 10 && Z_mass <= 75)  || Z_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
+        "((Z_mass >= 10 && Z_mass <= 75)  || Z_mass > 120) && JetBtagMaxTight && JetBtagMinLoose",
         requires=["CommonSelEle"],
     )
 

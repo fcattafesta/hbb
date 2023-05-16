@@ -9,7 +9,7 @@ def getFlowCommon(flow):
     flow.SubCollection(
         "SelectedMuon",
         "Muon",
-        sel="Muon_iso < 0.06 && Muon_mediumId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
+        sel="Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
     )
 
     ## Electrons ##
@@ -33,50 +33,72 @@ def getFlowCommon(flow):
     flow.SubCollection(
         "SelectedJet",
         "CleanJet",
-        sel="CleanJet_pt > 20. && abs(CleanJet_eta) < 2.5",
+        sel="CleanJet_pt > 20. && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0",
     )
 
-    # B-tagging working points
-    flow.Selection(
-        "LeadingJetLoose", "SelectedJet_btagDeepB[0] > 0.1241", requires=["twoJets"]
-    )
-    flow.Selection(
-        "LeadingJetMedium", "SelectedJet_btagDeepB[0] > 0.4184", requires=["twoJets"]
-    )
-    flow.Selection(
-        "LeadingJetTight", "SelectedJet_btagDeepB[0] > 0.7527", requires=["twoJets"]
-    )
-    flow.Selection(
-        "SubLeadingJetLoose", "SelectedJet_btagDeepB[1] > 0.1241", requires=["twoJets"]
+    flow.Selection("twoJets", "nSelectedJet >= 2")
+
+    # Define LeadingJet and SubLeadingJet
+    flow.Define("SelectedJetPtOrderIndices", "Argsort(-SelectedJet_pt)")
+    flow.ObjetAt(
+        "LeadingJet",
+        "SelectedJet",
+        "At(SelectedJetPtOrderIndices,0)",
+        requires=["twoJets"],
     )
 
-    # B-tagging distributions for LeadingJet and SubLeadingJet
-    flow.Define(
-        "btag_max",
-        "int((SelectedJet_btagDeepB[0] > 0.7527)) + int((SelectedJet_btagDeepB[0] > 0.4184)) + int((SelectedJet_btagDeepB[0] > 0.1241))",
+    flow.ObjetAt(
+        "SubLeadingJet",
+        "SelectedJet",
+        "At(SelectedJetPtOrderIndices,1)",
+        requires=["twoJets"],
     )
-    flow.Define(
-        "btag_min",
-        "int((SelectedJet_btagDeepB[1] > 0.1241)) + int((SelectedJet_btagDeepB[1] > 0.4184)) + int((SelectedJet_btagDeepB[1] > 0.7527))",
+
+    # Order by btag score
+    flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_btagDeepFlavB)")
+    flow.ObjetAt(
+        "JetBtagMax",
+        "SelectedJet",
+        "At(SelectedJetBTagOrderIndice,0)",
+        requires=["twoJets"],
     )
-    # Pt distributions for LeadingJet and SubLeadingJet
-    flow.Define("LeadingJet_pt", "SelectedJet_pt[0]")
-    flow.Define("SubLeadingJet_pt", "SelectedJet_pt[1]")
+    flow.ObjetAt(
+        "JetBtagMin",
+        "SelectedJet",
+        "At(SelectedJetBTagOrderIndice,1)",
+        requires=["twoJets"],
+    )
 
     ### Dijet ###
     ## Jet pair selection ##
-    flow.Selection("twoJets", "nSelectedJet >= 2")
-    flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
-    flow.Define("Dijets", "SelectedJet_p4[0]+SelectedJet_p4[1]", requires=["twoJets"])
+    flow.Define("JetBtagMax_p4", "@p4v(JetBtagMax)")
+    flow.Define("JetBtagMin_p4", "@p4v(JetBtagMin)")
+    flow.Define("Dijets", "JetBtagMax_p4+JetBtagMin_p4")
     flow.Define("Dijets_mass", "Dijets.M()")
     flow.Define("Dijets_pt", "Dijets.Pt()")
 
     # Relative topological properties of the two jets
-    flow.Define("jj_deta", "abs(SelectedJet_eta[0] - SelectedJet_eta[1])")
+    flow.Define("jj_deta", "abs(JetBtagMax_eta - JetBtagMin_eta)")
     flow.Define(
         "jj_dphi",
-        "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(SelectedJet_p4[0], SelectedJet_p4[1]))",
+        "TMath::Abs(ROOT::Math::VectorUtil::DeltaPhi(JetBtagMax_p4, JetBtagMin_p4))",
     )
     flow.Define("jj_dr", "TMath::Sqrt(jj_deta*jj_deta + jj_dphi*jj_dphi)")
+
+    # B-tagging working points
+    flow.Selection("JetBtagMaxLoose", "JetBtagMax_btagDeepFlavB > 0.0490")
+    flow.Selection("JetBtagMaxMedium", "JetBtagMax_btagDeepFlavB > 0.2783")
+    flow.Selection("JetBtagMaxTight", "JetBtagMax_btagDeepFlavB > 0.7100")
+    flow.Selection("JetBtagMinLoose", "JetBtagMin_btagDeepFlavB > 0.0490")
+
+    # B-tagging distributions for JetBtagMax and JetBtagMin
+    flow.Define(
+        "btag_max",
+        "int((JetBtagMax_btagDeepFlavB > 0.7100)) + int((JetBtagMax_btagDeepFlavB > 0.2783)) + int((JetBtagMax_btagDeepFlavB > 0.0490))",
+    )
+    flow.Define(
+        "btag_min",
+        "int((JetBtagMin_btagDeepFlavB > 0.7100)) + int((JetBtagMin_btagDeepFlavB > 0.2783)) + int((JetBtagMin_btagDeepFlavB > 0.0490))",
+    )
 
     return flow

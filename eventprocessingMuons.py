@@ -43,7 +43,7 @@ def getFlowMuons(flow):
     ### Signal regions ###
     flow.Selection(
         "SR_mm",
-        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && LeadingJetMedium && SubLeadingJetLoose",
+        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && JetBtagMaxMedium && JetBtagMaxLoose",
         requires=["CommonSelMu"],
     )
 
@@ -51,21 +51,21 @@ def getFlowMuons(flow):
     ## Z+bjets ##
     flow.Selection(
         "CR_Zmm_bjets",
-        "Z_mass >= 85 && Z_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && LeadingJetMedium && SubLeadingJetLoose && ZH_dphi > 2.5",
+        "Z_mass >= 85 && Z_mass <= 97 && (Dijets_mass < 90 || Dijets_mass > 150) && MET_pt < 60 && JetBtagMaxMedium && JetBtagMinLoose && ZH_dphi > 2.5",
         requires=["CommonSelMu"],
     )
     ## Z+light jets ##
     # Muons
     flow.Selection(
         "CR_Zmm_lightjets",
-        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !LeadingJetLoose && !SubLeadingJetLoose && ZH_dphi > 2.5",
+        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && !JetBtagMaxLoose && !JetBtagMinLoose && ZH_dphi > 2.5",
         requires=["CommonSelMu"],
     )
     ## ttbar ##
     # Muons
     flow.Selection(
         "CR_mm_ttbar",
-        "((Z_mass >= 10 && Z_mass <= 75)  || Z_mass > 120) && LeadingJetTight && SubLeadingJetLoose",
+        "((Z_mass >= 10 && Z_mass <= 75)  || Z_mass > 120) && JetBtagMaxTight && JetBtagMinLoose",
         requires=["CommonSelMu"],
     )
 

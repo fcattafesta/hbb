@@ -29,8 +29,8 @@ labelVariable = {
     "jj_dphi": "#Delta#phi(jj)",
     "jj_deta": "#Delta#eta(jj)",
     "jj_dr": "#DeltaR(jj)",
-    "LeadingJet_pt": "p_{T}^{max}",
-    "SubLeadingJet_pt": "p_{T}^{min}",
+    "JetBtagMax_pt": "p_{T}^{max}",
+    "JetBtagMin_pt": "p_{T}^{min}",
     "SoftActivityJetNjets5": "N_{jets}^{soft} (p_{T} > 5 GeV)",
 }
 
