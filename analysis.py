@@ -137,8 +137,9 @@ def runSample(ar):
                 # create snapshot directory
                 if not os.path.exists(f"{args.histfolder}/Snapshots"):
                     os.makedirs(f"{args.histfolder}/Snapshots")
-                out.rdf[sig_region].Snapshot(
-                    "Events", f"{args.histfolder}/Snapshots/{s}Snapshot.root", snaplist
+                processed_rdf = out.rdf.find(sig_region).second
+                processed_rdf.Snapshot(
+                    "Events", f"{args.histfolder}/Snapshots/{s}_Snapshot.root", snaplist
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
@@ -204,10 +205,6 @@ toproc = sorted(
     reverse=True,
 )
 print("To process", [x[0] for x in toproc])
-
-if not os.path.exists(args.histfolder):
-    os.makedirs(args.histfolder)
-
 
 if args.model == "fix":
     toproc = []
