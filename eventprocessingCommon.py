@@ -59,13 +59,13 @@ def getFlowCommon(flow):
     flow.ObjectAt(
         "JetBtagMax",
         "SelectedJet",
-        "At(SelectedJetBTagOrderIndice,0)",
+        "At(SelectedJetBTagOrderIndices,0)",
         requires=["twoJets"],
     )
     flow.ObjectAt(
         "JetBtagMin",
         "SelectedJet",
-        "At(SelectedJetBTagOrderIndice,1)",
+        "At(SelectedJetBTagOrderIndices,1)",
         requires=["twoJets"],
     )
 
