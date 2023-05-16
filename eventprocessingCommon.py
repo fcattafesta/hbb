@@ -40,14 +40,14 @@ def getFlowCommon(flow):
 
     # Define LeadingJet and SubLeadingJet
     flow.Define("SelectedJetPtOrderIndices", "Argsort(-SelectedJet_pt)")
-    flow.ObjetAt(
+    flow.ObjectAt(
         "LeadingJet",
         "SelectedJet",
         "At(SelectedJetPtOrderIndices,0)",
         requires=["twoJets"],
     )
 
-    flow.ObjetAt(
+    flow.ObjectAt(
         "SubLeadingJet",
         "SelectedJet",
         "At(SelectedJetPtOrderIndices,1)",
@@ -56,13 +56,13 @@ def getFlowCommon(flow):
 
     # Order by btag score
     flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_btagDeepFlavB)")
-    flow.ObjetAt(
+    flow.ObjectAt(
         "JetBtagMax",
         "SelectedJet",
         "At(SelectedJetBTagOrderIndice,0)",
         requires=["twoJets"],
     )
-    flow.ObjetAt(
+    flow.ObjectAt(
         "JetBtagMin",
         "SelectedJet",
         "At(SelectedJetBTagOrderIndice,1)",
