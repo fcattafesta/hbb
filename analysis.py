@@ -14,14 +14,14 @@ from args_analysis import args
 
 from eventprocessingCommon import getFlowCommon
 from eventprocessingMC import getFlowMC
+from histograms import histos
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
     from histograms import histosPerSelectionMuon as histosPerSelection
-
 elif args.lep == "el":
-    from histograms import histosPerSelectionElectron as histosPerSelection
     from eventprocessingElectrons import getFlowElectrons as getFlow
+    from histograms import histosPerSelectionElectron as histosPerSelection
 else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
@@ -127,12 +127,13 @@ def runSample(ar):
                 rdf = rdf.Define("isMC", "true")
                 out = proc(rdf, subs)
 
-            snaplist = ["run", "event"]
+            snaplist = ["run", "event"] + histos
             branchList = ROOT.vector("string")()
             map(lambda x: branchList.push_back(x), snaplist)
-            if "training" in samples[s].keys() and samples[s]["training"]:
-                out.rdf["PreSel"].Snapshot(
-                    "Events", f"{args.histfolder}/{s}Snapshot.root", branchList
+            if args.snapshot and "training" in samples[s].keys() and samples[s]["training"]:
+                sig_region = "SR_ee" if args.lep == "el" else "SR_mm"
+                out.rdf[sig_region].Snapshot(
+                    "Events", f"{args.histfolder}/Snapshots/{s}Snapshot.root", branchList
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
