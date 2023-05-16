@@ -18,7 +18,7 @@ parser.add_argument(
     "-l", "--lep", default="mu", help="Lepton channel"
 )
 parser.add_argument(
-    "-s", "--snapshot", default=True, action="store_false", help="Save snapshot"
+    "-s", "--snapshot", default=False, action="store_true", help="Save snapshot"
 )
 
 parser.print_help()

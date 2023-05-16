@@ -128,14 +128,17 @@ def runSample(ar):
                 out = proc(rdf, subs)
 
             snaplist = ["run", "event"] + histos
-            print("snaplist", snaplist)
-            branchList = ROOT.vector("string")()
-            map(lambda x: branchList.push_back(x), snaplist)
-            print("branchlist", branchList, type(branchList))
-            if args.snapshot and "training" in samples[s].keys() and samples[s]["training"]:
+            if (
+                args.snapshot
+                and "training" in samples[s].keys()
+                and samples[s]["training"]
+            ):
                 sig_region = "SR_ee" if args.lep == "el" else "SR_mm"
+                # create snapshot directory
+                if not os.path.exists(f"{args.histfolder}/Snapshots"):
+                    os.makedirs(f"{args.histfolder}/Snapshots")
                 out.rdf[sig_region].Snapshot(
-                    "Events", f"{args.histfolder}/Snapshots/{s}Snapshot.root", branchList
+                    "Events", f"{args.histfolder}/Snapshots/{s}Snapshot.root", snaplist
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
