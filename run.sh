@@ -21,5 +21,4 @@ $CMD \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --model ${model} \
     --lep ${lep} \
-    -s \
     "${@:3}"
