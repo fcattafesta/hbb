@@ -91,11 +91,22 @@ X_bkg = (variables_bkg, zeros_array)
 #######################################################
 X_fts = torch.cat((X_sig[0], X_bkg[0]), dim=1).transpose(1, 0)
 X_lbl = torch.cat((X_sig[1], X_bkg[1]), dim=1).transpose(1, 0)
-X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 
 # split the dataset into training and val sets
-train_size = int(0.8 * len(X)) if args.train_size is -1 else args.train_size
-val_size = len(X) - train_size if args.val_size is -1 else args.val_size
+if args.train_size != -1 and args.val_size != -1:
+    X_fts = X_fts[: args.train_size + args.val_size, :]
+    X_lbl = X_lbl[: args.train_size + args.val_size, :]
+    print("X_fts.shape", X_fts.shape)
+    print("X_lbl.shape", X_lbl.shape)
+
+X = torch.utils.data.TensorDataset(X_fts, X_lbl)
+
+
+train_size = int(0.8 * len(X)) if args.train_size == -1 else args.train_size
+val_size = len(X) - train_size if args.val_size == -1 else args.val_size
+
+print(f"Training size: {train_size}")
+print(f"Validation size: {val_size}")
 
 train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
 

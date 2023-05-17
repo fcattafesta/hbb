@@ -39,7 +39,7 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
             print("Training batch {} accuracy: {}".format(i + 1, accuracy))
 
             last_loss = running_loss / num_prints # loss per batch
-            print('  batch {} loss: {}'.format(i + 1, last_loss))
+            print('batch {} train loss: {}'.format(i + 1, last_loss))
             tb_x = epoch_index * len(training_loader) + i + 1
             tb_writer.add_scalar('Loss/train', last_loss, tb_x)
             running_loss = 0.
@@ -54,12 +54,20 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
         voutputs = model(vinputs)
         vloss = loss_fn(voutputs, vlabels)
         running_vloss += vloss
+        if i % num_prints == 0:
+
+            last_vloss = running_vloss / num_prints # loss per batch
+            print('batch {} val loss: {}'.format(i + 1, last_vloss))
+            tb_x = epoch_index * len(val_loader) + i + 1
+            tb_writer.add_scalar('Loss/val', last_vloss, tb_x)
+            running_vloss = 0.
 
     # validation accuracy
     vpreds = torch.round(torch.sigmoid(voutputs))
     vcorrect = (vpreds == vlabels).sum().item()
     vtotal = vlabels.size(0)
     vaccuracy = vcorrect / vtotal
+    print("Validation batch {} accuracy: {}".format(i + 1, vaccuracy))
 
     avg_vloss = running_vloss / (i + 1)
 
@@ -71,15 +79,5 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
         model_path = "models/model_{}_{}".format(timestamp, epoch_index)
         torch.save(model.state_dict(), model_path)
 
-    epoch_index += 1
-
-    if i % num_prints == 0:
-        print("Validation batch {} accuracy: {}".format(i + 1, vaccuracy))
-
-        last_vloss = running_vloss / num_prints # loss per batch
-        print('  batch {} val loss: {}'.format(i + 1, last_vloss))
-        tb_x = epoch_index * len(val_loader) + i + 1
-        tb_writer.add_scalar('Loss/val', last_vloss, tb_x)
-        running_vloss = 0.
 
     return avg_vloss
