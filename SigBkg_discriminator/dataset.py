@@ -3,8 +3,6 @@ import numpy as np
 import torch
 import sys
 
-sys.path.append("../")
-from modelsMuon import *
 
 batch_size = 8
 
@@ -31,36 +29,54 @@ input_list = [
     "SoftActivityJetNjets5",
 ]
 
-# create a list of samples
-signal_list = [ signal[x] for x in signal.keys()]
+background_list = [
+    # "DYZpt-0To50",
+    # "DYZpt-50To100",
+    "DYZpt-100To250",
+    # "DYZpt-250To400",
+    # "DYZpt-400To650",
+    # "DYZpt-650ToInf",
+    # "ST_tW_antitop_5f_NFHD",
+    # "ST_tW_antitop_5f_ID",
+    # "ST_tW_top_5f_NFHD",
+    # "ST_tW_top_5f_ID",
+    # "ST_t-channel_antitop_4f_ID",
+    # "ST_t-channel_top_4f_ID",
+    # "ST_t-channel_antitop_5f_ID",
+    # "ST_s-channel_4f_LD",
+    # "TTTo2L2Nu",
+    # "TTToSemiLeptonic",
+    # "TTToHadronic",
+    # "WZTo2Q2L",
+    # "WZTo3LNu",
+    # "WWTo2L2Nu",
+    # "ZZTo2L2Nu",
+    # "ZZTo2Q2L",
+    # "ZZTo4L",
+]
+signal_list = ["ZH", "ggZH"]
 
-signal_list = [signal[x] for x in signal.keys()]
-
-
-background_list = [ background[x] for x in background.keys()]
-
-print("signal_list: ", signal_list)
-print("background_list: ", background_list)
-
-main_dir="/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/"
+main_dir = "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/"
 
 # list of signal files
-sig_files = [main_dir+x+"_Snapshot.root" for x in signal_list]
+sig_files = [main_dir + x + "_Snapshot.root" for x in signal_list]
 
 # list of background files
-bkg_files = [main_dir+x+"_Snapshot.root" for x in background_list]
+bkg_files = [main_dir + x + "_Snapshot.root" for x in background_list]
+
+print("sig_files: ", sig_files)
+print("bkg_files: ", bkg_files)
 
 # get input data from a ROOT file and convert it to a torch tensor
-sig_train = ROOT.RDataFrame(
-    "Events", sig_files
-)
+sig_train = ROOT.RDataFrame("Events", sig_files)
+print("sig_train: ", sig_train)
 
 variables_sig = np.array([sig_train.AsNumpy()[x] for x in input_list])
 variables_sig = torch.tensor(variables_sig, device=device, dtype=torch.float32)
-ones_array=np.ones_like(sig_train.AsNumpy()["event"], dtype=np.float32)
+ones_array = np.ones_like(sig_train.AsNumpy()["event"], dtype=np.float32)
 ones_array = torch.tensor(ones_array, device=device, dtype=torch.float32).unsqueeze(0)
 
-X_sig = (variables_sig,ones_array)
+X_sig = (variables_sig, ones_array)
 print("train sig: ", X_sig, X_sig[0].size(), X_sig[1].size())
 
 #######################################################
@@ -68,53 +84,29 @@ bkg_train = ROOT.RDataFrame(
     "Events",
     bkg_files,
 )
+print("bkg_train: ", bkg_train)
 variables_bkg = np.array([bkg_train.AsNumpy()[x] for x in input_list])
 variables_bkg = torch.tensor(variables_bkg, device=device, dtype=torch.float32)
-zeros_array=np.zeros_like(bkg_train.AsNumpy()["event"], dtype=np.float32)
+zeros_array = np.zeros_like(bkg_train.AsNumpy()["event"], dtype=np.float32)
 zeros_array = torch.tensor(zeros_array, device=device, dtype=torch.float32).unsqueeze(0)
 
-X_bkg = (variables_bkg,zeros_array)
+X_bkg = (variables_bkg, zeros_array)
 print("train bkg: ", X_bkg, X_bkg[0].size(), X_bkg[1].size())
 
 #######################################################
-X_fts = torch.cat((X_sig[0],X_bkg[0]),dim=1).transpose(1,0)
-X_lbl = torch.cat((X_sig[1],X_bkg[1]),dim=1).transpose(1,0)
+X_fts = torch.cat((X_sig[0], X_bkg[0]), dim=1).transpose(1, 0)
+X_lbl = torch.cat((X_sig[1], X_bkg[1]), dim=1).transpose(1, 0)
 X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 print("X train: ", X, X[0], X[1])
 
-training_loader = torch.utils.data.DataLoader(X, batch_size=batch_size, shuffle=True)
+# split the dataset into training and val sets
+train_size = int(0.8 * len(X))
+val_size = len(X) - train_size
+
+train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
+
+training_loader = torch.utils.data.DataLoader(train_dataset.dataset, batch_size=batch_size, shuffle=True)
 print("training_loader: ", training_loader)
 
-#######################################################
-# do the same for validation data
-sig_val = ROOT.RDataFrame(
-    "Events", "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/ggZH_Snapshot.root"
-)
-variables_sig = np.array([sig_val.AsNumpy()[x] for x in input_list])
-variables_sig = torch.tensor(variables_sig, device=device, dtype=torch.float32)
-ones_array=np.ones_like(sig_val.AsNumpy()["event"], dtype=np.float32)
-ones_array = torch.tensor(ones_array, device=device, dtype=torch.float32).unsqueeze(0)
-
-X_sig = (variables_sig,ones_array)
-
-print("val sig: ", X_sig, X_sig[0].size(), X_sig[1].size())
-
-bkg_val = ROOT.RDataFrame(
-    "Events", "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/WZTo2Q2L_Snapshot.root"
-)
-variables_bkg = np.array([bkg_val.AsNumpy()[x] for x in input_list])
-variables_bkg = torch.tensor(variables_bkg, device=device, dtype=torch.float32)
-zeros_array=np.zeros_like(bkg_val.AsNumpy()["event"], dtype=np.float32)
-zeros_array = torch.tensor(zeros_array, device=device, dtype=torch.float32).unsqueeze(0)
-
-X_bkg = (variables_bkg,zeros_array)
-print("val bkg: ", X_bkg, X_bkg[0].size(), X_bkg[1].size())
-
-
-X_fts = torch.cat((X_sig[0],X_bkg[0]),dim=1).transpose(1,0)
-X_lbl = torch.cat((X_sig[1],X_bkg[1]),dim=1).transpose(1,0)
-X = torch.utils.data.TensorDataset(X_fts, X_lbl)
-print("X val: ", X, X[0], X[1])
-
-validation_loader = torch.utils.data.DataLoader(X, batch_size=batch_size, shuffle=False)
-print("val_loader: ", validation_loader)
+val_loader = torch.utils.data.DataLoader(val_dataset.dataset, batch_size=batch_size, shuffle=True)
+print("val_loader: ", val_loader)

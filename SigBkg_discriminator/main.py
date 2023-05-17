@@ -42,13 +42,13 @@ for epoch in range(EPOCHS):
 
     # Make sure gradient tracking is on, and do a pass over the data
     model.train(True)
-    avg_loss = train_one_epoch(epoch_number, writer)
+    avg_loss = train_one_epoch(epoch_number, writer, model, training_loader, loss_fn, optimizer, batch_size)
 
     # We don't need gradients on to do reporting
     model.train(False)
 
     running_vloss = 0.0
-    for i, vdata in enumerate(validation_loader):
+    for i, vdata in enumerate(val_loader):
         vinputs, vlabels = vdata
         voutputs = model(vinputs)
         vloss = loss_fn(voutputs, vlabels)
@@ -76,6 +76,8 @@ for epoch in range(EPOCHS):
     # Track best performance, and save the model's state
     if avg_vloss < best_vloss:
         best_vloss = avg_vloss
+        if not os.path.exists("models"):
+            os.makedirs("models")
         model_path = "models/model_{}_{}".format(timestamp, epoch_number)
         torch.save(model.state_dict(), model_path)
 

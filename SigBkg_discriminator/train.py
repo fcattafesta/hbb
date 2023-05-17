@@ -1,4 +1,6 @@
-def train_one_epoch(epoch_index, tb_writer):
+import torch
+
+def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer, batch_size):
     running_loss = 0.
     last_loss = 0.
 
