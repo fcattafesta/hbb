@@ -1,7 +1,7 @@
 import torch
 import os
 
-def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer, batch_size):
+def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer, batch_size, num_prints=1000):
     running_loss = 0.
     last_loss = 0.
 
@@ -18,8 +18,11 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
         # Make predictions for this batch
         outputs = model(inputs)
         #print(f"out: {outputs}", outputs.size())
-        #outputs = nn.Sigmoid(dim=1)(outputs)
+        # accuracy
         y_pred =torch.round(torch.sigmoid(outputs))
+        correct = (y_pred == labels).sum().item()
+        total = labels.size(0)
+        accuracy = correct / total
         #print(f"Predicted class: {y_pred}", y_pred.size())
 
 
@@ -32,13 +35,10 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
 
         # Gather data and report
         running_loss += loss.item()
-        if i % 10 == 0:
-            # accuracy
-            correct = (y_pred == labels).float().sum()
-            accuracy = correct / batch_size
-            print(f"Accuracy: {accuracy}")
+        if i % num_prints == 0:
+            print("Training batch {} accuracy: {}".format(i + 1, accuracy))
 
-            last_loss = running_loss / 10 # loss per batch
+            last_loss = running_loss / num_prints # loss per batch
             print('  batch {} loss: {}'.format(i + 1, last_loss))
             tb_x = epoch_index * len(training_loader) + i + 1
             tb_writer.add_scalar('Loss/train', last_loss, tb_x)
@@ -47,7 +47,7 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
     return last_loss
 
 
-def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_vloss):
+def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_vloss, num_prints=1000):
     running_vloss = 0.0
     for i, vdata in enumerate(val_loader):
         vinputs, vlabels = vdata
@@ -68,15 +68,15 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
         best_vloss = avg_vloss
         if not os.path.exists("models"):
             os.makedirs("models")
-        model_path = "models/model_{}_{}".format(timestamp, epoch_number)
+        model_path = "models/model_{}_{}".format(timestamp, epoch_index)
         torch.save(model.state_dict(), model_path)
 
-    epoch_number += 1
+    epoch_index += 1
 
-    if i % 10 == 0:
+    if i % num_prints == 0:
         print("Validation batch {} accuracy: {}".format(i + 1, vaccuracy))
 
-        last_vloss = running_vloss / 10 # loss per batch
+        last_vloss = running_vloss / num_prints # loss per batch
         print('  batch {} val loss: {}'.format(i + 1, last_vloss))
         tb_x = epoch_index * len(val_loader) + i + 1
         tb_writer.add_scalar('Loss/val', last_vloss, tb_x)

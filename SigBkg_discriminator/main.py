@@ -1,6 +1,7 @@
 from dataset import *
 from tools import *
 from DNN_model import *
+from args_dnn import args
 
 import os
 import torch
@@ -33,7 +34,7 @@ timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 writer = SummaryWriter("runs/DNN_trainer_{}".format(timestamp))
 epoch_number = 0
 
-EPOCHS = 5
+EPOCHS = args.epochs
 
 best_vloss = 1_000_000.0
 
@@ -42,12 +43,12 @@ for epoch in range(EPOCHS):
 
     # Make sure gradient tracking is on, and do a pass over the data
     model.train(True)
-    avg_loss = train_one_epoch(epoch_number, writer, model, training_loader, loss_fn, optimizer, batch_size)
+    avg_loss = train_one_epoch(epoch_number, writer, model, training_loader, loss_fn, optimizer, batch_size, args.num_prints)
 
     # We don't need gradients on to do reporting
     model.train(False)
 
-    avg_vloss = eval_one_epoch(epoch_number, writer, model, val_loader, loss_fn, timestamp, best_vloss)
+    avg_vloss = eval_one_epoch(epoch_number, writer, model, val_loader, loss_fn, timestamp, best_vloss, args.num_prints)
 
 
     print("LOSS train {} valid {}".format(avg_loss, avg_vloss))

@@ -3,8 +3,9 @@ import numpy as np
 import torch
 import sys
 
+from args_dnn import args
 
-batch_size = 8
+batch_size = args.batch_size
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
@@ -93,8 +94,8 @@ X_lbl = torch.cat((X_sig[1], X_bkg[1]), dim=1).transpose(1, 0)
 X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 
 # split the dataset into training and val sets
-train_size = int(0.8 * len(X))
-val_size = len(X) - train_size
+train_size = int(0.8 * len(X)) if args.train_size is -1 else args.train_size
+val_size = len(X) - train_size if args.val_size is -1 else args.val_size
 
 train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
 
