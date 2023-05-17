@@ -1,3 +1,11 @@
+import ROOT
+import numpy as np
+import torch
+
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using {device} device")
+
 input_list = [
     "Z_mass",
     "Z_pt",
