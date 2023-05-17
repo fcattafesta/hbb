@@ -26,7 +26,7 @@ else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
 
-nthreads = args.nthreads
+nthreads = args.nthreads if args.range == -1 else 0
 nprocesses = 7
 start = time.time()
 
