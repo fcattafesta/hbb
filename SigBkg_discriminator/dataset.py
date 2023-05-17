@@ -1,7 +1,12 @@
 import ROOT
 import numpy as np
 import torch
+import sys
 
+sys.path.append("../")
+from modelsMuon import *
+
+batch_size = 8
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
@@ -26,10 +31,28 @@ input_list = [
     "SoftActivityJetNjets5",
 ]
 
+# create a list of samples
+signal_list = [ signal[x] for x in signal.keys()]
+
+signal_list = [signal[x] for x in signal.keys()]
+
+
+background_list = [ background[x] for x in background.keys()]
+
+print("signal_list: ", signal_list)
+print("background_list: ", background_list)
+
+main_dir="/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/"
+
+# list of signal files
+sig_files = [main_dir+x+"_Snapshot.root" for x in signal_list]
+
+# list of background files
+bkg_files = [main_dir+x+"_Snapshot.root" for x in background_list]
 
 # get input data from a ROOT file and convert it to a torch tensor
 sig_train = ROOT.RDataFrame(
-    "Events", "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/ZH_Snapshot.root"
+    "Events", sig_files
 )
 
 variables_sig = np.array([sig_train.AsNumpy()[x] for x in input_list])
@@ -43,7 +66,7 @@ print("train sig: ", X_sig, X_sig[0].size(), X_sig[1].size())
 #######################################################
 bkg_train = ROOT.RDataFrame(
     "Events",
-    "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/test/Snapshots/ZZTo2Q2L_Snapshot.root",
+    bkg_files,
 )
 variables_bkg = np.array([bkg_train.AsNumpy()[x] for x in input_list])
 variables_bkg = torch.tensor(variables_bkg, device=device, dtype=torch.float32)

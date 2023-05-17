@@ -26,7 +26,3 @@ class DNN(nn.Module):
         logits = self.linear_relu_stack(x)
         return logits
 
-
-loss_fn = torch.nn.BCEWithLogitsLoss()
-
-optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)

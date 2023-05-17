@@ -16,13 +16,16 @@ from datetime import datetime
 
 
 
-batch_size = 8
 
 
 
 model = DNN(X_fts.size(1)).to(device)
 print(model)
 
+
+loss_fn = torch.nn.BCEWithLogitsLoss()
+
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
 
 # Initializing in a separate cell so we can easily add more epochs to the same run
