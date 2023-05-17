@@ -1,5 +1,5 @@
 from dataset import *
-from train import *
+from tools import *
 from DNN_model import *
 
 import os
@@ -47,21 +47,9 @@ for epoch in range(EPOCHS):
     # We don't need gradients on to do reporting
     model.train(False)
 
-    running_vloss = 0.0
-    for i, vdata in enumerate(val_loader):
-        vinputs, vlabels = vdata
-        voutputs = model(vinputs)
-        vloss = loss_fn(voutputs, vlabels)
-        running_vloss += vloss
+    avg_vloss = eval_one_epoch(epoch_number, writer, model, val_loader, loss_fn, timestamp, best_vloss)
 
-        # validation accuracy
-        vpreds = torch.round(torch.sigmoid(voutputs))
-        vcorrect = (vpreds == vlabels).sum().item()
-        vtotal = vlabels.size(0)
-        vaccuracy = vcorrect / vtotal
-        print("Validation batch {} accuracy: {}".format(i + 1, vaccuracy))
 
-    avg_vloss = running_vloss / (i + 1)
     print("LOSS train {} valid {}".format(avg_loss, avg_vloss))
 
     # Log the running loss averaged per batch
@@ -72,13 +60,3 @@ for epoch in range(EPOCHS):
         epoch_number + 1,
     )
     writer.flush()
-
-    # Track best performance, and save the model's state
-    if avg_vloss < best_vloss:
-        best_vloss = avg_vloss
-        if not os.path.exists("models"):
-            os.makedirs("models")
-        model_path = "models/model_{}_{}".format(timestamp, epoch_number)
-        torch.save(model.state_dict(), model_path)
-
-    epoch_number += 1
