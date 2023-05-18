@@ -13,6 +13,9 @@ import numpy as np
 # PyTorch TensorBoard support
 from torch.utils.tensorboard import SummaryWriter
 from datetime import datetime
+import time
+
+start_time = time.time()
 
 model = DNN(X_fts.size(1)).to(device)
 print(model)
@@ -53,3 +56,5 @@ for epoch in range(args.epochs):
     )
     writer.flush()
     epoch += 1
+
+print("Total time: {}".format(time.time() - start_time))

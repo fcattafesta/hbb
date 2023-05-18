@@ -57,15 +57,14 @@ background_list = [
 ]
 signal_list = ["ZH", "ggZH"]
 
-main_dir = "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/snap/Snapshots/"
+main_dir_mu = "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/snap/Snapshots/"
+main_dir_el = "/gpfs/ddn/cms/user/malucchi/hbb_out/el/snap/Snapshots/"
+
 
 # list of signal files
-sig_files = [main_dir + x + "_Snapshot.root" for x in signal_list]
-
-# list of background files
-bkg_files = [main_dir + x + "_Snapshot.root" for x in background_list]
-
-
+sig_files = [main_dir_mu + x + "_Snapshot.root" for x in signal_list] + [
+    main_dir_el + x + "_Snapshot.root" for x in signal_list
+]
 # get input data from a ROOT file and convert it to a torch tensor
 sig_train = ROOT.RDataFrame("Events", sig_files)
 
@@ -76,11 +75,13 @@ ones_array = torch.tensor(ones_array, device=device, dtype=torch.float32).unsque
 
 X_sig = (variables_sig, ones_array)
 
+
 #######################################################
-bkg_train = ROOT.RDataFrame(
-    "Events",
-    bkg_files,
-)
+# list of background files
+bkg_files = [main_dir_mu + x + "_Snapshot.root" for x in background_list] + [
+    main_dir_el + x + "_Snapshot.root" for x in background_list
+]
+bkg_train = ROOT.RDataFrame("Events", bkg_files)
 variables_bkg = np.array([bkg_train.AsNumpy()[x] for x in input_list])
 variables_bkg = torch.tensor(variables_bkg, device=device, dtype=torch.float32)
 zeros_array = np.zeros_like(bkg_train.AsNumpy()["event"], dtype=np.float32)
@@ -110,6 +111,10 @@ print(f"Validation size: {val_size}")
 
 train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
 
-training_loader = torch.utils.data.DataLoader(train_dataset.dataset, batch_size=batch_size, shuffle=True)
+training_loader = torch.utils.data.DataLoader(
+    train_dataset.dataset, batch_size=batch_size, shuffle=True
+)
 
-val_loader = torch.utils.data.DataLoader(val_dataset.dataset, batch_size=batch_size, shuffle=True)
+val_loader = torch.utils.data.DataLoader(
+    val_dataset.dataset, batch_size=batch_size, shuffle=True
+)
