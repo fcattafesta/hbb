@@ -35,20 +35,43 @@ best_vaccuracy = 0.0
 best_epoch = -1
 
 for epoch in range(args.epochs):
-    print("EPOCH # %d" %epoch)
-
     # Turn on gradients for training
-    train_batch_prints=train_size // batch_size // args.num_prints
     model.train(True)
-    avg_loss, avg_accuracy = train_one_epoch(epoch, writer, model, training_loader, loss_fn, optimizer, train_batch_prints)
+    train_batch_prints = train_size // batch_size // args.num_prints
+    num_train_batches = train_size // batch_size
+    avg_loss, avg_accuracy = train_one_epoch(
+        epoch,
+        writer,
+        model,
+        training_loader,
+        loss_fn,
+        optimizer,
+        train_batch_prints,
+        num_train_batches,
+    )
 
     # Turn off gradients for validation
     model.train(False)
-    val_batch_prints=val_size // batch_size // args.num_prints
-    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(epoch, writer, model, val_loader, loss_fn, timestamp, best_vloss, best_vaccuracy, best_epoch, val_batch_prints)
+    val_batch_prints = val_size // batch_size // args.num_prints
+    num_val_batches = val_size // batch_size
+    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(
+        epoch,
+        writer,
+        model,
+        val_loader,
+        loss_fn,
+        timestamp,
+        best_vloss,
+        best_vaccuracy,
+        best_epoch,
+        val_batch_prints,
+        num_val_batches,
+    )
 
-    print("EPOCH # %d: loss train %.4f,  val %.4f" %(epoch, avg_loss, avg_vloss))
-    print("EPOCH # %d: acc train %.4f,  val %.4f" %(epoch, avg_accuracy, avg_vaccuracy))
+    print("EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss))
+    print(
+        "EPOCH # %d: acc train %.4f,  val %.4f" % (epoch, avg_accuracy, avg_vaccuracy)
+    )
     print("\n\n\n")
 
     # Log the running loss averaged per batch
@@ -67,8 +90,8 @@ for epoch in range(args.epochs):
     writer.flush()
     epoch += 1
 
-print("Best epoch: %d" %best_epoch)
-print("Best val loss: %.4f" %best_vloss)
-print("Best val accuracy: %.4f" %best_vaccuracy)
+print("Best epoch: %d" % best_epoch)
+print("Best val loss: %.4f" % best_vloss)
+print("Best val accuracy: %.4f" % best_vaccuracy)
 
-print("Total time: %.1f" %(time.time() - start_time))
+print("Total time: %.1f" % (time.time() - start_time))

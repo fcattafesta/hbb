@@ -1,7 +1,7 @@
 import torch
 import os
 
-def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer,train_batch_prints):
+def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer,batch_prints, num_batches):
     running_loss = 0.
     tot_loss = 0.
 
@@ -40,11 +40,11 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
         running_num += batch_size
         tot_num += batch_size
 
-        if i % train_batch_prints == train_batch_prints-1:
+        if i % batch_prints == batch_prints-1:
 
-            last_loss = running_loss / train_batch_prints # loss per batch
+            last_loss = running_loss / batch_prints # loss per batch
             last_accuracy = running_correct / running_num # accuracy per batch
-            print("EPOCH # %d  Training batch %d         accuracy: %.4f      //      loss: %.4f" %(epoch_index, i + 1, last_accuracy, last_loss))
+            print("EPOCH # %d  Training batch %.2f %%         accuracy: %.4f      //      loss: %.4f" %(epoch_index, (i + 1)/num_batches, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(training_loader) + i + 1
             tb_writer.add_scalar('Accuracy/train', last_accuracy, tb_x)
@@ -60,7 +60,7 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
     return avg_loss, avg_accuracy
 
 
-def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_loss, best_accuracy, best_epoch, val_batch_prints):
+def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_loss, best_accuracy, best_epoch, batch_prints, num_batches):
     running_loss = 0.0
     tot_loss = 0.0
 
@@ -91,12 +91,12 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
         running_num += batch_size
         tot_num += batch_size
 
-        if i % val_batch_prints == val_batch_prints-1:
+        if i % batch_prints == batch_prints-1:
 
-            last_loss = running_loss / val_batch_prints # loss per batch
+            last_loss = running_loss / batch_prints # loss per batch
             last_accuracy = running_correct / running_num # accuracy per batch
 
-            print("EPOCH # %d  Validation batch %d         accuracy: %.4f      //      loss: %.4f" %(epoch_index, i + 1, last_accuracy, last_loss))
+            print("EPOCH # %d  Validation batch %.2f %%         accuracy: %.4f      //      loss: %.4f" %(epoch_index, (i + 1)/num_batches, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(val_loader) + i + 1
             tb_writer.add_scalar('Accuracy/val', last_loss, tb_x)
