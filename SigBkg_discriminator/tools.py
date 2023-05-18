@@ -51,7 +51,6 @@ def train_one_epoch(
         tot_num += batch_size
 
         if (i + 1) % batch_prints == 0:
-            print(i)
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
             print(
@@ -117,7 +116,6 @@ def eval_one_epoch(
         tot_num += batch_size
 
         if (i + 1) % batch_prints == 0:
-            print(i)
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
 
