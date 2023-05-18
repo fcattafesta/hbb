@@ -66,7 +66,11 @@ sig_files = [main_dir_mu + x + "_Snapshot.root" for x in signal_list] + [
     main_dir_el + x + "_Snapshot.root" for x in signal_list
 ]
 # get input data from a ROOT file and convert it to a torch tensor
-sig_train = ROOT.RDataFrame("Events", sig_files)
+sig_train = (
+    ROOT.RDataFrame("Events", sig_files).Range(args.train_size + args.val_size)
+    if args.train_size > 0 and args.val_size > 0
+    else ROOT.RDataFrame("Events", sig_files)
+)
 
 variables_sig = np.array([sig_train.AsNumpy()[x] for x in input_list])
 variables_sig = torch.tensor(variables_sig, device=device, dtype=torch.float32)
@@ -81,7 +85,11 @@ X_sig = (variables_sig, ones_array)
 bkg_files = [main_dir_mu + x + "_Snapshot.root" for x in background_list] + [
     main_dir_el + x + "_Snapshot.root" for x in background_list
 ]
-bkg_train = ROOT.RDataFrame("Events", bkg_files)
+bkg_train = (
+    ROOT.RDataFrame("Events", bkg_files).Range(args.train_size + args.val_size)
+    if args.train_size > 0 and args.val_size > 0
+    else ROOT.RDataFrame("Events", bkg_files)
+)
 variables_bkg = np.array([bkg_train.AsNumpy()[x] for x in input_list])
 variables_bkg = torch.tensor(variables_bkg, device=device, dtype=torch.float32)
 zeros_array = np.zeros_like(bkg_train.AsNumpy()["event"], dtype=np.float32)
