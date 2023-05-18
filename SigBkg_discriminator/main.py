@@ -36,6 +36,7 @@ best_epoch = -1
 
 for epoch in range(args.epochs):
     # Turn on gradients for training
+    print("\n Training \n ")
     model.train(True)
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
@@ -50,6 +51,7 @@ for epoch in range(args.epochs):
         num_train_batches,
     )
 
+    print("\n Validation \n ")
     # Turn off gradients for validation
     model.train(False)
     val_batch_prints = val_size // batch_size // args.num_prints

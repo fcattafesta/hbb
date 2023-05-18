@@ -1,9 +1,19 @@
 import torch
 import os
 
-def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer,batch_prints, num_batches):
-    running_loss = 0.
-    tot_loss = 0.
+
+def train_one_epoch(
+    epoch_index,
+    tb_writer,
+    model,
+    training_loader,
+    loss_fn,
+    optimizer,
+    batch_prints,
+    num_batches,
+):
+    running_loss = 0.0
+    tot_loss = 0.0
 
     running_correct = 0
     tot_correct = 0
@@ -40,27 +50,41 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
         running_num += batch_size
         tot_num += batch_size
 
-        if i % batch_prints == batch_prints-1:
-
-            last_loss = running_loss / batch_prints # loss per batch
-            last_accuracy = running_correct / running_num # accuracy per batch
-            print("EPOCH # %d  Training batch %.2f %%         accuracy: %.4f      //      loss: %.4f" %(epoch_index, (i + 1)/num_batches, last_accuracy, last_loss))
+        if i % batch_prints == 0 and i > 0:
+            last_loss = running_loss / batch_prints  # loss per batch
+            last_accuracy = running_correct / running_num  # accuracy per batch
+            print(
+                "EPOCH # %d  Training batch %.2f %%         accuracy: %.4f      //      loss: %.4f"
+                % (epoch_index, (i + 1) / num_batches, last_accuracy, last_loss)
+            )
 
             tb_x = epoch_index * len(training_loader) + i + 1
-            tb_writer.add_scalar('Accuracy/train', last_accuracy, tb_x)
-            tb_writer.add_scalar('Loss/train', last_loss, tb_x)
+            tb_writer.add_scalar("Accuracy/train", last_accuracy, tb_x)
+            tb_writer.add_scalar("Loss/train", last_loss, tb_x)
 
-            running_loss = 0.
+            running_loss = 0.0
             running_correct = 0
             running_num = 0
 
-    avg_loss = tot_loss / (i + 1) # loss per epoch
-    avg_accuracy = tot_correct / tot_num # accuracy per epoch
+    avg_loss = tot_loss / (i + 1)  # loss per epoch
+    avg_accuracy = tot_correct / tot_num  # accuracy per epoch
 
     return avg_loss, avg_accuracy
 
 
-def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_loss, best_accuracy, best_epoch, batch_prints, num_batches):
+def eval_one_epoch(
+    epoch_index,
+    tb_writer,
+    model,
+    val_loader,
+    loss_fn,
+    timestamp,
+    best_loss,
+    best_accuracy,
+    best_epoch,
+    batch_prints,
+    num_batches,
+):
     running_loss = 0.0
     tot_loss = 0.0
 
@@ -91,18 +115,20 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
         running_num += batch_size
         tot_num += batch_size
 
-        if i % batch_prints == batch_prints-1:
+        if i % batch_prints == 0 and i > 0:
+            last_loss = running_loss / batch_prints  # loss per batch
+            last_accuracy = running_correct / running_num  # accuracy per batch
 
-            last_loss = running_loss / batch_prints # loss per batch
-            last_accuracy = running_correct / running_num # accuracy per batch
-
-            print("EPOCH # %d  Validation batch %.2f %%         accuracy: %.4f      //      loss: %.4f" %(epoch_index, (i + 1)/num_batches, last_accuracy, last_loss))
+            print(
+                "EPOCH # %d  Validation batch %.2f %%         accuracy: %.4f      //      loss: %.4f"
+                % (epoch_index, (i + 1) / num_batches, last_accuracy, last_loss)
+            )
 
             tb_x = epoch_index * len(val_loader) + i + 1
-            tb_writer.add_scalar('Accuracy/val', last_loss, tb_x)
-            tb_writer.add_scalar('Loss/val', last_loss, tb_x)
+            tb_writer.add_scalar("Accuracy/val", last_accuracy, tb_x)
+            tb_writer.add_scalar("Loss/val", last_loss, tb_x)
 
-            running_loss = 0.
+            running_loss = 0.0
             running_correct = 0
             running_num = 0
 
@@ -119,6 +145,5 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
             os.makedirs("models")
         model_path = "models/model_{}_{}".format(timestamp, epoch_index)
         torch.save(model.state_dict(), model_path)
-
 
     return avg_loss, avg_accuracy, best_loss, best_accuracy, best_epoch
