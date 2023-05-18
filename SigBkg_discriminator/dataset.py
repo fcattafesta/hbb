@@ -68,7 +68,7 @@ sig_files = [main_dir_mu + x + "_Snapshot.root" for x in signal_list] + [
 # get input data from a ROOT file and convert it to a torch tensor
 sig_train = (
     ROOT.RDataFrame("Events", sig_files).Range(
-        args.train_size + args.val_size + args.test_size
+        (args.train_size + args.val_size + args.test_size) // 2
     )
     if args.train_size > 0 and args.val_size > 0 and args.test_size > 0
     else ROOT.RDataFrame("Events", sig_files)
@@ -89,7 +89,7 @@ bkg_files = [main_dir_mu + x + "_Snapshot.root" for x in background_list] + [
 ]
 bkg_train = (
     ROOT.RDataFrame("Events", bkg_files).Range(
-        args.train_size + args.val_size + args.test_size
+        (args.train_size + args.val_size + args.test_size)//2
     )
     if args.train_size > 0 and args.val_size > 0 and args.test_size > 0
     else ROOT.RDataFrame("Events", bkg_files)

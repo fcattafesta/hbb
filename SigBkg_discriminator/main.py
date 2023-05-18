@@ -107,25 +107,26 @@ print("Best epoch: %d" % best_epoch)
 print("Best val loss: %.4f" % best_vloss)
 print("Best val accuracy: %.4f" % best_vaccuracy)
 
-# evaluate model on test_dataset loadining the best model
-print("\n\n\n")
-print("Evaluating model on test dataset")
-print("================================")
-print("\n")
+if args.test:
+    # evaluate model on test_dataset loadining the best model
+    print("\n\n\n")
+    print("Evaluating model on test dataset")
+    print("================================")
+    print("\n")
 
-# Turn off gradients for validation
-test_batch_prints = test_size // batch_size // args.num_prints
-num_test_batches = test_size // batch_size
+    # Turn off gradients for validation
+    test_batch_prints = test_size // batch_size // args.num_prints
+    num_test_batches = test_size // batch_size
 
-# load best model
-model.load_state_dict(torch.load(best_model_name))
-model.train(False)
+    # load best model
+    model.load_state_dict(torch.load(best_model_name))
+    model.train(False)
 
-pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
+    pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
 
-print("\n\n\n")
-print("Plotting results")
-# plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
-plot_sig_bkg_distributions(pred_lbl_tensor)
+    print("\n\n\n")
+    print("Plotting results")
+    # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
+    plot_sig_bkg_distributions(pred_lbl_tensor)
 
 print("Total time: %.1f" % (time.time() - start_time))

@@ -61,5 +61,11 @@ parser.add_argument(
     ],
     help="Directory for data",
 )
+parser.add_argument(
+    "--test",
+    action="store_true",
+    help="Test the model",
+    default=False,
+)
 parser.print_help()
 args = parser.parse_args()
