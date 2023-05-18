@@ -1,7 +1,7 @@
 import torch
 import os
 
-def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer, batch_size, num_prints=1000):
+def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer,train_batch_prints):
     running_loss = 0.
     tot_loss = 0.
 
@@ -40,12 +40,9 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
         running_num += batch_size
         tot_num += batch_size
 
-        if i % num_prints == 0:
-            print(f"Predicted class: {y_pred}", y_pred.size())
-            print(f"Labeled class: {labels}", labels.size())
-            print(f"Correct: {correct} out of {batch_size}")
+        if i % train_batch_prints == 0:
 
-            last_loss = running_loss / num_prints # loss per batch
+            last_loss = running_loss / train_batch_prints # loss per batch
             last_accuracy = running_correct / running_num # accuracy per batch
             print("Training batch {}         accuracy: {}      //      loss: {}".format(i + 1, last_accuracy, last_loss))
 
@@ -63,7 +60,7 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
     return avg_loss, avg_accuracy
 
 
-def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_loss, best_accuracy, best_epoch, num_prints=1000):
+def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_loss, best_accuracy, best_epoch, val_batch_prints):
     running_loss = 0.0
     tot_loss = 0.0
 
@@ -94,12 +91,9 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
         running_num += batch_size
         tot_num += batch_size
 
-        if i % num_prints == 0:
-            print(f"Predicted class: {y_pred}", y_pred.size())
-            print(f"Labeled class: {labels}", labels.size())
-            print(f"Correct: {correct} out of {batch_size}")
+        if i % val_batch_prints == 0:
 
-            last_loss = running_loss / num_prints # loss per batch
+            last_loss = running_loss / val_batch_prints # loss per batch
             last_accuracy = running_correct / running_num # accuracy per batch
 
             print('Validation batch {}      accuracy: {}    //      loss: {}'.format(i + 1, last_accuracy, last_loss))

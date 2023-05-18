@@ -23,7 +23,7 @@ print(model)
 
 loss_fn = torch.nn.BCEWithLogitsLoss()
 
-optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+optimizer = torch.optim.Adam(model.parameters())
 
 
 # Initializing in a separate cell so we can easily add more epochs to the same run
@@ -38,12 +38,14 @@ for epoch in range(args.epochs):
     print("EPOCH {}:".format(epoch))
 
     # Turn on gradients for training
+    train_batch_prints=train_size // batch_size // args.num_prints
     model.train(True)
-    avg_loss, avg_accuracy = train_one_epoch(epoch, writer, model, training_loader, loss_fn, optimizer, batch_size, args.num_prints)
+    avg_loss, avg_accuracy = train_one_epoch(epoch, writer, model, training_loader, loss_fn, optimizer, train_batch_prints)
 
     # Turn off gradients for validation
     model.train(False)
-    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(epoch, writer, model, val_loader, loss_fn, timestamp, best_vloss, best_vaccuracy, best_epoch, args.num_prints)
+    val_batch_prints=val_size // batch_size // args.num_prints
+    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(epoch, writer, model, val_loader, loss_fn, timestamp, best_vloss, best_vaccuracy, best_epoch, val_batch_prints)
 
     print("EPOCH # {}: loss train {},  val {}".format(epoch, avg_loss, avg_vloss))
     print("EPOCH # {}: acc train {},  val {}".format(epoch, avg_accuracy, avg_vaccuracy))
