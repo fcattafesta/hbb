@@ -106,6 +106,7 @@ if args.train_size != -1 and args.val_size != -1:
     X_fts = X_fts[: args.train_size + args.val_size, :]
     X_lbl = X_lbl[: args.train_size + args.val_size, :]
 
+
 X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 
 
@@ -117,6 +118,9 @@ print(f"Validation size: {val_size}")
 print(f"Total size: {len(X)}")
 
 train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
+# check size of the dataset
+print("Training dataset size:", len(train_dataset))
+print("Validation dataset size:", len(val_dataset))
 
 training_loader = torch.utils.data.DataLoader(
     train_dataset,
@@ -133,3 +137,8 @@ val_loader = torch.utils.data.DataLoader(
     num_workers=args.num_workers,
     drop_last=True,
 )
+
+
+# check size of the loader
+print("Training loader size:", len(training_loader))
+print("Validation loader size:", len(val_loader))
