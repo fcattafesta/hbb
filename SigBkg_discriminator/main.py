@@ -47,8 +47,9 @@ for epoch in range(args.epochs):
     val_batch_prints=val_size // batch_size // args.num_prints
     avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(epoch, writer, model, val_loader, loss_fn, timestamp, best_vloss, best_vaccuracy, best_epoch, val_batch_prints)
 
-    print("EPOCH # %d: loss train %.2f,  val %.2f" %(epoch, avg_loss, avg_vloss))
-    print("EPOCH # %d: acc train %.2f,  val %.2f" %(epoch, avg_accuracy, avg_vaccuracy))
+    print("EPOCH # %d: loss train %.4f,  val %.4f" %(epoch, avg_loss, avg_vloss))
+    print("EPOCH # %d: acc train %.4f,  val %.4f" %(epoch, avg_accuracy, avg_vaccuracy))
+    print("\n\n\n")
 
     # Log the running loss averaged per batch
     # for both training and validation
@@ -67,7 +68,7 @@ for epoch in range(args.epochs):
     epoch += 1
 
 print("Best epoch: %d" %best_epoch)
-print("Best val loss: %.2f" %best_vloss)
-print("Best val accuracy: %.2f" %best_vaccuracy)
+print("Best val loss: %.4f" %best_vloss)
+print("Best val accuracy: %.4f" %best_vaccuracy)
 
-print("Total time: %.2f" %(time.time() - start_time))
+print("Total time: %.1f" %(time.time() - start_time))
