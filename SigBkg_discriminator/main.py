@@ -59,7 +59,14 @@ for epoch in range(args.epochs):
     val_batch_prints = val_size // batch_size // args.num_prints
     num_val_batches = val_size // batch_size
 
-    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch, best_model_name = eval_one_epoch(
+    (
+        avg_vloss,
+        avg_vaccuracy,
+        best_vloss,
+        best_vaccuracy,
+        best_epoch,
+        best_model_name,
+    ) = eval_one_epoch(
         epoch,
         writer,
         model,
@@ -114,9 +121,7 @@ num_test_batches = test_size // batch_size
 model.load_state_dict(torch.load(best_model_name))
 model.train(False)
 
-pred_lbl_tensor = test_model(
-    model, test_loader, test_batch_prints, num_test_batches
-)
+pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
 
 # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
 plot_sig_bkg_distributions(pred_lbl_tensor)

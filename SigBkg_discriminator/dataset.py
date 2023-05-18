@@ -67,8 +67,10 @@ sig_files = [main_dir_mu + x + "_Snapshot.root" for x in signal_list] + [
 ]
 # get input data from a ROOT file and convert it to a torch tensor
 sig_train = (
-    ROOT.RDataFrame("Events", sig_files).Range(args.train_size + args.val_size)
-    if args.train_size > 0 and args.val_size > 0
+    ROOT.RDataFrame("Events", sig_files).Range(
+        args.train_size + args.val_size + args.test_size
+    )
+    if args.train_size > 0 and args.val_size > 0 and args.test_size > 0
     else ROOT.RDataFrame("Events", sig_files)
 )
 
@@ -86,8 +88,10 @@ bkg_files = [main_dir_mu + x + "_Snapshot.root" for x in background_list] + [
     main_dir_el + x + "_Snapshot.root" for x in background_list
 ]
 bkg_train = (
-    ROOT.RDataFrame("Events", bkg_files).Range(args.train_size + args.val_size)
-    if args.train_size > 0 and args.val_size > 0
+    ROOT.RDataFrame("Events", bkg_files).Range(
+        args.train_size + args.val_size + args.test_size
+    )
+    if args.train_size > 0 and args.val_size > 0 and args.test_size > 0
     else ROOT.RDataFrame("Events", bkg_files)
 )
 variables_bkg = np.array([bkg_train.AsNumpy()[x] for x in input_list])
@@ -102,17 +106,17 @@ X_fts = torch.cat((X_sig[0], X_bkg[0]), dim=1).transpose(1, 0)
 X_lbl = torch.cat((X_sig[1], X_bkg[1]), dim=1).transpose(1, 0)
 
 # split the dataset into training and val sets
-if args.train_size != -1 and args.val_size != -1:
-    X_fts = X_fts[: args.train_size + args.val_size, :]
-    X_lbl = X_lbl[: args.train_size + args.val_size, :]
+if args.train_size != -1 and args.val_size != -1 and args.test_size != -1:
+    X_fts = X_fts[: args.train_size + args.val_size + args.test_size, :]
+    X_lbl = X_lbl[: args.train_size + args.val_size + args.test_size, :]
 
 
 X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 
 
 train_size = int(0.8 * len(X)) if args.train_size == -1 else args.train_size
-val_size = (len(X) - train_size)/2
-test_size = (len(X) - train_size )/2
+val_size = (len(X) - train_size) // 2
+test_size = (len(X) - train_size) // 2
 
 print(f"Total size: {len(X)}")
 print(f"Training size: {train_size}")
@@ -120,7 +124,9 @@ print(f"Validation size: {val_size}")
 print(f"Test size: {test_size}")
 
 # NOTE: should the spli be really random?
-train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(X, [train_size, val_size, test_size])
+train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(
+    X, [train_size, val_size, test_size]
+)
 # check size of the dataset
 print("Training dataset size:", len(train_dataset))
 print("Validation dataset size:", len(val_dataset))

@@ -31,6 +31,13 @@ parser.add_argument(
     type=int,
 )
 parser.add_argument(
+    "-te",
+    "--test-size",
+    default=-1,
+    help="Number of events to process during testing",
+    type=int,
+)
+parser.add_argument(
     "-p",
     "--num-prints",
     default=50,

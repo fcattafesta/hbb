@@ -2,6 +2,7 @@ import torch
 import os
 import matplotlib.pyplot as plt
 
+
 def train_one_epoch(
     epoch_index,
     tb_writer,
@@ -228,5 +229,5 @@ def plot_sig_bkg_distributions(pred_lbl_tensor):
     plt.ylabel("Normalized counts")
     plt.legend()
     plt.show()
-    
+
     plt.savefig("sig_bkg_distributions.png")
