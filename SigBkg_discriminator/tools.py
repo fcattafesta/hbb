@@ -3,28 +3,25 @@ import os
 
 def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, optimizer, batch_size, num_prints=1000):
     running_loss = 0.
-    last_loss = 0.
+    tot_loss = 0.
 
-    # Here, we use enumerate(training_loader) instead of
-    # iter(training_loader) so that we can track the batch
-    # index and do some intra-epoch reporting
+    running_correct = 0
+    tot_correct = 0
+
+    running_num = 0
+    tot_num = 0
+
+    # Loop over the training data
     for i, data in enumerate(training_loader):
-        # Every data instance is an input + label pair
         inputs, labels = data
-
-        # Zero your gradients for every batch!
         optimizer.zero_grad()
 
-        # Make predictions for this batch
         outputs = model(inputs)
-        #print(f"out: {outputs}", outputs.size())
-        # accuracy
-        y_pred =torch.round(torch.sigmoid(outputs))
-        correct = (y_pred == labels).sum().item()
-        total = labels.size(0)
-        accuracy = correct / total
-        #print(f"Predicted class: {y_pred}", y_pred.size())
 
+        # Compute the accuracy
+        y_pred = torch.round(torch.sigmoid(outputs))
+        correct = (y_pred == labels).sum().item()
+        batch_size = labels.size(0)
 
         # Compute the loss and its gradients
         loss = loss_fn(outputs, labels)
@@ -33,56 +30,99 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
         # Adjust learning weights
         optimizer.step()
 
-        # Gather data and report
+        # Gather data for reporting
         running_loss += loss.item()
+        tot_loss += loss.item()
+
+        running_correct += correct
+        tot_correct += correct
+
+        running_num += batch_size
+        tot_num += batch_size
+
         if i % num_prints == 0:
-            print("Training batch {} accuracy: {}".format(i + 1, accuracy))
-            tb_writer.add_scalar('Accuracy/train', accuracy, i + 1)
+            print(f"Predicted class: {y_pred}", y_pred.size())
+            print(f"Correct: {correct} out of {batch_size}")
 
             last_loss = running_loss / num_prints # loss per batch
-            print('batch {} train loss: {}'.format(i + 1, last_loss))
+            last_accuracy = running_correct / running_num # accuracy per batch
+            print("Training batch {}         accuracy: {}      //      loss: {}".format(i + 1, last_accuracy, last_loss))
+
             tb_x = epoch_index * len(training_loader) + i + 1
-            tb_writer.add_scalar('Loss/train', last_loss, tb_x)
+            tb_writer.add_scalar('Accuracy', {'train':last_accuracy}, tb_x)
+            tb_writer.add_scalar('Loss', {'train':last_loss}, tb_x)
+
             running_loss = 0.
+            running_correct = 0
+            running_num = 0
 
-    return last_loss
+    avg_loss = tot_loss / (i + 1) # loss per epoch
+    avg_accuracy = tot_correct / tot_num # accuracy per epoch
+
+    return avg_loss, avg_accuracy
 
 
-def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_vloss, num_prints=1000):
-    running_vloss = 0.0
+def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp, best_loss, best_accuracy, best_epoch, num_prints=1000):
+    running_loss = 0.0
     tot_loss = 0.0
-    for i, vdata in enumerate(val_loader):
-        vinputs, vlabels = vdata
-        voutputs = model(vinputs)
-        vloss = loss_fn(voutputs, vlabels)
-        running_vloss += vloss
-        tot_loss += vloss.item()
-        if i % num_prints == 0:
 
-            last_vloss = running_vloss / num_prints # loss per batch
-            print('batch {} val loss: {}'.format(i + 1, last_vloss))
-            tb_writer.add_scalar('Accuracy/val', last_vloss, i + 1)
+    running_correct = 0
+    tot_correct = 0
+
+    running_num = 0
+    tot_num = 0
+
+    for i, data in enumerate(val_loader):
+        inputs, labels = data
+        outputs = model(inputs)
+
+        # Compute the accuracy
+        y_pred = torch.round(torch.sigmoid(outputs))
+        correct = (y_pred == labels).sum().item()
+        batch_size = labels.size(0)
+
+        loss = loss_fn(outputs, labels)
+
+        # Gather data for reporting
+        running_loss += loss.item()
+        tot_loss += loss.item()
+
+        running_correct += correct
+        tot_correct += correct
+
+        running_num += batch_size
+        tot_num += batch_size
+
+        if i % num_prints == 0:
+            print(f"Predicted class: {y_pred}", y_pred.size())
+            print(f"Correct: {correct} out of {batch_size}")
+
+            last_loss = running_loss / num_prints # loss per batch
+            last_accuracy = running_correct / running_num # accuracy per batch
+
+            print('Validation batch {}      accuracy: {}    //      loss: {}'.format(i + 1, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(val_loader) + i + 1
-            tb_writer.add_scalar('Loss/val', last_vloss, tb_x)
-            running_vloss = 0.
+            tb_writer.add_scalar('Accuracy', {'val':last_loss}, tb_x)
+            tb_writer.add_scalar('Loss', {'val':last_loss}, tb_x)
 
-    # validation accuracy
-    vpreds = torch.round(torch.sigmoid(voutputs))
-    vcorrect = (vpreds == vlabels).sum().item()
-    vtotal = vlabels.size(0)
-    vaccuracy = vcorrect / vtotal
-    print("Validation batch {} accuracy: {}".format(i + 1, vaccuracy))
+            running_loss = 0.
+            running_correct = 0
+            running_num = 0
 
-    avg_vloss = tot_loss / (i + 1)
+    avg_loss = tot_loss / (i + 1)
+    avg_accuracy = tot_correct / tot_num
 
     # Track best performance, and save the model's state
-    if avg_vloss < best_vloss:
-        best_vloss = avg_vloss
+    if avg_loss < best_loss:
+        best_loss = avg_loss
+        best_accuracy = avg_accuracy
+        best_epoch = epoch_index
+
         if not os.path.exists("models"):
             os.makedirs("models")
         model_path = "models/model_{}_{}".format(timestamp, epoch_index)
         torch.save(model.state_dict(), model_path)
 
 
-    return avg_vloss
+    return avg_loss, avg_accuracy, best_loss, best_accuracy, best_epoch
