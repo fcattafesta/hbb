@@ -33,6 +33,7 @@ writer = SummaryWriter("runs/DNN_trainer_{}".format(timestamp))
 best_vloss = 1_000_000.0
 best_vaccuracy = 0.0
 best_epoch = -1
+best_model_name = ""
 
 for epoch in range(args.epochs):
     # Turn on gradients for training
@@ -58,7 +59,7 @@ for epoch in range(args.epochs):
     val_batch_prints = val_size // batch_size // args.num_prints
     num_val_batches = val_size // batch_size
 
-    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(
+    avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch, best_model_name = eval_one_epoch(
         epoch,
         writer,
         model,
@@ -70,6 +71,7 @@ for epoch in range(args.epochs):
         best_epoch,
         val_batch_prints,
         num_val_batches,
+        best_model_name,
     )
 
     print("EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss))
@@ -97,5 +99,26 @@ for epoch in range(args.epochs):
 print("Best epoch: %d" % best_epoch)
 print("Best val loss: %.4f" % best_vloss)
 print("Best val accuracy: %.4f" % best_vaccuracy)
+
+# evaluate model on test_dataset loadining the best model
+print("\n\n\n")
+print("Evaluating model on test dataset")
+print("================================")
+print("\n")
+
+# Turn off gradients for validation
+test_batch_prints = test_size // batch_size // args.num_prints
+num_test_batches = test_size // batch_size
+
+# load best model
+model.load_state_dict(torch.load(best_model_name))
+model.train(False)
+
+pred_lbl_tensor = test_model(
+    model, test_loader, test_batch_prints, num_test_batches
+)
+
+# plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
+plot_sig_bkg_distributions(pred_lbl_tensor)
 
 print("Total time: %.1f" % (time.time() - start_time))

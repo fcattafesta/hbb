@@ -57,15 +57,14 @@ background_list = [
 ]
 signal_list = ["ZH", "ggZH"]
 
-# if in args.dirs there is a path to a directory, then use that instead of the default
-if args.data_dirs:
-    dirs = args.data_dirs
+main_dir_mu = "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/snap/Snapshots/"
+main_dir_el = "/gpfs/ddn/cms/user/malucchi/hbb_out/el/snap/Snapshots/"
+
 
 # list of signal files
-sig_files = []
-for x in dirs:
-    sig_files += [x + y + "_Snapshot.root" for y in signal_list]
-
+sig_files = [main_dir_mu + x + "_Snapshot.root" for x in signal_list] + [
+    main_dir_el + x + "_Snapshot.root" for x in signal_list
+]
 # get input data from a ROOT file and convert it to a torch tensor
 sig_train = (
     ROOT.RDataFrame("Events", sig_files).Range(args.train_size + args.val_size)
@@ -83,10 +82,9 @@ X_sig = (variables_sig, ones_array)
 
 #######################################################
 # list of background files
-bkg_files = []
-for x in dirs:
-    bkg_files += [x + y + "_Snapshot.root" for y in background_list]
-
+bkg_files = [main_dir_mu + x + "_Snapshot.root" for x in background_list] + [
+    main_dir_el + x + "_Snapshot.root" for x in background_list
+]
 bkg_train = (
     ROOT.RDataFrame("Events", bkg_files).Range(args.train_size + args.val_size)
     if args.train_size > 0 and args.val_size > 0
@@ -113,16 +111,20 @@ X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 
 
 train_size = int(0.8 * len(X)) if args.train_size == -1 else args.train_size
-val_size = len(X) - train_size
+val_size = (len(X) - train_size)/2
+test_size = (len(X) - train_size )/2
 
+print(f"Total size: {len(X)}")
 print(f"Training size: {train_size}")
 print(f"Validation size: {val_size}")
-print(f"Total size: {len(X)}")
+print(f"Test size: {test_size}")
 
-train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
+# NOTE: should the spli be really random?
+train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(X, [train_size, val_size, test_size])
 # check size of the dataset
 print("Training dataset size:", len(train_dataset))
 print("Validation dataset size:", len(val_dataset))
+print("Test dataset size:", len(test_dataset))
 
 training_loader = torch.utils.data.DataLoader(
     train_dataset,
@@ -140,7 +142,16 @@ val_loader = torch.utils.data.DataLoader(
     drop_last=True,
 )
 
+test_loader = torch.utils.data.DataLoader(
+    test_dataset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=args.num_workers,
+    drop_last=True,
+)
+
 
 # check size of the loader
 print("Training loader size:", len(training_loader))
 print("Validation loader size:", len(val_loader))
+print("Test loader size:", len(test_loader))
