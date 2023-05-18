@@ -57,14 +57,15 @@ background_list = [
 ]
 signal_list = ["ZH", "ggZH"]
 
-main_dir_mu = "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/snap/Snapshots/"
-main_dir_el = "/gpfs/ddn/cms/user/malucchi/hbb_out/el/snap/Snapshots/"
-
+# if in args.dirs there is a path to a directory, then use that instead of the default
+if args.data_dirs:
+    dirs = args.data_dirs
 
 # list of signal files
-sig_files = [main_dir_mu + x + "_Snapshot.root" for x in signal_list] + [
-    main_dir_el + x + "_Snapshot.root" for x in signal_list
-]
+sig_files = []
+for x in dirs:
+    sig_files += [x + y + "_Snapshot.root" for y in signal_list]
+
 # get input data from a ROOT file and convert it to a torch tensor
 sig_train = (
     ROOT.RDataFrame("Events", sig_files).Range(args.train_size + args.val_size)
@@ -82,9 +83,10 @@ X_sig = (variables_sig, ones_array)
 
 #######################################################
 # list of background files
-bkg_files = [main_dir_mu + x + "_Snapshot.root" for x in background_list] + [
-    main_dir_el + x + "_Snapshot.root" for x in background_list
-]
+bkg_files = []
+for x in dirs:
+    bkg_files += [x + y + "_Snapshot.root" for y in background_list]
+
 bkg_train = (
     ROOT.RDataFrame("Events", bkg_files).Range(args.train_size + args.val_size)
     if args.train_size > 0 and args.val_size > 0
