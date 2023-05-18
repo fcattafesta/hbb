@@ -42,6 +42,7 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
 
         if i % num_prints == 0:
             print(f"Predicted class: {y_pred}", y_pred.size())
+            print(f"Labeled class: {labels}", labels.size())
             print(f"Correct: {correct} out of {batch_size}")
 
             last_loss = running_loss / num_prints # loss per batch
@@ -49,8 +50,8 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
             print("Training batch {}         accuracy: {}      //      loss: {}".format(i + 1, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(training_loader) + i + 1
-            tb_writer.add_scalar('Accuracy', {'train':last_accuracy}, tb_x)
-            tb_writer.add_scalar('Loss', {'train':last_loss}, tb_x)
+            tb_writer.add_scalar('Accuracy/train', last_accuracy, tb_x)
+            tb_writer.add_scalar('Loss/train', last_loss, tb_x)
 
             running_loss = 0.
             running_correct = 0
@@ -95,6 +96,7 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
 
         if i % num_prints == 0:
             print(f"Predicted class: {y_pred}", y_pred.size())
+            print(f"Labeled class: {labels}", labels.size())
             print(f"Correct: {correct} out of {batch_size}")
 
             last_loss = running_loss / num_prints # loss per batch
@@ -103,8 +105,8 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
             print('Validation batch {}      accuracy: {}    //      loss: {}'.format(i + 1, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(val_loader) + i + 1
-            tb_writer.add_scalar('Accuracy', {'val':last_loss}, tb_x)
-            tb_writer.add_scalar('Loss', {'val':last_loss}, tb_x)
+            tb_writer.add_scalar('Accuracy/val', last_loss, tb_x)
+            tb_writer.add_scalar('Loss/val', last_loss, tb_x)
 
             running_loss = 0.
             running_correct = 0

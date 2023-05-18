@@ -15,7 +15,7 @@ parser.add_argument(
     "-v", "--val-size", default=-1, help="Number of events to process during validation", type=int,
 )
 parser.add_argument(
-    "-p", "--num-prints", default=100, help="Number of batches to process before printing", type=int,
+    "-p", "--num-prints", default=50, help="Number of batches to process before printing", type=int,
 )
 
 parser.print_help()
