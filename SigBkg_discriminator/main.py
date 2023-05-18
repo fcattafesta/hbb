@@ -40,6 +40,9 @@ for epoch in range(args.epochs):
     model.train(True)
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
+    print("num_train_batches", num_train_batches)
+    print("train_batch_prints", train_batch_prints)
+
     avg_loss, avg_accuracy = train_one_epoch(
         epoch,
         writer,
@@ -56,6 +59,9 @@ for epoch in range(args.epochs):
     model.train(False)
     val_batch_prints = val_size // batch_size // args.num_prints
     num_val_batches = val_size // batch_size
+    print("num_val_batches", num_val_batches)
+    print("val_batch_prints", val_batch_prints)
+    
     avg_vloss, avg_vaccuracy, best_vloss, best_vaccuracy, best_epoch = eval_one_epoch(
         epoch,
         writer,

@@ -50,11 +50,11 @@ def train_one_epoch(
         running_num += batch_size
         tot_num += batch_size
 
-        if i % batch_prints == 0 and i > 0:
+        if (i + 1) % batch_prints == 0:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
             print(
-                "EPOCH # %d  Training batch %.2f %%         accuracy: %.4f      //      loss: %.4f"
+                "EPOCH # %d  Training batch %.0f %%         accuracy: %.4f      //      loss: %.4f"
                 % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
@@ -115,12 +115,12 @@ def eval_one_epoch(
         running_num += batch_size
         tot_num += batch_size
 
-        if i % batch_prints == 0 and i > 0:
+        if (i + 1) % batch_prints == 0:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
 
             print(
-                "EPOCH # %d  Validation batch %.2f %%         accuracy: %.4f      //      loss: %.4f"
+                "EPOCH # %d  Validation batch %.0f %%         accuracy: %.4f      //      loss: %.4f"
                 % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
