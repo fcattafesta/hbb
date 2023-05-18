@@ -55,7 +55,7 @@ def train_one_epoch(
             last_accuracy = running_correct / running_num  # accuracy per batch
             print(
                 "EPOCH # %d  Training batch %.2f %%         accuracy: %.4f      //      loss: %.4f"
-                % (epoch_index, (i + 1) / num_batches, last_accuracy, last_loss)
+                % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
             tb_x = epoch_index * len(training_loader) + i + 1
@@ -121,7 +121,7 @@ def eval_one_epoch(
 
             print(
                 "EPOCH # %d  Validation batch %.2f %%         accuracy: %.4f      //      loss: %.4f"
-                % (epoch_index, (i + 1) / num_batches, last_accuracy, last_loss)
+                % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
             tb_x = epoch_index * len(val_loader) + i + 1

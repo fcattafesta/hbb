@@ -104,17 +104,27 @@ X = torch.utils.data.TensorDataset(X_fts, X_lbl)
 
 
 train_size = int(0.8 * len(X)) if args.train_size == -1 else args.train_size
-val_size = len(X) - train_size if args.val_size == -1 else args.val_size
+val_size = len(X) - train_size
 
 print(f"Training size: {train_size}")
 print(f"Validation size: {val_size}")
+print(f"Total size: {len(X)}")
+print(f"Batch size: {batch_size}")
 
 train_dataset, val_dataset = torch.utils.data.random_split(X, [train_size, val_size])
 
 training_loader = torch.utils.data.DataLoader(
-    train_dataset.dataset, batch_size=batch_size, shuffle=True
+    train_dataset.dataset,
+    batch_size=batch_size,
+    shuffle=True,
+    num_workers=args.num_workers,
+    drop_last=True,
 )
 
 val_loader = torch.utils.data.DataLoader(
-    val_dataset.dataset, batch_size=batch_size, shuffle=True
+    val_dataset.dataset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=args.num_workers,
+    drop_last=True,
 )

@@ -17,6 +17,8 @@ parser.add_argument(
 parser.add_argument(
     "-p", "--num-prints", default=50, help="Number of prints for each epoch", type=int,
 )
-
+parser.add_argument(
+    "-n", "--num-workers", default=4, help="Number of workers for data loading", type=int,
+)
 parser.print_help()
 args = parser.parse_args()
