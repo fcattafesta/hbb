@@ -44,7 +44,7 @@ def train_one_epoch(epoch_index, tb_writer, model, training_loader, loss_fn, opt
 
             last_loss = running_loss / train_batch_prints # loss per batch
             last_accuracy = running_correct / running_num # accuracy per batch
-            print("Training batch {}         accuracy: {}      //      loss: {}".format(i + 1, last_accuracy, last_loss))
+            print("Training batch %d         accuracy: %.2f      //      loss: %.2f" %(i + 1, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(training_loader) + i + 1
             tb_writer.add_scalar('Accuracy/train', last_accuracy, tb_x)
@@ -96,7 +96,7 @@ def eval_one_epoch(epoch_index, tb_writer, model, val_loader, loss_fn, timestamp
             last_loss = running_loss / val_batch_prints # loss per batch
             last_accuracy = running_correct / running_num # accuracy per batch
 
-            print('Validation batch {}      accuracy: {}    //      loss: {}'.format(i + 1, last_accuracy, last_loss))
+            print("Validation batch %d         accuracy: %.2f      //      loss: %.2f" %(i + 1, last_accuracy, last_loss))
 
             tb_x = epoch_index * len(val_loader) + i + 1
             tb_writer.add_scalar('Accuracy/val', last_loss, tb_x)
