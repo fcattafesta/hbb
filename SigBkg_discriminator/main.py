@@ -123,6 +123,8 @@ model.train(False)
 
 pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
 
+print("\n\n\n")
+print("Plotting results")
 # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
 plot_sig_bkg_distributions(pred_lbl_tensor)
 
