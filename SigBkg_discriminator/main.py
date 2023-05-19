@@ -2,7 +2,7 @@ from dataset import *
 from tools import *
 from DNN_model import *
 from args_dnn import args
-from plot_histos import *
+from SigBkg_discriminator.sig_bkg_histos import *
 
 import os
 import torch
