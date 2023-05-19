@@ -63,8 +63,13 @@ def train_one_epoch(
             os.makedirs(f"models/{timestamp}", exist_ok=True)
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
-                    "EPOCH # %d  Validation batch %.1f %%         accuracy: %.4f      //      loss: %.4f\n"
-                    % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
+                    "EPOCH # %d  Training batch %.1f %%         accuracy: %.4f      //      loss: %.4f\n"
+                    % (
+                        epoch_index,
+                        (i + 1) / num_batches * 100,
+                        last_accuracy,
+                        last_loss,
+                    )
                 )
 
             tb_x = epoch_index * len(loader) + i + 1
@@ -138,9 +143,13 @@ def eval_one_epoch(
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
                     "EPOCH # %d  Validation batch %.1f %%         accuracy: %.4f      //      loss: %.4f\n"
-                    % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
+                    % (
+                        epoch_index,
+                        (i + 1) / num_batches * 100,
+                        last_accuracy,
+                        last_loss,
+                    )
                 )
-
 
             tb_x = epoch_index * len(loader) + i + 1
             tb_writer.add_scalar("Accuracy/val", last_accuracy, tb_x)
