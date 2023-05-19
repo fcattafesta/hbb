@@ -11,10 +11,10 @@ def plot_sig_bkg_distributions(pred_lbl_tensor):
     sig_pred = sig[:, 0]
     bkg_pred = bkg[:, 0]
 
-    plt.figure()
+    plt.figure(figsize=(10, 10))
     plt.hist(
         sig_pred,
-        bins=50,
+        bins=500,
         range=(0, 1),
         histtype="step",
         label="Signal",
@@ -23,7 +23,7 @@ def plot_sig_bkg_distributions(pred_lbl_tensor):
     )
     plt.hist(
         bkg_pred,
-        bins=50,
+        bins=500,
         range=(0, 1),
         histtype="step",
         label="Background",
