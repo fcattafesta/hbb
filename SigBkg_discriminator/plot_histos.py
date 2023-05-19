@@ -34,9 +34,9 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         label="Signal",
         density=True,
         edgecolor="blue",
-        facecolor="lightblue",
+        facecolor="dodgerblue",
         fill=True,
-        alpha=0.4,
+        alpha=0.5,
     )
     plt.hist(
         bkg_score,
