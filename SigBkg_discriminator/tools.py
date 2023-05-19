@@ -188,10 +188,18 @@ def test_model(model, test_loader, test_batch_prints, num_test_batches):
             all_preds = torch.cat((all_preds, y_pred))
             all_labels = torch.cat((all_labels, labels))
 
+    print("All predictions: ", all_preds, all_preds.size())
+    print("All labels: ", all_labels, all_labels.size())
     # concatenate all predictions and labels
     all_preds = all_preds.view(-1, 1)
     all_labels = all_labels.view(-1, 1)
+    print("All predictions: ", all_preds, all_preds.size())
+    print("All labels: ", all_labels, all_labels.size())
 
     pred_lbl_tensor = torch.cat((all_preds, all_labels), 1)
+    print("Prediction and label tensor: ", pred_lbl_tensor, pred_lbl_tensor.size())
 
-    return pred_lbl_tensor
+    # detach the tensor from the graph and convert to numpy array
+    pred_lbl_array = pred_lbl_tensor.detach().numpy()
+
+    return pred_lbl_array

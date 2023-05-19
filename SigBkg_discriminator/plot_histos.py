@@ -1,15 +1,20 @@
 import matplotlib.pyplot as plt
 import argparse
-import torch
+import numpy as np
 
 
 def plot_sig_bkg_distributions(pred_lbl_tensor):
     # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
-    sig = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 1].detach().numpy()
-    bkg = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 0].detach().numpy()
+    sig = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 1]
+    bkg = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 0]
+    print("sig.shape", sig.shape, sig)
+    print("bkg.shape", bkg.shape, bkg)
 
     sig_pred = sig[:, 0]
     bkg_pred = bkg[:, 0]
+
+    print("sig_pred.shape", sig_pred.shape, sig_pred)
+    print("bkg_pred.shape", bkg_pred.shape, bkg_pred)
 
     plt.figure(figsize=(10, 10))
     plt.hist(
@@ -48,10 +53,11 @@ if __name__ == "__main__":
     parser.print_help()
     args = parser.parse_args()
 
-    input_file = f"{args.input}/pred_lbl_tensor.pt"
+
+    input_file = f"{args.input}/pred_lbl_array.npy"
 
     # load the predicted labels
-    pred_lbl_tensor = torch.load(input_file)
+    pred_lbl_tensor = np.load(input_file)
 
     # plot the signal and background distributions
     plot_sig_bkg_distributions(pred_lbl_tensor)
