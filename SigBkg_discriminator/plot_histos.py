@@ -33,7 +33,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
     sig_score_test, bkg_score_test = handle_arrays(score_lbl_tensor_test)
 
     plt.figure(figsize=(13, 10))
-    plt.hist(
+    legend_sig_train=plt.hist(
         sig_score_train,
         bins=30,
         range=(0, 1),
@@ -45,7 +45,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
         fill=True,
         alpha=0.5,
     )
-    plt.hist(
+    legend_bkg_train=plt.hist(
         bkg_score_train,
         bins=30,
         range=(0, 1),
@@ -59,21 +59,21 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
 
     # Create the histogram with dots on top using plt.scatter
     counts, bins, _ = plt.hist(
-        sig_score_test, bins=30, alpha=0, density=True#, label="Signal (test)"
+        sig_score_test, bins=30, alpha=0, density=True,range=(0, 1)#, label="Signal (test)"
     )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
-    legend_markers_sig = plt.scatter([], [], marker='o', color='blue', label='Signal (test)')
+    legend_sig_test = plt.scatter([], [], marker='o', color='blue', label='Signal (test)')
     # Plot the dots on top of the histogram
     plt.scatter(bin_centers, counts, c="blue", s=10, marker='o')
 
     # Create the histogram with dots on top using plt.scatter
     counts, bins, _ = plt.hist(
-        bkg_score_test, bins=30, alpha=0, density=True#, label="Background (test)"
+        bkg_score_test, bins=30, alpha=0, density=True, range=(0, 1)#, label="Background (test)"
     )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
-    legend_markers_bkg = plt.scatter([], [], marker='o', color='red', label='Background (test)')
+    legend_bkg_test = plt.scatter([], [], marker='o', color='red', label='Background (test)')
     # Plot the dots on top of the histogram
     plt.scatter(bin_centers, counts, c="red", s=10, marker='o')
 
@@ -104,7 +104,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
 
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
-    plt.legend(loc="upper center", fontsize=20, handles=[legend_markers_sig, legend_markers_bkg])
+    plt.legend(loc="upper center", fontsize=20, handles=[legend_sig_train[2][0], legend_bkg_train[2][0], legend_sig_test, legend_bkg_test])
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
