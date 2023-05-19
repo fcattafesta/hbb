@@ -33,8 +33,8 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         histtype="step",
         label="Signal",
         density=True,
-        linecolor="dodgerblue",
-        fillcolor="blue",
+        edgecolor="blue",
+        facecolor="lightblue",
         fill=True,
         alpha=0.4,
     )
@@ -49,16 +49,15 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         fill=False,
         hatch="\\\\",
     )
-    plt.xlabel("DNN output", fontsize=20, loc='right')
-    plt.ylabel("Normalized counts", fontsize=20, loc='top')
-    plt.legend(loc='upper center', fontsize=20)
-    hep.style.use('CMS')
-    hep.cms.label('Preliminary')
-    hep.cms.label(year='UL18')
+    plt.xlabel("DNN output", fontsize=20, loc="right")
+    plt.ylabel("Normalized counts", fontsize=20, loc="top")
+    plt.legend(loc="upper center", fontsize=20)
+    hep.style.use("CMS")
+    hep.cms.label("Preliminary")
+    hep.cms.label(year="UL18")
     plt.savefig(f"{args.input}/sig_bkg_distributions.png")
     if args.show:
         plt.show()
-
 
 
 if __name__ == "__main__":
@@ -73,7 +72,6 @@ if __name__ == "__main__":
     )
     parser.print_help()
     args = parser.parse_args()
-
 
     input_file = f"{args.input}/score_lbl_array.npy"
 
