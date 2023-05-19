@@ -45,7 +45,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
     plt.xlabel("DNN output")
     plt.ylabel("Normalized counts")
     plt.legend()
-    #plt.show()
+    plt.show()
 
     plt.savefig(f"{args.input}/sig_bkg_distributions.png")
 

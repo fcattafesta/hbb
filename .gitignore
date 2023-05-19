@@ -157,4 +157,4 @@ libNailExternals.so
 to_do.txt
 runs/
 models/
-pred_lbls/
+score_lbls/
