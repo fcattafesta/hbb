@@ -29,19 +29,23 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         sig_score,
         bins=70,
         range=(0, 1),
-        histtype="bar",
+        histtype="step",
         label="Signal",
         density=True,
         color="blue",
+        fill=False,
+        hatch="\\",
     )
     plt.hist(
         bkg_score,
         bins=70,
         range=(0, 1),
-        histtype="bar",
+        histtype="step",
         label="Background",
         density=True,
         color="red",
+        fill=False,
+        hatch="//",
     )
     plt.xlabel("DNN output")
     plt.ylabel("Normalized counts")
