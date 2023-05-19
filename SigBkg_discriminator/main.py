@@ -130,7 +130,7 @@ if args.test:
 
     # create the directory for predicted labels with time stamp
     pred_lbl_dir = f"pred_lbls/{timestamp}/"
-    os.makedir(pred_lbl_dir, exist_ok=True)
+    os.makedirs(pred_lbl_dir, exist_ok=True)
     # save tensor with predicted labels
     torch.save(pred_lbl_tensor, f"{pred_lbl_dir}/pred_lbl_tensor.pt")
 
