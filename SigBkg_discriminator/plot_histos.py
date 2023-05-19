@@ -33,9 +33,9 @@ def plot_sig_bkg_distributions(pred_lbl_tensor):
     plt.xlabel("DNN output")
     plt.ylabel("Normalized counts")
     plt.legend()
-    plt.show()
+    #plt.show()
 
-    plt.savefig("sig_bkg_distributions.png")
+    plt.savefig(f"{args.input}/sig_bkg_distributions.png")
 
 
 if __name__ == "__main__":
@@ -43,13 +43,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-i", "--input", default="pred_lbl_tensor.pt", help="Input file", type=str
+        "-i", "--input", default="pred_lbls", help="Input directory", type=str
     )
     parser.print_help()
     args = parser.parse_args()
 
+    input_file = f"{args.input}/pred_lbl_tensor.pt"
+
     # load the predicted labels
-    pred_lbl_tensor = torch.load(args.input)
+    pred_lbl_tensor = torch.load(input_file)
 
     # plot the signal and background distributions
     plot_sig_bkg_distributions(pred_lbl_tensor)
