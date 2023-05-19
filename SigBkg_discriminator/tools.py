@@ -150,7 +150,7 @@ def eval_one_epoch(
     return avg_loss, avg_accuracy, best_loss, best_accuracy, best_epoch, best_model_name
 
 
-def test_model(model, test_loader, test_batch_prints, num_test_batches):
+def eval_model(model, test_loader, test_batch_prints, num_test_batches):
     # Test the model by running it on the test set
     running_loss = 0.0
     tot_loss = 0.0

@@ -123,7 +123,8 @@ if args.test:
     model.load_state_dict(torch.load(best_model_name))
     model.train(False)
 
-    score_lbl_array = test_model(model, test_loader, test_batch_prints, num_test_batches)
+    score_lbl_array_train = eval_model(model, training_loader, test_batch_prints, num_test_batches)
+    score_lbl_array_test = eval_model(model, test_loader, test_batch_prints, num_test_batches)
 
     # plot the signal and background distributions
     #plot_sig_bkg_distributions(score_lbl_tensor)
@@ -131,8 +132,8 @@ if args.test:
     # create the directory for labels with time stamp
     score_lbl_dir = f"score_lbls/{timestamp}/"
     os.makedirs(score_lbl_dir, exist_ok=True)
-    # save array with labels and score
-    np.save(f"{score_lbl_dir}/score_lbl_array.npy", score_lbl_array)
+    # save array with labels and score for train and test in the same file .npz
+    np.savez(f"{score_lbl_dir}/score_lbl_array.npz", score_lbl_array_train=score_lbl_array_train, score_lbl_array_test=score_lbl_array_test)
 
     print("Saved score_lbl_array.npy in %s" % score_lbl_dir)
 
