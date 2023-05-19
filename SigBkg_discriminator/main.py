@@ -134,5 +134,7 @@ if args.test:
     # save array with labels and score
     np.save(f"{score_lbl_dir}/score_lbl_array.npy", score_lbl_array)
 
+    print("Saved score_lbl_array.npy in %s" % score_lbl_dir)
+
 
 print("Total time: %.1f" % (time.time() - start_time))
