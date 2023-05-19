@@ -29,7 +29,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         sig_score,
         bins=70,
         range=(0, 1),
-        histtype="stepfilled",
+        histtype="bar",
         label="Signal",
         density=True,
         color="blue",
@@ -38,7 +38,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         bkg_score,
         bins=70,
         range=(0, 1),
-        histtype="stepfilled",
+        histtype="bar",
         label="Background",
         density=True,
         color="red",
@@ -49,9 +49,10 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
     hep.style.use('CMS')
     hep.cms.label('Preliminary')
     hep.cms.label(year='UL18')
-    plt.show()
-
     plt.savefig(f"{args.input}/sig_bkg_distributions.png")
+    if args.show:
+        plt.show()
+
 
 
 if __name__ == "__main__":
@@ -60,6 +61,9 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "-i", "--input", default="score_lbls", help="Input directory", type=str
+    )
+    parser.add_argument(
+        "-s", "--show", default=False, help="Show plots", action="store_true"
     )
     parser.print_help()
     args = parser.parse_args()
