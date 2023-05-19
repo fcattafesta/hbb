@@ -56,8 +56,10 @@ parser.add_argument(
     "--data-dirs",
     nargs="+",
     default=[
-        "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/snap/Snapshots/",
-        "/gpfs/ddn/cms/user/malucchi/hbb_out/el/snap/Snapshots/",
+        # "/gpfs/ddn/cms/user/malucchi/hbb_out/mu/snap/Snapshots/",
+        # "/gpfs/ddn/cms/user/malucchi/hbb_out/el/snap/Snapshots/",
+        "~/el/Snapshots/",
+        "~/mu/Snapshots/",
     ],
     help="Directory for data",
 )
