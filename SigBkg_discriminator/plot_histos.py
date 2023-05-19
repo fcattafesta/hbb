@@ -34,7 +34,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         density=True,
         color="blue",
         fill=False,
-        hatch="\\",
+        hatch="\\\\",
     )
     plt.hist(
         bkg_score,
@@ -47,8 +47,8 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         fill=False,
         hatch="//",
     )
-    plt.xlabel("DNN output")
-    plt.ylabel("Normalized counts")
+    plt.xlabel("DNN output", fontsize=20, loc='right')
+    plt.ylabel("Normalized counts", fontsize=20, loc='top')
     plt.legend(loc='upper left', fontsize=20)
     hep.style.use('CMS')
     hep.cms.label('Preliminary')
