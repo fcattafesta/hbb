@@ -3,6 +3,7 @@ import argparse
 import numpy as np
 import mplhep as hep
 
+
 def handle_arrays(score_lbl_tensor):
     sig = score_lbl_tensor[score_lbl_tensor[:, 1] == 1]
     bkg = score_lbl_tensor[score_lbl_tensor[:, 1] == 0]
@@ -57,23 +58,24 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
     )
 
     # Create the histogram with dots on top using plt.scatter
-    counts, bins, _ = plt.hist(sig_score_test, bins=30, alpha=0      ,  label="Signal (test)"
-)  # alpha=0 hides the bars
-
+    counts, bins, _ = plt.hist(
+        sig_score_test, bins=30, alpha=0, density=True#, label="Signal (test)"
+    )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
-
+    legend_markers_sig = plt.scatter([], [], marker='o', color='blue', label='Signal (test)')
     # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c='blue', s=10)
+    plt.scatter(bin_centers, counts, c="blue", s=10, marker='o')
 
     # Create the histogram with dots on top using plt.scatter
-    counts, bins, _ = plt.hist(bkg_score_test, bins=30, alpha=0,         label="Background (test)")  # alpha=0 hides the bars
-
+    counts, bins, _ = plt.hist(
+        bkg_score_test, bins=30, alpha=0, density=True#, label="Background (test)"
+    )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
-
+    legend_markers_bkg = plt.scatter([], [], marker='o', color='red', label='Background (test)')
     # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c='red', s=10)
+    plt.scatter(bin_centers, counts, c="red", s=10, marker='o')
 
     # plt.hist(
     #     sig_score_test,
@@ -100,10 +102,9 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
     #     hatch="\\\\",
     # )
 
-
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
-    plt.legend(loc="upper center", fontsize=20)
+    plt.legend(loc="upper center", fontsize=20, handles=[legend_markers_sig, legend_markers_bkg])
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
@@ -128,8 +129,12 @@ if __name__ == "__main__":
     input_file = f"{args.input}/score_lbl_array.npz"
 
     # load the labels and scores from the train and test datasets from a .npz file
-    score_lbl_tensor_train = np.load(input_file, allow_pickle=True)["score_lbl_array_train"]
-    score_lbl_tensor_test = np.load(input_file, allow_pickle=True)["score_lbl_array_test"]
+    score_lbl_tensor_train = np.load(input_file, allow_pickle=True)[
+        "score_lbl_array_train"
+    ]
+    score_lbl_tensor_test = np.load(input_file, allow_pickle=True)[
+        "score_lbl_array_test"
+    ]
 
     # plot the signal and background distributions
     plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test)
