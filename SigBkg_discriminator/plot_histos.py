@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
+import mplhep as hep
 
 
 def plot_sig_bkg_distributions(score_lbl_tensor):
@@ -45,6 +46,9 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
     plt.xlabel("DNN output")
     plt.ylabel("Normalized counts")
     plt.legend()
+    hep.style.use('CMS')
+    hep.cms.label('Preliminary')
+    hep.cms.label(year='UL18')
     plt.show()
 
     plt.savefig(f"{args.input}/sig_bkg_distributions.png")
