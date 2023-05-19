@@ -17,10 +17,13 @@ def read_tensorboard_log_file(log_file):
     # E. g. get wall clock, number of steps and value for a scalar 'Accuracy'
 
     infos = [event_acc.Scalars('Accuracy/train'), event_acc.Scalars('Accuracy/val'), event_acc.Scalars('Loss/train'), event_acc.Scalars('Loss/val')]
-    w_times, step_nums, vals = [], [], []
     w_times=[info[0] for info in infos]
     step_nums=[info[1] for info in infos]
     vals=[info[2] for info in infos]
+    print("w_times", w_times)
+    print("step_nums", step_nums)
+    print("vals", vals)
+    
 
     return w_times, step_nums, vals
 
