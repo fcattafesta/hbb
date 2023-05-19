@@ -2,14 +2,6 @@ import matplotlib.pyplot as plt
 import argparse
 import torch
 
-parser = argparse.ArgumentParser()
-
-parser.add_argument(
-    "-i", "--input", default="pred_lbl_tensor.pt", help="Input file", type=str
-)
-parser.print_help()
-args = parser.parse_args()
-
 
 def plot_sig_bkg_distributions(pred_lbl_tensor):
     # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
@@ -46,8 +38,18 @@ def plot_sig_bkg_distributions(pred_lbl_tensor):
     plt.savefig("sig_bkg_distributions.png")
 
 
-# load the predicted labels
-pred_lbl_tensor = torch.load(args.input)
+if __name__ == "__main__":
+    # parse the arguments
+    parser = argparse.ArgumentParser()
 
-# plot the signal and background distributions
-plot_sig_bkg_distributions(pred_lbl_tensor)
+    parser.add_argument(
+        "-i", "--input", default="pred_lbl_tensor.pt", help="Input file", type=str
+    )
+    parser.print_help()
+    args = parser.parse_args()
+
+    # load the predicted labels
+    pred_lbl_tensor = torch.load(args.input)
+
+    # plot the signal and background distributions
+    plot_sig_bkg_distributions(pred_lbl_tensor)

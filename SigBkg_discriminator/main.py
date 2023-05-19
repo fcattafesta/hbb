@@ -2,6 +2,7 @@ from dataset import *
 from tools import *
 from DNN_model import *
 from args_dnn import args
+from plot_histos import *
 
 import os
 import torch
@@ -123,6 +124,9 @@ if args.test:
     model.train(False)
 
     pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
+
+    # plot the signal and background distributions
+    plot_sig_bkg_distributions(pred_lbl_tensor)
 
     # create the directory for predicted labels with time stamp
     pred_lbl_dir = f"pred_lbls/{timestamp}/"
