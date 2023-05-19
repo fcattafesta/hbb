@@ -60,6 +60,7 @@ def train_one_epoch(
             )
 
             # write info to file txt
+            os.makedirs(f"models/{timestamp}", exist_ok=True)
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
                     "EPOCH # %d  Validation batch %.1f %%         accuracy: %.4f      //      loss: %.4f\n"
