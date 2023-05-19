@@ -124,9 +124,12 @@ if args.test:
 
     pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
 
-    print("\n\n\n")
-    print("Plotting results")
-    # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
-    plot_sig_bkg_distributions(pred_lbl_tensor)
+    # create the directory for predicted labels with time stamp
+    pred_lbl_dir = f"pred_lbls/{timestamp}/"
+    if not os.path.exists(pred_lbl_dir):
+        os.mkdir(pred_lbl_dir)
+    # save tensor with predicted labels
+    torch.save(pred_lbl_tensor, f"{pred_lbl_dir}/pred_lbl_tensor.pt")
+
 
 print("Total time: %.1f" % (time.time() - start_time))

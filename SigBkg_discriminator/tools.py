@@ -197,37 +197,3 @@ def test_model(model, test_loader, test_batch_prints, num_test_batches):
 
     return pred_lbl_tensor
 
-
-def plot_sig_bkg_distributions(pred_lbl_tensor):
-    # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
-    sig = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 1]
-    bkg = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 0]
-
-    sig_pred = sig[:, 0]
-    bkg_pred = bkg[:, 0]
-
-    plt.figure()
-    plt.hist(
-        sig_pred,
-        bins=50,
-        range=(0, 1),
-        histtype="step",
-        label="Signal",
-        density=True,
-        color="blue",
-    )
-    plt.hist(
-        bkg_pred,
-        bins=50,
-        range=(0, 1),
-        histtype="step",
-        label="Background",
-        density=True,
-        color="red",
-    )
-    plt.xlabel("DNN output")
-    plt.ylabel("Normalized counts")
-    plt.legend()
-    #plt.show()
-
-    plt.savefig("sig_bkg_distributions.png")
