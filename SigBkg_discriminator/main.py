@@ -68,7 +68,7 @@ for epoch in range(args.epochs):
         best_vaccuracy,
         best_epoch,
         best_model_name,
-    ) = eval_one_epoch(
+    ) = val_one_epoch(
         epoch,
         writer,
         model,

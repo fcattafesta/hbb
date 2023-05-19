@@ -1,7 +1,6 @@
 import torch
 import os
 
-
 def train_one_epoch(
     epoch_index,
     tb_writer,
@@ -59,20 +58,21 @@ def train_one_epoch(
                 % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
-            # write info to file txt
             os.makedirs(f"models/{timestamp}", exist_ok=True)
+
+            tb_x = epoch_index * len(loader) + i + 1
+            # write info to file txt
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
-                    "EPOCH # %d  Training batch %.1f %%         accuracy: %.4f      //      loss: %.4f\n"
+                    "EPOCH # %d  Training batch %.d %%         accuracy: %.4f      //      loss: %.4f\n"
                     % (
                         epoch_index,
-                        (i + 1) / num_batches * 100,
+                        tb_x,
                         last_accuracy,
                         last_loss,
                     )
                 )
 
-            tb_x = epoch_index * len(loader) + i + 1
             tb_writer.add_scalar("Accuracy/train", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/train", last_loss, tb_x)
 
@@ -86,7 +86,7 @@ def train_one_epoch(
     return avg_loss, avg_accuracy
 
 
-def eval_one_epoch(
+def val_one_epoch(
     epoch_index,
     tb_writer,
     model,
@@ -139,19 +139,19 @@ def eval_one_epoch(
                 % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
+            tb_x = epoch_index * len(loader) + i + 1
             # write info to file txt
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
-                    "EPOCH # %d  Validation batch %.1f %%         accuracy: %.4f      //      loss: %.4f\n"
+                    "EPOCH # %d  Validation batch %.d %%         accuracy: %.4f      //      loss: %.4f\n"
                     % (
                         epoch_index,
-                        (i + 1) / num_batches * 100,
+                        tb_x,
                         last_accuracy,
                         last_loss,
                     )
                 )
 
-            tb_x = epoch_index * len(loader) + i + 1
             tb_writer.add_scalar("Accuracy/val", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/val", last_loss, tb_x)
 

@@ -5,29 +5,27 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mplhep as hep
 
-from torch.utils.tensorboard import SummaryReader
 
-# read the tensorboard log file
-def read_tensorboard_log_file(log_file):
-    reader = SummaryReader(log_file)
+def read_from_txt(file):
+    # read form a txt with the info written like this:
+    # EPOCH # 14  Validation batch 97.9 %         accuracy: 0.8080      //      loss: 0.4195
 
-    # Initialize a dictionary to store scalar values
-    scalar_data = {}
+    # get accuracy and loss and separate them between training and validation
+    with open(file, 'r') as f:
+        lines = f.readlines()
+        train_accuracy = []
+        train_loss = []
+        val_accuracy = []
+        val_loss = []
+        for line in lines:
+            if 'Training' in line:
+                train_accuracy.append(float(line.split('accuracy: ')[1].split(' ')[0]))
+                train_loss.append(float(line.split()[2]))
+            if 'Validation' in line:
+                val_accuracy.append(float(line.split('accuracy: ')[1].split(' ')[0]))
+                val_loss.append(float(line.split()[2]))
 
-    # Extract scalar values from the log file
-    for scalar in reader.scalars():
-        scalar_name = scalar.tag
-        if scalar_name not in scalar_data:
-            scalar_data[scalar_name] = {'steps': [], 'values': []}
-        scalar_data[scalar_name]['steps'].append(scalar.step)
-        scalar_data[scalar_name]['values'].append(scalar.value)
-
-    # Plot each scalar value separately
-    for scalar_name, data in scalar_data.items():
-        steps = data['steps']
-        values = data['values']
-        plt.plot(steps, values, label=scalar_name)
-    return scalar_data
+    return train_accuracy, train_loss, val_accuracy, val_loss
 
 
 if __name__ == "__main__":
@@ -37,16 +35,26 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    scalar_data = read_tensorboard_log_file(args.input_file)
+    train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(args.input_file)
 
-    # Plot each scalar value separately
-    for scalar_name, data in scalar_data.items():
-        steps = data['steps']
-        values = data['values']
-        plt.plot(steps, values, label=scalar_name)
+    for info in ["accuracy", "loss"]:
+        plt.figure(figsize=(10, 10))
+        plt.plot(
+            range(len(train_accuracy)),
+            train_accuracy,
+            label="Training " + info,
+            color="blue",
+        )
+        plt.plot(
+            range(len(val_accuracy)),
+            val_accuracy,
+            label="Validation " + info,
+            color="orange",
+        )
+        plt.title("Training and validation " + info)
 
-    plt.xlabel("Epoch")
-    plt.ylabel("Accuracy/Loss")
-    plt.legend()
-    plt.savefig("history.png")
-    plt.show()
+        plt.xlabel("Epoch")
+        plt.ylabel(info.capitalize())
+        plt.legend()
+        plt.savefig(info + ".png")
+        plt.show()
