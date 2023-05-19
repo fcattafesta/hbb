@@ -24,8 +24,8 @@ def read_tensorboard_log_file(log_file):
         event_acc.Scalars("Loss/train"),
         event_acc.Scalars("Loss/val"),
     ]
-    vals = []
-    step_nums = []
+    vals = ()
+    step_nums = ()
     for info in infos:
         step_nums.append(event_acc.Scalars(info).step)
         vals.append(event_acc.Scalars(info).value)
