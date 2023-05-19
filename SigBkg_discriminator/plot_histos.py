@@ -13,10 +13,11 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
 
     # get the scores for signal and background
     # and make them the same length (which is the minimum of the two)
-    if sig.shape[0] < bkg.shape[0]:
-        bkg = bkg[: sig.shape[0]]
-    else:
-        sig = sig[: bkg.shape[0]]
+
+    # if sig.shape[0] < bkg.shape[0]:
+    #     bkg = bkg[: sig.shape[0]]
+    # else:
+    #     sig = sig[: bkg.shape[0]]
 
     sig_score = sig[:, 0]
     bkg_score = bkg[:, 0]
@@ -32,9 +33,10 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
         histtype="step",
         label="Signal",
         density=True,
-        color="blue",
+        linecolor="dodgerblue",
+        fillcolor="blue",
         fill=True,
-        alpha=0.5,
+        alpha=0.4,
     )
     plt.hist(
         bkg_score,
