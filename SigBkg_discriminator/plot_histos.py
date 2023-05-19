@@ -27,29 +27,29 @@ def plot_sig_bkg_distributions(score_lbl_tensor):
     plt.figure(figsize=(13, 10))
     plt.hist(
         sig_score,
-        bins=70,
+        bins=30,
         range=(0, 1),
         histtype="step",
         label="Signal",
         density=True,
         color="blue",
-        fill=False,
-        hatch="\\\\",
+        fill=True,
+        alpha=0.5,
     )
     plt.hist(
         bkg_score,
-        bins=70,
+        bins=30,
         range=(0, 1),
         histtype="step",
         label="Background",
         density=True,
         color="red",
         fill=False,
-        hatch="//",
+        hatch="\\\\",
     )
     plt.xlabel("DNN output", fontsize=20, loc='right')
     plt.ylabel("Normalized counts", fontsize=20, loc='top')
-    plt.legend(loc='upper left', fontsize=20)
+    plt.legend(loc='upper center', fontsize=20)
     hep.style.use('CMS')
     hep.cms.label('Preliminary')
     hep.cms.label(year='UL18')
