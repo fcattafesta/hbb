@@ -125,7 +125,7 @@ if __name__ == "__main__":
     parser.print_help()
     args = parser.parse_args()
 
-    input_file = f"{args.input}/score_lbl_array.npy"
+    input_file = f"{args.input}/score_lbl_array.npz"
 
     # load the labels and scores from the train and test datasets from a .npz file
     score_lbl_tensor_train = np.load(input_file, allow_pickle=True)["score_lbl_array_train"]
