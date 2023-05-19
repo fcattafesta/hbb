@@ -1,6 +1,5 @@
 import torch
 import os
-import matplotlib.pyplot as plt
 
 
 def train_one_epoch(
@@ -165,7 +164,8 @@ def test_model(model, test_loader, test_batch_prints, num_test_batches):
     for i, data in enumerate(test_loader):
         inputs, labels = data
         outputs = model(inputs)
-        y_pred = torch.round(torch.sigmoid(outputs))
+        y_score = torch.sigmoid(outputs)
+        y_pred = torch.round(y_score)
         correct = (y_pred == labels).sum().item()
         batch_size = labels.size(0)
         running_correct += correct
@@ -180,26 +180,26 @@ def test_model(model, test_loader, test_batch_prints, num_test_batches):
             running_correct = 0
             running_num = 0
 
-        # Create array of predictions and labels
+        # Create array of scores and labels
         if i == 0:
-            all_preds = y_pred
+            all_scores = y_score
             all_labels = labels
         else:
-            all_preds = torch.cat((all_preds, y_pred))
+            all_scores = torch.cat((all_scores, y_score))
             all_labels = torch.cat((all_labels, labels))
 
-    print("All predictions: ", all_preds, all_preds.size())
+    print("All scores: ", all_scores, all_scores.size())
     print("All labels: ", all_labels, all_labels.size())
-    # concatenate all predictions and labels
-    all_preds = all_preds.view(-1, 1)
+    # concatenate all scores and labels
+    all_scores = all_scores.view(-1, 1)
     all_labels = all_labels.view(-1, 1)
-    print("All predictions: ", all_preds, all_preds.size())
+    print("All scores: ", all_scores, all_scores.size())
     print("All labels: ", all_labels, all_labels.size())
 
-    pred_lbl_tensor = torch.cat((all_preds, all_labels), 1)
-    print("Prediction and label tensor: ", pred_lbl_tensor, pred_lbl_tensor.size())
+    score_lbl_tensor = torch.cat((all_scores, all_labels), 1)
+    print("scoreiction and label tensor: ", score_lbl_tensor, score_lbl_tensor.size())
 
     # detach the tensor from the graph and convert to numpy array
-    pred_lbl_array = pred_lbl_tensor.detach().numpy()
+    score_lbl_array = score_lbl_tensor.detach().numpy()
 
-    return pred_lbl_array
+    return score_lbl_array

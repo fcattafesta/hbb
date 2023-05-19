@@ -123,16 +123,16 @@ if args.test:
     model.load_state_dict(torch.load(best_model_name))
     model.train(False)
 
-    pred_lbl_array = test_model(model, test_loader, test_batch_prints, num_test_batches)
+    score_lbl_array = test_model(model, test_loader, test_batch_prints, num_test_batches)
 
     # plot the signal and background distributions
-    #plot_sig_bkg_distributions(pred_lbl_tensor)
+    #plot_sig_bkg_distributions(score_lbl_tensor)
 
-    # create the directory for predicted labels with time stamp
-    pred_lbl_dir = f"pred_lbls/{timestamp}/"
-    os.makedirs(pred_lbl_dir, exist_ok=True)
-    # save array with predicted labels
-    np.save(f"{pred_lbl_dir}/pred_lbl_array.npy", pred_lbl_array)
+    # create the directory for labels with time stamp
+    score_lbl_dir = f"score_lbls/{timestamp}/"
+    os.makedirs(score_lbl_dir, exist_ok=True)
+    # save array with labels and score
+    np.save(f"{score_lbl_dir}/score_lbl_array.npy", score_lbl_array)
 
 
 print("Total time: %.1f" % (time.time() - start_time))

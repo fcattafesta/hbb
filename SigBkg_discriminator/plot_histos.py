@@ -3,22 +3,22 @@ import argparse
 import numpy as np
 
 
-def plot_sig_bkg_distributions(pred_lbl_tensor):
+def plot_sig_bkg_distributions(score_lbl_tensor):
     # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
-    sig = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 1]
-    bkg = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 0]
+    sig = score_lbl_tensor[score_lbl_tensor[:, 1] == 1]
+    bkg = score_lbl_tensor[score_lbl_tensor[:, 1] == 0]
     print("sig.shape", sig.shape, sig)
     print("bkg.shape", bkg.shape, bkg)
 
-    sig_pred = sig[:, 0]
-    bkg_pred = bkg[:, 0]
+    sig_score = sig[:, 0]
+    bkg_score = bkg[:, 0]
 
-    print("sig_pred.shape", sig_pred.shape, sig_pred)
-    print("bkg_pred.shape", bkg_pred.shape, bkg_pred)
+    print("sig_score.shape", sig_score.shape, sig_score)
+    print("bkg_score.shape", bkg_score.shape, bkg_score)
 
     plt.figure(figsize=(10, 10))
     plt.hist(
-        sig_pred,
+        sig_score,
         bins=500,
         range=(0, 1),
         histtype="step",
@@ -27,7 +27,7 @@ def plot_sig_bkg_distributions(pred_lbl_tensor):
         color="blue",
     )
     plt.hist(
-        bkg_pred,
+        bkg_score,
         bins=500,
         range=(0, 1),
         histtype="step",
@@ -48,16 +48,16 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-i", "--input", default="pred_lbls", help="Input directory", type=str
+        "-i", "--input", default="score_lbls", help="Input directory", type=str
     )
     parser.print_help()
     args = parser.parse_args()
 
 
-    input_file = f"{args.input}/pred_lbl_array.npy"
+    input_file = f"{args.input}/score_lbl_array.npy"
 
-    # load the predicted labels
-    pred_lbl_tensor = np.load(input_file)
+    # load the labels and scores from the test dataset
+    score_lbl_tensor = np.load(input_file)
 
     # plot the signal and background distributions
-    plot_sig_bkg_distributions(pred_lbl_tensor)
+    plot_sig_bkg_distributions(score_lbl_tensor)
