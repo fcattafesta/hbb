@@ -49,6 +49,7 @@ for epoch in range(args.epochs):
         model,
         training_loader,
         loss_fn,
+        timestamp,
         optimizer,
         train_batch_prints,
         num_train_batches,
@@ -123,8 +124,8 @@ if args.test:
     model.load_state_dict(torch.load(best_model_name))
     model.train(False)
 
-    score_lbl_array_train = eval_model(model, training_loader, test_batch_prints, num_test_batches)
-    score_lbl_array_test = eval_model(model, test_loader, test_batch_prints, num_test_batches)
+    score_lbl_array_train = eval_model(model, training_loader, train_batch_prints, num_train_batches, 'training')
+    score_lbl_array_test = eval_model(model, test_loader, test_batch_prints, num_test_batches, 'test')
 
     # plot the signal and background distributions
     #plot_sig_bkg_distributions(score_lbl_tensor)

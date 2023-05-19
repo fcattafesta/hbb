@@ -10,14 +10,6 @@ def handle_arrays(score_lbl_tensor):
     print("sig.shape", sig.shape, sig)
     print("bkg.shape", bkg.shape, bkg)
 
-    # get the scores for signal and background
-    # and make them the same length (which is the minimum of the two)
-
-    # if sig.shape[0] < bkg.shape[0]:
-    #     bkg = bkg[: sig.shape[0]]
-    # else:
-    #     sig = sig[: bkg.shape[0]]
-
     sig_score = sig[:, 0]
     bkg_score = bkg[:, 0]
 
@@ -33,7 +25,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
     sig_score_test, bkg_score_test = handle_arrays(score_lbl_tensor_test)
 
     plt.figure(figsize=(13, 10))
-    legend_sig_train=plt.hist(
+    sig_train=plt.hist(
         sig_score_train,
         bins=30,
         range=(0, 1),
@@ -45,7 +37,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
         fill=True,
         alpha=0.5,
     )
-    legend_bkg_train=plt.hist(
+    bkg_train=plt.hist(
         bkg_score_train,
         bins=30,
         range=(0, 1),
@@ -77,34 +69,9 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
     # Plot the dots on top of the histogram
     plt.scatter(bin_centers, counts, c="red", s=10, marker='o')
 
-    # plt.hist(
-    #     sig_score_test,
-    #     bins=30,
-    #     range=(0, 1),
-    #     histtype="step",
-    #     label="Signal (test)",
-    #     density=True,
-    #     edgecolor="blue",
-    #     facecolor="dodgerblue",
-    #     fill=True,
-    #     alpha=0.5,
-    # )
-
-    # plt.hist(
-    #     bkg_score_test,
-    #     bins=30,
-    #     range=(0, 1),
-    #     histtype="step",
-    #     label="Background (test)",
-    #     density=True,
-    #     color="red",
-    #     fill=False,
-    #     hatch="\\\\",
-    # )
-
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
-    plt.legend(loc="upper center", fontsize=20, handles=[legend_sig_train[2][0], legend_bkg_train[2][0], legend_sig_test, legend_bkg_test])
+    plt.legend(loc="upper center", fontsize=20, handles=[sig_train[2][0], bkg_train[2][0], legend_sig_test, legend_bkg_test])
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
