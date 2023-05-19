@@ -5,8 +5,8 @@ import torch
 
 def plot_sig_bkg_distributions(pred_lbl_tensor):
     # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
-    sig = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 1]
-    bkg = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 0]
+    sig = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 1].detach().numpy()
+    bkg = pred_lbl_tensor[pred_lbl_tensor[:, 1] == 0].detach().numpy()
 
     sig_pred = sig[:, 0]
     bkg_pred = bkg[:, 0]
