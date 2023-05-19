@@ -17,19 +17,19 @@ def read_tensorboard_log_file(log_file):
     # E. g. get wall clock, number of steps and value for a scalar 'Accuracy'
 
     infos = [event_acc.Scalars('Accuracy/train'), event_acc.Scalars('Accuracy/val'), event_acc.Scalars('Loss/train'), event_acc.Scalars('Loss/val')]
-    w_times = [zip(*info)[0] for info in infos]
-    step_nums = [zip(*info)[1] for info in infos]
-    vals = [zip(*info)[2] for info in infos]
-
+    w_times, step_nums, vals = [], [], []
+    w_times=[info[0] for info in infos]
+    step_nums=[info[1] for info in infos]
+    vals=[info[2] for info in infos]
 
     return w_times, step_nums, vals
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--log_file", type=str, help="path to tensorboard log file")
+    parser.add_argument("-i", "--input-file", type=str, help="path to tensorboard log file")
     args = parser.parse_args()
 
-    w_times, step_nums, vals = read_tensorboard_log_file(args.log_file)
+    w_times, step_nums, vals = read_tensorboard_log_file(args.input_file)
 
     # plot the history for the training and validation losses and accuracies
     plt.figure(figsize=(13, 10))
