@@ -5,35 +5,29 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mplhep as hep
 
-# import a tensorboard log file
-from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
-
+from torch.utils.tensorboard import SummaryReader
 
 # read the tensorboard log file
 def read_tensorboard_log_file(log_file):
-    event_acc = EventAccumulator(log_file)
-    event_acc.Reload()
-    # Show all tags in the log file
-    print(event_acc.Tags())
-    # E. g. get wall clock, number of steps and value for a scalar 'Accuracy'
+    reader = SummaryReader(log_file)
 
-    # save the step and the value for the scalar in infos
-    infos = [
-        event_acc.Scalars("Accuracy/train"),
-        event_acc.Scalars("Accuracy/val"),
-        event_acc.Scalars("Loss/train"),
-        event_acc.Scalars("Loss/val"),
-    ]
-    vals = ()
-    step_nums = ()
-    for info in infos:
-        step_nums.append(event_acc.Scalars(info).step)
-        vals.append(event_acc.Scalars(info).value)
+    # Initialize a dictionary to store scalar values
+    scalar_data = {}
 
-    print("step_nums", step_nums)
-    print("vals", vals)
+    # Extract scalar values from the log file
+    for scalar in reader.scalars():
+        scalar_name = scalar.tag
+        if scalar_name not in scalar_data:
+            scalar_data[scalar_name] = {'steps': [], 'values': []}
+        scalar_data[scalar_name]['steps'].append(scalar.step)
+        scalar_data[scalar_name]['values'].append(scalar.value)
 
-    return step_nums, vals
+    # Plot each scalar value separately
+    for scalar_name, data in scalar_data.items():
+        steps = data['steps']
+        values = data['values']
+        plt.plot(steps, values, label=scalar_name)
+    return scalar_data
 
 
 if __name__ == "__main__":
@@ -43,16 +37,14 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    step_nums, vals = read_tensorboard_log_file(args.input_file)
+    scalar_data = read_tensorboard_log_file(args.input_file)
 
-    # plot the history for the training and validation losses and accuracies
-    plt.figure(figsize=(13, 10))
-    plt.plot(step_nums[0], vals[0], label="Training Accuracy", color="blue")
-    plt.plot(step_nums[1], vals[1], label="Validation Accuracy", color="red")
-    plt.plot(step_nums[2], vals[2], label="Training Loss", color="blue", linestyle="--")
-    plt.plot(
-        step_nums[3], vals[3], label="Validation Loss", color="red", linestyle="--"
-    )
+    # Plot each scalar value separately
+    for scalar_name, data in scalar_data.items():
+        steps = data['steps']
+        values = data['values']
+        plt.plot(steps, values, label=scalar_name)
+
     plt.xlabel("Epoch")
     plt.ylabel("Accuracy/Loss")
     plt.legend()
