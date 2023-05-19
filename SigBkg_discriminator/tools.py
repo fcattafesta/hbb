@@ -143,8 +143,7 @@ def eval_one_epoch(
         best_accuracy = avg_accuracy
         best_epoch = epoch_index
 
-        if not os.path.exists(f"models/{timestamp}/"):
-            os.makedirs(f"models/{timestamp}/")
+        os.makedirs(f"models/{timestamp}/", exist_ok=True)
         model_name = "models/{}/model_{}.pt".format(timestamp, epoch_index)
         torch.save(model.state_dict(), model_name)
         best_model_name = model_name
@@ -196,4 +195,3 @@ def test_model(model, test_loader, test_batch_prints, num_test_batches):
     pred_lbl_tensor = torch.cat((all_preds, all_labels), 1)
 
     return pred_lbl_tensor
-

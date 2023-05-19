@@ -126,12 +126,11 @@ if args.test:
     pred_lbl_tensor = test_model(model, test_loader, test_batch_prints, num_test_batches)
 
     # plot the signal and background distributions
-    plot_sig_bkg_distributions(pred_lbl_tensor)
+    #plot_sig_bkg_distributions(pred_lbl_tensor)
 
     # create the directory for predicted labels with time stamp
     pred_lbl_dir = f"pred_lbls/{timestamp}/"
-    if not os.path.exists(pred_lbl_dir):
-        os.mkdir(pred_lbl_dir)
+    os.makedir(pred_lbl_dir, exist_ok=True)
     # save tensor with predicted labels
     torch.save(pred_lbl_tensor, f"{pred_lbl_dir}/pred_lbl_tensor.pt")
 

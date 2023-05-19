@@ -30,8 +30,7 @@ nthreads = args.nthreads if args.range == -1 else 0
 nprocesses = 7
 start = time.time()
 
-if not os.path.exists(args.histfolder):
-    os.makedirs(args.histfolder)
+os.makedirs(args.histfolder, exist_ok=True)
 
 # Create the flow
 flow = SampleProcessing(
@@ -135,8 +134,7 @@ def runSample(ar):
             ):
                 sig_region = "SR_ee" if args.lep == "el" else "SR_mm"
                 # create snapshot directory
-                if not os.path.exists(f"{args.histfolder}/Snapshots"):
-                    os.makedirs(f"{args.histfolder}/Snapshots")
+                os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
                 processed_rdf = out.rdf.find(sig_region).second
                 processed_rdf.Snapshot(
                     "Events", f"{args.histfolder}/Snapshots/{s}_Snapshot.root", snaplist
