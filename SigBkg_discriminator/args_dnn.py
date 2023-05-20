@@ -69,5 +69,8 @@ parser.add_argument(
     help="Test the model",
     default=False,
 )
+parser.add_argument(
+    "-g", "--gpu", default=False, help="GPU number", action="store_true"
+)
 parser.print_help()
 args = parser.parse_args()

@@ -8,7 +8,11 @@ from args_dnn import args
 
 batch_size = args.batch_size
 
-device = 0 if torch.cuda.is_available() else "cpu"
+if args.gpus:
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
+#device = 0 if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
 input_list = [
