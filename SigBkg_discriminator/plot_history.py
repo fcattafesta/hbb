@@ -46,7 +46,6 @@ def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show):
             label="Validation " + type,
             color="orange",
         )
-        plt.title("Training and validation " + type)
 
         plt.xlabel("Epoch")
         plt.ylabel(type.capitalize())

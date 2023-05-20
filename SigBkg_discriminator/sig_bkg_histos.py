@@ -7,25 +7,27 @@ import mplhep as hep
 def handle_arrays(score_lbl_tensor):
     sig = score_lbl_tensor[score_lbl_tensor[:, 1] == 1]
     bkg = score_lbl_tensor[score_lbl_tensor[:, 1] == 0]
-    print("sig.shape", sig.shape, sig)
-    print("bkg.shape", bkg.shape, bkg)
+    # print("sig.shape", sig.shape, sig)
+    # print("bkg.shape", bkg.shape, bkg)
 
     sig_score = sig[:, 0]
     bkg_score = bkg[:, 0]
 
-    print("sig_score.shape", sig_score.shape, sig_score)
-    print("bkg_score.shape", bkg_score.shape, bkg_score)
+    # print("sig_score.shape", sig_score.shape, sig_score)
+    # print("bkg_score.shape", bkg_score.shape, bkg_score)
 
     return sig_score, bkg_score
 
 
-def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test, dir, show):
+def plot_sig_bkg_distributions(
+    score_lbl_tensor_train, score_lbl_tensor_test, dir, show
+):
     # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
     sig_score_train, bkg_score_train = handle_arrays(score_lbl_tensor_train)
     sig_score_test, bkg_score_test = handle_arrays(score_lbl_tensor_test)
 
     plt.figure(figsize=(13, 10))
-    sig_train=plt.hist(
+    sig_train = plt.hist(
         sig_score_train,
         bins=30,
         range=(0, 1),
@@ -37,7 +39,7 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test, di
         fill=True,
         alpha=0.5,
     )
-    bkg_train=plt.hist(
+    bkg_train = plt.hist(
         bkg_score_train,
         bins=30,
         range=(0, 1),
@@ -51,27 +53,43 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test, di
 
     # Create the histogram with dots on top using plt.scatter
     counts, bins, _ = plt.hist(
-        sig_score_test, bins=30, alpha=0, density=True,range=(0, 1)#, label="Signal (test)"
+        sig_score_test,
+        bins=30,
+        alpha=0,
+        density=True,
+        range=(0, 1),  # , label="Signal (test)"
     )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
-    legend_sig_test = plt.scatter([], [], marker='o', color='blue', label='Signal (test)')
+    legend_sig_test = plt.scatter(
+        [], [], marker="o", color="blue", label="Signal (test)"
+    )
     # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c="blue", s=10, marker='o')
+    plt.scatter(bin_centers, counts, c="blue", s=10, marker="o")
 
     # Create the histogram with dots on top using plt.scatter
     counts, bins, _ = plt.hist(
-        bkg_score_test, bins=30, alpha=0, density=True, range=(0, 1)#, label="Background (test)"
+        bkg_score_test,
+        bins=30,
+        alpha=0,
+        density=True,
+        range=(0, 1),  # , label="Background (test)"
     )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
-    legend_bkg_test = plt.scatter([], [], marker='o', color='red', label='Background (test)')
+    legend_bkg_test = plt.scatter(
+        [], [], marker="o", color="red", label="Background (test)"
+    )
     # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c="red", s=10, marker='o')
+    plt.scatter(bin_centers, counts, c="red", s=10, marker="o")
 
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
-    plt.legend(loc="upper center", fontsize=20, handles=[sig_train[2][0], bkg_train[2][0], legend_sig_test, legend_bkg_test])
+    plt.legend(
+        loc="upper center",
+        fontsize=20,
+        handles=[sig_train[2][0], bkg_train[2][0], legend_sig_test, legend_bkg_test],
+    )
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
@@ -104,4 +122,6 @@ if __name__ == "__main__":
     ]
 
     # plot the signal and background distributions
-    plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test,args.input_dir, args.show)
+    plot_sig_bkg_distributions(
+        score_lbl_tensor_train, score_lbl_tensor_test, args.input_dir, args.show
+    )

@@ -32,6 +32,8 @@ if __name__ == "__main__":
 
     # Initializing in a separate cell so we can easily add more epochs to the same run
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    main_dir = f"out/{timestamp}"
+    os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter("runs/DNN_trainer_{}".format(timestamp))
 
     best_vloss = 1_000_000.0
@@ -49,12 +51,12 @@ if __name__ == "__main__":
         num_train_batches = train_size // batch_size
 
         avg_loss, avg_accuracy, train_accuracy, train_loss = train_one_epoch(
+            main_dir,
             epoch,
             writer,
             model,
             training_loader,
             loss_fn,
-            timestamp,
             optimizer,
             train_batch_prints,
             num_train_batches,
@@ -78,12 +80,12 @@ if __name__ == "__main__":
             val_accuracy,
             val_loss,
         ) = val_one_epoch(
+            main_dir,
             epoch,
             writer,
             model,
             val_loader,
             loss_fn,
-            timestamp,
             best_vloss,
             best_vaccuracy,
             best_epoch,
@@ -122,12 +124,15 @@ if __name__ == "__main__":
     print("Best val accuracy: %.4f" % best_vaccuracy)
 
     if args.history:
+        # plot the training and validation loss and accuracy
+        print("\n\n\n")
+        print("Plotting training and validation loss and accuracy")
         plot_history(
             train_accuracy,
             train_loss,
             val_accuracy,
             val_loss,
-            f"models/{timestamp}/",
+            main_dir,
             False,
         )
 
@@ -153,20 +158,22 @@ if __name__ == "__main__":
             model, test_loader, test_batch_prints, num_test_batches, "test"
         )
 
-        score_lbl_dir = f"score_lbls/{timestamp}/"
         # plot the signal and background distributions
         if args.histos:
-            plot_sig_bkg_distributions(score_lbl_array_train, score_lbl_array_test, score_lbl_dir, False)
+            print("\n\n\n")
+            print("Plotting signal and background distributions")
+            plot_sig_bkg_distributions(
+                score_lbl_array_train, score_lbl_array_test, score_lbl_dir, False
+            )
 
         # create the directory for labels with time stamp
-        os.makedirs(score_lbl_dir, exist_ok=True)
         # save array with labels and score for train and test in the same file .npz
         np.savez(
-            f"{score_lbl_dir}/score_lbl_array.npz",
+            f"{main_dir}/score_lbl_array.npz",
             score_lbl_array_train=score_lbl_array_train,
             score_lbl_array_test=score_lbl_array_test,
         )
 
-        print("Saved score_lbl_array.npy in %s" % score_lbl_dir)
+        print("Saved score_lbl_array.npy in %s" % main_dir)
 
     print("Total time: %.1f" % (time.time() - start_time))

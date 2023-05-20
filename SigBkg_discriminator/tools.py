@@ -2,12 +2,12 @@ import torch
 import os
 
 def train_one_epoch(
+    main_dir,
     epoch_index,
     tb_writer,
     model,
     loader,
     loss_fn,
-    timestamp,
     optimizer,
     batch_prints,
     num_batches,
@@ -60,11 +60,9 @@ def train_one_epoch(
                 % (epoch_index, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
 
-            os.makedirs(f"models/{timestamp}", exist_ok=True)
-
             tb_x = epoch_index * len(loader) + i + 1
             # write info to file txt
-            with open(f"models/{timestamp}/log.txt", "a") as f:
+            with open(f"{main_dir}/log.txt", "a") as f:
                 f.write(
                     "EPOCH # %d  Training batch %.d         accuracy: %.4f      //      loss: %.4f\n"
                     % (
@@ -92,12 +90,12 @@ def train_one_epoch(
 
 
 def val_one_epoch(
+    main_dir,
     epoch_index,
     tb_writer,
     model,
     loader,
     loss_fn,
-    timestamp,
     best_loss,
     best_accuracy,
     best_epoch,
@@ -148,7 +146,7 @@ def val_one_epoch(
 
             tb_x = epoch_index * len(loader) + i + 1
             # write info to file txt
-            with open(f"models/{timestamp}/log.txt", "a") as f:
+            with open(f"{main_dir}/log.txt", "a") as f:
                 f.write(
                     "EPOCH # %d  Validation batch %.d          accuracy: %.4f      //      loss: %.4f\n"
                     % (
@@ -178,8 +176,9 @@ def val_one_epoch(
         best_accuracy = avg_accuracy
         best_epoch = epoch_index
 
-        os.makedirs(f"models/{timestamp}/", exist_ok=True)
-        model_name = "models/{}/model_{}.pt".format(timestamp, epoch_index)
+        model_dir = f"{main_dir}/models"
+        os.makedirs(model_dir, exist_ok=True)
+        model_name = f"{model_dir}/model_{epoch_index}.pt"
         torch.save(model.state_dict(), model_name)
         best_model_name = model_name
 
