@@ -117,7 +117,7 @@ for i, file in enumerate(bkg_files):
             ), dim=1
         )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
 
-zeros_tensor = torch.tensor(
+zeros_tensor = torch.zeros_like(
     variables_bkg[0], device=device, dtype=torch.float32
 ).unsqueeze(0)
 
