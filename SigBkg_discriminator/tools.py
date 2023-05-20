@@ -11,6 +11,8 @@ def train_one_epoch(
     optimizer,
     batch_prints,
     num_batches,
+    train_accuracy,
+    train_loss,
 ):
     running_loss = 0.0
     tot_loss = 0.0
@@ -64,7 +66,7 @@ def train_one_epoch(
             # write info to file txt
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
-                    "EPOCH # %d  Training batch %.d %%         accuracy: %.4f      //      loss: %.4f\n"
+                    "EPOCH # %d  Training batch %.d         accuracy: %.4f      //      loss: %.4f\n"
                     % (
                         epoch_index,
                         tb_x,
@@ -72,6 +74,9 @@ def train_one_epoch(
                         last_loss,
                     )
                 )
+
+            train_accuracy.append(last_accuracy)
+            train_loss.append(last_loss)
 
             tb_writer.add_scalar("Accuracy/train", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/train", last_loss, tb_x)
@@ -83,7 +88,7 @@ def train_one_epoch(
     avg_loss = tot_loss / (i + 1)  # loss per epoch
     avg_accuracy = tot_correct / tot_num  # accuracy per epoch
 
-    return avg_loss, avg_accuracy
+    return avg_loss, avg_accuracy, train_accuracy, train_loss
 
 
 def val_one_epoch(
@@ -99,6 +104,8 @@ def val_one_epoch(
     batch_prints,
     num_batches,
     best_model_name,
+    val_accuracy,
+    val_loss,
 ):
     running_loss = 0.0
     tot_loss = 0.0
@@ -143,7 +150,7 @@ def val_one_epoch(
             # write info to file txt
             with open(f"models/{timestamp}/log.txt", "a") as f:
                 f.write(
-                    "EPOCH # %d  Validation batch %.d %%         accuracy: %.4f      //      loss: %.4f\n"
+                    "EPOCH # %d  Validation batch %.d          accuracy: %.4f      //      loss: %.4f\n"
                     % (
                         epoch_index,
                         tb_x,
@@ -151,6 +158,9 @@ def val_one_epoch(
                         last_loss,
                     )
                 )
+
+            val_accuracy.append(last_accuracy)
+            val_loss.append(last_loss)
 
             tb_writer.add_scalar("Accuracy/val", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/val", last_loss, tb_x)
@@ -173,7 +183,7 @@ def val_one_epoch(
         torch.save(model.state_dict(), model_name)
         best_model_name = model_name
 
-    return avg_loss, avg_accuracy, best_loss, best_accuracy, best_epoch, best_model_name
+    return avg_loss, avg_accuracy, best_loss, best_accuracy, best_epoch, best_model_name, val_accuracy, val_loss
 
 
 def eval_model(model, loader, batch_prints, num_batches, type):

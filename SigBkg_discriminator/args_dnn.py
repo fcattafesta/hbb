@@ -72,5 +72,11 @@ parser.add_argument(
 parser.add_argument(
     "-g", "--gpu", default=False, help="GPU number", action="store_true"
 )
+parser.add_argument(
+    "--histos", default=False, help="Make histograms", action="store_true"
+)
+parser.add_argument(
+    "--history", default=False, help="Plot history", action="store_true"
+)
 parser.print_help()
 args = parser.parse_args()

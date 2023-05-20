@@ -8,7 +8,6 @@ import mplhep as hep
 
 def read_from_txt(file):
     # read form a txt with the info written like this:
-    # EPOCH # 14  Validation batch 97.9 %         accuracy: 0.8080      //      loss: 0.4195
 
     # get accuracy and loss and separate them between training and validation
     with open(file, "r") as f:
@@ -28,17 +27,7 @@ def read_from_txt(file):
     return train_accuracy, train_loss, val_accuracy, val_loss
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-i", "--input-dir", type=str, help="path to tensorboard log file"
-    )
-    args = parser.parse_args()
-
-    train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-        args.input_dir + "/log.txt"
-    )
-
+def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show):
     infos_dict = {
         "accuracy": {"train": train_accuracy, "val": val_accuracy},
         "loss": {"train": train_loss, "val": val_loss},
@@ -62,5 +51,30 @@ if __name__ == "__main__":
         plt.xlabel("Epoch")
         plt.ylabel(type.capitalize())
         plt.legend()
-        plt.savefig(args.input_dir + type + ".png")
-        plt.show()
+        hep.style.use("CMS")
+        hep.cms.label("Preliminary")
+        hep.cms.label(year="UL18")
+        plt.savefig(dir + type + ".png")
+        if show:
+            plt.show()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-i", "--input-dir", type=str, help="path to tensorboard log file"
+    )
+    parser.add_argument(
+        "-s",
+        "--show",
+        default=False,
+        action="store_true",
+        help="show plots",
+    )
+    args = parser.parse_args()
+
+    train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
+        args.input_dir + "/log.txt"
+    )
+
+    plot_history(train_accuracy, train_loss, val_accuracy, val_loss, args.input_dir, args.show)

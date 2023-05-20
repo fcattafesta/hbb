@@ -19,7 +19,7 @@ def handle_arrays(score_lbl_tensor):
     return sig_score, bkg_score
 
 
-def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
+def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test, dir, show):
     # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
     sig_score_train, bkg_score_train = handle_arrays(score_lbl_tensor_train)
     sig_score_test, bkg_score_test = handle_arrays(score_lbl_tensor_test)
@@ -75,8 +75,8 @@ def plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test):
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
-    plt.savefig(f"{args.input}/sig_bkg_distributions.png")
-    if args.show:
+    plt.savefig(f"{dir}/sig_bkg_distributions.png")
+    if show:
         plt.show()
 
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "-i", "--input", default="score_lbls", help="Input directory", type=str
+        "-i", "--input-dir", default="score_lbls", help="Input directory", type=str
     )
     parser.add_argument(
         "-s", "--show", default=False, help="Show plots", action="store_true"
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     parser.print_help()
     args = parser.parse_args()
 
-    input_file = f"{args.input}/score_lbl_array.npz"
+    input_file = f"{args.input_dir}/score_lbl_array.npz"
 
     # load the labels and scores from the train and test datasets from a .npz file
     score_lbl_tensor_train = np.load(input_file, allow_pickle=True)[
@@ -104,4 +104,4 @@ if __name__ == "__main__":
     ]
 
     # plot the signal and background distributions
-    plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test)
+    plot_sig_bkg_distributions(score_lbl_tensor_train, score_lbl_tensor_test,args.input_dir, args.show)
