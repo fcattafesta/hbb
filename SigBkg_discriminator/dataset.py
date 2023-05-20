@@ -75,7 +75,7 @@ print(variables_sig.size())
 # open each file and get the Events tree using uproot
 for file in sig_files:
     sig_train = uproot.open(f"{file}:Events")
-    variables_sig_array = sig_train.arrays(input_list, library="np")
+    variables_sig_array = np.concatenate([sig_train.array(input, library="np") for input in input_list])
     # concatenate all the variables into a single torch tensor
     variables_sig = torch.cat(
         (
@@ -85,10 +85,9 @@ for file in sig_files:
     )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
 print(variables_sig.size())
-ones_array = np.ones_like(sig_train.AsNumpy()["event"], dtype=np.float32)
-ones_array = torch.tensor(ones_array, device=device, dtype=torch.float32).unsqueeze(0)
+ones_tensor = torch.ones_like(variables_sig[0], device=device, dtype=torch.float32).unsqueeze(0)
 
-X_sig = (variables_sig, ones_array)
+X_sig = (variables_sig, ones_tensor)
 
 
 #######################################################
@@ -98,12 +97,12 @@ for x in dirs:
 
 variables_bkg = torch.empty(
     len(input_list), device=device, dtype=torch.float32
-).unsqueeze(0)
+).unsqueeze(1)
 print(variables_bkg.size())
 
 for file in bkg_files:
     bkg_train = uproot.open(f"{file}:Events")
-    variables_bkg_array = bkg_train.arrays(input_list, library="np")
+    variables_bkg_array = np.concatenate([bkg_train.array(input, library="np") for input in input_list])
     variables_bkg = torch.cat(
         (
             variables_bkg,
@@ -113,10 +112,9 @@ for file in bkg_files:
 
 print(variables_bkg.size())
 
-zeros_array = np.zeros_like(bkg_train.AsNumpy()["event"], dtype=np.float32)
-zeros_array = torch.tensor(zeros_array, device=device, dtype=torch.float32).unsqueeze(0)
+zeros_tensor = torch.tensor(variables_bkg[0], device=device, dtype=torch.float32).unsqueeze(0)
 
-X_bkg = (variables_bkg, zeros_array)
+X_bkg = (variables_bkg, zeros_tensor)
 
 #######################################################
 X_fts = torch.cat((X_sig[0], X_bkg[0]), dim=1).transpose(1, 0)
