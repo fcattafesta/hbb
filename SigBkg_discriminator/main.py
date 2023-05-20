@@ -101,7 +101,12 @@ if __name__ == "__main__":
             "EPOCH # %d: acc train %.4f,  val %.4f"
             % (epoch, avg_accuracy, avg_vaccuracy)
         )
+
         print("\n\n\n")
+        print(
+            "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
+            % (best_epoch, best_vloss, best_vaccuracy)
+        )
 
         # Log the running loss averaged per batch
         # for both training and validation
@@ -119,10 +124,6 @@ if __name__ == "__main__":
         writer.flush()
         epoch += 1
 
-    print("Best epoch: %d" % best_epoch)
-    print("Best val loss: %.4f" % best_vloss)
-    print("Best val accuracy: %.4f" % best_vaccuracy)
-
     if args.history:
         # plot the training and validation loss and accuracy
         print("\n\n\n")
@@ -136,7 +137,7 @@ if __name__ == "__main__":
             False,
         )
 
-    if args.test:
+    if args.eval:
         # evaluate model on test_dataset loadining the best model
         print("\n\n\n")
         print("Evaluating best model on test and train dataset")

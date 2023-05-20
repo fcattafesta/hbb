@@ -64,9 +64,9 @@ parser.add_argument(
     help="Directory for data",
 )
 parser.add_argument(
-    "--test",
+    "--eval",
     action="store_true",
-    help="Test the model",
+    help="Evaluate the model",
     default=False,
 )
 parser.add_argument(
@@ -80,3 +80,6 @@ parser.add_argument(
 )
 parser.print_help()
 args = parser.parse_args()
+
+# TODO: add option to load model and continue training
+# TODO: add option to load model and evaluate only on test and train dataset

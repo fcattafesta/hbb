@@ -12,7 +12,7 @@ if args.gpu:
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
-#device = 0 if torch.cuda.is_available() else "cpu"
+# device = 0 if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
 input_list = [
@@ -88,7 +88,8 @@ for i, file in enumerate(sig_files):
             (
                 variables_sig,
                 torch.tensor(variables_sig_array, device=device, dtype=torch.float32),
-            ), dim=1
+            ),
+            dim=1,
         )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
 ones_tensor = torch.ones_like(
@@ -118,7 +119,8 @@ for i, file in enumerate(bkg_files):
             (
                 variables_bkg,
                 torch.tensor(variables_bkg_array, device=device, dtype=torch.float32),
-            ), dim=1
+            ),
+            dim=1,
         )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
 
 zeros_tensor = torch.zeros_like(
@@ -166,7 +168,9 @@ training_loader = torch.utils.data.DataLoader(
     shuffle=True,
     num_workers=args.num_workers,
     drop_last=True,
+    pin_memory=True if args.gpu else False,
 )
+print("Training loader size:", len(training_loader))
 
 val_loader = torch.utils.data.DataLoader(
     val_dataset,
@@ -174,18 +178,17 @@ val_loader = torch.utils.data.DataLoader(
     shuffle=False,
     num_workers=args.num_workers,
     drop_last=True,
+    pin_memory=True if args.gpu else False,
 )
-
-test_loader = torch.utils.data.DataLoader(
-    test_dataset,
-    batch_size=batch_size,
-    shuffle=False,
-    num_workers=args.num_workers,
-    drop_last=True,
-)
-
-
-# check size of the loader
-print("Training loader size:", len(training_loader))
 print("Validation loader size:", len(val_loader))
-print("Test loader size:", len(test_loader))
+
+if args.eval:
+    test_loader = torch.utils.data.DataLoader(
+        test_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=args.num_workers,
+        drop_last=True,
+        pin_memory=True if args.gpu else False,
+    )
+    print("Test loader size:", len(test_loader))

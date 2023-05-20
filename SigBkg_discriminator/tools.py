@@ -1,6 +1,7 @@
 import torch
 import os
 
+
 def train_one_epoch(
     main_dir,
     epoch_index,
@@ -182,7 +183,16 @@ def val_one_epoch(
         torch.save(model.state_dict(), model_name)
         best_model_name = model_name
 
-    return avg_loss, avg_accuracy, best_loss, best_accuracy, best_epoch, best_model_name, val_accuracy, val_loss
+    return (
+        avg_loss,
+        avg_accuracy,
+        best_loss,
+        best_accuracy,
+        best_epoch,
+        best_model_name,
+        val_accuracy,
+        val_loss,
+    )
 
 
 def eval_model(model, loader, batch_prints, num_batches, type):
