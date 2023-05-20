@@ -44,6 +44,7 @@ if __name__ == "__main__":
     train_accuracy, train_loss, val_accuracy, val_loss = [], [], [], []
 
     for epoch in range(args.epochs):
+        time_epoch = time.time()
         # Turn on gradients for training
         print("\nTraining \n")
         model.train(True)
@@ -63,6 +64,8 @@ if __name__ == "__main__":
             train_accuracy,
             train_loss,
         )
+
+        print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
         print("\nValidation \n")
         # Turn off gradients for validation
@@ -123,6 +126,7 @@ if __name__ == "__main__":
 
         writer.flush()
         epoch += 1
+        print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
     if args.history:
         # plot the training and validation loss and accuracy
