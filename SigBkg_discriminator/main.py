@@ -34,7 +34,7 @@ if __name__ == "__main__":
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     main_dir = f"out/{timestamp}"
     os.makedirs(main_dir, exist_ok=True)
-    writer = SummaryWriter("runs/DNN_trainer_{}".format(timestamp))
+    writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
 
     best_vloss = 1_000_000.0
     best_vaccuracy = 0.0

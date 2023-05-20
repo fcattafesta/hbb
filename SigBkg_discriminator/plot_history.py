@@ -37,13 +37,13 @@ def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show):
         plt.plot(
             range(len(info["train"])),
             info["train"],
-            label="Training " + type,
+            label=f"Training {type}",
             color="blue",
         )
         plt.plot(
             range(len(info["val"])),
             info["val"],
-            label="Validation " + type,
+            label=f"Validation {type}",
             color="orange",
         )
 
@@ -53,7 +53,7 @@ def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show):
         hep.style.use("CMS")
         hep.cms.label("Preliminary")
         hep.cms.label(year="UL18")
-        plt.savefig(dir + type + ".png")
+        plt.savefig(f"{dir}/{type}.png")
         if show:
             plt.show()
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-        args.input_dir + "/log.txt"
+        f"{args.input_dir}/log.txt"
     )
 
     plot_history(train_accuracy, train_loss, val_accuracy, val_loss, args.input_dir, args.show)
