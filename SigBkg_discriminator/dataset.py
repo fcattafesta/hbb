@@ -75,7 +75,9 @@ print(variables_sig.size())
 # open each file and get the Events tree using uproot
 for file in sig_files:
     sig_train = uproot.open(f"{file}:Events")
-    variables_sig_array = np.concatenate([sig_train.array(input, library="np") for input in input_list])
+    variables_sig_array = np.concatenate(
+        [sig_train[input].array(library="np") for input in input_list]
+    )
     # concatenate all the variables into a single torch tensor
     variables_sig = torch.cat(
         (
@@ -85,7 +87,9 @@ for file in sig_files:
     )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
 print(variables_sig.size())
-ones_tensor = torch.ones_like(variables_sig[0], device=device, dtype=torch.float32).unsqueeze(0)
+ones_tensor = torch.ones_like(
+    variables_sig[0], device=device, dtype=torch.float32
+).unsqueeze(0)
 
 X_sig = (variables_sig, ones_tensor)
 
@@ -102,7 +106,9 @@ print(variables_bkg.size())
 
 for file in bkg_files:
     bkg_train = uproot.open(f"{file}:Events")
-    variables_bkg_array = np.concatenate([bkg_train.array(input, library="np") for input in input_list])
+    variables_bkg_array = np.concatenate(
+        [bkg_train[input].array(library="np") for input in input_list]
+    )
     variables_bkg = torch.cat(
         (
             variables_bkg,
@@ -112,7 +118,9 @@ for file in bkg_files:
 
 print(variables_bkg.size())
 
-zeros_tensor = torch.tensor(variables_bkg[0], device=device, dtype=torch.float32).unsqueeze(0)
+zeros_tensor = torch.tensor(
+    variables_bkg[0], device=device, dtype=torch.float32
+).unsqueeze(0)
 
 X_bkg = (variables_bkg, zeros_tensor)
 
