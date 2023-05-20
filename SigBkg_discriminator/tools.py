@@ -235,6 +235,6 @@ def eval_model(model, loader, batch_prints, num_batches, type):
     print("scoreiction and label tensor: ", score_lbl_tensor, score_lbl_tensor.size())
 
     # detach the tensor from the graph and convert to numpy array
-    score_lbl_array = score_lbl_tensor.detach().numpy()
+    score_lbl_array = score_lbl_tensor.cpu().detach().numpy()
 
     return score_lbl_array
