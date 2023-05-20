@@ -163,7 +163,7 @@ if __name__ == "__main__":
             print("\n\n\n")
             print("Plotting signal and background distributions")
             plot_sig_bkg_distributions(
-                score_lbl_array_train, score_lbl_array_test, score_lbl_dir, False
+                score_lbl_array_train, score_lbl_array_test, main_dir, False
             )
 
         # create the directory for labels with time stamp
