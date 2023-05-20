@@ -168,7 +168,6 @@ training_loader = torch.utils.data.DataLoader(
     shuffle=True,
     num_workers=args.num_workers,
     drop_last=True,
-    pin_memory=True if args.gpu else False,
 )
 print("Training loader size:", len(training_loader))
 
@@ -178,7 +177,6 @@ val_loader = torch.utils.data.DataLoader(
     shuffle=False,
     num_workers=args.num_workers,
     drop_last=True,
-    pin_memory=True if args.gpu else False,
 )
 print("Validation loader size:", len(val_loader))
 
@@ -189,6 +187,5 @@ if args.eval:
         shuffle=False,
         num_workers=args.num_workers,
         drop_last=True,
-        pin_memory=True if args.gpu else False,
     )
     print("Test loader size:", len(test_loader))
