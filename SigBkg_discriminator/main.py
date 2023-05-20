@@ -8,7 +8,6 @@ import os
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-import ROOT
 import numpy as np
 
 # PyTorch TensorBoard support
