@@ -8,7 +8,7 @@ from args_dnn import args
 
 batch_size = args.batch_size
 
-if args.gpus:
+if args.gpu:
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
