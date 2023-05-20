@@ -67,26 +67,26 @@ sig_files = []
 for x in dirs:
     sig_files += [x + y + "_Snapshot.root" for y in signal_list]
 
-variables_sig = torch.empty(
-    len(input_list), device=device, dtype=torch.float32
-).unsqueeze(0)
-print(variables_sig.size())
 
 # open each file and get the Events tree using uproot
-for file in sig_files:
+for i, file in enumerate(sig_files):
     sig_train = uproot.open(f"{file}:Events")
-    variables_sig_array = np.concatenate(
+    variables_sig_array = np.array(
         [sig_train[input].array(library="np") for input in input_list]
     )
     # concatenate all the variables into a single torch tensor
-    variables_sig = torch.cat(
-        (
-            variables_sig,
-            torch.tensor(variables_sig_array, device=device, dtype=torch.float32),
-        )
-    )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
+    if i == 0:
+        variables_sig = torch.tensor(
+            variables_sig_array, device=device, dtype=torch.float32
+        )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
+    else:
+        variables_sig = torch.cat(
+            (
+                variables_sig,
+                torch.tensor(variables_sig_array, device=device, dtype=torch.float32),
+            ), dim=1
+        )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
-print(variables_sig.size())
 ones_tensor = torch.ones_like(
     variables_sig[0], device=device, dtype=torch.float32
 ).unsqueeze(0)
@@ -99,24 +99,23 @@ bkg_files = []
 for x in dirs:
     bkg_files += [x + y + "_Snapshot.root" for y in background_list]
 
-variables_bkg = torch.empty(
-    len(input_list), device=device, dtype=torch.float32
-).unsqueeze(1)
-print(variables_bkg.size())
 
-for file in bkg_files:
+for i, file in enumerate(bkg_files):
     bkg_train = uproot.open(f"{file}:Events")
-    variables_bkg_array = np.concatenate(
+    variables_bkg_array = np.array(
         [bkg_train[input].array(library="np") for input in input_list]
     )
-    variables_bkg = torch.cat(
-        (
-            variables_bkg,
-            torch.tensor(variables_bkg_array, device=device, dtype=torch.float32),
-        )
-    )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
-
-print(variables_bkg.size())
+    if i == 0:
+        variables_bkg = torch.tensor(
+            variables_bkg_array, device=device, dtype=torch.float32
+        )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
+    else:
+        variables_bkg = torch.cat(
+            (
+                variables_bkg,
+                torch.tensor(variables_bkg_array, device=device, dtype=torch.float32),
+            ), dim=1
+        )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
 
 zeros_tensor = torch.tensor(
     variables_bkg[0], device=device, dtype=torch.float32
