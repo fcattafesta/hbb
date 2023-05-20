@@ -1,4 +1,4 @@
-import ROOT
+import uproot
 import numpy as np
 import torch
 import math
@@ -31,6 +31,7 @@ input_list = [
     "SoftActivityJetNjets5",
 ]
 
+signal_list = ["ZH", "ggZH"]
 background_list = [
     "DYZpt-0To50",
     "DYZpt-50To100",
@@ -56,7 +57,6 @@ background_list = [
     "ZZTo2Q2L",
     "ZZTo4L",
 ]
-signal_list = ["ZH", "ggZH"]
 
 if args.data_dirs:
     dirs = args.data_dirs
@@ -67,18 +67,24 @@ sig_files = []
 for x in dirs:
     sig_files += [x + y + "_Snapshot.root" for y in signal_list]
 
+variables_sig = torch.empty(
+    len(input_list), device=device, dtype=torch.float32
+).unsqueeze(0)
+print(variables_sig.size())
 
-# get input data from a ROOT file and convert it to a torch tensor
-sig_train = (
-    ROOT.RDataFrame("Events", sig_files).Range(
-        math.ceil((args.train_size + args.val_size + args.test_size) / 2)
-    )
-    if args.train_size > 0 and args.val_size > 0 and args.test_size > 0
-    else ROOT.RDataFrame("Events", sig_files)
-)
+# open each file and get the Events tree using uproot
+for file in sig_files:
+    sig_train = uproot.open(f"{file}:Events")
+    variables_sig_array = sig_train.arrays(input_list, library="np")
+    # concatenate all the variables into a single torch tensor
+    variables_sig = torch.cat(
+        (
+            variables_sig,
+            torch.tensor(variables_sig_array, device=device, dtype=torch.float32),
+        )
+    )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
-variables_sig = np.array([sig_train.AsNumpy()[x] for x in input_list])
-variables_sig = torch.tensor(variables_sig, device=device, dtype=torch.float32)
+print(variables_sig.size())
 ones_array = np.ones_like(sig_train.AsNumpy()["event"], dtype=np.float32)
 ones_array = torch.tensor(ones_array, device=device, dtype=torch.float32).unsqueeze(0)
 
@@ -86,20 +92,27 @@ X_sig = (variables_sig, ones_array)
 
 
 #######################################################
-# list of background files
 bkg_files = []
 for x in dirs:
     bkg_files += [x + y + "_Snapshot.root" for y in background_list]
 
-bkg_train = (
-    ROOT.RDataFrame("Events", bkg_files).Range(
-        math.floor((args.train_size + args.val_size + args.test_size) / 2)
-    )
-    if args.train_size > 0 and args.val_size > 0 and args.test_size > 0
-    else ROOT.RDataFrame("Events", bkg_files)
-)
-variables_bkg = np.array([bkg_train.AsNumpy()[x] for x in input_list])
-variables_bkg = torch.tensor(variables_bkg, device=device, dtype=torch.float32)
+variables_bkg = torch.empty(
+    len(input_list), device=device, dtype=torch.float32
+).unsqueeze(0)
+print(variables_bkg.size())
+
+for file in bkg_files:
+    bkg_train = uproot.open(f"{file}:Events")
+    variables_bkg_array = bkg_train.arrays(input_list, library="np")
+    variables_bkg = torch.cat(
+        (
+            variables_bkg,
+            torch.tensor(variables_bkg_array, device=device, dtype=torch.float32),
+        )
+    )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
+
+print(variables_bkg.size())
+
 zeros_array = np.zeros_like(bkg_train.AsNumpy()["event"], dtype=np.float32)
 zeros_array = torch.tensor(zeros_array, device=device, dtype=torch.float32).unsqueeze(0)
 
