@@ -184,7 +184,7 @@ def val_one_epoch(
         checkpoint = {
             "epoch": epoch_index + 1,
             "state_dict": model.state_dict(),
-            "optimizer": optimizer.state_dict()
+            "optimizer": optimizer.state_dict(),
         }
         torch.save(checkpoint, model_name)
         best_model_name = model_name
@@ -242,7 +242,6 @@ def eval_model(model, loader, batch_prints, num_batches, type):
     # concatenate all scores and labels
     all_scores = all_scores.view(-1, 1)
     all_labels = all_labels.view(-1, 1)
-
 
     score_lbl_tensor = torch.cat((all_scores, all_labels), 1)
 

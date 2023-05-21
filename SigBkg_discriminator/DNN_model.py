@@ -1,6 +1,7 @@
 from torch import nn
 import torch
 
+
 class DNN(nn.Module):
     def __init__(self, dim_in):
         super().__init__()
@@ -25,4 +26,3 @@ class DNN(nn.Module):
         # x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
-

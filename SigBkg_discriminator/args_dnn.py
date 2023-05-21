@@ -84,7 +84,6 @@ parser.add_argument(
     help="Path to model to evaluate",
     type=str,
 )
-# TODO: add option to load model and continue training
 parser.add_argument(
     "-l",
     "--load-model",

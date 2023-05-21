@@ -31,9 +31,9 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(model.parameters())
     if args.load_model:
         checkpoint = torch.load(args.load_model)
-        model.load_state_dict(checkpoint['state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer'])
-        loaded_epoch = checkpoint['epoch']
+        model.load_state_dict(checkpoint["state_dict"])
+        optimizer.load_state_dict(checkpoint["optimizer"])
+        loaded_epoch = checkpoint["epoch"]
 
     # Initializing in a separate cell so we can easily add more epochs to the same run
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 train_loss,
             )
 
-            print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
+            print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
             print("\nValidation \n")
             # Turn off gradients for validation
@@ -109,7 +109,9 @@ if __name__ == "__main__":
                 optimizer,
             )
 
-            print("EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss))
+            print(
+                "EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss)
+            )
             print(
                 "EPOCH # %d: acc train %.4f,  val %.4f"
                 % (epoch, avg_accuracy, avg_vaccuracy)
@@ -136,7 +138,7 @@ if __name__ == "__main__":
 
             writer.flush()
             epoch += 1
-            print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
+            print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
         if args.history:
             # plot the training and validation loss and accuracy
@@ -156,18 +158,23 @@ if __name__ == "__main__":
         print("\n\n\n")
         print("Evaluating best model on test and train dataset")
         print("================================")
-        print("\n")
 
         test_batch_prints = test_size // batch_size // args.num_prints
         num_test_batches = test_size // batch_size
 
         # load best model
-        model.load_state_dict(torch.load(best_model_name if not args.eval_model else args.eval_model)["state_dict"])
+        model.load_state_dict(
+            torch.load(best_model_name if not args.eval_model else args.eval_model)[
+                "state_dict"
+            ]
+        )
         model.train(False)
 
+        print("Training dataset\n")
         score_lbl_array_train = eval_model(
             model, training_loader, train_batch_prints, num_train_batches, "training"
         )
+        print("\nTest dataset")
         score_lbl_array_test = eval_model(
             model, test_loader, test_batch_prints, num_test_batches, "test"
         )

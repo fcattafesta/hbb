@@ -29,7 +29,14 @@ def read_from_txt(file):
 
 
 def plot_history(
-    train_accuracy, train_loss, val_accuracy, val_loss, dir, show, uniform_filter=50, lenght=-1
+    train_accuracy,
+    train_loss,
+    val_accuracy,
+    val_loss,
+    dir,
+    show,
+    uniform_filter=50,
+    lenght=-1,
 ):
     infos_dict = {
         "accuracy": {"train": train_accuracy[:lenght], "val": val_accuracy[:lenght]},
