@@ -245,7 +245,6 @@ def eval_model(model, loader, batch_prints, num_batches, type):
 
 
     score_lbl_tensor = torch.cat((all_scores, all_labels), 1)
-    print("score and label tensor: ", score_lbl_tensor, score_lbl_tensor.size())
 
     # detach the tensor from the graph and convert to numpy array
     score_lbl_array = score_lbl_tensor.cpu().detach().numpy()
