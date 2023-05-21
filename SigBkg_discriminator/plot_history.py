@@ -4,6 +4,7 @@ import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 import mplhep as hep
+from scipy.ndimage import uniform_filter1d
 
 
 def read_from_txt(file):
@@ -27,22 +28,23 @@ def read_from_txt(file):
     return train_accuracy, train_loss, val_accuracy, val_loss
 
 
-def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show):
+def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show, uniform_filter=10):
     infos_dict = {
         "accuracy": {"train": train_accuracy, "val": val_accuracy},
         "loss": {"train": train_loss, "val": val_loss},
     }
+
     for type, info in infos_dict.items():
         plt.figure(figsize=(10, 10))
         plt.plot(
             range(len(info["train"])),
-            info["train"],
+            uniform_filter1d(info["train"], size=uniform_filter),
             label=f"Training {type}",
             color="blue",
         )
         plt.plot(
             range(len(info["val"])),
-            info["val"],
+            uniform_filter1d(info["val"], size=uniform_filter),
             label=f"Validation {type}",
             color="orange",
         )
@@ -64,6 +66,13 @@ if __name__ == "__main__":
         "-i", "--input-dir", type=str, help="path to tensorboard log file"
     )
     parser.add_argument(
+        "-u",
+        "--uniform-filter",
+        default=10,
+        type=int,
+        help="size of the uniform filter",
+    )
+    parser.add_argument(
         "-s",
         "--show",
         default=False,
@@ -76,4 +85,4 @@ if __name__ == "__main__":
         f"{args.input_dir}/log.txt"
     )
 
-    plot_history(train_accuracy, train_loss, val_accuracy, val_loss, args.input_dir, args.show)
+    plot_history(train_accuracy, train_loss, val_accuracy, val_loss, args.input_dir, args.show, args.uniform_filter)
