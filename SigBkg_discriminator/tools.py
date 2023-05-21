@@ -239,16 +239,13 @@ def eval_model(model, loader, batch_prints, num_batches, type):
             all_scores = torch.cat((all_scores, y_score))
             all_labels = torch.cat((all_labels, labels))
 
-    print("All scores: ", all_scores, all_scores.size())
-    print("All labels: ", all_labels, all_labels.size())
     # concatenate all scores and labels
     all_scores = all_scores.view(-1, 1)
     all_labels = all_labels.view(-1, 1)
-    print("All scores: ", all_scores, all_scores.size())
-    print("All labels: ", all_labels, all_labels.size())
+
 
     score_lbl_tensor = torch.cat((all_scores, all_labels), 1)
-    print("scoreiction and label tensor: ", score_lbl_tensor, score_lbl_tensor.size())
+    print("score and label tensor: ", score_lbl_tensor, score_lbl_tensor.size())
 
     # detach the tensor from the graph and convert to numpy array
     score_lbl_array = score_lbl_tensor.cpu().detach().numpy()
