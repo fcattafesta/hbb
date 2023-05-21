@@ -48,7 +48,12 @@ if __name__ == "__main__":
 
     train_accuracy, train_loss, val_accuracy, val_loss = [], [], [], []
 
+    train_batch_prints = train_size // batch_size // args.num_prints
+    num_train_batches = train_size // batch_size
+
     if not args.eval_model:
+        val_batch_prints = val_size // batch_size // args.num_prints
+        num_val_batches = val_size // batch_size
         for epoch in range(args.epochs):
             if args.load_model and epoch < loaded_epoch:
                 continue
@@ -56,8 +61,6 @@ if __name__ == "__main__":
             # Turn on gradients for training
             print("\nTraining \n")
             model.train(True)
-            train_batch_prints = train_size // batch_size // args.num_prints
-            num_train_batches = train_size // batch_size
 
             avg_loss, avg_accuracy, train_accuracy, train_loss = train_one_epoch(
                 main_dir,
@@ -78,8 +81,6 @@ if __name__ == "__main__":
             print("\nValidation \n")
             # Turn off gradients for validation
             model.train(False)
-            val_batch_prints = val_size // batch_size // args.num_prints
-            num_val_batches = val_size // batch_size
 
             (
                 avg_vloss,
@@ -157,7 +158,6 @@ if __name__ == "__main__":
         print("================================")
         print("\n")
 
-        # Turn off gradients for validation
         test_batch_prints = test_size // batch_size // args.num_prints
         num_test_batches = test_size // batch_size
 
