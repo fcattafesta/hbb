@@ -105,6 +105,7 @@ def val_one_epoch(
     best_model_name,
     val_accuracy,
     val_loss,
+    optimizer,
 ):
     running_loss = 0.0
     tot_loss = 0.0
@@ -171,7 +172,7 @@ def val_one_epoch(
     avg_loss = tot_loss / (i + 1)
     avg_accuracy = tot_correct / tot_num
 
-    # Track best performance, and save the model's state
+    # Track best performance, and save the model state
     if avg_loss < best_loss:
         best_loss = avg_loss
         best_accuracy = avg_accuracy
@@ -180,7 +181,12 @@ def val_one_epoch(
         model_dir = f"{main_dir}/models"
         os.makedirs(model_dir, exist_ok=True)
         model_name = f"{model_dir}/model_{epoch_index}.pt"
-        torch.save(model.state_dict(), model_name)
+        checkpoint = {
+            "epoch": epoch_index + 1,
+            "state_dict": model.state_dict(),
+            "optimizer": optimizer.state_dict()
+        }
+        torch.save(checkpoint, model_name)
         best_model_name = model_name
 
     return (

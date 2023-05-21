@@ -78,8 +78,19 @@ parser.add_argument(
 parser.add_argument(
     "--history", default=False, help="Plot history", action="store_true"
 )
+parser.add_argument(
+    "--eval-model",
+    default="",
+    help="Path to model to evaluate",
+    type=str,
+)
+# TODO: add option to load model and continue training
+parser.add_argument(
+    "-l",
+    "--load-model",
+    default="",
+    help="Path to model to load and continue training",
+    type=str,
+)
 parser.print_help()
 args = parser.parse_args()
-
-# TODO: add option to load model and continue training
-# TODO: add option to load model and evaluate only on test and train dataset

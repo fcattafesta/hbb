@@ -162,25 +162,26 @@ print("Training dataset size:", len(train_dataset))
 print("Validation dataset size:", len(val_dataset))
 print("Test dataset size:", len(test_dataset))
 
-training_loader = torch.utils.data.DataLoader(
-    train_dataset,
-    batch_size=batch_size,
-    shuffle=True,
-    num_workers=args.num_workers,
-    drop_last=True,
-)
-print("Training loader size:", len(training_loader))
+if not args.eval_model:
+    training_loader = torch.utils.data.DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=args.num_workers,
+        drop_last=True,
+    )
+    print("Training loader size:", len(training_loader))
 
-val_loader = torch.utils.data.DataLoader(
-    val_dataset,
-    batch_size=batch_size,
-    shuffle=False,
-    num_workers=args.num_workers,
-    drop_last=True,
-)
-print("Validation loader size:", len(val_loader))
+    val_loader = torch.utils.data.DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=args.num_workers,
+        drop_last=True,
+    )
+    print("Validation loader size:", len(val_loader))
 
-if args.eval:
+if args.eval or args.eval_model:
     test_loader = torch.utils.data.DataLoader(
         test_dataset,
         batch_size=batch_size,

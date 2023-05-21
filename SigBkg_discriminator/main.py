@@ -29,6 +29,11 @@ if __name__ == "__main__":
     loss_fn = torch.nn.BCEWithLogitsLoss()
 
     optimizer = torch.optim.Adam(model.parameters())
+    if args.load_model:
+        checkpoint = torch.load(args.load_model)
+        model.load_state_dict(checkpoint['state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer'])
+        loaded_epoch = checkpoint['epoch']
 
     # Initializing in a separate cell so we can easily add more epochs to the same run
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -43,105 +48,109 @@ if __name__ == "__main__":
 
     train_accuracy, train_loss, val_accuracy, val_loss = [], [], [], []
 
-    for epoch in range(args.epochs):
-        time_epoch = time.time()
-        # Turn on gradients for training
-        print("\nTraining \n")
-        model.train(True)
-        train_batch_prints = train_size // batch_size // args.num_prints
-        num_train_batches = train_size // batch_size
+    if not args.eval_model:
+        for epoch in range(args.epochs):
+            if args.load_model and epoch < loaded_epoch:
+                continue
+            time_epoch = time.time()
+            # Turn on gradients for training
+            print("\nTraining \n")
+            model.train(True)
+            train_batch_prints = train_size // batch_size // args.num_prints
+            num_train_batches = train_size // batch_size
 
-        avg_loss, avg_accuracy, train_accuracy, train_loss = train_one_epoch(
-            main_dir,
-            epoch,
-            writer,
-            model,
-            training_loader,
-            loss_fn,
-            optimizer,
-            train_batch_prints,
-            num_train_batches,
-            train_accuracy,
-            train_loss,
-        )
+            avg_loss, avg_accuracy, train_accuracy, train_loss = train_one_epoch(
+                main_dir,
+                epoch,
+                writer,
+                model,
+                training_loader,
+                loss_fn,
+                optimizer,
+                train_batch_prints,
+                num_train_batches,
+                train_accuracy,
+                train_loss,
+            )
 
-        print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
+            print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
-        print("\nValidation \n")
-        # Turn off gradients for validation
-        model.train(False)
-        val_batch_prints = val_size // batch_size // args.num_prints
-        num_val_batches = val_size // batch_size
+            print("\nValidation \n")
+            # Turn off gradients for validation
+            model.train(False)
+            val_batch_prints = val_size // batch_size // args.num_prints
+            num_val_batches = val_size // batch_size
 
-        (
-            avg_vloss,
-            avg_vaccuracy,
-            best_vloss,
-            best_vaccuracy,
-            best_epoch,
-            best_model_name,
-            val_accuracy,
-            val_loss,
-        ) = val_one_epoch(
-            main_dir,
-            epoch,
-            writer,
-            model,
-            val_loader,
-            loss_fn,
-            best_vloss,
-            best_vaccuracy,
-            best_epoch,
-            val_batch_prints,
-            num_val_batches,
-            best_model_name,
-            val_accuracy,
-            val_loss,
-        )
+            (
+                avg_vloss,
+                avg_vaccuracy,
+                best_vloss,
+                best_vaccuracy,
+                best_epoch,
+                best_model_name,
+                val_accuracy,
+                val_loss,
+            ) = val_one_epoch(
+                main_dir,
+                epoch,
+                writer,
+                model,
+                val_loader,
+                loss_fn,
+                best_vloss,
+                best_vaccuracy,
+                best_epoch,
+                val_batch_prints,
+                num_val_batches,
+                best_model_name,
+                val_accuracy,
+                val_loss,
+                optimizer,
+            )
 
-        print("EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss))
-        print(
-            "EPOCH # %d: acc train %.4f,  val %.4f"
-            % (epoch, avg_accuracy, avg_vaccuracy)
-        )
+            print("EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss))
+            print(
+                "EPOCH # %d: acc train %.4f,  val %.4f"
+                % (epoch, avg_accuracy, avg_vaccuracy)
+            )
 
-        print("\n\n\n")
-        print(
-            "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
-            % (best_epoch, best_vloss, best_vaccuracy)
-        )
+            print("\n\n\n")
+            print(
+                "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
+                % (best_epoch, best_vloss, best_vaccuracy)
+            )
 
-        # Log the running loss averaged per batch
-        # for both training and validation
-        writer.add_scalars(
-            "Training vs. Validation Loss",
-            {"Training": avg_loss, "Validation": avg_vloss},
-            epoch,
-        )
-        writer.add_scalars(
-            "Training vs. Validation Accuracy",
-            {"Training": avg_accuracy, "Validation": avg_vaccuracy},
-            epoch,
-        )
+            # Log the running loss averaged per batch
+            # for both training and validation
+            writer.add_scalars(
+                "Training vs. Validation Loss",
+                {"Training": avg_loss, "Validation": avg_vloss},
+                epoch,
+            )
+            writer.add_scalars(
+                "Training vs. Validation Accuracy",
+                {"Training": avg_accuracy, "Validation": avg_vaccuracy},
+                epoch,
+            )
 
-        writer.flush()
-        epoch += 1
-        print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
+            writer.flush()
+            epoch += 1
+            print ("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
-    if args.history:
-        # plot the training and validation loss and accuracy
-        print("\n\n\n")
-        print("Plotting training and validation loss and accuracy")
-        plot_history(
-            train_accuracy,
-            train_loss,
-            val_accuracy,
-            val_loss,
-            main_dir,
-            False,
-        )
+        if args.history:
+            # plot the training and validation loss and accuracy
+            print("\n\n\n")
+            print("Plotting training and validation loss and accuracy")
+            plot_history(
+                train_accuracy,
+                train_loss,
+                val_accuracy,
+                val_loss,
+                main_dir,
+                False,
+            )
 
-    if args.eval:
+    if args.eval or args.eval_model:
         # evaluate model on test_dataset loadining the best model
         print("\n\n\n")
         print("Evaluating best model on test and train dataset")
@@ -153,7 +162,7 @@ if __name__ == "__main__":
         num_test_batches = test_size // batch_size
 
         # load best model
-        model.load_state_dict(torch.load(best_model_name))
+        model.load_state_dict(torch.load(best_model_name if not args.eval_model else args.eval_model)["state_dict"])
         model.train(False)
 
         score_lbl_array_train = eval_model(

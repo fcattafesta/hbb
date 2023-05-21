@@ -37,7 +37,7 @@ def plot_history(
     }
 
     for type, info in infos_dict.items():
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(13, 10))
         plt.plot(
             range(len(info["train"])),
             uniform_filter1d(info["train"], size=uniform_filter),
