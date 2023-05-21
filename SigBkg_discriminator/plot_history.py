@@ -29,7 +29,7 @@ def read_from_txt(file):
 
 
 def plot_history(
-    train_accuracy, train_loss, val_accuracy, val_loss, dir, show, uniform_filter=10, lenght=-1
+    train_accuracy, train_loss, val_accuracy, val_loss, dir, show, uniform_filter=50, lenght=-1
 ):
     infos_dict = {
         "accuracy": {"train": train_accuracy[:lenght], "val": val_accuracy[:lenght]},
@@ -51,7 +51,7 @@ def plot_history(
             color="orange",
         )
 
-        plt.xlabel("Epoch")
+        plt.xlabel("Step")
         plt.ylabel(type.capitalize())
         plt.legend()
         hep.style.use("CMS")
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-u",
         "--uniform-filter",
-        default=10,
+        default=50,
         type=int,
         help="size of the uniform filter",
     )
