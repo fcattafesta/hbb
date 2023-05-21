@@ -28,10 +28,12 @@ def read_from_txt(file):
     return train_accuracy, train_loss, val_accuracy, val_loss
 
 
-def plot_history(train_accuracy, train_loss, val_accuracy, val_loss, dir, show, uniform_filter=10):
+def plot_history(
+    train_accuracy, train_loss, val_accuracy, val_loss, dir, show, uniform_filter=10, lenght=-1
+):
     infos_dict = {
-        "accuracy": {"train": train_accuracy, "val": val_accuracy},
-        "loss": {"train": train_loss, "val": val_loss},
+        "accuracy": {"train": train_accuracy[:lenght], "val": val_accuracy[:lenght]},
+        "loss": {"train": train_loss[:lenght], "val": val_loss[:lenght]},
     }
 
     for type, info in infos_dict.items():
@@ -79,10 +81,25 @@ if __name__ == "__main__":
         action="store_true",
         help="show plots",
     )
+    parser.add_argument(
+        "-l",
+        "--lenght",
+        default=-1,
+        help="max lenght of the plot",
+    )
     args = parser.parse_args()
 
     train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
         f"{args.input_dir}/log.txt"
     )
 
-    plot_history(train_accuracy, train_loss, val_accuracy, val_loss, args.input_dir, args.show, args.uniform_filter)
+    plot_history(
+        train_accuracy,
+        train_loss,
+        val_accuracy,
+        val_loss,
+        args.input_dir,
+        args.show,
+        args.uniform_filter,
+        args.lenght,
+    )
