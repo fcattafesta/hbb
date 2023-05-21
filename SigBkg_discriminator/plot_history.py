@@ -86,6 +86,7 @@ if __name__ == "__main__":
         "--lenght",
         default=-1,
         help="max lenght of the plot",
+        type=int,
     )
     args = parser.parse_args()
 
