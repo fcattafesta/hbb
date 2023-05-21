@@ -1,3 +1,12 @@
+import os
+import torch
+import numpy as np
+from datetime import datetime
+import time
+
+# PyTorch TensorBoard support
+from torch.utils.tensorboard import SummaryWriter
+
 from dataset import *
 from tools import *
 from DNN_model import *
@@ -7,17 +16,6 @@ if args.histos:
     from sig_bkg_histos import *
 if args.history:
     from plot_history import *
-
-import os
-import torch
-from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
-import numpy as np
-
-# PyTorch TensorBoard support
-from torch.utils.tensorboard import SummaryWriter
-from datetime import datetime
-import time
 
 
 if __name__ == "__main__":

@@ -1,5 +1,3 @@
-# plot the history for the training and validation losses and accuracies
-
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
@@ -70,6 +68,7 @@ def plot_history(
 
 
 if __name__ == "__main__":
+    # plot the history for the training and validation losses and accuracies
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-i", "--input-dir", type=str, help="path to tensorboard log file"

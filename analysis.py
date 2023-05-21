@@ -86,9 +86,6 @@ def sumwsents(files):
     return sumws, LHEPdfSumw
 
 
-# import samples
-
-
 def runSample(ar):
     # f,s,i=ar
     p = psutil.Process()

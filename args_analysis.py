@@ -20,6 +20,8 @@ parser.add_argument(
 parser.add_argument(
     "-s", "--snapshot", default=False, action="store_true", help="Save snapshot"
 )
-
+parser.add_argument(
+    "-e", "--eval-model", default="", help="Model to evaluate", type=str,
+)
 parser.print_help()
 args = parser.parse_args()
