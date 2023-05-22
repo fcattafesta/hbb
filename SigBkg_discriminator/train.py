@@ -47,8 +47,6 @@ if __name__ == "__main__":
     best_epoch = -1
     best_model_name = ""
 
-    train_accuracy, train_loss, val_accuracy, val_loss = [], [], [], []
-
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
 
@@ -63,7 +61,7 @@ if __name__ == "__main__":
             print("\nTraining \n")
             model.train(True)
 
-            avg_loss, avg_accuracy, train_accuracy, train_loss = train_one_epoch(
+            avg_loss, avg_accuracy = train_one_epoch(
                 main_dir,
                 epoch,
                 writer,
@@ -73,10 +71,8 @@ if __name__ == "__main__":
                 optimizer,
                 train_batch_prints,
                 num_train_batches,
-                train_accuracy,
-                train_loss,
                 device,
-                time_epoch
+                time_epoch,
             )
 
             print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
@@ -92,8 +88,6 @@ if __name__ == "__main__":
                 best_vaccuracy,
                 best_epoch,
                 best_model_name,
-                val_accuracy,
-                val_loss,
             ) = val_one_epoch(
                 main_dir,
                 epoch,
@@ -107,11 +101,9 @@ if __name__ == "__main__":
                 val_batch_prints,
                 num_val_batches,
                 best_model_name,
-                val_accuracy,
-                val_loss,
                 optimizer,
                 device,
-                time_epoch
+                time_epoch,
             )
 
             print(
@@ -149,6 +141,10 @@ if __name__ == "__main__":
             # plot the training and validation loss and accuracy
             print("\n\n\n")
             print("Plotting training and validation loss and accuracy")
+            train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
+                f"{main_dir}/log.txt"
+            )
+
             plot_history(
                 train_accuracy,
                 train_loss,
@@ -189,7 +185,12 @@ if __name__ == "__main__":
 
         print("Training dataset\n")
         score_lbl_array_train = eval_model(
-            model, training_loader, train_batch_prints, num_train_batches, "training", device
+            model,
+            training_loader,
+            train_batch_prints,
+            num_train_batches,
+            "training",
+            device,
         )
         print("\nTest dataset")
         score_lbl_array_test = eval_model(

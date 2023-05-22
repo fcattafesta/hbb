@@ -13,8 +13,6 @@ def train_one_epoch(
     optimizer,
     batch_prints,
     num_batches,
-    train_accuracy,
-    train_loss,
     device,
     time_epoch,
 ):
@@ -86,9 +84,6 @@ def train_one_epoch(
                     )
                 )
 
-            train_accuracy.append(last_accuracy)
-            train_loss.append(last_loss)
-
             tb_writer.add_scalar("Accuracy/train", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/train", last_loss, tb_x)
 
@@ -99,7 +94,7 @@ def train_one_epoch(
     avg_loss = tot_loss / (i + 1)  # loss per epoch
     avg_accuracy = tot_correct / tot_num  # accuracy per epoch
 
-    return avg_loss, avg_accuracy, train_accuracy, train_loss
+    return avg_loss, avg_accuracy
 
 
 def val_one_epoch(
@@ -115,8 +110,6 @@ def val_one_epoch(
     batch_prints,
     num_batches,
     best_model_name,
-    val_accuracy,
-    val_loss,
     optimizer,
     device,
     time_epoch,
@@ -183,9 +176,6 @@ def val_one_epoch(
                     )
                 )
 
-            val_accuracy.append(last_accuracy)
-            val_loss.append(last_loss)
-
             tb_writer.add_scalar("Accuracy/val", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/val", last_loss, tb_x)
 
@@ -220,8 +210,6 @@ def val_one_epoch(
         best_accuracy,
         best_epoch,
         best_model_name,
-        val_accuracy,
-        val_loss,
     )
 
 
