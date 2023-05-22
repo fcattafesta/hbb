@@ -269,5 +269,6 @@ def export_onnx(model, model_name, batch_size, input_size, input_names, output_n
         input_names=input_names,
         output_names=output_names,
         export_params=True,
-        dynamic_axes=dynamic_axes_dict,
+        #dynamic_axes=dynamic_axes_dict,
+        opset_version=13
     )
