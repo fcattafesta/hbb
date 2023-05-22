@@ -32,19 +32,19 @@ for i, file in enumerate(sig_files):
     # concatenate all the variables into a single torch tensor
     if i == 0:
         variables_sig = torch.tensor(
-            variables_sig_array, device=device, dtype=torch.float32
+            variables_sig_array, dtype=torch.float32
         )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
     else:
         variables_sig = torch.cat(
             (
                 variables_sig,
-                torch.tensor(variables_sig_array, device=device, dtype=torch.float32),
+                torch.tensor(variables_sig_array, dtype=torch.float32),
             ),
             dim=1,
         )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
 ones_tensor = torch.ones_like(
-    variables_sig[0], device=device, dtype=torch.float32
+    variables_sig[0], dtype=torch.float32
 ).unsqueeze(0)
 
 X_sig = (variables_sig, ones_tensor)
@@ -63,19 +63,19 @@ for i, file in enumerate(bkg_files):
     )
     if i == 0:
         variables_bkg = torch.tensor(
-            variables_bkg_array, device=device, dtype=torch.float32
+            variables_bkg_array, dtype=torch.float32
         )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
     else:
         variables_bkg = torch.cat(
             (
                 variables_bkg,
-                torch.tensor(variables_bkg_array, device=device, dtype=torch.float32),
+                torch.tensor(variables_bkg_array, dtype=torch.float32),
             ),
             dim=1,
         )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
 
 zeros_tensor = torch.zeros_like(
-    variables_bkg[0], device=device, dtype=torch.float32
+    variables_bkg[0], dtype=torch.float32
 ).unsqueeze(0)
 
 X_bkg = (variables_bkg, zeros_tensor)

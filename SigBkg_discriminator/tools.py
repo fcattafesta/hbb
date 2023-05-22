@@ -14,6 +14,7 @@ def train_one_epoch(
     num_batches,
     train_accuracy,
     train_loss,
+    device,
 ):
     running_loss = 0.0
     tot_loss = 0.0
@@ -27,6 +28,8 @@ def train_one_epoch(
     # Loop over the training data
     for i, data in enumerate(loader):
         inputs, labels = data
+        inputs = inputs.to(device)
+        labels = labels.to(device)
         optimizer.zero_grad()
 
         outputs = model(inputs)
@@ -106,6 +109,7 @@ def val_one_epoch(
     val_accuracy,
     val_loss,
     optimizer,
+    device,
 ):
     running_loss = 0.0
     tot_loss = 0.0
@@ -118,6 +122,9 @@ def val_one_epoch(
 
     for i, data in enumerate(loader):
         inputs, labels = data
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
         outputs = model(inputs)
 
         # Compute the accuracy
@@ -201,7 +208,7 @@ def val_one_epoch(
     )
 
 
-def eval_model(model, loader, batch_prints, num_batches, type):
+def eval_model(model, loader, batch_prints, num_batches, type, device):
     # Test the model by running it on the test set
     running_loss = 0.0
     tot_loss = 0.0
@@ -214,6 +221,9 @@ def eval_model(model, loader, batch_prints, num_batches, type):
 
     for i, data in enumerate(loader):
         inputs, labels = data
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+        
         outputs = model(inputs)
         y_pred = torch.round(outputs)
         correct = (y_pred == labels).sum().item()

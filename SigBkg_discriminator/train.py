@@ -74,6 +74,7 @@ if __name__ == "__main__":
                 num_train_batches,
                 train_accuracy,
                 train_loss,
+                device
             )
 
             print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
@@ -107,6 +108,7 @@ if __name__ == "__main__":
                 val_accuracy,
                 val_loss,
                 optimizer,
+                device
             )
 
             print(
@@ -184,11 +186,11 @@ if __name__ == "__main__":
 
         print("Training dataset\n")
         score_lbl_array_train = eval_model(
-            model, training_loader, train_batch_prints, num_train_batches, "training"
+            model, training_loader, train_batch_prints, num_train_batches, "training", device
         )
         print("\nTest dataset")
         score_lbl_array_test = eval_model(
-            model, test_loader, test_batch_prints, num_test_batches, "test"
+            model, test_loader, test_batch_prints, num_test_batches, "test", device
         )
 
         # plot the signal and background distributions
