@@ -31,9 +31,9 @@ for i, file in enumerate(sig_files):
     )
     # concatenate all the variables into a single torch tensor
     if i == 0:
-        variables_sig = torch.tensor(
-            variables_sig_array, dtype=torch.float32
-        )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
+        variables_sig = torch.tensor(variables_sig_array, dtype=torch.float32)[
+            :, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)
+        ]
     else:
         variables_sig = torch.cat(
             (
@@ -43,9 +43,7 @@ for i, file in enumerate(sig_files):
             dim=1,
         )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
-ones_tensor = torch.ones_like(
-    variables_sig[0], dtype=torch.float32
-).unsqueeze(0)
+ones_tensor = torch.ones_like(variables_sig[0], dtype=torch.float32).unsqueeze(0)
 
 X_sig = (variables_sig, ones_tensor)
 
@@ -62,9 +60,9 @@ for i, file in enumerate(bkg_files):
         [bkg_train[input].array(library="np") for input in input_list]
     )
     if i == 0:
-        variables_bkg = torch.tensor(
-            variables_bkg_array, dtype=torch.float32
-        )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
+        variables_bkg = torch.tensor(variables_bkg_array, dtype=torch.float32)[
+            :, : math.floor((args.train_size + args.val_size + args.test_size) / 2)
+        ]
     else:
         variables_bkg = torch.cat(
             (
@@ -74,9 +72,7 @@ for i, file in enumerate(bkg_files):
             dim=1,
         )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
 
-zeros_tensor = torch.zeros_like(
-    variables_bkg[0], dtype=torch.float32
-).unsqueeze(0)
+zeros_tensor = torch.zeros_like(variables_bkg[0], dtype=torch.float32).unsqueeze(0)
 
 X_bkg = (variables_bkg, zeros_tensor)
 
@@ -119,6 +115,7 @@ training_loader = torch.utils.data.DataLoader(
     shuffle=True,
     num_workers=args.num_workers,
     drop_last=True,
+    pin_memory=args.pin_memory,
 )
 print("Training loader size:", len(training_loader))
 
@@ -129,6 +126,7 @@ if not args.eval_model:
         shuffle=False,
         num_workers=args.num_workers,
         drop_last=True,
+        pin_memory=args.pin_memory,
     )
     print("Validation loader size:", len(val_loader))
 
@@ -139,5 +137,6 @@ if args.eval or args.eval_model:
         shuffle=False,
         num_workers=args.num_workers,
         drop_last=True,
+        pin_memory=args.pin_memory,
     )
     print("Test loader size:", len(test_loader))

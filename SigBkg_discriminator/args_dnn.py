@@ -99,5 +99,11 @@ parser.add_argument(
     help="Save model in ONNX format",
     action="store_true",
 )
+parser.add_argument(
+    "--pin-memory",
+    default=False,
+    help="Pin memory for data loading",
+    action="store_true",
+)
 parser.print_help()
 args = parser.parse_args()
