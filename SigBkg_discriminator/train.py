@@ -37,7 +37,7 @@ if __name__ == "__main__":
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
-        main_dir = os.path.dirname(args.load_model).replace("models/", "")
+        main_dir = os.path.dirname(args.load_model).replace("models", "")
 
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
@@ -212,6 +212,6 @@ if __name__ == "__main__":
             score_lbl_array_test=score_lbl_array_test,
         )
 
-        print("Saved score_lbl_array.npy in %s" % main_dir)
+    print("Saved output in %s" % main_dir)
 
     print("Total time: %.1f" % (time.time() - start_time))
