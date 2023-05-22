@@ -19,9 +19,9 @@ class DNN(nn.Module):
             nn.ReLU(),
             nn.Linear(64, 1),
         )
-        self.sigmoid = nn.Sigmoid()
+        #self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
         logits = self.linear_relu_stack(x)
-        output = self.sigmoid(logits)
-        return output
+        #logits = self.sigmoid(logits)
+        return logits
