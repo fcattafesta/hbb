@@ -27,17 +27,18 @@ if __name__ == "__main__":
     print(model)
 
     loss_fn = torch.nn.BCELoss()
-
     optimizer = torch.optim.Adam(model.parameters())
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    main_dir = f"out/{timestamp}"
+
     if args.load_model:
         checkpoint = torch.load(args.load_model)
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
+        main_dir = os.path.dirname(args.load_model)
 
-    # Initializing in a separate cell so we can easily add more epochs to the same run
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    main_dir = f"out/{timestamp}"
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
 
