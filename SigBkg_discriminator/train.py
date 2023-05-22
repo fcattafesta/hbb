@@ -37,7 +37,7 @@ if __name__ == "__main__":
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
-        main_dir = os.path.dirname(args.load_model)
+        main_dir = os.path.dirname(args.load_model).replace("models/", "")
 
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
