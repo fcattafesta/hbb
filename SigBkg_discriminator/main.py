@@ -156,7 +156,7 @@ if __name__ == "__main__":
             print("\n\n\n")
             print("Exporting model to ONNX")
             model.train(False)
-            export_onnx(model, best_model_name, batch_size, input_size, input_list, ["sigmoid"])
+            export_onnx(model, best_model_name, batch_size, input_size, input_list, ["sigmoid"], device)
 
     if args.eval or args.eval_model:
         # evaluate model on test_dataset loadining the best model
