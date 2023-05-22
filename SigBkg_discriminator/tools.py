@@ -257,7 +257,6 @@ def export_onnx(
     # Export the model to ONNX format
     dummy_input = torch.zeros(batch_size, input_size, device=device)
     print("dummy_input", dummy_input.size())
-    output = torch.nn.Sigmoid()(model(dummy_input))
     dynamic_axes_dict = {
         input_names[i]: {0: "batch_size"} for i in range(len(input_names))
     }
@@ -269,9 +268,15 @@ def export_onnx(
         dummy_input,
         model_name.replace(".pt", ".onnx"),
         verbose=True,
-        input_names=input_names,
-        output_names=output_names,
+        # input_names=input_names,
+        # output_names=output_names,
         export_params=True,
         # dynamic_axes=dynamic_axes_dict,
         opset_version=13,
+        input_names=["modelInput"],  # the model's input names
+        output_names=["modelOutput"],  # the model's output names
+        dynamic_axes={
+            "modelInput": {0: "batch_size"},  # variable length axes
+            "modelOutput": {0: "batch_size"},
+        },
     )

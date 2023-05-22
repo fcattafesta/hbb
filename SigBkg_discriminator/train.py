@@ -26,7 +26,8 @@ if __name__ == "__main__":
     model = DNN(input_size).to(device)
     print(model)
 
-    loss_fn = torch.nn.BCEWithLogitsLoss()
+    loss_fn = torch.nn.BCELoss() #BCEWithLogitsLoss()
+
 
     optimizer = torch.optim.Adam(model.parameters())
     if args.load_model:
