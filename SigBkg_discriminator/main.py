@@ -21,7 +21,8 @@ if args.history:
 if __name__ == "__main__":
     start_time = time.time()
 
-    model = DNN(X_fts.size(1)).to(device)
+    input_size=X_fts.size(1)
+    model = DNN(input_size).to(device)
     print(model)
 
     loss_fn = torch.nn.BCEWithLogitsLoss()
@@ -150,6 +151,12 @@ if __name__ == "__main__":
                 main_dir,
                 False,
             )
+        if args.onnx:
+            # export the model to ONNX
+            print("\n\n\n")
+            print("Exporting model to ONNX")
+            model.train(False)
+            export_onnx(model, best_model_name, batch_size, input_size, input_list, ["sigmoid"])
 
     if args.eval or args.eval_model:
         # evaluate model on test_dataset loadining the best model

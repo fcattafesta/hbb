@@ -249,3 +249,25 @@ def eval_model(model, loader, batch_prints, num_batches, type):
     score_lbl_array = score_lbl_tensor.cpu().detach().numpy()
 
     return score_lbl_array
+
+
+def export_onnx(model, model_name, batch_size, input_size, input_names, output_names):
+    # Export the model to ONNX format
+    dummy_input = torch.randn(batch_size, input_size)
+    output = torch.nn.Sigmoid()(model(dummy_input))
+    dynamic_axes_dict = {
+        input_names[i]: {0: "batch_size"} for i in range(len(input_names))
+    }
+    dynamic_axes_dict.update(
+        {output_names[i]: {0: "batch_size"} for i in range(len(output_names))}
+    )
+    torch.onnx.export(
+        model,
+        dummy_input,
+        model_name.replace(".pt", ".onnx"),
+        verbose=True,
+        input_names=input_names,
+        output_names=output_names,
+        export_params=True,
+        dynamic_axes=dynamic_axes_dict,
+    )

@@ -20,8 +20,9 @@ parser.add_argument(
 parser.add_argument(
     "-s", "--snapshot", default=False, action="store_true", help="Save snapshot"
 )
+# TODO: add option to evaluate model
 parser.add_argument(
-    "-e", "--eval-model", default="", help="Model to evaluate", type=str,
+    "-e", "--eval-model", default=False, action="store_true", help="Evaluate model"
 )
 parser.print_help()
 args = parser.parse_args()

@@ -69,6 +69,7 @@ parser.add_argument(
     help="Evaluate the model",
     default=False,
 )
+# TODO: add option to use multiple gpus
 parser.add_argument(
     "-g", "--gpu", default=False, help="GPU number", action="store_true"
 )
