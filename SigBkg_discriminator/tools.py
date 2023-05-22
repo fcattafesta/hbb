@@ -254,6 +254,7 @@ def eval_model(model, loader, batch_prints, num_batches, type):
 def export_onnx(model, model_name, batch_size, input_size, device):
     # Export the model to ONNX format
     dummy_input = torch.zeros(batch_size, input_size, device=device)
+    output = torch.nn.Sigmoid()(model(dummy_input))
     torch.onnx.export(
         model,
         dummy_input,
