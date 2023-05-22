@@ -92,5 +92,12 @@ parser.add_argument(
     help="Path to model to load and continue training",
     type=str,
 )
+parser.add_argument(
+    "-o",
+    "--onnx",
+    default=False,
+    help="Save model in ONNX format",
+    action="store_true",
+)
 parser.print_help()
 args = parser.parse_args()
