@@ -21,7 +21,8 @@ if args.history:
 if __name__ == "__main__":
     start_time = time.time()
 
-    input_size=X_fts.size(1)
+    input_size = X_fts.size(1)
+    print("X_fts:", X_fts.size())
     model = DNN(input_size).to(device)
     print(model)
 
@@ -151,12 +152,20 @@ if __name__ == "__main__":
                 main_dir,
                 False,
             )
-        if args.onnx:
-            # export the model to ONNX
-            print("\n\n\n")
-            print("Exporting model to ONNX")
-            model.train(False)
-            export_onnx(model, best_model_name, batch_size, input_size, input_list, ["sigmoid"], device)
+    if args.onnx:
+        # export the model to ONNX
+        print("\n\n\n")
+        print("Exporting model to ONNX")
+        model.train(False)
+        export_onnx(
+            model,
+            best_model_name if not args.eval_model else args.eval_model,
+            batch_size,
+            input_size,
+            input_list,
+            ["sigmoid"],
+            device,
+        )
 
     if args.eval or args.eval_model:
         # evaluate model on test_dataset loadining the best model
