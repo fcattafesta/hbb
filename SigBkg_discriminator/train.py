@@ -75,7 +75,8 @@ if __name__ == "__main__":
                 num_train_batches,
                 train_accuracy,
                 train_loss,
-                device
+                device,
+                time_epoch
             )
 
             print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
@@ -109,7 +110,8 @@ if __name__ == "__main__":
                 val_accuracy,
                 val_loss,
                 optimizer,
-                device
+                device,
+                time_epoch
             )
 
             print(
