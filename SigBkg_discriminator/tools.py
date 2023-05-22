@@ -32,7 +32,7 @@ def train_one_epoch(
         outputs = model(inputs)
 
         # Compute the accuracy
-        y_pred = torch.round(torch.sigmoid(outputs))
+        y_pred = torch.round(outputs)
         correct = (y_pred == labels).sum().item()
         batch_size = labels.size(0)
 
@@ -121,7 +121,7 @@ def val_one_epoch(
         outputs = model(inputs)
 
         # Compute the accuracy
-        y_pred = torch.round(torch.sigmoid(outputs))
+        y_pred = torch.round(outputs)
         correct = (y_pred == labels).sum().item()
         batch_size = labels.size(0)
 
@@ -215,8 +215,7 @@ def eval_model(model, loader, batch_prints, num_batches, type):
     for i, data in enumerate(loader):
         inputs, labels = data
         outputs = model(inputs)
-        y_score = torch.sigmoid(outputs)
-        y_pred = torch.round(y_score)
+        y_pred = torch.round(outputs)
         correct = (y_pred == labels).sum().item()
         batch_size = labels.size(0)
         running_correct += correct
@@ -233,10 +232,10 @@ def eval_model(model, loader, batch_prints, num_batches, type):
 
         # Create array of scores and labels
         if i == 0:
-            all_scores = y_score
+            all_scores = outputs
             all_labels = labels
         else:
-            all_scores = torch.cat((all_scores, y_score))
+            all_scores = torch.cat((all_scores, outputs))
             all_labels = torch.cat((all_labels, labels))
 
     # concatenate all scores and labels
@@ -254,7 +253,6 @@ def eval_model(model, loader, batch_prints, num_batches, type):
 def export_onnx(model, model_name, batch_size, input_size, device):
     # Export the model to ONNX format
     dummy_input = torch.zeros(batch_size, input_size, device=device)
-    output = torch.nn.Sigmoid()(model(dummy_input))
     torch.onnx.export(
         model,
         dummy_input,
@@ -262,10 +260,10 @@ def export_onnx(model, model_name, batch_size, input_size, device):
         verbose=True,
         export_params=True,
         opset_version=13,
-        input_names=["modelInput"],  # the model's input names
-        output_names=["modelOutput"],  # the model's output names
+        input_names=["InputVariables"],  # the model's input names
+        output_names=["Sigmoid"],  # the model's output names
         dynamic_axes={
-            "modelInput": {0: "batch_size"},  # variable length axes
-            "modelOutput": {0: "batch_size"},
+            "InputVariables": {0: "batch_size"},  # variable length axes
+            "Sigmoid": {0: "batch_size"},
         },
     )
