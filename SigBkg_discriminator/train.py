@@ -75,11 +75,9 @@ if __name__ == "__main__":
             time_epoch = time.time()
             # Turn on gradients for training
             print("\n\n\n")
-            print("\nTraining \n")
-            model.train(True)
 
-            avg_loss, avg_accuracy = train_one_epoch(
-                main_dir,
+            avg_loss, avg_accuracy, *_= train_val_one_epoch(
+                True,
                 epoch,
                 writer,
                 model,
@@ -94,10 +92,6 @@ if __name__ == "__main__":
 
             print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
-            print("\nValidation \n")
-            # Turn off gradients for validation
-            model.train(False)
-
             (
                 avg_vloss,
                 avg_vaccuracy,
@@ -105,22 +99,23 @@ if __name__ == "__main__":
                 best_vaccuracy,
                 best_epoch,
                 best_model_name,
-            ) = val_one_epoch(
-                main_dir,
+            ) = train_val_one_epoch(
+                False,
                 epoch,
                 writer,
                 model,
                 val_loader,
                 loss_fn,
+                optimizer,
+                val_batch_prints,
+                num_val_batches,
+                device,
+                time_epoch,
+                main_dir,
                 best_vloss,
                 best_vaccuracy,
                 best_epoch,
-                val_batch_prints,
-                num_val_batches,
                 best_model_name,
-                optimizer,
-                device,
-                time_epoch,
             )
 
             logger.info(
