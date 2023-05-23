@@ -172,12 +172,14 @@ if __name__ == "__main__":
         print("\n\n\n")
         print("Exporting model to ONNX")
         model.train(False)
+        # move model to cpu
+        model.to("cpu")
         export_onnx(
             model,
             best_model_name if not args.eval_model else args.eval_model,
             batch_size,
             input_size,
-            device,
+            "cpu",
         )
 
     if args.eval or args.eval_model:
