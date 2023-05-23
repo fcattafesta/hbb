@@ -6,7 +6,7 @@ void TMVA_SOFIE_ONNX(std::string inputFile = ""){
 
     //Creating parser object to parse ONNX files
     SOFIE::RModelParser_ONNX parser;
-    SOFIE::RModel model = parser.Parse(inputFile, true);
+    SOFIE::RModel model = parser.Parse(inputFile);
 
     //Generating inference code
     model.Generate();
