@@ -33,35 +33,31 @@ if __name__ == "__main__":
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     main_dir = f"out/{timestamp}"
 
-    if args.load_model:
-        checkpoint = torch.load(args.load_model)
-        model.load_state_dict(checkpoint["state_dict"])
-        optimizer.load_state_dict(checkpoint["optimizer"])
-        loaded_epoch = checkpoint["epoch"]
-        main_dir = os.path.dirname(args.load_model).replace("models", "")
-
-    os.makedirs(main_dir, exist_ok=True)
-    writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
-    # Create the logger
-    logger = setup_logger(f"{main_dir}/log.log")
-
     best_vloss = 1_000_000.0
     best_vaccuracy = 0.0
     best_epoch = -1
     best_model_name = ""
 
     if args.load_model:
-        # read the log file and get the best validation loss, accuracy, epoch and model name
-        with open(f"{main_dir}/log.txt", "r") as f:
-            for line in f:
-                if "best validation loss" in line:
-                    best_vloss = float(line.split(":")[1])
-                if "best validation accuracy" in line:
-                    best_vaccuracy = float(line.split(":")[1])
-                if "best epoch" in line:
-                    best_epoch = int(line.split(":")[1])
-                if "best model name" in line:
-                    best_model_name = line.split(":")[1].strip()
+        checkpoint = torch.load(args.load_model)
+        model.load_state_dict(checkpoint["state_dict"])
+        optimizer.load_state_dict(checkpoint["optimizer"])
+        loaded_epoch = checkpoint["epoch"]
+        main_dir = os.path.dirname(args.load_model).replace("models", "")
+        best_model_name = args.load_model
+        with open(f"{main_dir}/log.log", "r") as f:
+            for line in reversed(f.readlines()):
+                if "Best" in line:
+                    best_epoch = int(line.split(",")[0].split(":")[1])
+                    best_vloss = float(line.split(",")[1].split(":")[1])
+                    best_vaccuracy = float(line.split(",")[2].split(":")[1])
+                    break
+
+    os.makedirs(main_dir, exist_ok=True)
+    writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
+    # Create the logger
+    logger = setup_logger(f"{main_dir}/log.log")
+
 
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
@@ -157,7 +153,7 @@ if __name__ == "__main__":
             print("\n\n\n")
             print("Plotting training and validation loss and accuracy")
             train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-                f"{main_dir}/log.txt"
+                f"{main_dir}/log.log"
             )
 
             plot_history(
