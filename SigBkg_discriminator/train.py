@@ -38,6 +38,8 @@ if __name__ == "__main__":
     best_epoch = -1
     best_model_name = ""
 
+    loaded_epoch = -1
+
     if args.load_model or args.eval_model:
         checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
         model.load_state_dict(checkpoint["state_dict"])
@@ -52,7 +54,7 @@ if __name__ == "__main__":
                 if "Best epoch" in line:
                     # get line from Best epoch onwards
                     line = line.split("Best epoch")[1]
-                    best_epoch = int(line.split(",")[0].split(":")[1])
+                    best_epoch = int(line.split(",")[0].split("#")[1])
                     best_vloss = float(line.split(",")[1].split(":")[1])
                     best_vaccuracy = float(line.split(",")[2].split(":")[1])
                     break
@@ -72,13 +74,13 @@ if __name__ == "__main__":
         val_batch_prints = val_size // batch_size // args.num_prints
         num_val_batches = val_size // batch_size
         for epoch in range(args.epochs):
-            if args.load_model and epoch <= loaded_epoch:
+            if epoch <= loaded_epoch:
                 continue
             time_epoch = time.time()
             # Turn on gradients for training
             print("\n\n\n")
 
-            avg_loss, avg_accuracy, *_= train_val_one_epoch(
+            avg_loss, avg_accuracy, *_ = train_val_one_epoch(
                 True,
                 epoch,
                 writer,
@@ -195,6 +197,7 @@ if __name__ == "__main__":
         )
         model.train(False)
 
+        eval_epoch = loaded_epoch if args.eval_model else best_epoch
         print("Training dataset\n")
         score_lbl_array_train, loss_eval_train, accuracy_eval_train = eval_model(
             model,
@@ -204,7 +207,7 @@ if __name__ == "__main__":
             num_train_batches,
             "training",
             device,
-            best_epoch,
+            eval_epoch,
         )
 
         print("\nTest dataset")
@@ -216,19 +219,20 @@ if __name__ == "__main__":
             num_test_batches,
             "test",
             device,
-            best_epoch,
+            eval_epoch,
         )
         print("================================")
         logger.info(
-            "Best epoch # %d, best val loss: %.4f, best val accuracy: %.4f"
+            "Best epoch # %d, loss val: %.4f, accuracy val: %.4f"
             % (best_epoch, best_vloss, best_vaccuracy)
         )
         logger.info(
-            "Eval loss train %.4f,  test %.4f" % (loss_eval_train, loss_eval_test)
+            "Eval epoch # %d,  loss train: %.4f,  loss test: %.4f"
+            % (eval_epoch, loss_eval_train, loss_eval_test)
         )
         logger.info(
-            "Eval acc train %.4f,  test %.4f"
-            % (accuracy_eval_train, accuracy_eval_test)
+            "Eval epoch # %d,  acc train: %.4f,  acc test: %.4f"
+            % (eval_epoch, accuracy_eval_train, accuracy_eval_test)
         )
 
         # plot the signal and background distributions
