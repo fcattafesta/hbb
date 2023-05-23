@@ -26,18 +26,18 @@ for i in range(500):\n\
 \n\
 model.eval()\n\
 m = torch.jit.script(model)\n\
-torch.jit.save(m,'PyTorchModel.pt')\n";
+torch.jit.save(m,'dummy_model.pt')\n";
 
 
 void TMVA_SOFIE_PyTorch(){
 
     //Running the Python script to generate PyTorch .pt file
-    TMVA::PyMethodBase::PyInitialize();
-
-    TMacro m;
-    m.AddLine(pythonSrc);
-    m.SaveSource("make_pytorch_model.py");
-    gSystem->Exec(TMVA::Python_Executable() + " make_pytorch_model.py");
+    
+    // TMVA::PyMethodBase::PyInitialize();
+    // TMacro m;
+    // m.AddLine(pythonSrc);
+    // m.SaveSource("make_pytorch_model.py");
+    // gSystem->Exec(TMVA::Python_Executable() + " make_pytorch_model.py");
 
     //Parsing a PyTorch model requires the shape and data-type of input tensor
     //Data-type of input tensor defaults to Float if not specified
@@ -45,11 +45,11 @@ void TMVA_SOFIE_PyTorch(){
     std::vector<std::vector<size_t>> inputShapesSequential{inputTensorShapeSequential};
 
     //Parsing the saved PyTorch .pt file into RModel object
-    SOFIE::RModel model = SOFIE::PyTorch::Parse("PyTorchModel.pt",inputShapesSequential);
+    SOFIE::RModel model = SOFIE::PyTorch::Parse("dummy_model.pt",inputShapesSequential);
 
     //Generating inference code
     model.Generate();
-    model.OutputGenerated("PyTorchModel.hxx");
+    model.OutputGenerated("dummy_model.hxx");
 
     //Printing required input tensors
     std::cout<<"\n\n";
