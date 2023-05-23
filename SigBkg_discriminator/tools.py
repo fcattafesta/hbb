@@ -351,7 +351,7 @@ def eval_model(
             last_accuracy = running_correct / running_num  # accuracy per batch
 
             logger.info(
-                "Evaluating Best epoch # %d (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
+                "Evaluating epoch # %d (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
                 % (
                     best_epoch,
                     type,
