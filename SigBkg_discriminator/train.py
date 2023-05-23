@@ -49,7 +49,9 @@ if __name__ == "__main__":
         best_model_name = args.load_model if args.load_model else args.eval_model
         with open(f"{main_dir}/log.log", "r") as f:
             for line in reversed(f.readlines()):
-                if "Best" in line:
+                if "Best epoch" in line:
+                    # get line from Best epoch onwards
+                    line = line.split("Best epoch")[1]
                     best_epoch = int(line.split(",")[0].split(":")[1])
                     best_vloss = float(line.split(",")[1].split(":")[1])
                     best_vaccuracy = float(line.split(",")[2].split(":")[1])
@@ -126,7 +128,7 @@ if __name__ == "__main__":
                 % (epoch, avg_accuracy, avg_vaccuracy)
             )
             logger.info(
-                "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
+                "Best epoch # %d, best val loss: %.4f, best val accuracy: %.4f"
                 % (best_epoch, best_vloss, best_vaccuracy)
             )
 
@@ -216,9 +218,9 @@ if __name__ == "__main__":
             device,
             best_epoch,
         )
-
+        print("================================")
         logger.info(
-            "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
+            "Best epoch # %d, best val loss: %.4f, best val accuracy: %.4f"
             % (best_epoch, best_vloss, best_vaccuracy)
         )
         logger.info(

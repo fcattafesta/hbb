@@ -75,7 +75,7 @@ def train_val_one_epoch(
             tb_x = epoch_index * len(loader) + i + 1
 
             logger.info(
-                "EPOCH # %d, time %.1f,  %.s batch %.1f %% , step %.d        accuracy: %.4f      //      loss: %.4f"
+                "EPOCH # %d, time %.1f,  %.s batch %.1f %% , step %d        accuracy: %.4f      //      loss: %.4f"
                 % (
                     epoch_index,
                     time.time() - time_epoch,
@@ -182,7 +182,7 @@ def train_one_epoch(
             last_accuracy = running_correct / running_num  # accuracy per batch
             tb_x = epoch_index * len(loader) + i + 1
             logger.info(
-                "EPOCH # %d, time %.1f,  Training batch %.1f %% , step %.d        accuracy: %.4f      //      loss: %.4f"
+                "EPOCH # %d, time %.1f,  Training batch %.1f %% , step %d        accuracy: %.4f      //      loss: %.4f"
                 % (
                     epoch_index,
                     time.time() - time_epoch,
@@ -262,7 +262,7 @@ def val_one_epoch(
             tb_x = epoch_index * len(loader) + i + 1
 
             logger.info(
-                "EPOCH # %d, time %.1f,  Validation batch %.1f %% , step %.d        accuracy: %.4f      //      loss: %.4f"
+                "EPOCH # %d, time %.1f,  Validation batch %.1f %% , step %d        accuracy: %.4f      //      loss: %.4f"
                 % (
                     epoch_index,
                     time.time() - time_epoch,
@@ -351,7 +351,7 @@ def eval_model(
             last_accuracy = running_correct / running_num  # accuracy per batch
 
             logger.info(
-                "Evaluating Best epoch # %.d (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
+                "Evaluating Best epoch # %d (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
                 % (
                     best_epoch,
                     type,
