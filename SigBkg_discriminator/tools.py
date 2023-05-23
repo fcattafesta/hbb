@@ -108,7 +108,7 @@ def train_val_one_epoch(
         os.makedirs(model_dir, exist_ok=True)
         model_name = f"{model_dir}/model_{epoch_index}.pt"
         checkpoint = {
-            "epoch": epoch_index + 1,
+            "epoch": epoch_index,
             "state_dict": model.state_dict(),
             "optimizer": optimizer.state_dict(),
         }

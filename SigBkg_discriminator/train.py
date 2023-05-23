@@ -70,7 +70,7 @@ if __name__ == "__main__":
         val_batch_prints = val_size // batch_size // args.num_prints
         num_val_batches = val_size // batch_size
         for epoch in range(args.epochs):
-            if args.load_model and epoch < loaded_epoch:
+            if args.load_model and epoch <= loaded_epoch:
                 continue
             time_epoch = time.time()
             # Turn on gradients for training
