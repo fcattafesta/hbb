@@ -26,7 +26,7 @@ def train_val_one_epoch(
 ):
     print("Training" if train else "Validation")
     model.train(train)
-    
+
     running_loss = 0.0
     tot_loss = 0.0
 
@@ -58,7 +58,6 @@ def train_val_one_epoch(
             loss.backward()
             # Adjust learning weights
             optimizer.step()
-
 
         # Gather data for reporting
         running_loss += loss.item()
@@ -124,6 +123,7 @@ def train_val_one_epoch(
         best_epoch,
         best_model_name,
     )
+
 
 def train_one_epoch(
     epoch_index,
@@ -353,8 +353,8 @@ def eval_model(
             logger.info(
                 "Evaluating Best epoch # %.d (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
                 % (
-                    type,
                     best_epoch,
+                    type,
                     (i + 1) / num_batches * 100,
                     last_accuracy,
                     last_loss,
