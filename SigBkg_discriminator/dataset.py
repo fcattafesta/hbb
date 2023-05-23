@@ -2,6 +2,9 @@ import uproot
 import numpy as np
 import torch
 import math
+import logging
+
+logger = logging.getLogger(__name__)
 
 from args_dnn import args
 from input_lists import *
@@ -12,7 +15,7 @@ if args.gpu:
     device = torch.device("cuda")
 else:
     device = torch.device("cpu")
-print(f"Using {device} device")
+logger.info(f"Using {device} device")
 
 dirs = args.data_dirs
 
@@ -93,10 +96,10 @@ train_size = int(0.8 * len(X)) if args.train_size == -1 else args.train_size
 val_size = math.ceil((len(X) - train_size) / 2)
 test_size = math.floor((len(X) - train_size) / 2)
 
-print(f"Total size: {len(X)}")
-print(f"Training size: {train_size}")
-print(f"Validation size: {val_size}")
-print(f"Test size: {test_size}")
+logger.info(f"Total size: {len(X)}")
+logger.info(f"Training size: {train_size}")
+logger.info(f"Validation size: {val_size}")
+logger.info(f"Test size: {test_size}")
 
 gen = torch.Generator()
 gen.manual_seed(0)

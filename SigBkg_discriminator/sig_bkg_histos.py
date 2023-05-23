@@ -7,14 +7,9 @@ import mplhep as hep
 def handle_arrays(score_lbl_tensor):
     sig = score_lbl_tensor[score_lbl_tensor[:, 1] == 1]
     bkg = score_lbl_tensor[score_lbl_tensor[:, 1] == 0]
-    # print("sig.shape", sig.shape, sig)
-    # print("bkg.shape", bkg.shape, bkg)
 
     sig_score = sig[:, 0]
     bkg_score = bkg[:, 0]
-
-    # print("sig_score.shape", sig_score.shape, sig_score)
-    # print("bkg_score.shape", bkg_score.shape, bkg_score)
 
     return sig_score, bkg_score
 

@@ -38,13 +38,15 @@ if __name__ == "__main__":
     best_epoch = -1
     best_model_name = ""
 
-    if args.load_model:
-        checkpoint = torch.load(args.load_model)
+    if args.load_model or args.eval_model:
+        checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
-        main_dir = os.path.dirname(args.load_model).replace("models", "")
-        best_model_name = args.load_model
+        main_dir = os.path.dirname(
+            args.load_model if args.load_model else args.eval_model
+        ).replace("models", "")
+        best_model_name = args.load_model if args.load_model else args.eval_model
         with open(f"{main_dir}/log.log", "r") as f:
             for line in reversed(f.readlines()):
                 if "Best" in line:
@@ -52,12 +54,14 @@ if __name__ == "__main__":
                     best_vloss = float(line.split(",")[1].split(":")[1])
                     best_vaccuracy = float(line.split(",")[2].split(":")[1])
                     break
+        print(
+            f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
+        )
 
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
     # Create the logger
     logger = setup_logger(f"{main_dir}/log.log")
-
 
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
@@ -203,6 +207,7 @@ if __name__ == "__main__":
             num_train_batches,
             "training",
             device,
+            best_epoch,
         )
 
         print("\nTest dataset")
@@ -214,8 +219,13 @@ if __name__ == "__main__":
             num_test_batches,
             "test",
             device,
+            best_epoch,
         )
 
+        logger.info(
+            "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
+            % (best_epoch, best_vloss, best_vaccuracy)
+        )
         logger.info(
             "Eval loss train %.4f,  test %.4f" % (loss_eval_train, loss_eval_test)
         )

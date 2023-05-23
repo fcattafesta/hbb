@@ -230,7 +230,7 @@ def eval_model(model, loader, loss_fn, batch_prints, num_batches, type, device):
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
 
-            print(
+            logger.info(
                 "Evaluating (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
                 % (type, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
