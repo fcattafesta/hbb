@@ -1,6 +1,9 @@
 import torch
 import os
 import time
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def train_one_epoch(
@@ -59,30 +62,18 @@ def train_one_epoch(
         if (i + 1) % batch_prints == 0:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
-            print(
-                "EPOCH # %d, time %.1f,  Training batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
+            tb_x = epoch_index * len(loader) + i + 1
+            logger.info(
+                "EPOCH # %d, time %.1f,  Training batch %.1f %% , step %.d        accuracy: %.4f      //      loss: %.4f"
                 % (
                     epoch_index,
                     time.time() - time_epoch,
                     (i + 1) / num_batches * 100,
+                    tb_x,
                     last_accuracy,
                     last_loss,
                 )
             )
-
-            tb_x = epoch_index * len(loader) + i + 1
-            # write info to file txt
-            with open(f"{main_dir}/log.txt", "a") as f:
-                f.write(
-                    "EPOCH # %d, time %.1f,  Training batch %.d         accuracy: %.4f      //      loss: %.4f\n"
-                    % (
-                        epoch_index,
-                        time.time() - time_epoch,
-                        tb_x,
-                        last_accuracy,
-                        last_loss,
-                    )
-                )
 
             tb_writer.add_scalar("Accuracy/train", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/train", last_loss, tb_x)
@@ -150,31 +141,19 @@ def val_one_epoch(
         if (i + 1) % batch_prints == 0:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
+            tb_x = epoch_index * len(loader) + i + 1
 
-            print(
-                "EPOCH # %d, time %.1f,  Validation batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
+            logger.info(
+                "EPOCH # %d, time %.1f,  Validation batch %.1f %% , step %.d        accuracy: %.4f      //      loss: %.4f"
                 % (
                     epoch_index,
                     time.time() - time_epoch,
                     (i + 1) / num_batches * 100,
+                    tb_x,
                     last_accuracy,
                     last_loss,
                 )
             )
-
-            tb_x = epoch_index * len(loader) + i + 1
-            # write info to file txt
-            with open(f"{main_dir}/log.txt", "a") as f:
-                f.write(
-                    "EPOCH # %d, time %.1f,  Validation batch %.d         accuracy: %.4f      //      loss: %.4f\n"
-                    % (
-                        epoch_index,
-                        time.time() - time_epoch,
-                        tb_x,
-                        last_accuracy,
-                        last_loss,
-                    )
-                )
 
             tb_writer.add_scalar("Accuracy/val", last_accuracy, tb_x)
             tb_writer.add_scalar("Loss/val", last_loss, tb_x)
@@ -213,7 +192,7 @@ def val_one_epoch(
     )
 
 
-def eval_model(model, loader, batch_prints, num_batches, type, device):
+def eval_model(model, loader, loss_fn, batch_prints, num_batches, type, device):
     # Test the model by running it on the test set
     running_loss = 0.0
     tot_loss = 0.0
@@ -230,18 +209,33 @@ def eval_model(model, loader, batch_prints, num_batches, type, device):
         labels = labels.to(device)
 
         outputs = model(inputs)
+
         y_pred = torch.round(outputs)
         correct = (y_pred == labels).sum().item()
         batch_size = labels.size(0)
+
+        loss = loss_fn(outputs, labels)
+
+        # Gather data for reporting
+        running_loss += loss.item()
+        tot_loss += loss.item()
+
         running_correct += correct
+        tot_correct += correct
+
         running_num += batch_size
+        tot_num += batch_size
 
         if (i + 1) % batch_prints == 0:
-            last_accuracy = running_correct / running_num
+            last_loss = running_loss / batch_prints  # loss per batch
+            last_accuracy = running_correct / running_num  # accuracy per batch
+
             print(
-                "Evaluating (%s) batch %.1f %%         accuracy: %.4f"
-                % (type, (i + 1) / num_batches * 100, last_accuracy)
+                "Evaluating (%s) batch %.1f %%         accuracy: %.4f      //      loss: %.4f"
+                % (type, (i + 1) / num_batches * 100, last_accuracy, last_loss)
             )
+
+            running_loss = 0.0
             running_correct = 0
             running_num = 0
 
@@ -253,6 +247,9 @@ def eval_model(model, loader, batch_prints, num_batches, type, device):
             all_scores = torch.cat((all_scores, outputs))
             all_labels = torch.cat((all_labels, labels))
 
+    avg_loss = tot_loss / (i + 1)
+    avg_accuracy = tot_correct / tot_num
+
     # concatenate all scores and labels
     all_scores = all_scores.view(-1, 1)
     all_labels = all_labels.view(-1, 1)
@@ -262,7 +259,7 @@ def eval_model(model, loader, batch_prints, num_batches, type, device):
     # detach the tensor from the graph and convert to numpy array
     score_lbl_array = score_lbl_tensor.cpu().detach().numpy()
 
-    return score_lbl_array
+    return score_lbl_array, avg_loss, avg_accuracy
 
 
 def export_onnx(model, model_name, batch_size, input_size, device):

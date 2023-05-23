@@ -11,6 +11,7 @@ from dataset import *
 from tools import *
 from DNN_model import *
 from args_dnn import args
+from logger import setup_logger
 
 if args.histos:
     from sig_bkg_histos import *
@@ -41,11 +42,26 @@ if __name__ == "__main__":
 
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
+    # Create the logger
+    logger = setup_logger(f"{main_dir}/log.log")
 
     best_vloss = 1_000_000.0
     best_vaccuracy = 0.0
     best_epoch = -1
     best_model_name = ""
+
+    if args.load_model:
+        # read the log file and get the best validation loss, accuracy, epoch and model name
+        with open(f"{main_dir}/log.txt", "r") as f:
+            for line in f:
+                if "best validation loss" in line:
+                    best_vloss = float(line.split(":")[1])
+                if "best validation accuracy" in line:
+                    best_vaccuracy = float(line.split(":")[1])
+                if "best epoch" in line:
+                    best_epoch = int(line.split(":")[1])
+                if "best model name" in line:
+                    best_model_name = line.split(":")[1].strip()
 
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
@@ -58,6 +74,7 @@ if __name__ == "__main__":
                 continue
             time_epoch = time.time()
             # Turn on gradients for training
+            print("\n\n\n")
             print("\nTraining \n")
             model.train(True)
 
@@ -106,16 +123,14 @@ if __name__ == "__main__":
                 time_epoch,
             )
 
-            print(
+            logger.info(
                 "EPOCH # %d: loss train %.4f,  val %.4f" % (epoch, avg_loss, avg_vloss)
             )
-            print(
+            logger.info(
                 "EPOCH # %d: acc train %.4f,  val %.4f"
                 % (epoch, avg_accuracy, avg_vaccuracy)
             )
-
-            print("\n\n\n")
-            print(
+            logger.info(
                 "Best epoch: %d, best val loss: %.4f, best val accuracy: %.4f"
                 % (best_epoch, best_vloss, best_vaccuracy)
             )
@@ -184,17 +199,33 @@ if __name__ == "__main__":
         model.train(False)
 
         print("Training dataset\n")
-        score_lbl_array_train = eval_model(
+        score_lbl_array_train, loss_eval_train, accuracy_eval_train = eval_model(
             model,
             training_loader,
+            loss_fn,
             train_batch_prints,
             num_train_batches,
             "training",
             device,
         )
+
         print("\nTest dataset")
-        score_lbl_array_test = eval_model(
-            model, test_loader, test_batch_prints, num_test_batches, "test", device
+        score_lbl_array_test, loss_eval_test, accuracy_eval_test = eval_model(
+            model,
+            test_loader,
+            loss_fn,
+            test_batch_prints,
+            num_test_batches,
+            "test",
+            device,
+        )
+
+        logger.info(
+            "Eval loss train %.4f,  test %.4f" % (loss_eval_train, loss_eval_test)
+        )
+        logger.info(
+            "Eval acc train %.4f,  test %.4f"
+            % (accuracy_eval_train, accuracy_eval_test)
         )
 
         # plot the signal and background distributions
@@ -205,8 +236,7 @@ if __name__ == "__main__":
                 score_lbl_array_train, score_lbl_array_test, main_dir, False
             )
 
-        # create the directory for labels with time stamp
-        # save array with labels and score for train and test in the same file .npz
+        # save the score and label arrays
         np.savez(
             f"{main_dir}/score_lbl_array.npz",
             score_lbl_array_train=score_lbl_array_train,
