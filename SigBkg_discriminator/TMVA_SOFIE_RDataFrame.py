@@ -18,8 +18,9 @@ input_shapes.push_back(input_shape)
 print("input shapes", input_shapes)
 print("input shape", input_shape)
 
+input_shapes=[[32,17]]
 
-
+print("input shapes", input_shapes)
 
 # parse the input PyTorch model into RModel object
 model = ROOT.TMVA.Experimental.SOFIE.PyTorch.Parse(modelFile, input_shapes)
