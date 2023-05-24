@@ -8,14 +8,15 @@ ROOT.TMVA.PyMethodBase.PyInitialize()
 modelFile = "out/20230524_120331/models/model_0.pt"
 
 # input tensor shape as C std::vector ofstd::vector<unsigned long> with thhe shape of (32,17)
-input_shape = ROOT.vector("unsigned long")()
+input_shape = ROOT.std.vector("unsigned long")()
 input_shape.push_back(32)
 input_shape.push_back(17)
-input_shapes = ROOT.vector(ROOT.vector("unsigned long"))()
+input_shapes = ROOT.std.vector(ROOT.std.vector("unsigned long"))()
 input_shapes.push_back(input_shape)
 
 
-
+print("input shapes", input_shapes)
+print("input shape", input_shape)
 
 
 
