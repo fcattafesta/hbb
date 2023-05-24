@@ -28,12 +28,11 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-input_dir = os.path.dirname(args.model)
 
 # Make the header known to the interpreter
 ROOT.gInterpreter.ProcessLine('#include "TMVA_SOFIE_ONNX.h"')
 
-ROOT.TMVA_SOFIE_ONNX(args.model)
+ROOT.TMVA_SOFIE_ONNX(ROOT.std.string(args.model))
 
 # compile using ROOT JIT trained model
 print("compiling SOFIE model and functor....")
@@ -46,7 +45,7 @@ rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root")
 eval_string="sofie_functor(rdfslot_,"
 for i in input_list:
     eval_string += i+","
-eval_string = eval_string[:-1]
+eval_string = eval_string[:-1]+")"
 print(eval_string)
 h1 = rdf.Define("DNN_Value", eval_string).Histo1D(("h_sig", "", 100, 0, 1),"DNN_Value")
 
