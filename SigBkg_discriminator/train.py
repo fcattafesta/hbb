@@ -22,15 +22,6 @@ if args.history:
 if __name__ == "__main__":
     start_time = time.time()
 
-
-    input_size = X_fts.size(1)
-    print("X_fts:", X_fts.size())
-    model = DNN(input_size).to(device)
-    print(model)
-
-    loss_fn = torch.nn.BCELoss()
-    optimizer = torch.optim.Adam(model.parameters())
-
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     main_dir = f"out/{timestamp}"
 
@@ -42,26 +33,9 @@ if __name__ == "__main__":
     loaded_epoch = -1
 
     if args.load_model or args.eval_model:
-        checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
-        model.load_state_dict(checkpoint["state_dict"])
-        optimizer.load_state_dict(checkpoint["optimizer"])
-        loaded_epoch = checkpoint["epoch"]
         main_dir = os.path.dirname(
             args.load_model if args.load_model else args.eval_model
         ).replace("models", "")
-        best_model_name = args.load_model if args.load_model else args.eval_model
-        with open(f"{main_dir}/log.log", "r") as f:
-            for line in reversed(f.readlines()):
-                if "Best epoch" in line:
-                    # get line from Best epoch onwards
-                    line = line.split("Best epoch")[1]
-                    best_epoch = int(line.split(",")[0].split("#")[1])
-                    best_vloss = float(line.split(",")[1].split(":")[1])
-                    best_vaccuracy = float(line.split(",")[2].split(":")[1])
-                    break
-        print(
-            f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
-        )
 
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
@@ -81,6 +55,32 @@ if __name__ == "__main__":
         device,
         batch_size,
     ) = load_data(args)
+
+    input_size = X_fts.size(1)
+    model = DNN(input_size).to(device)
+    print(model)
+
+    loss_fn = torch.nn.BCELoss()
+    optimizer = torch.optim.Adam(model.parameters())
+
+    if args.load_model or args.eval_model:
+        checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
+        model.load_state_dict(checkpoint["state_dict"])
+        optimizer.load_state_dict(checkpoint["optimizer"])
+        loaded_epoch = checkpoint["epoch"]
+        best_model_name = args.load_model if args.load_model else args.eval_model
+        with open(f"{main_dir}/log.log", "r") as f:
+            for line in reversed(f.readlines()):
+                if "Best epoch" in line:
+                    # get line from Best epoch onwards
+                    line = line.split("Best epoch")[1]
+                    best_epoch = int(line.split(",")[0].split("#")[1])
+                    best_vloss = float(line.split(",")[1].split(":")[1])
+                    best_vaccuracy = float(line.split(",")[2].split(":")[1])
+                    break
+        print(
+            f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
+        )
 
     train_batch_prints = train_size // batch_size // args.num_prints
     num_train_batches = train_size // batch_size
