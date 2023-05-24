@@ -108,6 +108,10 @@ def load_data(args):
     print("Validation dataset size:", len(val_dataset))
     print("Test dataset size:", len(test_dataset))
 
+    training_loader = None
+    val_loader = None
+    test_loader = None
+
     training_loader = torch.utils.data.DataLoader(
         train_dataset,
         batch_size=batch_size,
@@ -139,8 +143,7 @@ def load_data(args):
             pin_memory=args.pin_memory,
         )
         print("Test loader size:", len(test_loader))
-    else:
-        test_loader = None
+
     return (
         training_loader,
         val_loader,
