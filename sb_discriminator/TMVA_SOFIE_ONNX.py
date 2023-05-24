@@ -40,18 +40,18 @@ ROOT.gInterpreter.Declare(f'#include "{args.model.replace(".onnx", ".hxx")}"')
 modelName = os.path.basename(args.model).replace(".onnx", "")
 ROOT.gInterpreter.Declare('auto sofie_functor = TMVA::Experimental::SofieFunctor<0,TMVA_SOFIE_'+modelName+'::Session>(0);')
 
-rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root")
+rdf = ROOT.RDataFrame('Events', '~/el/Snapshots/ggZH_Snapshot.root')
 # print branches
 print("branches in the tree:")
 for i in rdf.GetColumnNames():
     print(i)
-    
+
 
 # loop over input list and put the in the string
-eval_string="sofie_functor(rdfslot_,"
+eval_string='sofie_functor(rdfslot_,'
 for i in input_list:
-    eval_string += i+","
-eval_string = eval_string[:-1]+")"
+    eval_string += i+', '
+eval_string = eval_string[:-2]+')'
 print(eval_string)
 h1 = rdf.Define("DNN_Value", eval_string).Histo1D(("h_sig", "", 100, 0, 1),"DNN_Value")
 
