@@ -8,7 +8,7 @@ ROOT.TMVA.PyMethodBase.PyInitialize()
 modelFile = "out/20230524_120331/models/model_0.pt"
 
 # input tensor shape as C std::vector of shape (32, 17)
-input_shape = ROOT.std.vector('unsigned int')()
+input_shape = ROOT.std.vector('size_t')()
 input_shape.push_back(32)
 input_shape.push_back(17)
 
