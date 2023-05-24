@@ -58,3 +58,4 @@ h1 = rdf.Define("DNN_Value", eval_string).Histo1D(("h_sig", "", 100, 0, 1),"DNN_
 c1 = ROOT.TCanvas()
 h1.Draw()
 c1.SaveAs("test.png")
+c1.close()
