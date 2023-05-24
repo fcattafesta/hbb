@@ -1,4 +1,4 @@
-input_list = [
+DNN_input_variables = [
     "Z_mass",
     "Z_pt",
     "Dijets_mass",

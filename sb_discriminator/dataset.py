@@ -30,7 +30,7 @@ def load_data(args):
     for i, file in enumerate(sig_files):
         sig_train = uproot.open(f"{file}:Events")
         variables_sig_array = np.array(
-            [sig_train[input].array(library="np") for input in input_list]
+            [sig_train[input].array(library="np") for input in DNN_input_variables]
         )
         # concatenate all the variables into a single torch tensor
         if i == 0:
@@ -58,7 +58,7 @@ def load_data(args):
     for i, file in enumerate(bkg_files):
         bkg_train = uproot.open(f"{file}:Events")
         variables_bkg_array = np.array(
-            [bkg_train[input].array(library="np") for input in input_list]
+            [bkg_train[input].array(library="np") for input in DNN_input_variables]
         )
         if i == 0:
             variables_bkg = torch.tensor(variables_bkg_array, dtype=torch.float32)[
