@@ -46,21 +46,29 @@ def plot_sig_bkg_distributions(
         hatch="\\\\",
     )
 
+    legend_test_list = []
     for score, color, label in zip(
-        [sig_score_test, bkg_score_test], ["blue", "red"], ["Signal (test)", "Background (test)"]
+        [sig_score_test, bkg_score_test],
+        ["blue", "red"],
+        ["Signal (test)", "Background (test)"],
     ):
-        plt.hist(
+        counts, bins, _ = plt.hist(
             score,
             bins=30,
-            range=(0, 1),
-            histtype="step",
-            label=label,
+            alpha=0,
             density=True,
-            color=color,
-            linestyle="--",
+            range=(0, 1),
+        )
+        bin_centers = 0.5 * (bins[:-1] + bins[1:])
+        errors = np.sqrt(counts)
+
+        legend_test_list.append(
+            plt.errorbar(
+                bin_centers, counts, yerr=errors, marker="o", color=color, label=label
+            )
         )
 
-    '''# Create the histogram with dots on top using plt.scatter
+    """# Create the histogram with dots on top using plt.scatter
     counts, bins, _ = plt.hist(
         sig_score_test,
         bins=30,
@@ -90,14 +98,19 @@ def plot_sig_bkg_distributions(
         [], [], marker="o", color="red", label="Background (test)"
     )
     # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c="red", s=10, marker="o")'''
+    plt.scatter(bin_centers, counts, c="red", s=10, marker="o")"""
 
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
     plt.legend(
         loc="upper center",
         fontsize=20,
-        #handles=[sig_train[2][0], bkg_train[2][0], legend_sig_test, legend_bkg_test],
+        handles=[
+            sig_train[2][0],
+            bkg_train[2][0],
+            legend_test_list[0],
+            legend_test_list[1],
+        ],
     )
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
