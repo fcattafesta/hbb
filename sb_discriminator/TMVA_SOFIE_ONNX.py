@@ -2,6 +2,9 @@ import ROOT
 import argparse
 import os
 
+# do not show canvases
+ROOT.gROOT.SetBatch(True)
+
 input_list = [
     "Z_mass",
     "Z_pt",
