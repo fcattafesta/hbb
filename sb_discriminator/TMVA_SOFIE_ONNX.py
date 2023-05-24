@@ -38,7 +38,7 @@ ROOT.TMVA_SOFIE_ONNX(ROOT.std.string(args.model))
 print("compiling SOFIE model and functor....")
 ROOT.gInterpreter.Declare(f'#include "{args.model.replace(".onnx", ".hxx")}"')
 modelName = os.path.basename(args.model).replace(".onnx", "")
-ROOT.gInterpreter.Declare('auto sofie_functor = TMVA::Experimental::SofieFunctor<0,TMVA_SOFIE_'+modelName+'::Session>(0);')
+ROOT.gInterpreter.Declare(f'auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(input_list)},TMVA_SOFIE_'+modelName+'::Session>(0);')
 
 rdf = ROOT.RDataFrame('Events', '~/el/Snapshots/ggZH_Snapshot.root')
 # print branches
