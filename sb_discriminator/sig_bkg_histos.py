@@ -17,7 +17,7 @@ def handle_arrays(score_lbl_tensor):
 def plot_sig_bkg_distributions(
     score_lbl_tensor_train, score_lbl_tensor_test, dir, show
 ):
-    # plot the signal and background distributions for the test dataset using the best model as a function of the DNN output
+    # plot the signal and background distributions
     sig_score_train, bkg_score_train = handle_arrays(score_lbl_tensor_train)
     sig_score_test, bkg_score_test = handle_arrays(score_lbl_tensor_test)
 
@@ -46,13 +46,27 @@ def plot_sig_bkg_distributions(
         hatch="\\\\",
     )
 
-    # Create the histogram with dots on top using plt.scatter
+    for score, color, label in zip(
+        [sig_score_test, bkg_score_test], ["blue", "red"], ["Signal (test)", "Background (test)"]
+    ):
+        plt.hist(
+            score,
+            bins=30,
+            range=(0, 1),
+            histtype="step",
+            label=label,
+            density=True,
+            color=color,
+            linestyle="--",
+        )
+
+    '''# Create the histogram with dots on top using plt.scatter
     counts, bins, _ = plt.hist(
         sig_score_test,
         bins=30,
         alpha=0,
         density=True,
-        range=(0, 1),  # , label="Signal (test)"
+        range=(0, 1),
     )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
@@ -68,7 +82,7 @@ def plot_sig_bkg_distributions(
         bins=30,
         alpha=0,
         density=True,
-        range=(0, 1),  # , label="Background (test)"
+        range=(0, 1),
     )  # alpha=0 hides the bars
     # Calculate the x-position of the dots as the center of each bin
     bin_centers = 0.5 * (bins[:-1] + bins[1:])
@@ -76,14 +90,14 @@ def plot_sig_bkg_distributions(
         [], [], marker="o", color="red", label="Background (test)"
     )
     # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c="red", s=10, marker="o")
+    plt.scatter(bin_centers, counts, c="red", s=10, marker="o")'''
 
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
     plt.legend(
         loc="upper center",
         fontsize=20,
-        handles=[sig_train[2][0], bkg_train[2][0], legend_sig_test, legend_bkg_test],
+        #handles=[sig_train[2][0], bkg_train[2][0], legend_sig_test, legend_bkg_test],
     )
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
