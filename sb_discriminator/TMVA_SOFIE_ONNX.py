@@ -42,7 +42,11 @@ ROOT.gInterpreter.Declare('auto sofie_functor = TMVA::Experimental::SofieFunctor
 
 rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root")
 # print branches
-rdf.GetColumnNames()
+print("branches in the tree:")
+for i in rdf.GetColumnNames():
+    print(i)
+    
+
 # loop over input list and put the in the string
 eval_string="sofie_functor(rdfslot_,"
 for i in input_list:
