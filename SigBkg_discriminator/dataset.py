@@ -139,7 +139,8 @@ def load_data(args):
             pin_memory=args.pin_memory,
         )
         print("Test loader size:", len(test_loader))
-
+    else:
+        test_loader = None
     return (
         training_loader,
         val_loader,
