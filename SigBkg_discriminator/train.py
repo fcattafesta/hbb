@@ -213,6 +213,7 @@ if __name__ == "__main__":
             ]
         )
         model.train(False)
+        model.to(device)
 
         eval_epoch = loaded_epoch if args.eval_model else best_epoch
         print("Training dataset\n")
