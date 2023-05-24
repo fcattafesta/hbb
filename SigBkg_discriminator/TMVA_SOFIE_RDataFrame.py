@@ -5,10 +5,10 @@ ROOT.TMVA.PyMethodBase.PyInitialize()
 
 
 # check if the input file exists
-modelFile = "model_0.onnx"
+modelFile = "out/20230524_120331/models/model_0.onnx"
 
-# parse the input Keras model into RModel object
-model = ROOT.TMVA.Experimental.SOFIE.PyKeras.Parse(modelFile)
+# parse the input PyTorch model into RModel object
+model = ROOT.TMVA.Experimental.SOFIE.PyTorch.Parse(modelFile)
 
 # generating inference code
 model.Generate()
