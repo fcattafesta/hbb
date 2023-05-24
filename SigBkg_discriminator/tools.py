@@ -398,10 +398,10 @@ def export_onnx(model, model_name, batch_size, input_size, device):
         verbose=True,
         export_params=True,
         opset_version=13,
-        input_names=["InputVariables"],  # the model's input names
-        output_names=["Sigmoid"],  # the model's output names
-        dynamic_axes={
-            "InputVariables": {0: "batch_size"},  # variable length axes
-            "Sigmoid": {0: "batch_size"},
-        },
+        # input_names=["InputVariables"],  # the model's input names
+        # output_names=["Sigmoid"],  # the model's output names
+        # dynamic_axes={
+        #     "InputVariables": {0: "batch_size"},  # variable length axes
+        #     "Sigmoid": {0: "batch_size"},
+        # },
     )

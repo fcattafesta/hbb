@@ -24,17 +24,6 @@ void TMVA_SOFIE_ONNX(std::string inputFile = ""){
     std::cout<<"\n\n";
     model.PrintIntermediateTensors();
 
-    //Checking if tensor already exist in model
-    std::cout<<"\n\nTensor \"16weight\" already exist: "<<std::boolalpha<<model.CheckIfTensorAlreadyExist("16weight")<<"\n\n";
-    std::vector<size_t> tensorShape = model.GetTensorShape("16weight");
-    std::cout<<"Shape of tensor \"16weight\": ";
-    for(auto& it:tensorShape){
-        std::cout<<it<<",";
-    }
-    std::cout<<"\n\nData type of tensor \"16weight\": ";
-    SOFIE::ETensorType tensorType = model.GetTensorType("16weight");
-    std::cout<<SOFIE::ConvertTypeToString(tensorType);
-
     //Printing generated inference code
     std::cout<<"\n\n";
     model.PrintGenerated();
