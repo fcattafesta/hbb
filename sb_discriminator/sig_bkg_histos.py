@@ -64,7 +64,7 @@ def plot_sig_bkg_distributions(
 
         legend_test_list.append(
             plt.errorbar(
-                bin_centers, counts, yerr=errors, marker="o", color=color, label=label
+                bin_centers, counts, yerr=errors, marker="o", color=color, label=label, linestyle="None"
             )
         )
 

@@ -5,7 +5,7 @@ import math
 import logging
 
 
-from input_lists import *
+from input_lists import DNN_input_variables, signal_list, background_list
 
 logger = logging.getLogger(__name__)
 

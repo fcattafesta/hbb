@@ -15,14 +15,16 @@ parser.add_argument(
     "-n", "--nthreads", default=50, help="Number of threads", type=int,
 )
 parser.add_argument(
+    "-p", "--num-processes", default=7, help="Number of processes", type=int
+)
+parser.add_argument(
     "-l", "--lep", default="mu", help="Lepton channel"
 )
 parser.add_argument(
     "-s", "--snapshot", default=False, action="store_true", help="Save snapshot"
 )
-# TODO: add option to evaluate model
 parser.add_argument(
-    "-e", "--eval-model", default=False, action="store_true", help="Evaluate model"
+    "-e", "--eval-model", default="", help="Evaluate model", type=str,
 )
 parser.print_help()
 args = parser.parse_args()

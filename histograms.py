@@ -17,6 +17,7 @@ histos = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
+    "DNN_Score"
 ]
 
 ### List of selections for muons and electrons ###

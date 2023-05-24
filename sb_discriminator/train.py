@@ -7,16 +7,16 @@ import time
 # PyTorch TensorBoard support
 from torch.utils.tensorboard import SummaryWriter
 
-from dataset import *
-from tools import *
-from DNN_model import *
-from args_dnn import args
+from dataset import load_data
+from tools import train_val_one_epoch, eval_model, export_onnx
+from DNN_model import DNN
+from sb_discriminator.args_train import args
 from logger import setup_logger
 
 if args.histos:
-    from sig_bkg_histos import *
+    from sig_bkg_histos import plot_sig_bkg_distributions
 if args.history:
-    from plot_history import *
+    from plot_history import read_from_txt, plot_history
 
 
 if __name__ == "__main__":
