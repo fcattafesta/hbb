@@ -22,6 +22,19 @@ if args.history:
 if __name__ == "__main__":
     start_time = time.time()
 
+    (
+        training_loader,
+        val_loader,
+        test_loader,
+        train_size,
+        val_size,
+        test_size,
+        X_fts,
+        X_lbl,
+        device,
+        batch_size,
+    ) = load_data(args)
+    
     input_size = X_fts.size(1)
     print("X_fts:", X_fts.size())
     model = DNN(input_size).to(device)
