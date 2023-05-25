@@ -19,13 +19,20 @@ def getFlowDNN(model, flow=None):
 
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
-    ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')
-
-    ROOT.gInterpreter.Declare(
-        f"auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
-        + os.path.basename(modelName)
-        + "::Session>(0);"
-    )
+    if flow is not None:
+        flow.AddCppCode(f'#include "{modelName}.hxx"')
+        flow.AddCppCode(
+            f"auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
+            + os.path.basename(modelName)
+            + "::Session>(0);"
+        )
+    else:
+        ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')
+        ROOT.gInterpreter.Declare(
+            f"auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
+            + os.path.basename(modelName)
+            + "::Session>(0);"
+        )
 
     eval_string = "sofie_functor(rdfslot_,"
     for i in DNN_input_variables:
@@ -49,9 +56,10 @@ def getFlowDNN(model, flow=None):
 
     return flow
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model", help="Path to the model", type=str)
     args = parser.parse_args()
 
-    _=getFlowDNN(args.model)
+    _ = getFlowDNN(args.model)
