@@ -5,7 +5,7 @@ import sys
 
 sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
-
+from args_analysis import args
 
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
@@ -24,7 +24,7 @@ def getFlowDNN(model, flow=None):
         flow.AddCppCode(f'{n1}#include "{modelName}.hxx"{n1}')
         flow.AddCppCode("\n#include <TMVA/SOFIEHelpers.hxx>\n")
         flow.AddCppCode(
-            f"{n1}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
+            f"{n1}auto sofie_functor = TMVA::Experimental::SofieFunctor<{args.nthreads},TMVA_SOFIE_"
             + os.path.basename(modelName)
             + "::Session>(0);\n"
         )
