@@ -1,5 +1,5 @@
-#ifndef TMVA_SOFIE_ONNX
-#define TMVA_SOFIE_ONNX
+#ifndef TMVASOFIEONNX_H
+#define TMVASOFIEONNX_H
 
 using namespace TMVA::Experimental;
 
