@@ -34,7 +34,7 @@ def getFlowDNN(model, flow=None):
             + "::Session>(0);"
         )
 
-    eval_string = "sofie_functor(rdfslot_,"
+    eval_string = "sofie_functor(__slot,"
     for i in DNN_input_variables:
         eval_string += i + ", "
     eval_string = eval_string[:-2] + ")"

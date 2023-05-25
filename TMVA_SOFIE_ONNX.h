@@ -1,7 +1,11 @@
 #ifndef TMVASOFIEONNX_H
 #define TMVASOFIEONNX_H
 
+#include "TMVA/Sofie.h"
+
 using namespace TMVA::Experimental;
+
+
 
 void TMVA_SOFIE_ONNX(std::string inputFile = ""){
     //Creating parser object to parse ONNX files
