@@ -18,7 +18,7 @@ def getFlowDNN(model, flow=None):
 
     ROOT.gInterpreter.Declare(
         f"auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
-        + modelName
+        + os.path.basename(modelName)
         + "::Session>(0);"
     )
 
