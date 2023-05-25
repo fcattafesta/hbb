@@ -10,19 +10,24 @@ from sb_discriminator.DNN_input_lists import DNN_input_variables
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
         if flow is not None:
-            flow.AddCppCode('#include "TMVA_SOFIE_ONNX.h"')
+            flow.AddCppCode('\n#include "TMVA_SOFIE_ONNX.h"\n')
         else:
-            ROOT.gInterpreter.Declare('#include "TMVA_SOFIE_ONNX.h"')
+            ROOT.gInterpreter.Declare('\n#include "TMVA_SOFIE_ONNX.h"\n')
         ROOT.TMVA_SOFIE_ONNX(model)
 
     modelName = os.path.splitext(model)[0]
 
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
+    n1='\n'
     if flow is not None:
-        flow.AddCppCode(f'#include "{modelName}.hxx"')
-        flow.AddCppCode('#include <TMVA/SOFIEHelpers.hxx>')
-        flow.AddCppCode(f'auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_{os.path.basename(modelName)}::Session>(0);'  )
+        flow.AddCppCode(f'{n1}#include "{modelName}.hxx"{n1}')
+        flow.AddCppCode("\n#include <TMVA/SOFIEHelpers.hxx>\n")
+        flow.AddCppCode(
+            "\nauto sofie_functor = TMVA::Experimental::SofieFunctor<"+len(DNN_input_variables)+",TMVA_SOFIE_"
+            + os.path.basename(modelName)
+            + "::Session>(0);\n"
+        )
     else:
         ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')
         ROOT.gInterpreter.Declare(
