@@ -3,7 +3,7 @@ import argparse
 import os
 import sys
 
-sys.append("../")
+sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
 
 
