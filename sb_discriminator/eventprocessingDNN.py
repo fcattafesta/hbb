@@ -26,7 +26,7 @@ def getFlowDNN(model, flow=None):
         flow.AddCppCode(
             f"{n1}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
-            + f"::Session>({args.nthread});{n1}"
+            + f"::Session>({args.nthreads});{n1}"
         )
     else:
         ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')
