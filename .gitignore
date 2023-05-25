@@ -156,5 +156,4 @@ libNailExternals.so
 # Matteo personal stuff
 to_do.txt
 runs/
-models/
-score_lbls/
+model*

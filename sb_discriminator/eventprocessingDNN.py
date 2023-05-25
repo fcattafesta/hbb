@@ -1,8 +1,10 @@
 import ROOT
 import argparse
 import os
+import sys
 
-from input_lists import DNN_input_variables
+sys.append("../")
+from sb_discriminator.DNN_input_lists import DNN_input_variables
 
 
 def getFlowDNN(model, flow=None):
