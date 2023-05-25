@@ -156,4 +156,4 @@ libNailExternals.so
 # Matteo personal stuff
 to_do.txt
 runs/
-model*
+model_*
