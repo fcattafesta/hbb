@@ -44,10 +44,11 @@ def getFlowDNN(model, flow=None):
         h1.Draw()
         c1.SaveAs("test.png")
 
+    return flow
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model", help="Path to the model", type=str)
     args = parser.parse_args()
 
-    getFlowDNN(args.model)
+    _=getFlowDNN(args.model)
