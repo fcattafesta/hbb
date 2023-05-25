@@ -2,6 +2,9 @@
 #define TMVASOFIEONNX_H
 
 #include "TMVA/Sofie.h"
+#include "TMVA/RModel.hxx"
+#include "TMVA/RModelParser_ONNX.hxx"
+#include "TMVA/SOFIEHelpers.hxx"
 
 using namespace TMVA::Experimental;
 
