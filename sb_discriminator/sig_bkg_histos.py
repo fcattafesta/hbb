@@ -60,45 +60,14 @@ def plot_sig_bkg_distributions(
             range=(0, 1),
         )
         bin_centers = 0.5 * (bins[:-1] + bins[1:])
-        errors = np.sqrt(counts)
+        # TODO: compute the errors correctly
+        errors = np.sqrt(counts) *0
 
         legend_test_list.append(
             plt.errorbar(
                 bin_centers, counts, yerr=errors, marker="o", color=color, label=label, linestyle="None"
             )
         )
-
-    """# Create the histogram with dots on top using plt.scatter
-    counts, bins, _ = plt.hist(
-        sig_score_test,
-        bins=30,
-        alpha=0,
-        density=True,
-        range=(0, 1),
-    )  # alpha=0 hides the bars
-    # Calculate the x-position of the dots as the center of each bin
-    bin_centers = 0.5 * (bins[:-1] + bins[1:])
-    legend_sig_test = plt.scatter(
-        [], [], marker="o", color="blue", label="Signal (test)"
-    )
-    # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c="blue", s=10, marker="o")
-
-    # Create the histogram with dots on top using plt.scatter
-    counts, bins, _ = plt.hist(
-        bkg_score_test,
-        bins=30,
-        alpha=0,
-        density=True,
-        range=(0, 1),
-    )  # alpha=0 hides the bars
-    # Calculate the x-position of the dots as the center of each bin
-    bin_centers = 0.5 * (bins[:-1] + bins[1:])
-    legend_bkg_test = plt.scatter(
-        [], [], marker="o", color="red", label="Background (test)"
-    )
-    # Plot the dots on top of the histogram
-    plt.scatter(bin_centers, counts, c="red", s=10, marker="o")"""
 
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
