@@ -19,14 +19,14 @@ def getFlowDNN(model, flow=None):
 
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
-    n1='\n'
+    nl='\n'
     if flow is not None:
-        flow.AddCppCode(f'{n1}#include "{modelName}.hxx"{n1}')
+        flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
         flow.AddCppCode("\n#include <TMVA/SOFIEHelpers.hxx>\n")
         flow.AddCppCode(
-            f"{n1}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
+            f"{nl}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
-            + f"::Session>({args.nthreads});{n1}"
+            + f"::Session>({args.nthreads});{nl}"
         )
     else:
         ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')

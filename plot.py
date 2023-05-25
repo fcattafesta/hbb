@@ -907,7 +907,7 @@ def makeplot(hn, saveintegrals=True):
             f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
         )
         os.system("mkdir -p " + outpath)
-        os.system("cp " + args.histfolder + "/description.txt " + outpath)
+        #os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
         #        os.system("git diff HEAD > "+outpath+"/git_diff.txt")
         #        os.system("git status HEAD > "+outpath+"/git_status.txt")

@@ -14,7 +14,7 @@ from args_analysis import args
 
 from eventprocessingCommon import getFlowCommon
 from eventprocessingMC import getFlowMC
-from sb_discriminator.eventprocessingDNN import getFlowDNN
+from eventprocessingDNN import getFlowDNN
 from histograms import histos
 
 if args.lep == "mu":
