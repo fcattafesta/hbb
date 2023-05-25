@@ -10,7 +10,7 @@ def getFlowDNN(model, flow=None):
         ROOT.gInterpreter.ProcessLine('#include "TMVA_SOFIE_ONNX.h"')
         ROOT.TMVA_SOFIE_ONNX(ROOT.std.string(model))
 
-    modelName = os.path.splitext(os.path.basename(args.model))[0]
+    modelName = os.path.splitext(args.model)[0]
 
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
