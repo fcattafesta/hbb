@@ -10,7 +10,7 @@ from sb_discriminator.DNN_input_lists import DNN_input_variables
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
         if flow is not None:
-            flow.AddCppCode('#include "sb_discriminator/TMVA_SOFIE_ONNX.h"')
+            flow.AddCppCode('#include "TMVA_SOFIE_ONNX.h"')
         else:
             ROOT.gInterpreter.Declare('#include "TMVA_SOFIE_ONNX.h"')
         ROOT.TMVA_SOFIE_ONNX(model)
@@ -40,7 +40,7 @@ def getFlowDNN(model, flow=None):
     eval_string = eval_string[:-2] + ")"
 
     if flow is not None:
-        flow.Define("DNN_Score", eval_string)
+        flow.DefineSlot("DNN_Score", eval_string)
     else:
         # test on a RDataFrame
         rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root").Range(100)
