@@ -1,3 +1,5 @@
+from args.analysis import args
+
 ### List of histograms to be plotted ###
 histos = [
     "Z_mass",
@@ -17,8 +19,9 @@ histos = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
-    "DNN_Score"
 ]
+if args.eval_model:
+    histos.append("DNN_Score")
 
 ### List of selections for muons and electrons ###
 selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
