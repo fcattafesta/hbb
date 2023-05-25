@@ -21,6 +21,7 @@ def getFlowDNN(model, flow=None):
     print("compiling SOFIE model and functor....")
     if flow is not None:
         flow.AddCppCode(f'#include "{modelName}.hxx"')
+        flow.AddCppCode('#include "TMVA/SOFIEHelpers.hxx"')
         flow.AddCppCode(
             f"auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
