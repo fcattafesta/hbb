@@ -1,3 +1,6 @@
+#ifndef TMVA_SOFIE_ONNX
+#define TMVA_SOFIE_ONNX
+
 using namespace TMVA::Experimental;
 
 void TMVA_SOFIE_ONNX(std::string inputFile = ""){
@@ -27,3 +30,5 @@ void TMVA_SOFIE_ONNX(std::string inputFile = ""){
     std::cout<<"\n\n";
     model.PrintGenerated();
 }
+
+#endif
