@@ -7,10 +7,7 @@ void TMVA_SOFIE_ONNX(std::string inputFile = ""){
 
     //Generating inference code
     model.Generate();
-    // write the code in a file in the same directory as the input file named
-    // as the input file with .dat and .hxx extensions
 
-    // get the input file without the extension and set the extension to .hxx
     std::string outputFile = inputFile.substr(0, inputFile.find_last_of('.')) + ".hxx";
 
     model.OutputGenerated(outputFile);
