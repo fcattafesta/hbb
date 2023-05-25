@@ -9,7 +9,7 @@ from sb_discriminator.DNN_input_lists import DNN_input_variables
 
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
-        ROOT.gInterpreter.ProcessLine('#include "TMVA_SOFIE_ONNX.h"')
+        ROOT.gInterpreter.ProcessLine('#include "sb_discriminator/TMVA_SOFIE_ONNX.h"')
         ROOT.TMVA_SOFIE_ONNX(model)
 
     modelName = os.path.splitext(args.model)[0]
