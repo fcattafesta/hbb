@@ -12,7 +12,7 @@ def getFlowDNN(model, flow=None):
         ROOT.gInterpreter.ProcessLine('#include "sb_discriminator/TMVA_SOFIE_ONNX.h"')
         ROOT.TMVA_SOFIE_ONNX(model)
 
-    modelName = os.path.splitext(args.model)[0]
+    modelName = os.path.splitext(model)[0]
 
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
