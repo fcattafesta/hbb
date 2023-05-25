@@ -40,7 +40,7 @@ def getFlowDNN(model, flow=None):
     eval_string = eval_string[:-2] + ")"
 
     if flow is not None:
-        flow.DefineSlot("DNN_Score", eval_string)
+        flow.Define("DNN_Score", eval_string)
     else:
         # test on a RDataFrame
         rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root").Range(100)
