@@ -143,7 +143,7 @@ def runSample(ar):
 
 if __name__ == "__main__":
     nthreads = args.nthreads if args.range == -1 else 0
-    nprocesses = args.nprocesses
+    nprocesses = args.num_processes
     start = time.time()
 
     os.makedirs(args.histfolder, exist_ok=True)
