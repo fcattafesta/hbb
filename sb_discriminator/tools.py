@@ -42,8 +42,8 @@ def train_val_one_epoch(
         inputs = inputs.to(device)
         weights = inputs[:, -1]
         inputs = inputs[:, :-1]
-        print("inputs", inputs[0], inputs.shape)
-        print("weights", weights[0], weights.shape)
+        print("inputs", inputs, inputs.size())
+        print("weights", weights, weights.size())
         labels = labels.to(device)
         if train:
             optimizer.zero_grad()
@@ -60,10 +60,10 @@ def train_val_one_epoch(
 
         # weight the loss
         loss = loss * weights
-        print("loss", loss[0], loss.shape)
+        print("loss", loss, loss.size())
         # average the loss
         loss = loss.mean()
-        print("loss", loss[0], loss.shape)
+        print("loss", loss)
 
         if train:
             loss.backward()
@@ -171,8 +171,8 @@ def eval_model(
         print("loss", loss[0], loss.shape)
         # average the loss
         loss = loss.mean()
-        print("loss", loss[0], loss.shape)
-        
+        print("loss", loss)
+
         # Gather data for reporting
         running_loss += loss.item()
         tot_loss += loss.item()
