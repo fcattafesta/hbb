@@ -59,7 +59,9 @@ def train_val_one_epoch(
         loss = loss_fn(outputs, labels)
 
         print("loss", loss, loss.size())
-        
+        # reshape the loss
+        loss = loss.view(1, -1).squeeze()
+
         # weight the loss
         loss = loss * weights
         print("loss", loss, loss.size())
@@ -168,12 +170,13 @@ def eval_model(
 
         loss = loss_fn(outputs, labels)
 
+        loss = loss.view(1, -1).squeeze()
+
+
         # weight the loss
         loss = loss * weights
-        print("loss", loss[0], loss.shape)
         # average the loss
         loss = loss.mean()
-        print("loss", loss)
 
         # Gather data for reporting
         running_loss += loss.item()
