@@ -5,4 +5,4 @@
 
 #include <TMVA/SOFIEHelpers.hxx>
 
-auto sofie_functor = TMVA::Experimental::SofieFunctor<17,TMVA_SOFIE_model_DNN::Session>(50);
+auto sofie_functor = TMVA::Experimental::SofieFunctor<17,TMVA_SOFIE_model_DNN::Session>(0);
