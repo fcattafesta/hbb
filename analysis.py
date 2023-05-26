@@ -157,7 +157,7 @@ def runSample(ar):
                 os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
                 processed_rdf = out.rdf.find(sig_region).second
                 if "xsec" in samples[s].keys():  # is MC
-                    processed_rdf.Define(
+                    processed_rdf=processed_rdf.Define(
                         "DNN_weight", f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}"
                     )
                 processed_rdf.Snapshot(
