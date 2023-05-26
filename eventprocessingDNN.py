@@ -7,6 +7,7 @@ sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
 from args_analysis import args
 
+
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
         if flow is not None:
@@ -19,7 +20,7 @@ def getFlowDNN(model, flow=None):
 
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
-    nl='\n'
+    nl = "\n"
     if flow is not None:
         flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
         flow.AddCppCode("\n#include <TMVA/SOFIEHelpers.hxx>\n")
@@ -37,7 +38,7 @@ def getFlowDNN(model, flow=None):
         )
 
     eval_string = "sofie_functor(__slot,"
-    for i in DNN_input_variables:
+    for i in DNN_input_variables[:-1]:
         eval_string += i + ", "
     eval_string = eval_string[:-2] + ")"
 
