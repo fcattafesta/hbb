@@ -96,7 +96,7 @@ def sumwsents(files):
 
             hn = ROOT.TH1I("hn", "", 1, 0, 1e9)
             run.Project("hn", "1", "genEventCount")
-            nevents += hn.GetSumOfWeights()
+            nevents += int(hn.GetSumOfWeights())
 
     if sumws < 1:
         sumws = 1
@@ -122,7 +122,7 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        print("Sumws", sumws, "LHEPdfSumw", LHEPdfSumw, "nevents", nevents)
+        print("sample", s, "Sumws", sumws,"nevents", nevents)
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
     #    import jsonreader
