@@ -94,7 +94,7 @@ def sumwsents(files):
                 run.Project("hw", "1", "genEventSumw")
                 sumws += hw.GetSumOfWeights()
 
-            hn = ROOT.TH1I("hn", "", 1, 0, 1e9)
+            hn = ROOT.TH1I("hn", "", 5, 0, 5)
             run.Project("hn", "1", "genEventCount")
             nevents += int(hn.GetSumOfWeights())
 
