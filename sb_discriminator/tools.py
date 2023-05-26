@@ -58,9 +58,9 @@ def train_val_one_epoch(
         # Compute the loss and its gradients
         loss = loss_fn(outputs, labels)
 
+        loss = loss.view(1, -1).squeeze()
         print("loss", loss, loss.size())
         # reshape the loss
-        loss = loss.view(1, -1).squeeze()
 
         # weight the loss
         loss = loss * weights
