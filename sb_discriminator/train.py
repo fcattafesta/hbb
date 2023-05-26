@@ -56,7 +56,7 @@ if __name__ == "__main__":
         batch_size,
     ) = load_data(args)
 
-    input_size = X_fts.size(1)
+    input_size = X_fts.size(1)-1
 
     # Get model
     model, loss_fn , optimizer = get_model(input_size, device)
