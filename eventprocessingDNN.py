@@ -7,6 +7,12 @@ sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
 from args_analysis import args
 
+DNN_input_variables = (
+    DNN_input_variables.remove("DNN_weight")
+    if "DNN_weigth" in DNN_input_variables
+    else DNN_input_variables
+)
+
 
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
@@ -38,11 +44,7 @@ def getFlowDNN(model, flow=None):
         )
 
     eval_string = "sofie_functor(__slot,"
-    for i in (
-        DNN_input_variables.remove("DNN_weight")
-        if "DNN_weigth" in DNN_input_variables
-        else DNN_input_variables
-    ):
+    for i in DNN_input_variables:
         eval_string += i + ", "
     eval_string = eval_string[:-2] + ")"
 
