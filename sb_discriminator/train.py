@@ -76,7 +76,7 @@ if __name__ == "__main__":
                     best_vloss = float(line.split(",")[1].split(":")[1])
                     best_vaccuracy = float(line.split(",")[2].split(":")[1])
                     break
-        print(
+        logger.info(
             f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
         )
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
                 time_epoch,
             )
 
-            print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
+            logger.info("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
             (
                 avg_vloss,
@@ -162,12 +162,12 @@ if __name__ == "__main__":
 
             writer.flush()
             epoch += 1
-            print("time elapsed: {:.2f}s".format(time.time() - time_epoch))
+            logger.info("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
         if args.history:
             # plot the training and validation loss and accuracy
             print("\n\n\n")
-            print("Plotting training and validation loss and accuracy")
+            logger.info("Plotting training and validation loss and accuracy")
             train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
                 f"{main_dir}/log.log"
             )
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     if args.onnx:
         # export the model to ONNX
         print("\n\n\n")
-        print("Exporting model to ONNX")
+        logger.info("Exporting model to ONNX")
         model.train(False)
         # move model to cpu
         model.to("cpu")
@@ -198,7 +198,7 @@ if __name__ == "__main__":
     if args.eval or args.eval_model:
         # evaluate model on test_dataset loadining the best model
         print("\n\n\n")
-        print("Evaluating best model on test and train dataset")
+        logger.info("Evaluating best model on test and train dataset")
         print("================================")
 
         test_batch_prints = test_size // batch_size // args.num_prints
@@ -214,7 +214,7 @@ if __name__ == "__main__":
         model.to(device)
 
         eval_epoch = loaded_epoch if args.eval_model else best_epoch
-        print("Training dataset\n")
+        logger.info("Training dataset\n")
         score_lbl_array_train, loss_eval_train, accuracy_eval_train = eval_model(
             model,
             training_loader,
@@ -226,7 +226,7 @@ if __name__ == "__main__":
             eval_epoch,
         )
 
-        print("\nTest dataset")
+        logger.info("\nTest dataset")
         score_lbl_array_test, loss_eval_test, accuracy_eval_test = eval_model(
             model,
             test_loader,
@@ -254,7 +254,7 @@ if __name__ == "__main__":
         # plot the signal and background distributions
         if args.histos:
             print("\n\n\n")
-            print("Plotting signal and background distributions")
+            logger.info("Plotting signal and background distributions")
             plot_sig_bkg_distributions(
                 score_lbl_array_train, score_lbl_array_test, main_dir, False
             )
@@ -266,6 +266,6 @@ if __name__ == "__main__":
             score_lbl_array_test=score_lbl_array_test,
         )
 
-    print("Saved output in %s" % main_dir)
+    logger.info("Saved output in %s" % main_dir)
 
-    print("Total time: %.1f" % (time.time() - start_time))
+    logger.info("Total time: %.1f" % (time.time() - start_time))

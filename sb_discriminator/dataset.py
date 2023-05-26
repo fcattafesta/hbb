@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 def load_data(args):
     batch_size = args.batch_size
+    logger.info(f"Batch size: {batch_size}")
 
     if args.gpu:
         device = torch.device("cuda")
@@ -48,6 +49,11 @@ def load_data(args):
 
     logger.info(f"number of signal events: {variables_sig.shape[1]}")
 
+    # sum of weights
+    sumw_sig=variables_sig[-1].sum()
+    logger.info(f"sum of weights sig: {sumw_sig}")
+
+
     ones_tensor = torch.ones_like(variables_sig[0], dtype=torch.float32).unsqueeze(0)
 
     X_sig = (variables_sig, ones_tensor)
@@ -76,6 +82,11 @@ def load_data(args):
             )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
 
     logger.info(f"number of background events: {variables_bkg.shape[1]}")
+
+    # sum of weights
+    sumw_bkg=variables_bkg[-1].sum()
+    logger.info(f"sum of weights bkg: {sumw_bkg}")
+    
 
     zeros_tensor = torch.zeros_like(variables_bkg[0], dtype=torch.float32).unsqueeze(0)
 
@@ -125,12 +136,6 @@ def load_data(args):
         pin_memory=args.pin_memory,
     )
     print("Training loader size:", len(training_loader))
-
-    # I have a column of weights in the dataset for each event that I want to use
-    # as the weight for the loss function
-
-
-
 
     if not args.eval_model:
         val_loader = torch.utils.data.DataLoader(

@@ -24,7 +24,7 @@ def train_val_one_epoch(
     best_epoch=None,
     best_model_name=None,
 ):
-    print("Training" if train else "Validation")
+    logger.info("Training" if train else "Validation")
     model.train(train)
 
     running_loss = 0.0
