@@ -13,7 +13,7 @@ def getFlowDNN(model, flow=None):
     ROOT.TMVA_SOFIE_ONNX(model)
     eval_string = "sofie_functor(__slot,"
     for i in (
-        DNN_input_variables.remove("DNN_weigth")
+        DNN_input_variables.remove("DNN_weight")
         if "DNN_weigth" in DNN_input_variables
         else DNN_input_variables
     ):
