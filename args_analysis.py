@@ -18,7 +18,10 @@ parser.add_argument(
     "-p", "--num-processes", default=7, help="Number of processes", type=int
 )
 parser.add_argument(
-    "-l", "--lep", default="mu", help="Lepton channel"
+    "-l", "--lep", default="mu", help="Lepton channel (mu or el)"
+)
+parser.add_argument(
+    "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
 )
 parser.add_argument(
     "-s", "--snapshot", default=False, action="store_true", help="Save snapshot"

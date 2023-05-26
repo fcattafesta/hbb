@@ -1,5 +1,5 @@
 from torch import nn
-
+import torch
 
 class DNN(nn.Module):
     def __init__(self, dim_in):
@@ -25,3 +25,14 @@ class DNN(nn.Module):
         logits = self.linear_relu_stack(x)
         logits = self.sigmoid(logits)
         return logits
+
+
+def get_model(input_size, device):
+    model = DNN(input_size).to(device)
+    print(model)
+
+    # TODO: loss? CrossEntropyLoss with weights?
+    loss_fn = torch.nn.BCELoss()
+    optimizer = torch.optim.Adam(model.parameters())
+
+    return model, loss_fn, optimizer

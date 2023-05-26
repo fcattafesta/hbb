@@ -1,7 +1,7 @@
 from nail.nail import *
 
 
-def getFlowCommon(flow):
+def getFlowCommonDeepFlav(flow):
     ### Common preselections for leptons ###
     ## Muons ##
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
@@ -54,7 +54,7 @@ def getFlowCommon(flow):
         requires=["twoJets"],
     )
 
-    # Define p4 
+    # Define p4
     flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
 
     # Order by btag score

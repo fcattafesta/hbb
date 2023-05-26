@@ -12,10 +12,17 @@ import os
 from histobinning import binningRules
 from args_analysis import args
 
-from eventprocessingCommon import getFlowCommon
 from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histos
+
+if args.btag == "deepcsv":
+    from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
+elif args.btag == "deepflav":
+    from eventprocessingCommonDeepFlav import getFlowCommonDeepFlav as getFlowCommon
+else:
+    print("Btagging algo must be 'deepflav' or 'deepcsv'")
+    sys.exit(1)
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow

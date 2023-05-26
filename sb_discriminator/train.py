@@ -9,7 +9,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from dataset import load_data
 from tools import train_val_one_epoch, eval_model, export_onnx
-from DNN_model import DNN
+from DNN_model import get_model
 from sb_discriminator.args_train import args
 from logger import setup_logger
 
@@ -57,12 +57,9 @@ if __name__ == "__main__":
     ) = load_data(args)
 
     input_size = X_fts.size(1)
-    model = DNN(input_size).to(device)
-    print(model)
 
-    # TODO: loss? CrossEntropyLoss with weights?
-    loss_fn = torch.nn.BCELoss()
-    optimizer = torch.optim.Adam(model.parameters())
+    # Get model
+    model, loss_fn , optimizer = get_model(input_size, device)
 
     if args.load_model or args.eval_model:
         checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
