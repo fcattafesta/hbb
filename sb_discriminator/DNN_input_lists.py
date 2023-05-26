@@ -16,6 +16,7 @@ DNN_input_variables = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
+    "DNN_weight",
 ]
 
 signal_list = ["ZH", "ggZH"]

@@ -122,6 +122,12 @@ def load_data(args):
     )
     print("Training loader size:", len(training_loader))
 
+    # I have a column of weights in the dataset for each event that I want to use
+    # as the weight for the loss function
+    
+
+
+
     if not args.eval_model:
         val_loader = torch.utils.data.DataLoader(
             val_dataset,

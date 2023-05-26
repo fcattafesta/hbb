@@ -31,8 +31,7 @@ def get_model(input_size, device):
     model = DNN(input_size).to(device)
     print(model)
 
-    # TODO: loss? CrossEntropyLoss with weights?
-    loss_fn = torch.nn.BCELoss()
+    loss_fn = torch.nn.BCELoss(reduction="none")
     optimizer = torch.optim.Adam(model.parameters())
 
     return model, loss_fn, optimizer
