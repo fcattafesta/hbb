@@ -12,7 +12,11 @@ def getFlowDNN(model, flow=None):
     ROOT.gSystem.Load("./test_dnn.so")
     ROOT.TMVA_SOFIE_ONNX(model)
     eval_string = "sofie_functor(__slot,"
-    for i in DNN_input_variables[:-1]:
+    for i in (
+        DNN_input_variables.remove("DNN_Score")
+        if "DNN_Score" in DNN_input_variables
+        else DNN_input_variables
+    ):
         eval_string += i + ", "
     eval_string = eval_string[:-2] + ")"
 
