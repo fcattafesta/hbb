@@ -75,8 +75,10 @@ procData = flowData.CreateProcessor(
     nthreads,
 )
 
+
 def sumwsents(files):
     sumws = 1e-9
+    nevents = 1e-9
     LHEPdfSumw = []
     for fn in files:
         f = ROOT.TFile.Open(fn)
@@ -91,9 +93,17 @@ def sumwsents(files):
             else:
                 run.Project("hw", "1", "genEventSumw")
                 sumws += hw.GetSumOfWeights()
+
+            hn = ROOT.TH1F("hn", "", 1, 0, 1e9)
+            run.Project("hn", "1", "genEventCount")
+            nevents += hn.GetSumOfWeights()
+
     if sumws < 1:
         sumws = 1
-    return sumws, LHEPdfSumw
+    if nevents < 1:
+        nevents = 1
+
+    return sumws, LHEPdfSumw, nevents
 
 
 def runSample(ar):
@@ -111,9 +121,10 @@ def runSample(ar):
     s, files = ar
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
-        sumws, LHEPdfSumw = sumwsents(files)
+        sumws, LHEPdfSumw, nevents = sumwsents(files)
+        print("Sumws", sumws, "LHEPdfSumw", LHEPdfSumw, "nevents", nevents)
     else:  # is data
-        sumws, LHEPdfSumw = 1.0, []
+        sumws, LHEPdfSumw, nevents = 1.0, [], 0
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
@@ -124,6 +135,8 @@ def runSample(ar):
             # add customizations here
             # rdf = rdf.Define("year", year)
             # rdf = rdf.Define("TriggerSel", trigger)
+            snaplist = ["run", "event"] + histos
+
             if "lumi" in samples[s].keys():
                 rdf = rdf.Define("isMC", "false")
                 out = procData(rdf)
@@ -132,8 +145,8 @@ def runSample(ar):
                     subs = samples[s]["subsamples"]
                 rdf = rdf.Define("isMC", "true")
                 out = proc(rdf, subs)
+                snaplist += ["DNN_weight"]
 
-            snaplist = ["run", "event"] + histos
             if (
                 args.snapshot
                 and "training" in samples[s].keys()
@@ -143,6 +156,10 @@ def runSample(ar):
                 # create snapshot directory
                 os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
                 processed_rdf = out.rdf.find(sig_region).second
+                if "xsec" in samples[s].keys():  # is MC
+                    processed_rdf.Define(
+                        "DNN_weight", f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}"
+                    )
                 processed_rdf.Snapshot(
                     "Events", f"{args.histfolder}/Snapshots/{s}_Snapshot.root", snaplist
                 )
@@ -252,9 +269,7 @@ elif args.model[:5] == "model":
         print(x, "\t", samples[x]["lumi"])
 
     toproc = [
-        (s, samples[s]["files"])
-        for s in sams
-        if s in allmc + alldata  # + sys.argv[3:]
+        (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
     ]
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
