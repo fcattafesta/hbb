@@ -14,7 +14,7 @@ def getFlowDNN(model, flow=None):
     eval_string = "sofie_functor(__slot,"
     for i in (
         DNN_input_variables.remove("DNN_weight")
-        if "DNN_weigth" in DNN_input_variables
+        if "DNN_weight" in DNN_input_variables
         else DNN_input_variables
     ):
         eval_string += i + ", "

@@ -9,7 +9,7 @@ from args_analysis import args
 
 DNN_input_variables = (
     DNN_input_variables.remove("DNN_weight")
-    if "DNN_weigth" in DNN_input_variables
+    if "DNN_weight" in DNN_input_variables
     else DNN_input_variables
 )
 
