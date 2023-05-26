@@ -11,7 +11,7 @@ def getFlowDNN(model, flow=None):
 
     ROOT.gSystem.Load('./test_dnn.so')
     eval_string = "sofie_functor(__slot,"
-    for i in DNN_input_variables:
+    for i in DNN_input_variables[:-1]:
         eval_string += i + ", "
     eval_string = eval_string[:-2] + ")"
 
