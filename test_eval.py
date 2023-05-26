@@ -7,20 +7,19 @@ sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
 from args_analysis import args
 
+if "DNN_weight" in DNN_input_variables:
+    DNN_input_variables.remove("DNN_weight")
+
 
 def getFlowDNN(model, flow=None):
     ROOT.gSystem.Load("./test_dnn.so")
-    ROOT.TMVA_SOFIE_ONNX(model)
+    #ROOT.TMVA_SOFIE_ONNX(model)
     eval_string = "sofie_functor(__slot,"
-    for i in (
-        DNN_input_variables.remove("DNN_weight")
-        if "DNN_weight" in DNN_input_variables
-        else DNN_input_variables
-    ):
+    for i in DNN_input_variables:
         eval_string += i + ", "
     eval_string = eval_string[:-2] + ")"
 
-    ROOT.gInterpreter.Declare(f'#include "model_DNN.hxx"')
+    #ROOT.gInterpreter.Declare(f'#include "model_DNN.hxx"')
 
     # test on a RDataFrame
     rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root").Range(100)

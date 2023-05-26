@@ -1,7 +1,7 @@
 
-#include "TMVA_SOFIE_ONNX.h"
+//#include "TMVA_SOFIE_ONNX.h"
 
-// #include "model_DNN.hxx"
+#include "model_DNN.hxx"
 
 #include <TMVA/SOFIEHelpers.hxx>
 
