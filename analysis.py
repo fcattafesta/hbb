@@ -34,6 +34,46 @@ else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
 
+nthreads = args.nthreads if args.range == -1 else 0
+nprocesses = args.num_processes
+start = time.time()
+
+os.makedirs(args.histfolder, exist_ok=True)
+
+# Create the flow
+flow = SampleProcessing(
+    "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
+)
+# Flow for data
+flowData = getFlowCommon(flow)
+flowData = getFlow(flowData)
+if args.eval_model:
+    flowData = getFlowDNN(args.eval_model, flowData)
+# Final flow for MC
+flow = copy.deepcopy(flowData)
+flow = getFlowMC(flow)
+
+
+# Add binning rules
+flow.binningRules = binningRules
+flowData.binningRules = binningRules
+
+proc = flow.CreateProcessor(
+    "eventProcessor",
+    ["OneB", "TwoB", "OneC", "Light", "HF", "LF"],
+    histosPerSelection,
+    [],
+    "",
+    nthreads,
+)
+procData = flowData.CreateProcessor(
+    "eventProcessorData",
+    [],
+    histosPerSelection,
+    [],
+    "",
+    nthreads,
+)
 
 def sumwsents(files):
     sumws = 1e-9
@@ -148,126 +188,85 @@ def runSample(ar):
         print("Null file", s)
 
 
-if __name__ == "__main__":
-    nthreads = args.nthreads if args.range == -1 else 0
-    nprocesses = args.num_processes
-    start = time.time()
+# from multiprocessing.pool import ThreadPool as Pool
+runpool = Pool(nprocesses)
 
-    os.makedirs(args.histfolder, exist_ok=True)
+print(samples.keys())
+sams = samples.keys()
 
-    # Create the flow
-    flow = SampleProcessing(
-        "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
-    )
-    # Flow for data
-    flowData = getFlowCommon(flow)
-    flowData = getFlow(flowData)
-    if args.eval_model:
-        flowData = getFlowDNN(args.eval_model, flowData)
-    # Final flow for MC
-    flow = copy.deepcopy(flowData)
-    flow = getFlowMC(flow)
+# check that at least the first file exists
+toproc = [
+    (s, samples[s]["files"])
+    for s in sams
+    if "files" in samples[s].keys() and os.path.exists(samples[s]["files"][0])
+]
 
+# sort by sample size, start heaviest first
+toproc = sorted(
+    toproc,
+    key=lambda x: sum(
+        map(lambda x: (os.path.getsize(x) if os.path.exists(x) else 0), x[1])
+    ),
+    reverse=True,
+)
+print("To process", [x[0] for x in toproc])
 
-    # Add binning rules
-    flow.binningRules = binningRules
-    flowData.binningRules = binningRules
+if args.model == "fix":
+    toproc = []
+    sss = sams
+    if len(sys.argv[3:]):
+        sss = [s for s in sams if s in sys.argv[3:]]
+        print("fixing", sss)
+    for s in sss:
+        if os.path.exists(samples[s]["files"][0]):
+            try:
+                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
+                if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
+                    print("zombie or zero keys", s)
+                    toproc.append((s, samples[s]["files"]))
 
-    proc = flow.CreateProcessor(
-        "eventProcessor",
-        ["OneB", "TwoB", "OneC", "Light", "HF", "LF"],
-        histosPerSelection,
-        [],
-        "",
-        nthreads,
-    )
-    procData = flowData.CreateProcessor(
-        "eventProcessorData",
-        [],
-        histosPerSelection,
-        [],
-        "",
-        nthreads,
-    )
-    # from multiprocessing.pool import ThreadPool as Pool
-    runpool = Pool(nprocesses)
+            except:
+                print("failed", s)
+                toproc.append((s, samples[s]["files"]))
+elif args.model[:5] == "model":
+    import importlib
 
-    print(samples.keys())
-    sams = samples.keys()
+    model = importlib.import_module(args.model)
+    # 	samples=model.samples
 
-    # check that at least the first file exists
+    allmc = []
+    for x in model.background:
+        for y in model.background[x]:
+            if x.endswith(
+                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
+            ):
+                allmc.append(y.rsplit("_", 1)[0])
+            else:
+                allmc.append(y)
+
+    allmc += [y for x in model.signal for y in model.signal[x]]
+    alldata = [y for x in model.data for y in model.data[x]]
+    for x in allmc:
+        print(x, "\t", samples[x]["xsec"])
+    for x in alldata:
+        print(x, "\t", samples[x]["lumi"])
+
     toproc = [
         (s, samples[s]["files"])
         for s in sams
-        if "files" in samples[s].keys() and os.path.exists(samples[s]["files"][0])
+        if s in allmc + alldata  # + sys.argv[3:]
     ]
+elif args.model != "":
+    toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
-    # sort by sample size, start heaviest first
-    toproc = sorted(
-        toproc,
-        key=lambda x: sum(
-            map(lambda x: (os.path.getsize(x) if os.path.exists(x) else 0), x[1])
-        ),
-        reverse=True,
-    )
-    print("To process", [x[0] for x in toproc])
+print("Will process", [x[0] for x in toproc])
 
-    if args.model == "fix":
-        toproc = []
-        sss = sams
-        if len(sys.argv[3:]):
-            sss = [s for s in sams if s in sys.argv[3:]]
-            print("fixing", sss)
-        for s in sss:
-            if os.path.exists(samples[s]["files"][0]):
-                try:
-                    ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
-                    if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
-                        print("zombie or zero keys", s)
-                        toproc.append((s, samples[s]["files"]))
+if nprocesses > 1:
+    results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])
+else:
+    results = zip([runSample(x) for x in toproc], [x[0] for x in toproc])
 
-                except:
-                    print("failed", s)
-                    toproc.append((s, samples[s]["files"]))
-    elif args.model[:5] == "model":
-        import importlib
+print("Results", results)
+print("To resubmit", [x[1] for x in results if x[0]])
 
-        model = importlib.import_module(args.model)
-        # 	samples=model.samples
-
-        allmc = []
-        for x in model.background:
-            for y in model.background[x]:
-                if x.endswith(
-                    tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
-                ):
-                    allmc.append(y.rsplit("_", 1)[0])
-                else:
-                    allmc.append(y)
-
-        allmc += [y for x in model.signal for y in model.signal[x]]
-        alldata = [y for x in model.data for y in model.data[x]]
-        for x in allmc:
-            print(x, "\t", samples[x]["xsec"])
-        for x in alldata:
-            print(x, "\t", samples[x]["lumi"])
-
-        toproc = [
-            (s, samples[s]["files"])
-            for s in sams
-            if s in allmc + alldata  # + sys.argv[3:]
-        ]
-    elif args.model != "":
-        toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
-
-    print("Will process", [x[0] for x in toproc])
-
-    if nprocesses > 1:
-        results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])
-    else:
-        results = zip([runSample(x) for x in toproc], [x[0] for x in toproc])
-
-    print("Results", results)
-    print("To resubmit", [x[1] for x in results if x[0]])
-
-    print("time:  ", time.time() - start)
+print("time:  ", time.time() - start)

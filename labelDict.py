@@ -1,3 +1,4 @@
+# TODO: rename the regions to specify if they are mu or el
 labelRegion = {
     "SR_ee": "Signal Region",
     "CR_Zee_bjets": "Z+bjets Region",
