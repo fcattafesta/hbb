@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 from dataset import load_data
 from tools import train_val_one_epoch, eval_model, export_onnx
 from DNN_model import get_model
-from sb_discriminator.args_train import args
+from args_train import args
 from logger import setup_logger
 
 if args.histos:

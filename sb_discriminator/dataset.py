@@ -5,7 +5,7 @@ import math
 import logging
 
 
-from sb_discriminator.DNN_input_lists import DNN_input_variables, signal_list, background_list
+from DNN_input_lists import DNN_input_variables, signal_list, background_list
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +28,9 @@ def load_data(args):
 
     # open each file and get the Events tree using uproot
     for i, file in enumerate(sig_files):
-        sig_train = uproot.open(f"{file}:Events")
+        sig_file = uproot.open(f"{file}:Events")
         variables_sig_array = np.array(
-            [sig_train[input].array(library="np") for input in DNN_input_variables]
+            [sig_file[input].array(library="np") for input in DNN_input_variables]
         )
         # concatenate all the variables into a single torch tensor
         if i == 0:
@@ -56,9 +56,9 @@ def load_data(args):
         bkg_files += [x + y + "_Snapshot.root" for y in background_list]
 
     for i, file in enumerate(bkg_files):
-        bkg_train = uproot.open(f"{file}:Events")
+        bkg_file = uproot.open(f"{file}:Events")
         variables_bkg_array = np.array(
-            [bkg_train[input].array(library="np") for input in DNN_input_variables]
+            [bkg_file[input].array(library="np") for input in DNN_input_variables]
         )
         if i == 0:
             variables_bkg = torch.tensor(variables_bkg_array, dtype=torch.float32)[
