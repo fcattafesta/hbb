@@ -46,6 +46,8 @@ def load_data(args):
                 dim=1,
             )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
 
+    logger.info(f"number of signal events: {variables_sig.shape[1]}")
+
     ones_tensor = torch.ones_like(variables_sig[0], dtype=torch.float32).unsqueeze(0)
 
     X_sig = (variables_sig, ones_tensor)
@@ -72,6 +74,8 @@ def load_data(args):
                 ),
                 dim=1,
             )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
+
+    logger.info(f"number of background events: {variables_bkg.shape[1]}")
 
     zeros_tensor = torch.zeros_like(variables_bkg[0], dtype=torch.float32).unsqueeze(0)
 
@@ -124,7 +128,7 @@ def load_data(args):
 
     # I have a column of weights in the dataset for each event that I want to use
     # as the weight for the loss function
-    
+
 
 
 
