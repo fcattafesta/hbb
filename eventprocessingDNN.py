@@ -7,11 +7,9 @@ sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
 from args_analysis import args
 
-DNN_input_variables = (
+if "DNN_weight" in DNN_input_variables:
     DNN_input_variables.remove("DNN_weight")
-    if "DNN_weight" in DNN_input_variables
-    else DNN_input_variables
-)
+
 
 
 def getFlowDNN(model, flow=None):
