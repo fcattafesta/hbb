@@ -56,10 +56,10 @@ if __name__ == "__main__":
         batch_size,
     ) = load_data(args)
 
-    input_size = X_fts.size(1)-1
+    input_size = X_fts.size(1) - 1
 
     # Get model
-    model, loss_fn , optimizer = get_model(input_size, device)
+    model, loss_fn, optimizer = get_model(input_size, device)
 
     if args.load_model or args.eval_model:
         checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
@@ -80,13 +80,7 @@ if __name__ == "__main__":
             f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
         )
 
-    train_batch_prints = len(training_loader) / args.num_prints
-    logger.info("train_batch_prints %d" % train_batch_prints)
-
     if not args.eval_model:
-        val_batch_prints = len(val_loader) / args.num_prints
-        logger.info("val_batch_prints %d" % val_batch_prints)
-
         for epoch in range(args.epochs):
             if epoch <= loaded_epoch:
                 continue
@@ -102,7 +96,7 @@ if __name__ == "__main__":
                 training_loader,
                 loss_fn,
                 optimizer,
-                train_batch_prints,
+                args.num_prints,
                 device,
                 time_epoch,
             )
@@ -124,7 +118,7 @@ if __name__ == "__main__":
                 val_loader,
                 loss_fn,
                 optimizer,
-                val_batch_prints,
+                args.num_prints,
                 device,
                 time_epoch,
                 main_dir,
@@ -200,10 +194,6 @@ if __name__ == "__main__":
         logger.info("Evaluating best model on test and train dataset")
         print("================================")
 
-        test_batch_prints = len(test_loader) / args.num_prints
-
-        logger.info("test_batch_prints %d" % test_batch_prints)
-
         # load best model
         model.load_state_dict(
             torch.load(best_model_name if not args.eval_model else args.eval_model)[
@@ -219,7 +209,7 @@ if __name__ == "__main__":
             model,
             training_loader,
             loss_fn,
-            train_batch_prints,
+            args.num_prints,
             "training",
             device,
             eval_epoch,
@@ -230,7 +220,7 @@ if __name__ == "__main__":
             model,
             test_loader,
             loss_fn,
-            test_batch_prints,
+            args.num_prints,
             "test",
             device,
             eval_epoch,
