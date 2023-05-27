@@ -61,7 +61,19 @@ def plot_sig_bkg_distributions(
         )
         bin_centers = 0.5 * (bins[:-1] + bins[1:])
         # TODO: compute the errors correctly
-        errors = np.sqrt(counts) *0
+        # Calculate bin widths
+        bin_widths = bins[1:] - bins[:-1]
+
+        # Calculate counts per bin
+        counts_per_bin = counts * len(score) * bin_widths
+
+        # Calculate standard deviation per bin
+        std_per_bin = np.sqrt(counts_per_bin)
+
+        # Calculate error bars by rescaling standard deviation
+        errors = std_per_bin / np.sum(counts_per_bin)
+
+        #errors = np.sqrt(counts) *0
 
         legend_test_list.append(
             plt.errorbar(
