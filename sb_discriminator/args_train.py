@@ -105,5 +105,14 @@ parser.add_argument(
     help="Pin memory for data loading",
     action="store_true",
 )
+parser.add_argument(
+    "--weights-list",
+    nargs="+",
+    default=[100, 1/70],
+    help="Weights for the loss function (signal, background)",
+    type=float,
+)
+
+
 parser.print_help()
 args = parser.parse_args()

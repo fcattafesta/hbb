@@ -22,7 +22,7 @@ def load_data(args):
 
     dirs = args.data_dirs
 
-    dimension=(args.train_size + args.val_size + args.test_size) / 2
+    dimension = (args.train_size + args.val_size + args.test_size) / 2
 
     # list of signal files
     sig_files = []
@@ -56,7 +56,7 @@ def load_data(args):
     logger.info(f"sum of weights sig: {sumw_sig}")
 
     # multiply the weights by 100
-    variables_sig[-1] = variables_sig[-1] * 100
+    variables_sig[-1] = variables_sig[-1] * args.weigth[0]
 
     sumw_sig = variables_sig[-1].sum()
     logger.info(f"sum of weights sig: {sumw_sig}")
@@ -95,7 +95,7 @@ def load_data(args):
     logger.info(f"sum of weights bkg: {sumw_bkg}")
 
     # multiply the weights by 1/70
-    variables_bkg[-1] = variables_bkg[-1] / 70
+    variables_bkg[-1] = variables_bkg[-1] * args.weigth[1]
 
     sumw_bkg = variables_bkg[-1].sum()
     logger.info(f"sum of weights bkg: {sumw_bkg}")
