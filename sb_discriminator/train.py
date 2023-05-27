@@ -80,12 +80,13 @@ if __name__ == "__main__":
             f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
         )
 
-    train_batch_prints = int(train_size / batch_size / args.num_prints)
-    num_train_batches = int(train_size / batch_size)
+    train_batch_prints = int(len(training_loader) / args.num_prints)
+    num_train_batches = int(len(training_loader))
 
     if not args.eval_model:
-        val_batch_prints = int(val_size / batch_size / args.num_prints)
-        num_val_batches = int(val_size / batch_size)
+        val_batch_prints = int(len(val_loader) / args.num_prints)
+        num_val_batches = int(len(val_loader))
+
         for epoch in range(args.epochs):
             if epoch <= loaded_epoch:
                 continue
@@ -201,8 +202,8 @@ if __name__ == "__main__":
         logger.info("Evaluating best model on test and train dataset")
         print("================================")
 
-        test_batch_prints = int(test_size / batch_size / args.num_prints)
-        num_test_batches = int(test_size / batch_size)
+        test_batch_prints = int(len(test_loader) / args.num_prints)
+        num_test_batches = int(len(test_loader))
 
         # load best model
         model.load_state_dict(

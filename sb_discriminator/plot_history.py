@@ -1,6 +1,5 @@
 import argparse
 import matplotlib.pyplot as plt
-import numpy as np
 import mplhep as hep
 from scipy.ndimage import uniform_filter1d
 
@@ -31,9 +30,6 @@ def read_from_txt(file):
     print("len train loss: ", len(train_loss))
     print("len val accuracy: ", len(val_accuracy))
     print("len val loss: ", len(val_loss))
-
-    print("i: ", i)
-    print("j: ", j)
 
     return train_accuracy, train_loss, val_accuracy, val_loss
 
