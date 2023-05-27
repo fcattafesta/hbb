@@ -106,7 +106,7 @@ parser.add_argument(
     action="store_true",
 )
 parser.add_argument(
-    "--weights-list",
+    "--weights",
     nargs="+",
     default=[100, 1/70],
     help="Weights for the loss function (signal, background)",
