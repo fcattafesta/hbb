@@ -17,7 +17,7 @@ def read_from_txt(file):
             if "Training batch" in line:
                 train_accuracy.append(float(line.split("accuracy: ")[1].split(" ")[0]))
                 train_loss.append(float(line.split("loss: ")[1].split("\n")[0]))
-            if "Validation batch" in line:
+            elif "Validation batch" in line:
                 val_accuracy.append(float(line.split("accuracy: ")[1].split(" ")[0]))
                 val_loss.append(float(line.split("loss: ")[1].split("\n")[0]))
 
