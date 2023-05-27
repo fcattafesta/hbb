@@ -82,10 +82,12 @@ if __name__ == "__main__":
 
     train_batch_prints = int(len(training_loader) / args.num_prints)
     num_train_batches = int(len(training_loader))
+    print("train_batch_prints", train_batch_prints)
 
     if not args.eval_model:
         val_batch_prints = int(len(val_loader) / args.num_prints)
         num_val_batches = int(len(val_loader))
+        print("val_batch_prints", val_batch_prints)
 
         for epoch in range(args.epochs):
             if epoch <= loaded_epoch:
@@ -204,6 +206,8 @@ if __name__ == "__main__":
 
         test_batch_prints = int(len(test_loader) / args.num_prints)
         num_test_batches = int(len(test_loader))
+
+        print("test_batch_prints", test_batch_prints)
 
         # load best model
         model.load_state_dict(

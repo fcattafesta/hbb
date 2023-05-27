@@ -147,7 +147,7 @@ def load_data(args):
         drop_last=True,
         pin_memory=args.pin_memory,
     )
-    logger.info("Training loader size:", len(training_loader))
+    logger.info("Training loader size: %d", len(training_loader))
 
     if not args.eval_model:
         val_loader = torch.utils.data.DataLoader(
@@ -158,7 +158,7 @@ def load_data(args):
             drop_last=True,
             pin_memory=args.pin_memory,
         )
-        logger.info("Validation loader size:", len(val_loader))
+        logger.info("Validation loader size: %d", len(val_loader))
 
     if args.eval or args.eval_model:
         test_loader = torch.utils.data.DataLoader(
@@ -169,7 +169,7 @@ def load_data(args):
             drop_last=True,
             pin_memory=args.pin_memory,
         )
-        logger.info("Test loader size:", len(test_loader))
+        logger.info("Test loader size: %d", len(test_loader))
 
     return (
         training_loader,
