@@ -27,7 +27,7 @@ def getFlowDNN(model, flow=None):
     nl = "\n"
     if flow is not None:
         flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
-        flow.AddCppCode("\n#include <TMVA/SOFIEHelpers.hxx>\n")
+        flow.AddCppCode('\n#include "TMVA/SOFIEHelpers.hxx"\n')
         flow.AddCppCode(
             f"{nl}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
@@ -43,6 +43,7 @@ def getFlowDNN(model, flow=None):
 
 
     if flow is not None:
+        flow.AddCppCode('\n#include <ROOT/RDataFrame.hxx>\n')
         eval_string = "sofie_functor(rdfslot_," # __slot,"
         for i in DNN_input_variables:
             eval_string += i + ", "
