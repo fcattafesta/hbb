@@ -36,6 +36,7 @@ def train_val_one_epoch(
     tot_num = 0
 
     num_batches = len(loader)
+    count = 1
 
     # Loop over the training data
     for i, data in enumerate(loader):
@@ -80,9 +81,10 @@ def train_val_one_epoch(
         running_num += batch_size
         tot_num += batch_size
 
-        # do an if statement which is true in the loop a number of times equal to num_prints
-        if (i + 1) % (num_batches // num_prints) == 0:
-            last_loss = running_loss * num_prints/ num_batches  # loss per batch
+        if i + 1 >= num_batches / num_prints * count:
+            count += 1
+
+            last_loss = running_loss * num_prints / num_batches  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
             tb_x = epoch_index * num_batches + i + 1
 
@@ -137,9 +139,7 @@ def train_val_one_epoch(
     )
 
 
-def eval_model(
-    model, loader, loss_fn, num_prints, type, device, best_epoch
-):
+def eval_model(model, loader, loss_fn, num_prints, type, device, best_epoch):
     # Test the model by running it on the test set
     running_loss = 0.0
     tot_loss = 0.0
@@ -150,7 +150,8 @@ def eval_model(
     running_num = 0
     tot_num = 0
 
-    num_batches= len(loader)
+    num_batches = len(loader)
+    count = 1
 
     for i, data in enumerate(loader):
         inputs, labels = data
@@ -169,7 +170,6 @@ def eval_model(
 
         loss = loss.view(1, -1).squeeze()
 
-
         # weight the loss
         loss = loss * weights
         # average the loss
@@ -185,7 +185,9 @@ def eval_model(
         running_num += batch_size
         tot_num += batch_size
 
-        if (i + 1) % (num_batches // num_prints) == 0:
+        if i + 1 >= num_batches / num_prints * count:
+            count += 1
+
             last_loss = running_loss * num_batches / num_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
 
