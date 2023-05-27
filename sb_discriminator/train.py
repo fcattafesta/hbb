@@ -81,13 +81,11 @@ if __name__ == "__main__":
         )
 
     train_batch_prints = len(training_loader) / args.num_prints
-    num_train_batches = len(training_loader)
-    print("train_batch_prints", train_batch_prints)
+    logger.info("train_batch_prints %d" % train_batch_prints)
 
     if not args.eval_model:
         val_batch_prints = len(val_loader) / args.num_prints
-        num_val_batches = len(val_loader)
-        print("val_batch_prints", val_batch_prints)
+        logger.info("val_batch_prints %d" % val_batch_prints)
 
         for epoch in range(args.epochs):
             if epoch <= loaded_epoch:
@@ -105,7 +103,6 @@ if __name__ == "__main__":
                 loss_fn,
                 optimizer,
                 train_batch_prints,
-                num_train_batches,
                 device,
                 time_epoch,
             )
@@ -128,7 +125,6 @@ if __name__ == "__main__":
                 loss_fn,
                 optimizer,
                 val_batch_prints,
-                num_val_batches,
                 device,
                 time_epoch,
                 main_dir,
@@ -205,9 +201,8 @@ if __name__ == "__main__":
         print("================================")
 
         test_batch_prints = len(test_loader) / args.num_prints
-        num_test_batches = len(test_loader)
 
-        print("test_batch_prints", test_batch_prints)
+        logger.info("test_batch_prints %d" % test_batch_prints)
 
         # load best model
         model.load_state_dict(
@@ -225,7 +220,6 @@ if __name__ == "__main__":
             training_loader,
             loss_fn,
             train_batch_prints,
-            num_train_batches,
             "training",
             device,
             eval_epoch,
@@ -237,7 +231,6 @@ if __name__ == "__main__":
             test_loader,
             loss_fn,
             test_batch_prints,
-            num_test_batches,
             "test",
             device,
             eval_epoch,

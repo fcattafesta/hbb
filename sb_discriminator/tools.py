@@ -15,7 +15,6 @@ def train_val_one_epoch(
     loss_fn,
     optimizer,
     batch_prints,
-    num_batches,
     device,
     time_epoch,
     main_dir=None,
@@ -79,7 +78,7 @@ def train_val_one_epoch(
         running_num += batch_size
         tot_num += batch_size
 
-        if int((i + 1) % batch_prints) == 0:
+        if i % batch_prints == batch_prints - 1:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
             tb_x = epoch_index * len(loader) + i + 1
@@ -90,7 +89,7 @@ def train_val_one_epoch(
                     epoch_index,
                     time.time() - time_epoch,
                     "Training" if train else "Validation",
-                    (i + 1) / num_batches * 100,
+                    (i + 1) / len(loader) * 100,
                     tb_x,
                     last_accuracy,
                     last_loss,
@@ -136,7 +135,7 @@ def train_val_one_epoch(
 
 
 def eval_model(
-    model, loader, loss_fn, batch_prints, num_batches, type, device, best_epoch
+    model, loader, loss_fn, batch_prints, type, device, best_epoch
 ):
     # Test the model by running it on the test set
     running_loss = 0.0
@@ -181,7 +180,7 @@ def eval_model(
         running_num += batch_size
         tot_num += batch_size
 
-        if int((i + 1) % batch_prints) == 0:
+        if i % batch_prints == batch_prints - 1:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
 
@@ -190,7 +189,7 @@ def eval_model(
                 % (
                     best_epoch,
                     type,
-                    (i + 1) / num_batches * 100,
+                    (i + 1) / len(loader) * 100,
                     last_accuracy,
                     last_loss,
                 )
