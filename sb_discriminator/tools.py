@@ -79,7 +79,7 @@ def train_val_one_epoch(
         running_num += batch_size
         tot_num += batch_size
 
-        if (i + 1) % batch_prints == 0:
+        if int((i + 1) % batch_prints) == 0:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
             tb_x = epoch_index * len(loader) + i + 1
@@ -181,7 +181,7 @@ def eval_model(
         running_num += batch_size
         tot_num += batch_size
 
-        if (i + 1) % batch_prints == 0:
+        if int((i + 1) % batch_prints) == 0:
             last_loss = running_loss / batch_prints  # loss per batch
             last_accuracy = running_correct / running_num  # accuracy per batch
 
