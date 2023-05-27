@@ -41,16 +41,21 @@ def getFlowDNN(model, flow=None):
             + "::Session>(0);"
         )
 
-    eval_string = "sofie_functor(__slot,"
-    for i in DNN_input_variables:
-        eval_string += i + ", "
-    eval_string = eval_string[:-2] + ")"
 
     if flow is not None:
+        eval_string = "sofie_functor(__slot,"
+        for i in DNN_input_variables:
+            eval_string += i + ", "
+        eval_string = eval_string[:-2] + ")"
         flow.Define("DNN_Score", eval_string)
         flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
     else:
         # test on a RDataFrame
+        eval_string = "sofie_functor(rdfslot_,"
+        for i in DNN_input_variables:
+            eval_string += i + ", "
+        eval_string = eval_string[:-2] + ")"
+        
         rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root").Range(100)
         print("branches in the tree:")
         for i in rdf.GetColumnNames():
