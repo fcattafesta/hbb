@@ -23,7 +23,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    main_dir = f"out/{timestamp}_{args.batch_size}_{args.weights[0]}_{args.weights[1]}"
+    main_dir = f"out/{timestamp}_batchsize{args.batch_size}_weights{args.weights[0]}-{args.weights[1]}"
 
     best_vloss = 1_000_000.0
     best_vaccuracy = 0.0
