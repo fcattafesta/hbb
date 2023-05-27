@@ -13,18 +13,27 @@ def read_from_txt(file):
         train_loss = []
         val_accuracy = []
         val_loss = []
+        i=0
+        j=0
         for line in lines:
             if "Training batch" in line:
                 train_accuracy.append(float(line.split("accuracy: ")[1].split(" ")[0]))
                 train_loss.append(float(line.split("loss: ")[1].split("\n")[0]))
+                i+=1
             elif "Validation batch" in line:
                 val_accuracy.append(float(line.split("accuracy: ")[1].split(" ")[0]))
                 val_loss.append(float(line.split("loss: ")[1].split("\n")[0]))
+                j+=1
+                if j > 10000:
+                    print("val_accuracy: ", val_accuracy[-1], "val_loss: ", val_loss[-1])
 
     print("len train accuracy: ", len(train_accuracy))
     print("len train loss: ", len(train_loss))
     print("len val accuracy: ", len(val_accuracy))
     print("len val loss: ", len(val_loss))
+
+    print("i: ", i)
+    print("j: ", j)
 
     return train_accuracy, train_loss, val_accuracy, val_loss
 
