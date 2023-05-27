@@ -6,8 +6,6 @@ from scipy.ndimage import uniform_filter1d
 
 
 def read_from_txt(file):
-    # read form a txt with the info written like this:
-
     # get accuracy and loss and separate them between training and validation
     with open(file, "r") as f:
         lines = f.readlines()
@@ -22,6 +20,11 @@ def read_from_txt(file):
             if "Validation batch" in line:
                 val_accuracy.append(float(line.split("accuracy: ")[1].split(" ")[0]))
                 val_loss.append(float(line.split("loss: ")[1].split("\n")[0]))
+
+    print("len train accuracy: ", len(train_accuracy))
+    print("len train loss: ", len(train_loss))
+    print("len val accuracy: ", len(val_accuracy))
+    print("len val loss: ", len(val_loss))
 
     return train_accuracy, train_loss, val_accuracy, val_loss
 
@@ -42,6 +45,8 @@ def plot_history(
     }
 
     for type, info in infos_dict.items():
+        print("len info train: ", len(info["train"]))
+        print("len info val: ", len(info["val"]))
         plt.figure(figsize=(13, 10))
         plt.plot(
             range(len(info["train"])),
