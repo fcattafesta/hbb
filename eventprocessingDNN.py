@@ -48,6 +48,7 @@ def getFlowDNN(model, flow=None):
 
     if flow is not None:
         flow.Define("DNN_Score", eval_string)
+        flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
     else:
         # test on a RDataFrame
         rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root").Range(100)

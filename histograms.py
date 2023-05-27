@@ -22,6 +22,7 @@ histos = [
 ]
 if args.eval_model:
     histos.append("DNN_Score")
+    histos.append("atanhDNN_Score")
 
 ### List of selections for muons and electrons ###
 selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
