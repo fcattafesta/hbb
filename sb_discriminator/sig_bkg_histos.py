@@ -63,12 +63,15 @@ def plot_sig_bkg_distributions(
         # TODO: compute the errors correctly
         # Calculate bin widths
         bin_widths = bins[1:] - bins[:-1]
+        print("bin widths: ", bin_widths)
 
         # Calculate counts per bin
         counts_per_bin = counts * len(score) * bin_widths
+        print("counts per bin: ", counts_per_bin)
 
         # Calculate standard deviation per bin
         std_per_bin = np.sqrt(counts_per_bin)
+        print("std per bin: ", std_per_bin)
 
         # Calculate error bars by rescaling standard deviation
         errors = std_per_bin / np.sum(counts_per_bin)
