@@ -43,7 +43,6 @@ def getFlowDNN(model, flow=None):
 
 
     if flow is not None:
-        flow.AddCppCode('\n#include <ROOT/RDataFrame.hxx>\n')
         eval_string = "sofie_functor(__slot,"
         for i in DNN_input_variables:
             eval_string += i + ", "
