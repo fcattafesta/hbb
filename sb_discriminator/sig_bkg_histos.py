@@ -73,6 +73,8 @@ def plot_sig_bkg_distributions(
         # Calculate error bars by rescaling standard deviation
         errors = std_per_bin / np.sum(counts_per_bin)
 
+        print("errors: ", errors)
+
         #errors = np.sqrt(counts) *0
 
         legend_test_list.append(
