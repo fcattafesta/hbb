@@ -111,7 +111,7 @@ def runSample(ar):
     p = psutil.Process()
     #    print("Affinity", p.cpu_affinity())
     p.cpu_affinity(list(range(psutil.cpu_count())))
-    if args.range == -1:
+    if args.nthreads != 0:
         ROOT.gROOT.ProcessLine(
             """
         ROOT::EnableImplicitMT(%s);
@@ -128,7 +128,7 @@ def runSample(ar):
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
-        rdf = rdf.Range(int(args.range))
+        rdf = rdf.Range(args.range)
     subs = {}
     if rdf:
         try:
@@ -165,7 +165,7 @@ def runSample(ar):
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
-            if args.range == -1:
+            if args.nthreads != 0:
                 ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
 
