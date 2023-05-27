@@ -25,7 +25,7 @@ def read_from_txt(file):
                 val_loss.append(float(line.split("loss: ")[1].split("\n")[0]))
                 j+=1
                 if j > 10000:
-                    print("val_accuracy: ", val_accuracy[-1], "val_loss: ", val_loss[-1])
+                    print(line)
 
     print("len train accuracy: ", len(train_accuracy))
     print("len train loss: ", len(train_loss))
