@@ -22,6 +22,8 @@ def load_data(args):
 
     dirs = args.data_dirs
 
+    dimension=(args.train_size + args.val_size + args.test_size) / 2
+
     # list of signal files
     sig_files = []
     for x in dirs:
@@ -36,7 +38,7 @@ def load_data(args):
         # concatenate all the variables into a single torch tensor
         if i == 0:
             variables_sig = torch.tensor(variables_sig_array, dtype=torch.float32)[
-                :, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)
+                :, : math.ceil(dimension)
             ]
         else:
             variables_sig = torch.cat(
@@ -45,14 +47,19 @@ def load_data(args):
                     torch.tensor(variables_sig_array, dtype=torch.float32),
                 ),
                 dim=1,
-            )[:, : math.ceil((args.train_size + args.val_size + args.test_size) / 2)]
+            )[:, : math.ceil(dimension)]
 
     logger.info(f"number of signal events: {variables_sig.shape[1]}")
 
     # sum of weights
-    sumw_sig=variables_sig[-1].sum()
+    sumw_sig = variables_sig[-1].sum()
     logger.info(f"sum of weights sig: {sumw_sig}")
 
+    # multiply the weights by 100
+    variables_sig[-1] = variables_sig[-1] * 100
+
+    sumw_sig = variables_sig[-1].sum()
+    logger.info(f"sum of weights sig: {sumw_sig}")
 
     ones_tensor = torch.ones_like(variables_sig[0], dtype=torch.float32).unsqueeze(0)
 
@@ -70,7 +77,7 @@ def load_data(args):
         )
         if i == 0:
             variables_bkg = torch.tensor(variables_bkg_array, dtype=torch.float32)[
-                :, : math.floor((args.train_size + args.val_size + args.test_size) / 2)
+                :, : math.floor(dimension)
             ]
         else:
             variables_bkg = torch.cat(
@@ -79,14 +86,19 @@ def load_data(args):
                     torch.tensor(variables_bkg_array, dtype=torch.float32),
                 ),
                 dim=1,
-            )[:, : math.floor((args.train_size + args.val_size + args.test_size) / 2)]
+            )[:, : math.floor(dimension)]
 
     logger.info(f"number of background events: {variables_bkg.shape[1]}")
 
     # sum of weights
-    sumw_bkg=variables_bkg[-1].sum()
+    sumw_bkg = variables_bkg[-1].sum()
     logger.info(f"sum of weights bkg: {sumw_bkg}")
-    
+
+    # multiply the weights by 1/70
+    variables_bkg[-1] = variables_bkg[-1] / 70
+
+    sumw_bkg = variables_bkg[-1].sum()
+    logger.info(f"sum of weights bkg: {sumw_bkg}")
 
     zeros_tensor = torch.zeros_like(variables_bkg[0], dtype=torch.float32).unsqueeze(0)
 

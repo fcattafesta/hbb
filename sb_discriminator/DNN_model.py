@@ -32,6 +32,7 @@ def get_model(input_size, device):
     print(model)
 
     loss_fn = torch.nn.BCELoss(reduction="none")
+    #loss_fn = torch.nn.CategoricalCrossEntropy(reduction="none")
     optimizer = torch.optim.Adam(model.parameters())
 
     return model, loss_fn, optimizer
