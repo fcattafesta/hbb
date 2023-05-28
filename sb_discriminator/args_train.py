@@ -108,12 +108,17 @@ parser.add_argument(
 parser.add_argument(
     "--weights",
     nargs="+",
-    default=[100, 1/70],
+    default=[50, 1/70],
     help="Weights for the loss function (signal, background)",
     type=float,
 )
-
+parser.add_argument(
+    "-n",
+    "--name",
+    default="",
+    help="Name for the directory",
+    type=str,
+)
 
 parser.print_help()
 args = parser.parse_args()
-print(args)
