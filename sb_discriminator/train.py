@@ -84,7 +84,8 @@ if __name__ == "__main__":
                     best_vaccuracy = float(line.split(",")[2].split(":")[1])
                     break
         logger.info(
-            f"Loaded model from {args.load_model if args.load_model else args.eval_model} at epoch {loaded_epoch} with best validation loss {best_vloss} and best validation accuracy {best_vaccuracy}"
+            f"Loaded model from %s, epoch %d, best val loss: %.4f, best val accuracy: %.4f"
+            % (best_model_name, loaded_epoch, best_vloss, best_vaccuracy)
         )
 
     if not args.eval_model:

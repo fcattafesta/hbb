@@ -127,7 +127,7 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("sample", s, "Sumws", sumws,"nevents", nevents)
+        logger.info("sample %s: sumws %s, nevents %s" %(s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
     #    import jsonreader
@@ -207,7 +207,7 @@ def runSample(ar):
             logger.error("FAIL", s)
             return 1
     else:
-        logger.info("Null file", s)
+        logger.info("Null file %s" % s)
 
 
 # from multiprocessing.pool import ThreadPool as Pool
@@ -231,20 +231,20 @@ toproc = sorted(
     ),
     reverse=True,
 )
-logger.info("To process", [x[0] for x in toproc])
+logger.info("To process %s" % toproc)
 
 if args.model == "fix":
     toproc = []
     sss = sams
     if len(sys.argv[3:]):
         sss = [s for s in sams if s in sys.argv[3:]]
-        logger.info("fixing", sss)
+        logger.info("fixing %s" % sss)
     for s in sss:
         if os.path.exists(samples[s]["files"][0]):
             try:
                 ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
                 if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
-                    logger.info("zombie or zero keys", s)
+                    logger.info("zombie or zero keys %s" % s)
                     toproc.append((s, samples[s]["files"]))
 
             except:
@@ -269,9 +269,9 @@ elif args.model[:5] == "model":
     allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
     for x in allmc:
-        logger.info(x, "\t", samples[x]["xsec"])
+        logger.info("%s\t%s" % (x, samples[x]["lumi"]))
     for x in alldata:
-        logger.info(x, "\t", samples[x]["lumi"])
+        logger.info("%s\t%s" % (x, samples[x]["lumi"]))
 
     toproc = [
         (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
@@ -279,14 +279,14 @@ elif args.model[:5] == "model":
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
-logger.info("Will process", [x[0] for x in toproc])
+logger.info("Will process %s" % toproc)
 
 if nprocesses > 1:
     results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])
 else:
     results = zip([runSample(x) for x in toproc], [x[0] for x in toproc])
 
-logger.info("Results", results)
-logger.info("To resubmit", [x[1] for x in results if x[0]])
+logger.info("Results %s" % results)
+logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 
-logger.info("time:  ", time.time() - start)
+logger.info("time:   %s" % (time.time() - start))
