@@ -42,7 +42,7 @@ def train_val_one_epoch(
     for i, data in enumerate(loader):
         inputs, labels = data
         inputs = inputs.to(device)
-        #weights = inputs[:, -1]
+        weights = inputs[:, -1]
         inputs = inputs[:, :-1]
         labels = labels.to(device)
         if train:
@@ -55,18 +55,16 @@ def train_val_one_epoch(
         correct = (y_pred == labels).sum().item()
         batch_size = labels.size(0)
 
-        print('batch_size: ', batch_size)
-
         # Compute the loss and its gradients
         loss = loss_fn(outputs, labels)
 
-        '''# reshape the loss
+        # reshape the loss
         loss = loss.view(1, -1).squeeze()
 
         # weight the loss
         loss = loss * weights
         # average the loss
-        loss = loss.mean()'''
+        loss = loss.mean()
 
         if train:
             loss.backward()
@@ -241,4 +239,11 @@ def export_onnx(model, model_name, batch_size, input_size, device):
         verbose=True,
         export_params=True,
         opset_version=13,
+        input_names=["InputVariables"],  # the model's input names
+        output_names=["Sigmoid"],  # the model's output names
+        dynamic_axes={
+            "InputVariables": {0: "batch_size"},  # variable length axes
+            "Sigmoid": {0: "batch_size"},
+        },
+
     )

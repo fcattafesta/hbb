@@ -108,7 +108,7 @@ parser.add_argument(
 parser.add_argument(
     "--weights",
     nargs="+",
-    default=[50, 1/70],
+    default=[50, 0.014],
     help="Weights for the loss function (signal, background)",
     type=float,
 )
