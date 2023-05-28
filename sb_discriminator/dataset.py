@@ -55,7 +55,7 @@ def load_data(args):
     sumw_sig = variables_sig[-1].sum()
     logger.info(f"sum of weights sig: {sumw_sig}")
 
-    # multiply the weights by 100
+    # multiply the weights by the weight factor
     variables_sig[-1] = variables_sig[-1] * args.weights[0]
 
     sumw_sig = variables_sig[-1].sum()
@@ -94,7 +94,7 @@ def load_data(args):
     sumw_bkg = variables_bkg[-1].sum()
     logger.info(f"sum of weights bkg: {sumw_bkg}")
 
-    # multiply the weights by 1/70
+    # multiply the weights by the weight factor
     variables_bkg[-1] = variables_bkg[-1] * args.weights[1]
 
     sumw_bkg = variables_bkg[-1].sum()

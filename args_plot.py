@@ -20,3 +20,4 @@ parser.add_argument(
 
 parser.print_help()
 args = parser.parse_args()
+print(args)
