@@ -60,10 +60,12 @@ def getFlowDNN(model, flow=None):
         print("branches in the tree:")
         for i in rdf.GetColumnNames():
             print(i)
-        h1 = rdf.Define("DNN_Score", eval_string).Histo1D(
+        rdf=rdf.Define("DNN_Score", eval_string)
+        rdf=rdf.Define("atanhDNN_Score", "atanh(DNN_Score)")
+        h1 = rdf.Histo1D(
             ("h_sig", "", 100, 0, 1), "DNN_Score"
         )
-        h2 = rdf.Define("atanhDNN_Score", "atanh(DNN_Score)").Histo1D(
+        h2 = rdf.Histo1D(
             ("h_sig", "", 100, -5, 5), "atanhDNN_Score"
         )
         c1 = ROOT.TCanvas()
