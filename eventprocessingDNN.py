@@ -48,7 +48,7 @@ def getFlowDNN(model, flow=None):
             eval_string += i + ", "
         eval_string = eval_string[:-2] + ")"
         flow.Define("DNN_Score", eval_string)
-        flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
+        #flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
     else:
         # test on a RDataFrame
         eval_string = "sofie_functor(rdfslot_,"
