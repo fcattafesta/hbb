@@ -41,7 +41,12 @@ nprocesses = args.num_processes
 start = time.time()
 
 os.makedirs(args.histfolder, exist_ok=True)
+# remove the log file if already exists
+if os.path.exists(f"{args.histfolder}/log.log"):
+    os.remove(f"{args.histfolder}/log.log")
+
 logger = setup_logger(f"{args.histfolder}/log.log")
+
 
 logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))
 
@@ -269,7 +274,7 @@ elif args.model[:5] == "model":
     allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
     for x in allmc:
-        logger.info("%s\t%s" % (x, samples[x]["lumi"]))
+        logger.info("%s\t%s" % (x, samples[x]["xsec"]))
     for x in alldata:
         logger.info("%s\t%s" % (x, samples[x]["lumi"]))
 
