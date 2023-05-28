@@ -113,7 +113,6 @@ parser.add_argument(
     type=float,
 )
 parser.add_argument(
-    "-n",
     "--name",
     default="",
     help="Name for the directory",
