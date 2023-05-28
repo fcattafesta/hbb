@@ -9,6 +9,8 @@ import traceback
 import time
 import os
 
+from logger import setup_logger
+
 from histobinning import binningRules
 from args_analysis import args
 
@@ -39,6 +41,7 @@ nprocesses = args.num_processes
 start = time.time()
 
 os.makedirs(args.histfolder, exist_ok=True)
+logger = setup_logger(f"{args.histfolder}/log.log")
 
 # Create the flow
 flow = SampleProcessing(
@@ -122,7 +125,7 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        print("sample", s, "Sumws", sumws,"nevents", nevents)
+        logger.info("sample", s, "Sumws", sumws,"nevents", nevents)
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
     #    import jsonreader
@@ -197,18 +200,18 @@ def runSample(ar):
 
             return 0
         except Exception as e:
-            print(e)
+            logger.error(e)
             traceback.print_exc()
-            print("FAIL", s)
+            logger.error("FAIL", s)
             return 1
     else:
-        print("Null file", s)
+        logger.info("Null file", s)
 
 
 # from multiprocessing.pool import ThreadPool as Pool
 runpool = Pool(nprocesses)
 
-print(samples.keys())
+logger.info(samples.keys())
 sams = samples.keys()
 
 # check that at least the first file exists
@@ -226,24 +229,24 @@ toproc = sorted(
     ),
     reverse=True,
 )
-print("To process", [x[0] for x in toproc])
+logger.info("To process", [x[0] for x in toproc])
 
 if args.model == "fix":
     toproc = []
     sss = sams
     if len(sys.argv[3:]):
         sss = [s for s in sams if s in sys.argv[3:]]
-        print("fixing", sss)
+        logger.info("fixing", sss)
     for s in sss:
         if os.path.exists(samples[s]["files"][0]):
             try:
                 ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
                 if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
-                    print("zombie or zero keys", s)
+                    logger.info("zombie or zero keys", s)
                     toproc.append((s, samples[s]["files"]))
 
             except:
-                print("failed", s)
+                logger.error("failed", s)
                 toproc.append((s, samples[s]["files"]))
 elif args.model[:5] == "model":
     import importlib
@@ -264,9 +267,9 @@ elif args.model[:5] == "model":
     allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
     for x in allmc:
-        print(x, "\t", samples[x]["xsec"])
+        logger.info(x, "\t", samples[x]["xsec"])
     for x in alldata:
-        print(x, "\t", samples[x]["lumi"])
+        logger.info(x, "\t", samples[x]["lumi"])
 
     toproc = [
         (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
@@ -274,14 +277,14 @@ elif args.model[:5] == "model":
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
-print("Will process", [x[0] for x in toproc])
+logger.info("Will process", [x[0] for x in toproc])
 
 if nprocesses > 1:
     results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])
 else:
     results = zip([runSample(x) for x in toproc], [x[0] for x in toproc])
 
-print("Results", results)
-print("To resubmit", [x[1] for x in results if x[0]])
+logger.info("Results", results)
+logger.info("To resubmit", [x[1] for x in results if x[0]])
 
-print("time:  ", time.time() - start)
+logger.info("time:  ", time.time() - start)

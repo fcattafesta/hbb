@@ -3,6 +3,7 @@ import torch
 import numpy as np
 from datetime import datetime
 import time
+import sys
 
 # PyTorch TensorBoard support
 from torch.utils.tensorboard import SummaryWriter
@@ -11,7 +12,10 @@ from dataset import load_data
 from tools import train_val_one_epoch, eval_model, export_onnx
 from DNN_model import get_model
 from args_train import args
+
+sys.path.append('../')
 from logger import setup_logger
+
 
 if args.histos:
     from sig_bkg_histos import plot_sig_bkg_distributions
