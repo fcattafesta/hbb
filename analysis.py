@@ -231,7 +231,7 @@ toproc = sorted(
     ),
     reverse=True,
 )
-logger.info("To process %s" % toproc)
+logger.info("To process %s" % [x[0] for x in toproc])
 
 if args.model == "fix":
     toproc = []
@@ -279,7 +279,7 @@ elif args.model[:5] == "model":
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
-logger.info("Will process %s" % toproc)
+logger.info("Will process %s" %  [x[0] for x in toproc])
 
 if nprocesses > 1:
     results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])
