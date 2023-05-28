@@ -43,6 +43,8 @@ start = time.time()
 os.makedirs(args.histfolder, exist_ok=True)
 logger = setup_logger(f"{args.histfolder}/log.log")
 
+logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))
+
 # Create the flow
 flow = SampleProcessing(
     "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
