@@ -63,9 +63,16 @@ def getFlowDNN(model, flow=None):
         h1 = rdf.Define("DNN_Score", eval_string).Histo1D(
             ("h_sig", "", 100, 0, 1), "DNN_Score"
         )
+        h2 = rdf.Define("atanhDNN_Score", "atanh(DNN_Score)").Histo1D(
+            ("h_sig", "", 100, -5, 5), "atanhDNN_Score"
+        )
         c1 = ROOT.TCanvas()
         h1.Draw()
         c1.SaveAs("test.png")
+        c2 = ROOT.TCanvas()
+        h2.Draw()
+        c2.SaveAs("test2.png")
+
 
     return flow
 
