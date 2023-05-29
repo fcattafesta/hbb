@@ -1032,7 +1032,7 @@ def makeplot(hn, saveintegrals=True):
                     Significance.SetBinContent(
                         i, Significance.GetBinContent(i) / sqrt(B.GetBinContent(i))
                     )
-                except ZeroDivisionError:
+                except ValueError:
                     Significance.SetBinContent(i, 0)
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")
