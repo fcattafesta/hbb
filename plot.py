@@ -1045,7 +1045,7 @@ def makeplot(hn, saveintegrals=True):
             c_significance.SetLeftMargin(0.2)
             Significance.Draw("hist")
             t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.45, 0.95, SignificanceSum, 42)
+            t2 = makeText(0.45, 0.95, str(SignificanceSum), 42)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_Significance.png" % hn)
