@@ -1041,7 +1041,7 @@ def makeplot(hn, saveintegrals=True):
             Significance.Write()
             # sum the bins of the significance histogram
             SignificanceSum = Significance.Integral(0, Significance.GetNbinsX() + 1)
-            SignificanceSum_str = '%.2f' % SignificanceSum
+            SignificanceSum_str = str('%.2f' % SignificanceSum)
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
