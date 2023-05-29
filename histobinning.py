@@ -6,7 +6,7 @@ binningRules = [
     (".*_deta", "30, 0, 5"),
     (".*_dr", "30, 0, 10"),
     (".*_ptRatio", "30, 0, 2"),
-    ("btag.*", "4, -0.5, 3.5"),
+    ("btag.*", "100, 0, 1"),
     ("SoftActivityJetNjets5", "12, -0.5, 11.5"),
     ("DNN_Score", "10000, 0, 1"),
     ("atanhDNN_Score", "10000, 0, 7"),
