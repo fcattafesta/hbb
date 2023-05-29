@@ -23,6 +23,7 @@ def load_data(args):
     dirs = args.data_dirs
 
     dimension = (args.train_size + args.val_size + args.test_size) / 2
+    logger.info("Variables: %s", DNN_input_variables)
 
     # list of signal files
     sig_files = []
@@ -31,6 +32,7 @@ def load_data(args):
 
     # open each file and get the Events tree using uproot
     for i, file in enumerate(sig_files):
+        logger.info(f"Loading file {file}")
         sig_file = uproot.open(f"{file}:Events")
         variables_sig_array = np.array(
             [sig_file[input].array(library="np") for input in DNN_input_variables]
@@ -71,6 +73,7 @@ def load_data(args):
         bkg_files += [x + y + "_Snapshot.root" for y in background_list]
 
     for i, file in enumerate(bkg_files):
+        logger.info(f"Loading file {file}")
         bkg_file = uproot.open(f"{file}:Events")
         variables_bkg_array = np.array(
             [bkg_file[input].array(library="np") for input in DNN_input_variables]
