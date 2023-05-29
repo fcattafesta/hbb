@@ -1046,7 +1046,7 @@ def makeplot(hn, saveintegrals=True):
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
             t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.55, 0.95, "SignificanceSum = "+SignificanceSum_str, 42)
+            t2 = makeText(0.75, 0.95, "SignificanceSum = "+SignificanceSum_str, 35)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_Significance.png" % hn)
