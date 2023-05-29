@@ -907,7 +907,7 @@ def makeplot(hn, saveintegrals=True):
             f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
         )
         os.system("mkdir -p " + outpath)
-        #os.system("cp " + args.histfolder + "/description.txt " + outpath)
+        # os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
         #        os.system("git diff HEAD > "+outpath+"/git_diff.txt")
         #        os.system("git status HEAD > "+outpath+"/git_status.txt")
@@ -1021,6 +1021,25 @@ def makeplot(hn, saveintegrals=True):
             S.Write()
             fR.Close()
 
+        if "DNN" in hn:
+            S = histoSigsum[hn].Clone()
+            B = histosum[hn].Clone()
+            # histogram of significance (S/sqrt(B)) for each bin of the DNN
+            Significance = S.Clone()
+            # divide each bin of the significance histogram by sqrt(B)
+            for i in range(Significance.GetNbinsX() + 1):
+                Significance.SetBinContent(
+                    i, Significance.GetBinContent(i) / sqrt(B.GetBinContent(i))
+                )
+            # write the significance histogram to a file
+            fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")
+            Significance.Write()
+            # sum the bins of the significance histogram
+            SignificanceSum = Significance.Integral(0, Significance.GetNbinsX() + 1)
+            # write the sum of the bins of the significance histogram to a file
+            SignificanceSum.Write()
+            fR.Close()
+
         # for gr in model.signalSortedForLegend:
         #     h = histosSignal[hn][gr]
         #     histos[hn].Add(h.Clone())
@@ -1042,7 +1061,13 @@ def makeplot(hn, saveintegrals=True):
                     / (0.001 + abs(histos[hn].GetStack().Last().GetBinContent(i)))
                     > 0.05
                 ):
-                    print("to blind",hn,i,abs(histos[hn].GetStack().Last().GetBinContent(i)), histosSig[hn].GetStack().Last().GetBinContent(i))
+                    print(
+                        "to blind",
+                        hn,
+                        i,
+                        abs(histos[hn].GetStack().Last().GetBinContent(i)),
+                        histosSig[hn].GetStack().Last().GetBinContent(i),
+                    )
                     if i < firstBlind:
                         firstBlind = i
                     lastBlind = i
@@ -1050,7 +1075,7 @@ def makeplot(hn, saveintegrals=True):
                 for i in range(firstBlind, lastBlind + 1):
                     datastack[hn].GetStack().Last().SetBinContent(i, 0)
                     datasum[hn].SetBinContent(i, 0)
-                    print("blinded",i,hn)
+                    print("blinded", i, hn)
 
         myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
