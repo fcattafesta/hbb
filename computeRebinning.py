@@ -17,8 +17,8 @@ def FindBinDown(
 ):
     binLimitDown = 0.0
     for n in range(binLimitUp - MinNumberOfBin_inBinning - 1, 0, -1):
-        error_B = ROOT.Double(0)
-        error_S = ROOT.Double(0)
+        error_B = ROOT.Double_t(0)
+        error_S = ROOT.Double_t(0)
         integral_B = hBackground.IntegralAndError(n + 1, binLimitUp, error_B)
         integral_S = hSignal.IntegralAndError(n + 1, binLimitUp, error_S)
 
