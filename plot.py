@@ -1042,15 +1042,15 @@ def makeplot(hn, saveintegrals=True):
                     / (0.001 + abs(histos[hn].GetStack().Last().GetBinContent(i)))
                     > 0.05
                 ):
-                    # print "to blind",hn,i,abs(histos[hn].GetStack().Last().GetBinContent(i)), histosSig[hn].GetStack().Last().GetBinContent(i)
+                    print("to blind",hn,i,abs(histos[hn].GetStack().Last().GetBinContent(i)), histosSig[hn].GetStack().Last().GetBinContent(i))
                     if i < firstBlind:
                         firstBlind = i
                     lastBlind = i
-            if False:  # blind!
+            if args.blind:  # blind!
                 for i in range(firstBlind, lastBlind + 1):
                     datastack[hn].GetStack().Last().SetBinContent(i, 0)
                     datasum[hn].SetBinContent(i, 0)
-                    # print "blinded",i,hn
+                    print("blinded",i,hn)
 
         myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 

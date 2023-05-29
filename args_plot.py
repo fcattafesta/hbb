@@ -16,6 +16,9 @@ parser.add_argument(
 parser.add_argument(
     "-fsub", "--foldersuffix", default="", help="Folder suffix for annotations"
 )
+parser.add_argument(
+    "-b", "--blind", help="Blind data in plots", action="store_true"
+)
 
 
 parser.print_help()
