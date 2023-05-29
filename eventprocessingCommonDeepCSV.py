@@ -22,7 +22,7 @@ def getFlowCommonDeepCSV(flow):
 
     ### Preselction for Jets ###
     # NOTE: JEC?
-    # NOTE: FSR, PUId=0, JET_pt=30
+    # NOTE: FSR, JET_pt=30
     flow.MatchDeltaR("SelectedElectron", "Jet")
     flow.MatchDeltaR("SelectedMuon", "Jet")
     flow.SubCollection(
