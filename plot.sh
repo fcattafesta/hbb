@@ -24,4 +24,5 @@ $CMD \
     ${model} \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --outfolder ${plotdir}/${lep}/${suffix}/ \
+    --blind \
     "${@:3}"

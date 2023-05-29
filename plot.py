@@ -1021,6 +1021,7 @@ def makeplot(hn, saveintegrals=True):
             S.Write()
             fR.Close()
 
+        SignificanceSum_str = ""
         if "DNN" in hn:
             S = histoSigsum[hn].Clone()
             B = histosum[hn].Clone()
@@ -1041,20 +1042,21 @@ def makeplot(hn, saveintegrals=True):
             Significance.Write()
             # sum the bins of the significance histogram
             SignificanceSum = Significance.Integral(0, Significance.GetNbinsX() + 1)
-            SignificanceSum_str = str('%.2f' % SignificanceSum)
+            SignificanceSum_str = "SignificanceSum = " + str("%.2f" % SignificanceSum)
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
             t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.75, 0.95, "SignificanceSum = "+SignificanceSum_str, 42)
+            t2 = makeText(0.8, 0.95, SignificanceSum_str, 42, size=0.03)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_Significance.png" % hn)
-            SignificanceSum = getattr(ROOT, "TParameter<double>")("SignificanceSum", SignificanceSum)
+            SignificanceSum = getattr(ROOT, "TParameter<double>")(
+                "SignificanceSum", SignificanceSum
+            )
             SignificanceSum.Write()
             c_significance.Write()
             fR.Close()
-
 
         # for gr in model.signalSortedForLegend:
         #     h = histosSignal[hn][gr]
@@ -1179,6 +1181,7 @@ def makeplot(hn, saveintegrals=True):
                 42,
                 size=0.04,
             )
+
             t1 = makeText(0.25, 0.95, "CMS", 61)
             t2 = makeText(0.45, 0.95, str(year), 42)
             t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
@@ -1190,6 +1193,9 @@ def makeplot(hn, saveintegrals=True):
             t2.Draw()
             t3.Draw()
             # td.Draw()
+            if SignificanceSum_str:
+                t_sig = makeText(0.4, 0.7, SignificanceSum_str, 42, size=0.03)
+                t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
                 datasum[hn].SetMarkerColor(ROOT.kBlack)
