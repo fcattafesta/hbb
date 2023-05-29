@@ -1039,9 +1039,8 @@ def makeplot(hn, saveintegrals=True):
             Significance.Write()
             # sum the bins of the significance histogram
             SignificanceSum = Significance.Integral(0, Significance.GetNbinsX() + 1)
-            # write the sum of the bins of the significance histogram to a file
-            SignificanceSum.Write()
-            fR.Close()
+            with open(outpath + "/%s_Significance.txt" % hn, "w") as f:
+                f.write(str(SignificanceSum))
 
         # for gr in model.signalSortedForLegend:
         #     h = histosSignal[hn][gr]
