@@ -49,7 +49,7 @@ hSignal = fSignal.Get(variable + f"___{SR}").Clone()
 hBackground = fBackground.Get(variable + f"___{SR}").Clone()
 
 
-xMax = 5.0
+xMax = 1. if variable == "DNN_Score" else 7.
 binMinWidth = 0.01
 Nbins_binning = hSignal.GetNbinsX()
 MinNumberOfBin_inBinning = int(binMinWidth / xMax * Nbins_binning)
