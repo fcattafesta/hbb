@@ -35,10 +35,10 @@ def FindBinDown(
 histodir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/{args.suffix}/"
 variable = args.variable
 if args.lep == "mu":
-    SR = "SRmm"
+    SR = "SR_mm"
     data = "SingleMuon_2018"
 elif args.lep == "el":
-    SR = "SRee"
+    SR = "SR_ee"
     data = "EGamma_2018"
 
 signalSample = "ZH"
