@@ -1030,7 +1030,9 @@ def makeplot(hn, saveintegrals=True):
             for i in range(Significance.GetNbinsX() + 1):
                 try:
                     Significance.SetBinContent(
-                        i, Significance.GetBinContent(i) / sqrt(B.GetBinContent(i))
+                        i,
+                        Significance.GetBinContent(i)
+                        / sqrt(B.GetBinContent(i) + 0.1 * B.GetBinContent(i)),
                     )
                 except (ValueError, ZeroDivisionError):
                     Significance.SetBinContent(i, 0)
