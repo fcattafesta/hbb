@@ -1028,9 +1028,12 @@ def makeplot(hn, saveintegrals=True):
             Significance = S.Clone()
             # divide each bin of the significance histogram by sqrt(B)
             for i in range(Significance.GetNbinsX() + 1):
-                Significance.SetBinContent(
-                    i, Significance.GetBinContent(i) / sqrt(B.GetBinContent(i))
-                )
+                try:
+                    Significance.SetBinContent(
+                        i, Significance.GetBinContent(i) / sqrt(B.GetBinContent(i))
+                    )
+                except ZeroDivisionError:
+                    Significance.SetBinContent(i, 0)
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")
             Significance.Write()
