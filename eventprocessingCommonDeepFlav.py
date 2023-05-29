@@ -95,11 +95,11 @@ def getFlowCommonDeepFlav(flow):
     # B-tagging distributions for JetBtagMax and JetBtagMin
     flow.Define(
         "btag_max",
-        "int((JetBtagMax_btagDeepFlavB > 0.7100)) + int((JetBtagMax_btagDeepFlavB > 0.2783)) + int((JetBtagMax_btagDeepFlavB > 0.0490))",
+        "JetBtagMax_btagDeepFlavB",
     )
     flow.Define(
         "btag_min",
-        "int((JetBtagMin_btagDeepFlavB > 0.7100)) + int((JetBtagMin_btagDeepFlavB > 0.2783)) + int((JetBtagMin_btagDeepFlavB > 0.0490))",
+        "JetBtagMin_btagDeepFlavB",
     )
 
     return flow

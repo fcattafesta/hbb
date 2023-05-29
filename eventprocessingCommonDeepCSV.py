@@ -95,11 +95,11 @@ def getFlowCommonDeepCSV(flow):
     # B-tagging distributions for JetBtagMax and JetBtagMin
     flow.Define(
         "btag_max",
-        "int((JetBtagMax_btagDeepB > 0.7100)) + int((JetBtagMax_btagDeepB > 0.2783)) + int((JetBtagMax_btagDeepB > 0.0490))",
+        "JetBtagMax_btagDeepB",
     )
     flow.Define(
         "btag_min",
-        "int((JetBtagMin_btagDeepB > 0.7100)) + int((JetBtagMin_btagDeepB > 0.2783)) + int((JetBtagMin_btagDeepB > 0.0490))",
+        "JetBtagMin_btagDeepB",
     )
 
     return flow
