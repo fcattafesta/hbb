@@ -1194,7 +1194,7 @@ def makeplot(hn, saveintegrals=True):
             t3.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.4, 0.7, SignificanceSum_str, 42, size=0.03)
+                t_sig = makeText(0.6, 0.75, SignificanceSum_str, 42, size=0.03)
                 t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
