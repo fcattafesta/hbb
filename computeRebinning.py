@@ -17,13 +17,11 @@ def FindBinDown(
 ):
     binLimitDown = 0.0
     for n in range(binLimitUp - MinNumberOfBin_inBinning - 1, 0, -1):
-        error_B = ROOT.Double_t(0)
-        error_S = ROOT.Double_t(0)
-        integral_B = hBackground.IntegralAndError(n + 1, binLimitUp, error_B)
-        integral_S = hSignal.IntegralAndError(n + 1, binLimitUp, error_S)
+
+        integral_B = hBackground.Integral(n + 1, binLimitUp)
+        integral_S = hSignal.Integral(n + 1, binLimitUp)
 
         integral = integral_S + integral_B
-        error2 = error_B * error_B + error_S * error_S
 
         if integral_S >= minNumberOfEventPerBin:
             binLimitDown = n
