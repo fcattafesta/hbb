@@ -55,7 +55,7 @@ Nbins_binning = hSignal.GetNbinsX()
 MinNumberOfBin_inBinning = int(binMinWidth / xMax * Nbins_binning)
 binLimitDown = Nbins_binning
 
-minNumberOfEventPerBin = 0.3
+minNumberOfEventPerBin = 2
 hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
 tot = hSignal.Integral(0, Nbins_binning + 1)
 N = tot * 2
