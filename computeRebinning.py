@@ -6,22 +6,19 @@ from samples import samples
 
 # argument parser
 parser = argparse.ArgumentParser()
-parser.add_argument("-v", "--variable", default="DNN_Score", help="Variable to plot")
+parser.add_argument("-v", "--variable", default="atanhDNN_Score", help="Variable to plot")
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 parser.add_argument("-s", "--suffix", default="", help="Suffix for output file")
 args = parser.parse_args()
 
 
 def FindBinDown(
-    hBackground, hSignal, binLimitUp, minNumberOfEventPerBin, MinNumberOfBin_inBinning
+    hSignal, binLimitUp, minNumberOfEventPerBin, MinNumberOfBin_inBinning
 ):
     binLimitDown = 0.0
     for n in range(binLimitUp - MinNumberOfBin_inBinning - 1, 0, -1):
 
-        integral_B = hBackground.Integral(n + 1, binLimitUp)
         integral_S = hSignal.Integral(n + 1, binLimitUp)
-
-        integral = integral_S + integral_B
 
         if integral_S >= minNumberOfEventPerBin:
             binLimitDown = n
@@ -42,20 +39,18 @@ elif args.lep == "el":
 signalSample = "ZH"
 
 fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}Histos.root")
-fBackground = ROOT.TFile.Open(f"{histodir}/{signalSample}Histos.root")
 
 
 hSignal = fSignal.Get(variable + f"___{SR}").Clone()
-hBackground = fBackground.Get(variable + f"___{SR}").Clone()
 
 
-xMax = 1. if variable == "DNN_Score" else 7.
-binMinWidth = 0.01
+xMax = 7. if variable == "atanhDNN_Score" else 1.
+binMinWidth = 0.25 if variable == "atanhDNN_Score" else 0.03
 Nbins_binning = hSignal.GetNbinsX()
 MinNumberOfBin_inBinning = int(binMinWidth / xMax * Nbins_binning)
 binLimitDown = Nbins_binning
 
-minNumberOfEventPerBin = 2
+minNumberOfEventPerBin = 1
 hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
 tot = hSignal.Integral(0, Nbins_binning + 1)
 N = tot * 2
@@ -74,7 +69,6 @@ while binLimitDown > 0:
     binning_DNN.append((1.0 * binLimitDown * xMax) / Nbins_binning)
     binLimitUp = binLimitDown
     binLimitDown = FindBinDown(
-        hBackground,
         hSignal,
         binLimitUp,
         minNumberOfEventPerBin,
