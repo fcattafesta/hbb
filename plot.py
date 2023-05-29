@@ -1041,8 +1041,19 @@ def makeplot(hn, saveintegrals=True):
             Significance.Write()
             # sum the bins of the significance histogram
             SignificanceSum = Significance.Integral(0, Significance.GetNbinsX() + 1)
-            with open(outpath + "/%s_Significance.txt" % hn, "w") as f_out:
-                f_out.write(str(SignificanceSum))
+            c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
+            c_significance.SetLeftMargin(0.2)
+            Significance.Draw("hist")
+            t1 = makeText(0.25, 0.95, "CMS", 61)
+            t2 = makeText(0.45, 0.95, SignificanceSum, 42)
+            t1.Draw()
+            t2.Draw()
+            c_significance.SaveAs(outpath + "/%s_Significance.png" % hn)
+            SignificanceSum = getattr(ROOT, "TParameter<double>")("SignificanceSum", SignificanceSum)
+            SignificanceSum.Write()
+            c_significance.Write()
+            fR.Close()
+
 
         # for gr in model.signalSortedForLegend:
         #     h = histosSignal[hn][gr]
