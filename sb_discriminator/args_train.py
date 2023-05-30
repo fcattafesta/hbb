@@ -69,9 +69,8 @@ parser.add_argument(
     help="Evaluate the model",
     default=False,
 )
-# TODO: add option to use multiple gpus
 parser.add_argument(
-    "-g", "--gpu", default=False, help="GPU number", action="store_true"
+    "-g", "--gpus", default="", help="GPU numbers separated by a comma", type=str
 )
 parser.add_argument(
     "--histos", default=False, help="Make histograms", action="store_true"
@@ -108,7 +107,7 @@ parser.add_argument(
 parser.add_argument(
     "--weights",
     nargs="+",
-    default=[50, 0.014], # [50, 0.01] for csv, [50, 0.014] for flav
+    default=[50, 0.014],  # [50, 0.01] for csv, [50, 0.014] for flav
     help="Weights for the loss function (signal, background)",
     type=float,
 )

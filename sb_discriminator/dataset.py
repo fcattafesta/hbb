@@ -14,11 +14,7 @@ def load_data(args):
     batch_size = args.batch_size
     logger.info(f"Batch size: {batch_size}")
 
-    if args.gpu:
-        device = torch.device("cuda")
-    else:
-        device = torch.device("cpu")
-    logger.info(f"Using {device} device")
+
 
     dirs = args.data_dirs
 
@@ -183,6 +179,5 @@ def load_data(args):
         test_size,
         X_fts,
         X_lbl,
-        device,
         batch_size,
     )

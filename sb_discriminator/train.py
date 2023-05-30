@@ -59,14 +59,25 @@ if __name__ == "__main__":
         test_size,
         X_fts,
         X_lbl,
-        device,
         batch_size,
     ) = load_data(args)
+
+    if args.gpus:
+        gpus = [int(i) for i in args.gpus.split(',')]
+        device = torch.device(gpus[0])
+    else:
+        gpus=None
+        device = torch.device("cpu")
+    logger.info(f"Using {device} device")
 
     input_size = X_fts.size(1) - 1
 
     # Get model
     model, loss_fn, optimizer = get_model(input_size, device)
+    
+    if gpus is not None and len(gpus) > 1:
+        # model becomes `torch.nn.DataParallel` w/ model.module being the original `torch.nn.Module`
+        model = torch.nn.DataParallel(model, device_ids=gpus)
 
     if args.load_model or args.eval_model:
         checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
