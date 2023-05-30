@@ -87,10 +87,10 @@ def getFlowCommonDeepCSV(flow):
     flow.Define("jj_dr", "TMath::Sqrt(jj_deta*jj_deta + jj_dphi*jj_dphi)")
 
     # B-tagging working points
-    flow.Selection("JetBtagMaxLoose", "JetBtagMax_btagDeepB > 0.0490")
-    flow.Selection("JetBtagMaxMedium", "JetBtagMax_btagDeepB > 0.2783")
-    flow.Selection("JetBtagMaxTight", "JetBtagMax_btagDeepB > 0.7100")
-    flow.Selection("JetBtagMinLoose", "JetBtagMin_btagDeepB > 0.0490")
+    flow.Selection("JetBtagMaxLoose", "JetBtagMax_btagDeepB > 0.1208")
+    flow.Selection("JetBtagMaxMedium", "JetBtagMax_btagDeepB > 0.4168")
+    flow.Selection("JetBtagMaxTight", "JetBtagMax_btagDeepB > 0.7665")
+    flow.Selection("JetBtagMinLoose", "JetBtagMin_btagDeepB > 0.1208")
 
     # B-tagging distributions for JetBtagMax and JetBtagMin
     flow.Define(
