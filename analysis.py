@@ -171,10 +171,10 @@ def runSample(ar):
                         "DNN_weight", f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}"
                     )
                 processed_rdf.Snapshot(
-                    "Events", f"{args.histfolder}/Snapshots/{s}_Snapshot.root", snaplist
+                    "Events", f"{args.histfolder}/Snapshots/{s}_{sig_region}_Snapshot.root", snaplist
                 )
 
-            outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
+            outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
             if nthreads != 0:
                 ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
@@ -192,7 +192,7 @@ def runSample(ar):
 
             for subname in subs:
                 outFile = ROOT.TFile.Open(
-                    f"{args.histfolder}/{s}_{subname}Histos.root", "recreate"
+                    f"{args.histfolder}/{s}_{subname}_Histos.root", "recreate"
                 )
                 for h in out.histosOutSplit[subname]:
                     hname = h.GetName()
@@ -247,7 +247,7 @@ if args.model == "fix":
     for s in sss:
         if os.path.exists(samples[s]["files"][0]):
             try:
-                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
+                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root")
                 if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
                     logger.info("zombie or zero keys %s" % s)
                     toproc.append((s, samples[s]["files"]))
