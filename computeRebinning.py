@@ -41,13 +41,13 @@ fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
 hSignal=fSignal.Get(variable + f"___{SR}").Clone()
 print(hSignal)
 hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
-fSignal.Close()
 print(hSignal)
 
 signalSample = "ggZH"
-fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
-hSignal.Add(fSignal.Get(variable + f"___{SR}").Clone(), samples[signalSample]["xsec"] * samples[data]["lumi"])
+fSignal1 = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
+hSignal.Add(fSignal1.Get(variable + f"___{SR}").Clone(), samples[signalSample]["xsec"] * samples[data]["lumi"])
 fSignal.Close()
+fSignal1.Close()
 
 
 xMax = 7. if variable == "atanhDNN_Score" else 1.
