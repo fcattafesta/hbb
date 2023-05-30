@@ -39,12 +39,15 @@ elif args.lep == "el":
 signalSample = "ZH"
 fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
 hSignal=fSignal.Get(variable + f"___{SR}").Clone()
+print(hSignal)
 hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
+fSignal.Close()
+print(hSignal)
 
 signalSample = "ggZH"
 fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
 hSignal.Add(fSignal.Get(variable + f"___{SR}").Clone(), samples[signalSample]["xsec"] * samples[data]["lumi"])
-
+fSignal.Close()
 
 
 xMax = 7. if variable == "atanhDNN_Score" else 1.
