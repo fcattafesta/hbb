@@ -36,23 +36,15 @@ elif args.lep == "el":
     SR = "SR_ee"
     data = "EGamma_2018"
 
-signalSamples = ["ZH", "ggZH"]
-hSignals = []
-for signalSample in signalSamples:
-    fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
-    print(f"{histodir}/{signalSample}_Histos.root")
+signalSample = "ZH"
+fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
+hSignal=fSignal.Get(variable + f"___{SR}").Clone()
+hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
 
-    hSignal=fSignal.Get(variable + f"___{SR}").Clone()
-    hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
-    hSignals.append(hSignal.Clone()) #fSignal.Get(variable + f"___{SR}").Clone())
-    print(hSignal)
+signalSample = "ggZH"
+fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
+hSignal.Add(fSignal.Get(variable + f"___{SR}").Clone(), samples[signalSample]["xsec"] * samples[data]["lumi"])
 
-
-print(hSignals)
-# sum the signal histograms
-hSignal = hSignals[0].Clone()
-for h in hSignals[1:]:
-    hSignal.Add(h)
 
 
 xMax = 7. if variable == "atanhDNN_Score" else 1.
