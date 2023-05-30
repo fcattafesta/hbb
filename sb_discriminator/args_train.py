@@ -117,6 +117,12 @@ parser.add_argument(
     help="Name for the directory",
     type=str,
 )
+parser.add_argument(
+    "--noVV",
+    default=False,
+    help="Remove VV from the background",
+    action="store_true",
+)
 
 parser.print_help()
 args = parser.parse_args()

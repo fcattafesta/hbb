@@ -5,7 +5,7 @@ import math
 import logging
 
 
-from DNN_input_lists import DNN_input_variables, signal_list, background_list
+from DNN_input_lists import DNN_input_variables, signal_list, background_list, background_list_noVV
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +66,10 @@ def load_data(args):
     #######################################################
     bkg_files = []
     for x in dirs:
-        bkg_files += [x + y + "_Snapshot.root" for y in background_list]
+        if args.noVV:
+            bkg_files += [x + y + "_Snapshot.root" for y in background_list_noVV]
+        else:
+            bkg_files += [x + y + "_Snapshot.root" for y in background_list]
 
     for i, file in enumerate(bkg_files):
         logger.info(f"Loading file {file}")
