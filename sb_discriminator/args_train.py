@@ -108,7 +108,7 @@ parser.add_argument(
 parser.add_argument(
     "--weights",
     nargs="+",
-    default=[50, 0.014],
+    default=[50, 0.014], # [50, 0.01] for csv, [50, 0.014] for flav
     help="Weights for the loss function (signal, background)",
     type=float,
 )

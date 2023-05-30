@@ -1040,8 +1040,11 @@ def makeplot(hn, saveintegrals=True):
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")
             Significance.Write()
-            # sum the bins of the significance histogram
-            SignificanceSum = Significance.Integral(0, Significance.GetNbinsX() + 1)
+            # sum the squared of the bins of the significance histogram
+            SignificanceSum = 0
+            for i in range(Significance.GetNbinsX() + 1):
+                SignificanceSum += Significance.GetBinContent(i) ** 2
+
             SignificanceSum_str = "S/sqrt(B) sum = " + str("%.2f" % SignificanceSum)
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
