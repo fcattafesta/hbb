@@ -41,11 +41,19 @@ hSignals = []
 for signalSample in signalSamples:
     fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
     print(f"{histodir}/{signalSample}_Histos.root")
-    hSignal=fSignal.Get(variable + f"___{SR}").Clone()
+    # get a copy of the signal histogram that lasts outside the loop
+
+    # hSignal = fSignal.Get(f"{SR}/{variable}")
+    # hSignal.SetDirectory(0)
+    # hSignals.append(hSignal)
+    # fSignal.Close()
+
+    hSignal=fSignal.Get(variable + f"___{SR}")
     print(variable + f"___{SR}")
     hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
     hSignals.append(hSignal)
     print(hSignal)
+
 
 print(hSignals)
 # sum the signal histograms
