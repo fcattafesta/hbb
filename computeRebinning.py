@@ -46,8 +46,6 @@ print(hSignal)
 signalSample = "ggZH"
 fSignal1 = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
 hSignal.Add(fSignal1.Get(variable + f"___{SR}").Clone(), samples[signalSample]["xsec"] * samples[data]["lumi"])
-fSignal.Close()
-fSignal1.Close()
 
 
 xMax = 7. if variable == "atanhDNN_Score" else 1.
@@ -87,3 +85,6 @@ for n in range(len(binning_DNN) - 1, 0, -1):
 
 print("]")
 print(len(binning_DNN))
+
+fSignal.Close()
+fSignal1.Close()
