@@ -41,12 +41,13 @@ hSignals = []
 for signalSample in signalSamples:
     fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
     hSignals.append(fSignal.Get(variable + f"___{SR}").Clone())
+    hSignals[:-1].Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
 
 # sum the signal histograms
 hSignal = hSignals[0].Clone()
 for h in hSignals[1:]:
     hSignal.Add(h)
-    
+
 
 xMax = 7. if variable == "atanhDNN_Score" else 1.
 binMinWidth = 0.25 if variable == "atanhDNN_Score" else 0.03
@@ -55,7 +56,6 @@ MinNumberOfBin_inBinning = int(binMinWidth / xMax * Nbins_binning)
 binLimitDown = Nbins_binning
 
 minNumberOfEventPerBin = 1
-hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
 tot = hSignal.Integral(0, Nbins_binning + 1)
 N = tot * 2
 print("Total number of events:  ", tot)
