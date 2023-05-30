@@ -44,13 +44,13 @@ for signalSample in signalSamples:
 
     hSignal=fSignal.Get(variable + f"___{SR}").Clone()
     hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
-    hSignals.append(hSignal) #fSignal.Get(variable + f"___{SR}").Clone())
+    hSignals.append(hSignal.Clone()) #fSignal.Get(variable + f"___{SR}").Clone())
     print(hSignal)
 
 
 print(hSignals)
 # sum the signal histograms
-hSignal = hSignals[0]
+hSignal = hSignals[0].Clone()
 for h in hSignals[1:]:
     hSignal.Add(h)
 
