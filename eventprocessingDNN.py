@@ -56,17 +56,17 @@ def getFlowDNN(model, flow=None):
             eval_string += i + ", "
         eval_string = eval_string[:-2] + ")"
 
-        rdf = ROOT.RDataFrame("Events", "~/el/Snapshots/ggZH_Snapshot.root").Range(100)
+        rdf = ROOT.RDataFrame("Events", "~/ggZH_Snapshot.root").Range(100)
         print("branches in the tree:")
         for i in rdf.GetColumnNames():
             print(i)
         rdf=rdf.Define("DNN_Score", eval_string)
         rdf=rdf.Define("atanhDNN_Score", "atanh(DNN_Score)")
         h1 = rdf.Histo1D(
-            ("h_sig", "", 100, 0, 1), "DNN_Score"
+            ("h_sig", "", 50, 0, 1), "DNN_Score"
         )
         h2 = rdf.Histo1D(
-            ("h_sig", "", 100, -5, 5), "atanhDNN_Score"
+            ("h_sig", "", 50, 0, 5), "atanhDNN_Score"
         )
         c1 = ROOT.TCanvas()
         h1.Draw()
