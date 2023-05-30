@@ -5,7 +5,12 @@ import math
 import logging
 import os
 
-from DNN_input_lists import DNN_input_variables, signal_list, background_list, background_list_noVV
+from DNN_input_lists import (
+    DNN_input_variables,
+    signal_list,
+    background_list,
+    background_list_noVV,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -14,20 +19,23 @@ def load_data(args):
     batch_size = args.batch_size
     logger.info(f"Batch size: {batch_size}")
 
-
-
     dirs = args.data_dirs
 
     dimension = (args.train_size + args.val_size + args.test_size) / 2
     logger.info("Variables: %s", DNN_input_variables)
 
-    # list of signal files
+    # list of signal and background files
     sig_files = []
+    bkg_files = []
     for x in dirs:
-        try:
-            sig_files += [x + y + "_SR_ee_Snapshot.root" for y in signal_list]
-        except FileNotFoundError:
-            sig_files += [x + y + "_SR_mm_Snapshot.root" for y in signal_list]
+        files = os.listdir(x)
+        for file in files:
+            for signal in signal_list:
+                if signal in file:
+                    sig_files.append(x + file)
+            for background in background_list_noVV if args.noVV else background_list:
+                if background in file:
+                    bkg_files.append(x + file)
 
     # open each file and get the Events tree using uproot
     for i, file in enumerate(sig_files):
@@ -67,19 +75,6 @@ def load_data(args):
     X_sig = (variables_sig, ones_tensor)
 
     #######################################################
-    bkg_files = []
-    for x in dirs:
-        if args.noVV:
-            try:
-                bkg_files += [x + y + "_SR_ee_Snapshot.root" for y in background_list_noVV]
-            except FileNotFoundError:
-                bkg_files += [x + y + "_SR_mm_Snapshot.root" for y in background_list_noVV]
-        else:
-            try:
-                bkg_files += [x + y + "_SR_ee_Snapshot.root" for y in background_list]
-            except FileNotFoundError:
-                bkg_files += [x + y + "_SR_mm_Snapshot.root" for y in background_list]
-
     for i, file in enumerate(bkg_files):
         logger.info(f"Loading file {file}")
         bkg_file = uproot.open(f"{file}:Events")
