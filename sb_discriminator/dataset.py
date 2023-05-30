@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import math
 import logging
-
+import os
 
 from DNN_input_lists import DNN_input_variables, signal_list, background_list, background_list_noVV
 
@@ -24,7 +24,10 @@ def load_data(args):
     # list of signal files
     sig_files = []
     for x in dirs:
-        sig_files += [x + y + "_Snapshot.root" for y in signal_list]
+        try:
+            sig_files += [x + y + "SR_ee_Snapshot.root" for y in signal_list]
+        except FileNotFoundError:
+            sig_files += [x + y + "SR_mm_Snapshot.root" for y in signal_list]
 
     # open each file and get the Events tree using uproot
     for i, file in enumerate(sig_files):
@@ -67,9 +70,15 @@ def load_data(args):
     bkg_files = []
     for x in dirs:
         if args.noVV:
-            bkg_files += [x + y + "_Snapshot.root" for y in background_list_noVV]
+            try:
+                bkg_files += [x + y + "SR_ee_Snapshot.root" for y in background_list_noVV]
+            except FileNotFoundError:
+                bkg_files += [x + y + "SR_mm_Snapshot.root" for y in background_list_noVV]
         else:
-            bkg_files += [x + y + "_Snapshot.root" for y in background_list]
+            try:
+                bkg_files += [x + y + "SR_ee_Snapshot.root" for y in background_list]
+            except FileNotFoundError:
+                bkg_files += [x + y + "SR_mm_Snapshot.root" for y in background_list]
 
     for i, file in enumerate(bkg_files):
         logger.info(f"Loading file {file}")
