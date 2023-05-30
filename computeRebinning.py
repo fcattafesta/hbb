@@ -48,10 +48,10 @@ for signalSample in signalSamples:
     # hSignals.append(hSignal)
     # fSignal.Close()
 
-    hSignal=fSignal.Get(variable + f"___{SR}")
-    hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
-    hSignals.append(hSignal.Clone())
-    print(hSignal)
+    #hSignal=fSignal.Get(variable + f"___{SR}").Clone()
+    #hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
+    hSignals.append(fSignal.Get(variable + f"___{SR}").Clone())
+    #print(hSignal)
 
 
 print(hSignals)
