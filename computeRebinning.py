@@ -40,8 +40,9 @@ signalSamples = ["ZH", "ggZH"]
 hSignals = []
 for signalSample in signalSamples:
     fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
-    hSignals.append(fSignal.Get(variable + f"___{SR}").Clone())
-    hSignals[:-1].Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
+    hSignal=fSignal.Get(variable + f"___{SR}").Clone()
+    hSignal.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
+    hSignals.append(hSignal)
 
 # sum the signal histograms
 hSignal = hSignals[0].Clone()
