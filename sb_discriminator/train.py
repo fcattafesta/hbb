@@ -9,7 +9,7 @@ import sys
 from torch.utils.tensorboard import SummaryWriter
 
 from dataset import load_data
-from tools import train_val_one_epoch, eval_model, export_onnx
+from tools import get_model_parameters_number, train_val_one_epoch, eval_model, export_onnx
 from DNN_model import get_model
 from args_train import args
 
@@ -74,7 +74,10 @@ if __name__ == "__main__":
 
     # Get model
     model, loss_fn, optimizer = get_model(input_size, device)
-    
+    num_parameters=get_model_parameters_number(model)
+
+    logger.info(f"Number of parameters: {num_parameters}")
+
     if gpus is not None and len(gpus) > 1:
         # model becomes `torch.nn.DataParallel` w/ model.module being the original `torch.nn.Module`
         model = torch.nn.DataParallel(model, device_ids=gpus)

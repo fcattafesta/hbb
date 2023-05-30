@@ -5,6 +5,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def get_model_parameters_number(model):
+    params_num = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    return params_num
 
 def train_val_one_epoch(
     train,
