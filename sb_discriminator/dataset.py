@@ -25,9 +25,9 @@ def load_data(args):
     sig_files = []
     for x in dirs:
         try:
-            sig_files += [x + y + "SR_ee_Snapshot.root" for y in signal_list]
+            sig_files += [x + y + "_SR_ee_Snapshot.root" for y in signal_list]
         except FileNotFoundError:
-            sig_files += [x + y + "SR_mm_Snapshot.root" for y in signal_list]
+            sig_files += [x + y + "_SR_mm_Snapshot.root" for y in signal_list]
 
     # open each file and get the Events tree using uproot
     for i, file in enumerate(sig_files):
@@ -71,14 +71,14 @@ def load_data(args):
     for x in dirs:
         if args.noVV:
             try:
-                bkg_files += [x + y + "SR_ee_Snapshot.root" for y in background_list_noVV]
+                bkg_files += [x + y + "_SR_ee_Snapshot.root" for y in background_list_noVV]
             except FileNotFoundError:
-                bkg_files += [x + y + "SR_mm_Snapshot.root" for y in background_list_noVV]
+                bkg_files += [x + y + "_SR_mm_Snapshot.root" for y in background_list_noVV]
         else:
             try:
-                bkg_files += [x + y + "SR_ee_Snapshot.root" for y in background_list]
+                bkg_files += [x + y + "_SR_ee_Snapshot.root" for y in background_list]
             except FileNotFoundError:
-                bkg_files += [x + y + "SR_mm_Snapshot.root" for y in background_list]
+                bkg_files += [x + y + "_SR_mm_Snapshot.root" for y in background_list]
 
     for i, file in enumerate(bkg_files):
         logger.info(f"Loading file {file}")
