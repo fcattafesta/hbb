@@ -1045,7 +1045,8 @@ def makeplot(hn, saveintegrals=True):
             for i in range(Significance.GetNbinsX() + 1):
                 SignificanceSum += Significance.GetBinContent(i) ** 2
 
-            SignificanceSum_str = "S/sqrt(B) sum = " + str("%.2f" % SignificanceSum)
+            SignificanceSum = sqrt(SignificanceSum)
+            SignificanceSum_str = " #sqrt{#sum (S/#sqrt{B})^{2}} = " + str("%.2f" % SignificanceSum)
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
