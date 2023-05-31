@@ -1,22 +1,27 @@
-labelRegion_ = {
-    "SR_ee": "Signal Region Electrons",
-    "CR_Zee_bjets": "Z+bjets Region Electrons",
-    "CR_Zee_lightjets": "Z+lightjets Region Electrons",
-    "CR_ee_ttbar": "t#bar{t} Region Electrons",
-    "SR_mm": "Signal Region Muons",
-    "CR_Zmm_bjets": "Z+bjets Region Muons",
-    "CR_Zmm_lightjets": "Z+lightjets Region Muons",
-    "CR_mm_ttbar": "t#bar{t} Region Muons",
+labelRegion = {
+    "SR_ee": "Signal Region",
+    "CR_Zee_bjets": "Z+bjets Region",
+    "CR_Zee_lightjets": "Z+lightjets Region",
+    "CR_ee_ttbar": "t#bar{t} Region",
+    "SR_mm": "Signal Region",
+    "CR_Zmm_bjets": "Z+bjets Region",
+    "CR_Zmm_lightjets": "Z+lightjets Region",
+    "CR_mm_ttbar": "t#bar{t} Region",
 }
-
-labelRegionDeepFlav = {}
-for key in labelRegion_.keys():
-    labelRegionDeepFlav[key] = labelRegion_[key] + " DeepFlav"
-
-labelRegionDeepCSV = {}
-for key in labelRegion_.keys():
-    labelRegionDeepCSV[key] = labelRegion_[key] + " DeepCSV"
-
+labelLeptons = {
+    "SR_ee": "Electrons",
+    "CR_Zee_bjets": "Electrons",
+    "CR_Zee_lightjets": "Electrons",
+    "CR_ee_ttbar": "Electrons",
+    "SR_mm": "Muons",
+    "CR_Zmm_bjets": "Muons",
+    "CR_Zmm_lightjets": "Muons",
+    "CR_mm_ttbar": "Muons",
+}
+labelBtag = {
+    "deepflav": " DeepFlav",
+    "deepcsv": " DeepCSV",
+}
 
 labelVariable = {
     "Zee_mass": "m_{ee}",

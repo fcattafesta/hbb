@@ -13,14 +13,9 @@ import copy
 import ctypes
 
 from args_plot import args
-from labelDict import labelVariable, labelLegend
-if args.btag == "deepcsv":
-    from labelDict import labelRegionDeepCSV as labelRegion
-elif args.btag == "deepflav":
-    from labelDict import labelRegionDeepFlav as labelRegion
-else:
-    print("Btagging algo must be 'deepflav' or 'deepcsv'")
-    sys.exit(1)
+from labelDict import *
+
+btag_label= labelBtag[args.btag]
 
 outdir = args.workspace
 
@@ -1184,18 +1179,27 @@ def makeplot(hn, saveintegrals=True):
                 histosSignal[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.4,
-                0.8,
+                0.45,
+                0.85,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
                 else hn.split("___")[1],
                 42,
-                size=0.04,
+                size=0.03,
             )
 
             t1 = makeText(0.25, 0.95, "CMS", 61)
             t2 = makeText(0.45, 0.95, str(year), 42)
             t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t4 = makeText(
+                0.45,
+                0.75,
+                labelLeptons[hn.split("___")[1]] + btag_label
+                if hn.split("___")[1] in list(labelLeptons.keys())
+                else hn.split("___")[1],
+                42,
+                size=0.03,
+            )
             # td = makeText(
             #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
             # )
@@ -1203,9 +1207,10 @@ def makeplot(hn, saveintegrals=True):
             t1.Draw()
             t2.Draw()
             t3.Draw()
+            t4.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.45, 0.75, SignificanceSum_str, 42, size=0.03)
+                t_sig = makeText(0.45, 0.7, SignificanceSum_str, 42, size=0.025)
                 t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
