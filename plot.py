@@ -362,7 +362,7 @@ def makeEnvelopeShape(hn, sy, f, d, model):
         )
         and (i - badFit) > 0
     ):
-        logger.info("REPLICAS, not HESSIAN for %s %s %s %s %s"%( hn, sy, f, d, model))
+        logger.info("REPLICAS, not HESSIAN for %s %s %s %s %s" % (hn, sy, f, d, model))
         par2 = par2 / (i - badFit)
 
     funct.SetParameters(*envelopeFunctionParameterValues)
@@ -1162,15 +1162,10 @@ def makeplot(hn, saveintegrals=True):
                     max(0.1 * histos[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
                 if i == 0:
-                    histos[hn].SetMaximum(
-                        max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
-                    )
+                    histos[hn].SetMaximum(2 * histosum[hn].GetMaximum())
                 else:
                     histos[hn].SetMaximum(
-                        max(
-                            (datasum[hn].GetMaximum()) ** 2,
-                            (histosum[hn].GetMaximum()) ** 2,
-                        )
+                        (histosum[hn].GetMaximum()) ** 2,
                     )
                 histos[hn].Draw("hist")
 
