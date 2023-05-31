@@ -42,10 +42,10 @@ start = time.time()
 
 os.makedirs(args.histfolder, exist_ok=True)
 # remove the log file if already exists
-if os.path.exists(f"{args.histfolder}/log.log"):
-    os.remove(f"{args.histfolder}/log.log")
+if os.path.exists(f"{args.histfolder}/logger.log"):
+    os.remove(f"{args.histfolder}/logger.log")
 
-logger = setup_logger(f"{args.histfolder}/log.log")
+logger = setup_logger(f"{args.histfolder}/logger.log")
 
 
 logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))

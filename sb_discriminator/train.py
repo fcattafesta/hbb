@@ -44,7 +44,7 @@ if __name__ == "__main__":
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
     # Create the logger
-    logger = setup_logger(f"{main_dir}/log.log")
+    logger = setup_logger(f"{main_dir}/logger.log")
 
     logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
         best_model_name = args.load_model if args.load_model else args.eval_model
-        with open(f"{main_dir}/log.log", "r") as f:
+        with open(f"{main_dir}/logger.log", "r") as f:
             for line in reversed(f.readlines()):
                 if "Best epoch" in line:
                     # get line from Best epoch onwards
@@ -184,7 +184,7 @@ if __name__ == "__main__":
             print("\n\n\n")
             logger.info("Plotting training and validation loss and accuracy")
             train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-                f"{main_dir}/log.log"
+                f"{main_dir}/logger.log"
             )
 
             plot_history(

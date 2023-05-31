@@ -8,7 +8,6 @@ import importlib
 import time
 
 # import postfitPlot
-import argparse
 import copy
 import ctypes
 
@@ -16,7 +15,7 @@ from args_plot import args
 from labelDict import *
 from logger import setup_logger
 
-btag_label= labelBtag[args.btag]
+btag_label = labelBtag[args.btag]
 
 outdir = args.workspace
 
@@ -36,12 +35,12 @@ systematicsSetToUse = []
 
 date_time = time.strftime("%m%d-%H%M%S")
 
-outpath = (
-    f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
-)
+outpath = f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
 os.system("mkdir -p " + outpath)
 
-logger=setup_logger(outpath+"/log.log")
+logger = setup_logger(outpath + "/logger.log")
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
+
 
 def makeLegend(xDown, xUp, yDown, yUp, name=""):
     myLegend = ROOT.TLegend(xDown, yDown, xUp, yUp, name)
@@ -147,7 +146,7 @@ def findSyst(hn, sy, f, silent=False):
         hnForSys[hn][sy] = h3
         return h3
     if not silent:
-        logger.info("none matching", hn, sy, f)
+        logger.info("none matching %s %s %s" % (hn, sy, f))
     return ""
 
 
@@ -285,8 +284,11 @@ def makeEnvelopeShape(hn, sy, f, d, model):
         LHApdf_min = f[d].Get("LHApdf_down").GetVal()
         LHApdf_max = f[d].Get("LHApdf_up").GetVal()
     except:
-        logger.info("WARNING makeEnvelopeShape: LHApdf_down not found", hn, sy, f, d, model)
-        logger.info("I will consider ", pdf)
+        logger.info(
+            "WARNING makeEnvelopeShape: LHApdf_down not found %s %s %s %s"
+            % (hn, sy, f, d, model)
+        )
+        logger.info("I will consider %s" % pdf)
         LHApdf_min = -1
         LHApdf_max = -1
 
@@ -332,7 +334,7 @@ def makeEnvelopeShape(hn, sy, f, d, model):
             ) ** 2
         else:
             badFit += 1
-            logger.info(
+            print(
                 "BAD Fit",
                 hn,
                 sy,
@@ -367,7 +369,7 @@ def makeEnvelopeShape(hn, sy, f, d, model):
         )
         and (i - badFit) > 0
     ):
-        logger.info("REPLICAS, not HESSIAN for", hn, sy, f, d, model)
+        print("REPLICAS, not HESSIAN for", hn, sy, f, d, model)
         par2 = par2 / (i - badFit)
 
     funct.SetParameters(*envelopeFunctionParameterValues)
@@ -386,11 +388,10 @@ def makeEnvelopeShape(hn, sy, f, d, model):
 
     nhisto = nomHistoRebinned.Clone(hn + sy)
     nhisto.Multiply(funct)
+    logger.info("Creating %s using %s" % (nhisto.GetName(), pdf))
     logger.info(
-        "Creating %s using %s" % (nhisto.GetName(), pdf),
-        nhisto.Integral(),
-        funct.GetParameters()[0],
-        funct.GetParameters()[1],
+        "%s, %s, %s"
+        % (nhisto.Integral(), funct.GetParameters()[0], funct.GetParameters()[1])
     )
     return copy.copy(nhisto)
 
@@ -443,8 +444,11 @@ def makeEnvelopeShapeOld(hn, sy, f, d, model):
         LHApdf_min = f[d].Get("LHApdf_down").GetVal()
         LHApdf_max = f[d].Get("LHApdf_up").GetVal()
     except:
-        logger.info("WARNING makeEnvelopeShape: LHApdf_down not found", hn, sy, f, d, model)
-        logger.info("I will consider ", pdf)
+        logger.info(
+            "WARNING makeEnvelopeShape: LHApdf_down not found for %s %s %s %s "
+            % (hn, sy, f, d, model)
+        )
+        logger.info("I will consider %s" % pdf)
         LHApdf_min = -1
         LHApdf_max = -1
 
@@ -650,10 +654,13 @@ def fill_datasum(
                 else:
                     # if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
                     logger.info(
-                        h.GetSumOfWeights(),
-                        h.GetEntries(),
-                        lumi * samples[d]["xsec"],
-                        d,
+                        "%s %s %s %s"
+                        % (
+                            h.GetSumOfWeights(),
+                            h.GetEntries(),
+                            lumi * samples[d]["xsec"],
+                            d,
+                        )
                     )
                     h.Scale(samples[d]["xsec"] * lumi)
                     error_b = ctypes.c_double(0)
@@ -756,7 +763,7 @@ def fill_datasum(
                                     makeWorkspace,
                                 )
                             else:
-                                logger.info("missing", sy, "for", hn, gr, d)
+                                logger.info("missing %s for %s %s %s " % (s, hn, gr, d))
                                 addHistoInTStack(
                                     h,
                                     stackSys,
@@ -860,7 +867,7 @@ def fill_datasum(
                                 makeWorkspace,
                             )
                         else:
-                            logger.info("missing", sy, "for", hn, gr, d)
+                            logger.info("missing %s for %s %s %s " % (s, hn, gr, d))
                             addHistoInTStack(
                                 h,
                                 stackSys,
@@ -879,7 +886,7 @@ def fill_datasum(
                 if makeWorkspace:
                     all_histo_all_syst[hn][d]["nom"] = h.Clone()
             else:
-                logger.info("Cannot open", d, hn)
+                logger.info("Cannot open %s %s" % (d, hn))
                 exit(1)
             if gr in model.signal:
                 if gr not in list(histosSignal[hn].keys()):
@@ -900,8 +907,6 @@ def fill_datasum(
     # if (data) : myLegend.AddEntry(h,"data","P")
     # else : myLegend.AddEntry(h,gr,"f")
     return h
-
-
 
 
 def makeplot(hn, saveintegrals=True):
@@ -935,7 +940,7 @@ def makeplot(hn, saveintegrals=True):
 
         lumitot = 0
         lumis = {}
-        logger.info(("model.data=", model.data))
+        logger.info("model.data= %s" % model.data)
         for gr in model.data:
             for d in model.data[gr]:
                 lumitot += samples[d]["lumi"]
@@ -947,7 +952,7 @@ def makeplot(hn, saveintegrals=True):
                 else:
                     lumis[yr] = samples[d]["lumi"]
 
-        logger.info(("lumis=", lumis))
+        logger.info("lumis= %f" % lumis)
 
         histoSingleSyst[hn] = {}
         histosSignal[hn] = {}
@@ -1042,7 +1047,7 @@ def makeplot(hn, saveintegrals=True):
                         Significance.GetBinContent(i)
                         / (sqrt(B.GetBinContent(i)) + 0.1 * B.GetBinContent(i)),
                     )
-                except (ZeroDivisionError):
+                except ZeroDivisionError:
                     Significance.SetBinContent(i, 0)
                     logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
             # write the significance histogram to a file
@@ -1054,7 +1059,9 @@ def makeplot(hn, saveintegrals=True):
                 SignificanceSum += Significance.GetBinContent(i) ** 2
 
             SignificanceSum = sqrt(SignificanceSum)
-            SignificanceSum_str = " #sqrt{#sum (S/#sqrt{B})^{2}} = " + str("%.2f" % SignificanceSum)
+            SignificanceSum_str = " #sqrt{#sum (S/#sqrt{B})^{2}} = " + str(
+                "%.2f" % SignificanceSum
+            )
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
@@ -1092,11 +1099,13 @@ def makeplot(hn, saveintegrals=True):
                     > 0.05
                 ):
                     logger.info(
-                        "to blind",
-                        hn,
-                        i,
-                        abs(histos[hn].GetStack().Last().GetBinContent(i)),
-                        histosSig[hn].GetStack().Last().GetBinContent(i),
+                        "to blind %s bin %i: %f %f"
+                        % (
+                            hn,
+                            i,
+                            abs(histos[hn].GetStack().Last().GetBinContent(i)),
+                            histosSig[hn].GetStack().Last().GetBinContent(i),
+                        )
                     )
                     if i < firstBlind:
                         firstBlind = i
@@ -1105,7 +1114,7 @@ def makeplot(hn, saveintegrals=True):
                 for i in range(firstBlind, lastBlind + 1):
                     datastack[hn].GetStack().Last().SetBinContent(i, 0)
                     datasum[hn].SetBinContent(i, 0)
-                    logger.info("blinded", i, hn)
+                    logger.info("blinded %s bin %i" % (hn, i))
 
         myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
@@ -1311,8 +1320,8 @@ systematicsSetToUse.sort()
 postfit = False
 postfit = args.postfit
 
-logger.info("makeWorkspace", makeWorkspace)
-logger.info("variablesToFit", variablesToFit)
+logger.info("makeWorkspace %s"% makeWorkspace)
+logger.info("variablesToFit %s"% variablesToFit)
 
 
 his = [x for x in histoNames if "__syst__" not in x and "sumWeight" not in x]
@@ -1361,4 +1370,4 @@ tot = 0
 for s in totevCount:
     tot += totevSkim[s]
 
-logger.info(tot, "input events")
+logger.info("%d input events" %tot)

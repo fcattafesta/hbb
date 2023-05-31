@@ -107,7 +107,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-        f"{args.input_dir}/log.log"
+        f"{args.input_dir}/logger.log"
     )
 
     plot_history(
