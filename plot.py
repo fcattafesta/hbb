@@ -1027,7 +1027,7 @@ def makeplot(hn, saveintegrals=True):
             fR.Close()
 
         SignificanceSum_str = ""
-        if "DNN" in hn:
+        if "DNN" in hn and hn in histoSigsum.keys():
             S = histoSigsum[hn].Clone()
             B = histosum[hn].Clone()
             # histogram of significance (S/sqrt(B)) for each bin of the DNN
