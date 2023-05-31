@@ -334,16 +334,9 @@ def makeEnvelopeShape(hn, sy, f, d, model):
             ) ** 2
         else:
             badFit += 1
-            print(
-                "BAD Fit",
-                hn,
-                sy,
-                f,
-                d,
-                model,
-                funct.GetParameter(0),
-                funct.GetParameter(1),
-                end=" ",
+            logger.info(
+                "BAD Fit %s %s %s %s %s %f %f"
+                % (hn, sy, f, d, model, funct.GetParameter(0), funct.GetParameter(1))
             )
         i = i + 1
         hs = f[d].Get(findSyst(hn, pdf + str(i), f[d]))
@@ -369,7 +362,7 @@ def makeEnvelopeShape(hn, sy, f, d, model):
         )
         and (i - badFit) > 0
     ):
-        print("REPLICAS, not HESSIAN for", hn, sy, f, d, model)
+        logger.info("REPLICAS, not HESSIAN for %s %s %s %s %s"%( hn, sy, f, d, model))
         par2 = par2 / (i - badFit)
 
     funct.SetParameters(*envelopeFunctionParameterValues)
@@ -952,7 +945,7 @@ def makeplot(hn, saveintegrals=True):
                 else:
                     lumis[yr] = samples[d]["lumi"]
 
-        logger.info("lumis= %f" % lumis)
+        logger.info("lumis= %s" % lumis)
 
         histoSingleSyst[hn] = {}
         histosSignal[hn] = {}
@@ -1320,8 +1313,8 @@ systematicsSetToUse.sort()
 postfit = False
 postfit = args.postfit
 
-logger.info("makeWorkspace %s"% makeWorkspace)
-logger.info("variablesToFit %s"% variablesToFit)
+logger.info("makeWorkspace %s" % makeWorkspace)
+logger.info("variablesToFit %s" % variablesToFit)
 
 
 his = [x for x in histoNames if "__syst__" not in x and "sumWeight" not in x]
@@ -1370,4 +1363,4 @@ tot = 0
 for s in totevCount:
     tot += totevSkim[s]
 
-logger.info("%d input events" %tot)
+logger.info("%d input events" % tot)
