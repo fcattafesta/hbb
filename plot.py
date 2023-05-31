@@ -1,4 +1,3 @@
-from labelDict import *
 import re
 from array import array
 from math import *
@@ -14,6 +13,14 @@ import copy
 import ctypes
 
 from args_plot import args
+from labelDict import labelVariable, labelLegend
+if args.btag == "deepcsv":
+    from labelDict import labelRegionDeepCSV as labelRegion
+elif args.btag == "deepflav":
+    from labelDict import labelRegionDeepFlav as labelRegion
+else:
+    print("Btagging algo must be 'deepflav' or 'deepcsv'")
+    sys.exit(1)
 
 outdir = args.workspace
 

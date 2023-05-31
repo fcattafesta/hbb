@@ -16,10 +16,10 @@ parser.add_argument(
 parser.add_argument(
     "-fsub", "--foldersuffix", default="", help="Folder suffix for annotations"
 )
+parser.add_argument("--blind", help="Blind data in plots", action="store_true")
 parser.add_argument(
-    "-b", "--blind", help="Blind data in plots", action="store_true"
+    "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
 )
-
 
 parser.print_help()
 args = parser.parse_args()

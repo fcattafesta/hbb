@@ -1,14 +1,21 @@
-# TODO: rename the regions to specify if they are mu or el
-labelRegion = {
-    "SR_ee": "Signal Region",
-    "CR_Zee_bjets": "Z+bjets Region",
-    "CR_Zee_lightjets": "Z+lightjets Region",
-    "CR_ee_ttbar": "t#bar{t} Region",
-    "SR_mm": "Signal Region",
-    "CR_Zmm_bjets": "Z+bjets Region",
-    "CR_Zmm_lightjets": "Z+lightjets Region",
-    "CR_mm_ttbar": "t#bar{t} Region",
+labelRegion_ = {
+    "SR_ee": "Signal Region Electrons",
+    "CR_Zee_bjets": "Z+bjets Region Electrons",
+    "CR_Zee_lightjets": "Z+lightjets Region Electrons",
+    "CR_ee_ttbar": "t#bar{t} Region Electrons",
+    "SR_mm": "Signal Region Muons",
+    "CR_Zmm_bjets": "Z+bjets Region Muons",
+    "CR_Zmm_lightjets": "Z+lightjets Region Muons",
+    "CR_mm_ttbar": "t#bar{t} Region Muons",
 }
+
+labelRegionDeepFlav = {}
+for key in labelRegion_.keys():
+    labelRegionDeepFlav[key] = labelRegion_[key] + " DeepFlav"
+
+labelRegionDeepCSV = {}
+for key in labelRegion_.keys():
+    labelRegionDeepCSV[key] = labelRegion_[key] + " DeepCSV"
 
 
 labelVariable = {
