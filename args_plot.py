@@ -3,7 +3,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # Plot
-parser.add_argument("model", help="Model to plot")
+parser.add_argument("-m", "--model", help="Model to plot", type=str)
 parser.add_argument("-p", "--postfit", help="plot postfit plot", action="store_true")
 parser.add_argument("-v", "--variablesToFit", nargs="*")
 parser.add_argument(
