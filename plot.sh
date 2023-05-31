@@ -21,7 +21,7 @@ plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
 
 
 $CMD \
-    ${model} \
+    --model ${model} \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --outfolder ${plotdir}/${lep}/${suffix}/ \
     --blind \
