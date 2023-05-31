@@ -1043,6 +1043,9 @@ def makeplot(hn, saveintegrals=True):
                 except ZeroDivisionError:
                     Significance.SetBinContent(i, 0)
                     logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
+                    logger.info("setting bin content to 0")
+                if "SR" in hn:
+                    logger.info("bin %i: %f" % (i, B.GetBinContent(i)))
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")
             Significance.Write()
