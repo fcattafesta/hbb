@@ -1013,10 +1013,12 @@ def makeplot(hn, saveintegrals=True):
 
         # myLegend.AddEntry(None, "", "")
         for gr in model.backgroundSortedForLegend:
-            myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
+            if model.fillocolor[gr] != ROOT.kWhite:
+                myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         for gr in model.signalSortedForLegend:
-            myLegend_1.AddEntry(dictLegendSignal[gr], labelLegend[gr], "FL")
+            if model.fillocolor[gr] != ROOT.kWhite:
+                myLegend_1.AddEntry(dictLegendSignal[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
         # if makeWorkspace : return
@@ -1127,7 +1129,8 @@ def makeplot(hn, saveintegrals=True):
                     datasum[hn].SetBinContent(i, 0)
                     logger.info("blinded %s bin %i" % (hn, i))
 
-        myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
+        if model.fillcolor[hn] != ROOT.kWhite:
+            myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
         canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
         # canvas[hn].SetRightMargin(.0);

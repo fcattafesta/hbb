@@ -23,12 +23,12 @@ import ROOT
 
 # Color palette
 
-fillcolor = {
-    f"VV{flavour}": ROOT.kWhite for flavour in flavourVVSplitting
-}
+fillcolor = {f"VV{flavour}": ROOT.kWhite for flavour in flavourVVSplitting}
 
 linecolor = fillcolor
-linecolorNotStacked = {key: i for i, key in  zip([ROOT.kBlack, ROOT.kBlue], fillcolor.keys())}
+linecolorNotStacked = {
+    f"VV{flavour}": ROOT.kOrange + i for i, flavour in zip([0, -1], flavourVVSplitting)
+}
 markercolor = fillcolor
 
 
