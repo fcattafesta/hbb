@@ -44,4 +44,13 @@ def getFlowMC(flow):
     )
     flow.Define("LF", "!HF")
 
+    flow.Define(
+        "btag_max_hadronFlavour",
+        "JetBtagMax_hadronFlavour",
+    )
+    flow.Define(
+        "btag_min_hadronFlavour",
+        "JetBtagMin_hadronFlavour",
+    )
+
     return flow
