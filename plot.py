@@ -1013,11 +1013,11 @@ def makeplot(hn, saveintegrals=True):
 
         # myLegend.AddEntry(None, "", "")
         for gr in model.backgroundSortedForLegend:
-            if model.fillocolor[gr] != ROOT.kWhite:
+            if model.fillcolor[gr] != ROOT.kWhite:
                 myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         for gr in model.signalSortedForLegend:
-            if model.fillocolor[gr] != ROOT.kWhite:
+            if model.fillcolor[gr] != ROOT.kWhite:
                 myLegend_1.AddEntry(dictLegendSignal[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
