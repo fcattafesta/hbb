@@ -79,11 +79,12 @@ while binLimitDown > 0:
     )
     minNumberOfEventPerBin += delta
 
-print("    '" + variable + "' : [0")
+print("    '" + variable + "' :")
+print("[0")
 for n in range(len(binning_DNN) - 1, 0, -1):
     print(",", binning_DNN[n])
 
-print("]")
+print("],")
 print(len(binning_DNN))
 
 fSignal.Close()
