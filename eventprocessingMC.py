@@ -4,6 +4,15 @@ from nail.nail import *
 def getFlowMC(flow):
     ## MonteCarlo-only definitions ##
 
+    flow.Define(
+        "btag_max_hadronFlavour",
+        "JetBtagMax_hadronFlavour",
+    )
+    flow.Define(
+        "btag_min_hadronFlavour",
+        "JetBtagMin_hadronFlavour",
+    )
+
     flow.CentralWeight("genWeight")  # add a central weight
 
     # Cleaning of GenJet collection from GenLeptons
@@ -43,14 +52,5 @@ def getFlowMC(flow):
         "OneB || TwoB || OneC",
     )
     flow.Define("LF", "!HF")
-
-    flow.Define(
-        "btag_max_hadronFlavour",
-        "JetBtagMax_hadronFlavour",
-    )
-    flow.Define(
-        "btag_min_hadronFlavour",
-        "JetBtagMin_hadronFlavour",
-    )
 
     return flow

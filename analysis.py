@@ -15,7 +15,7 @@ from args_analysis import args
 
 from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
-from histograms import histos
+from histograms import histosData, histosMC
 
 if args.flav_split:
     from samplesFlavSplit import samples, flavourSplitting, flavourVVSplitting
@@ -32,10 +32,12 @@ else:
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
-    from histograms import histosPerSelectionMuon as histosPerSelection
+    from histograms import histosPerSelectionMuonMC as histosPerSelectionMC
+    from histograms import histosPerSelectionMuonData as histosPerSelectionData
 elif args.lep == "el":
     from eventprocessingElectrons import getFlowElectrons as getFlow
-    from histograms import histosPerSelectionElectron as histosPerSelection
+    from histograms import histosPerSelectionElectronMC as histosPerSelectionMC
+    from histograms import histosPerSelectionElectronData as histosPerSelectionData
 else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
@@ -76,7 +78,7 @@ proc = flow.CreateProcessor(
     "eventProcessor",
     [flavourSplitting[x] for x in flavourSplitting]
     + [flavourVVSplitting[x] for x in flavourVVSplitting],
-    histosPerSelection,
+    histosPerSelectionMC,
     [],
     "",
     nthreads,
@@ -84,7 +86,7 @@ proc = flow.CreateProcessor(
 procData = flowData.CreateProcessor(
     "eventProcessorData",
     [],
-    histosPerSelection,
+    histosPerSelectionData,
     [],
     "",
     nthreads,
@@ -150,17 +152,18 @@ def runSample(ar):
             # add customizations here
             # rdf = rdf.Define("year", year)
             # rdf = rdf.Define("TriggerSel", trigger)
-            snaplist = ["run", "event"] + histos
+            snaplist = ["run", "event"]
 
             if "lumi" in samples[s].keys():
                 rdf = rdf.Define("isMC", "false")
                 out = procData(rdf)
+                snaplist += histosData
             else:
                 if "subsamples" in samples[s].keys():
                     subs = samples[s]["subsamples"]
                 rdf = rdf.Define("isMC", "true")
                 out = proc(rdf, subs)
-                snaplist += ["DNN_weight"]
+                snaplist += histosMC + ["DNN_weight"]
 
             if (
                 args.snapshot
