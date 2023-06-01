@@ -1129,7 +1129,7 @@ def makeplot(hn, saveintegrals=True):
                     datasum[hn].SetBinContent(i, 0)
                     logger.info("blinded %s bin %i" % (hn, i))
 
-        if not all([model.fillcolor[hn] != ROOT.kWhite for hn in model.fillcolor]):
+        if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
             myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
         canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
