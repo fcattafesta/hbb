@@ -1092,7 +1092,7 @@ def makeplot(hn, saveintegrals=True):
         for gr in model.histosNotStacked_list:
             h = histosNotStacked[hn][gr]
             histos[hn].Add(h.Clone())
-            h.SetLineColor(model.linecolor[gr])
+            h.SetLineColor(model.linecolorNotStacked[gr])
             h.SetFillStyle(0)
             h.SetLineWidth(3)
             h.SetLineStyle(2)
