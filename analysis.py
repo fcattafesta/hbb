@@ -74,7 +74,8 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    list(flavourSplitting.keys()) + list(flavourVVSplitting.keys()),
+    [flavourSplitting[x] for x in flavourSplitting]
+    + [flavourVVSplitting[x] for x in flavourVVSplitting],
     histosPerSelection,
     [],
     "",
