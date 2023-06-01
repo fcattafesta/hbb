@@ -34,7 +34,7 @@ markercolor = fillcolor
 # legend sorting
 backgroundSortedForLegend = []
 backgroundSortedForLegend += [
-    # x for x in background if x not in backgroundSortedForLegend
+    x for x in background if x not in backgroundSortedForLegend
 ]
 backgroundSorted = backgroundSortedForLegend
 
