@@ -1082,7 +1082,7 @@ def makeplot(hn, saveintegrals=True):
         #     h.Scale(5000.0)
         #     myLegend_1.AddEntry(h, gr + " x5k", "l")
 
-        for gr in model.backgroundNotStacked:
+        for gr in model.histoNotStacked:
             h = histos[hn][gr]
             histos[hn].Add(h.Clone())
             h.SetLineColor(model.linecolor[gr])
