@@ -104,32 +104,32 @@ samples.update(
     {
         "WZTo2Q2L": {
             "xsec": 47.13 * 6.729 * 67.41 / 10000,
-            "subsamples": flavourVVSplitting,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "WZTo3LNu": {
             "xsec": 47.13 * 21.34 * 10.099 / 10000.0,
-            "subsamples": flavourVVSplitting,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "WWTo2L2Nu": {
             "xsec": 118.7 * 21.34 * 21.34 / 10000.0,
-            "subsamples": flavourVVSplitting,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ZZTo2L2Nu": {
             "xsec": 16.523 * 20.000 * 10.099 / 10000.0,
-            "subsamples": flavourVVSplitting,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ZZTo2Q2L": {
             "xsec": 16.523 * 2.0 * 10.099 * 69.91 / 10000.0,
-            "subsamples": flavourVVSplitting,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ZZTo4L": {
             "xsec": 16.523 * 10.099 * 10.099 / 10000.0,
-            "subsamples": flavourVVSplitting,
+            "subsamples": flavourSplitting,
             "training": True,
         },
     }
