@@ -567,6 +567,7 @@ datasumSyst = {}
 histosumSyst = {}
 histoSigsumSyst = {}
 histosSignal = {}
+histosNotStacked = {}
 all_histo_all_syst = {}
 
 integral = {}
@@ -886,6 +887,11 @@ def fill_datasum(
                     histosSignal[hn][gr] = h.Clone()
                 else:
                     histosSignal[hn][gr].Add(h)
+            if gr in model.histosNotStacked_list:
+                if gr not in list(histosNotStacked[hn].keys()):
+                    histosNotStacked[hn][gr] = h.Clone()
+                else:
+                    histosNotStacked[hn][gr].Add(h)
     if not data:
         writeYields(
             ftxt,
@@ -949,6 +955,7 @@ def makeplot(hn, saveintegrals=True):
 
         histoSingleSyst[hn] = {}
         histosSignal[hn] = {}
+        histosNotStacked[hn] = {}
         for gr in model.data:
             h = fill_datasum(
                 f,
@@ -1082,8 +1089,8 @@ def makeplot(hn, saveintegrals=True):
         #     h.Scale(5000.0)
         #     myLegend_1.AddEntry(h, gr + " x5k", "l")
 
-        for gr in model.histoNotStacked:
-            h = histos[hn][gr]
+        for gr in model.histosNotStacked_list:
+            h = histosNotStacked[hn][gr]
             histos[hn].Add(h.Clone())
             h.SetLineColor(model.linecolor[gr])
             h.SetFillStyle(0)
@@ -1191,6 +1198,8 @@ def makeplot(hn, saveintegrals=True):
                 datasum[hn].Draw("E P same")
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
+            for gr in model.histosNotStacked_list:
+                histosNotStacked[hn][gr].Draw("hist same")
 
             t0 = makeText(
                 0.45,

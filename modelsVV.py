@@ -2,12 +2,7 @@ from samples import *
 
 name = "VV"
 
-background = {}
-
-data = {}
-
-
-signal = {
+background = {
     f"VV{flavour}": [
         f"WWTo2L2Nu_{flavour}",
         f"WZTo2Q2L_{flavour}",
@@ -18,6 +13,11 @@ signal = {
     ]
     for flavour in flavourVVSplitting.keys()
 }
+
+data = {}
+
+
+signal = {}
 
 import ROOT
 
@@ -38,7 +38,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histoNotStacked = [f"VV{flavour}" for flavour in flavourVVSplitting.keys()]
+histosNotStacked_list = [f"VV{flavour}" for flavour in flavourVVSplitting.keys()]
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
