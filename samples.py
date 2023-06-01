@@ -55,46 +55,57 @@ samples.update(
     {
         "ST_tW_antitop_5f_NFHD": {
             "xsec": 19.56,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_tW_antitop_5f_ID": {
             "xsec": 35.85,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_tW_top_5f_NFHD": {
             "xsec": 19.56,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_tW_top_5f_ID": {
             "xsec": 35.85,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_t-channel_antitop_4f_ID": {
             "xsec": 80.95,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_t-channel_top_4f_ID": {
             "xsec": 136.02,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_t-channel_antitop_5f_ID": {
             "xsec": 80.95,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "ST_s-channel_4f_LD": {
             "xsec": 3.36,
+            "subsamples": flavourSplitting,
             "training": True,
         },
         "TTTo2L2Nu": {
             "xsec": 85.65,
+            "subsamples": flavourSplitting,
             "training": True,
         },  # 88.29
         "TTToSemiLeptonic": {
             "xsec": 356.19,
+            "subsamples": flavourSplitting,
             "training": True,
         },  # 365.34
         "TTToHadronic": {
             "xsec": 366.20,
+            "subsamples": flavourSplitting,
             "training": True,
         },  # 377.96
     }
