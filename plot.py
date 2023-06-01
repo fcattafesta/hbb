@@ -1194,7 +1194,7 @@ def makeplot(hn, saveintegrals=True):
             histosum[hn].SetFillStyle(3004)
             setStyle(histos[hn].GetStack().Last())
             c.Update()
-            if model.fillcolor[hn] != ROOT.kWhite:
+            if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
                 histosum[hn].Draw("same E2")
 
             if hn in datasum.keys():
