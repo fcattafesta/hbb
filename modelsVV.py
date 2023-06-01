@@ -27,7 +27,7 @@ fillcolor = {
     f"VV{flavour}": ROOT.kOrange + i for i, flavour in zip([0, -1], flavourVVSplitting)
 }
 
-linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
+linecolor = {key: i for i, key in  zip([ROOT.kBlack, ROOT.kBlue], fillcolor.keys())}
 markercolor = fillcolor
 
 
