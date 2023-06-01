@@ -1,6 +1,5 @@
 from multiprocessing import Pool
 import psutil
-from samples import samples, flavourSplitting, flavourVVSplitting
 import copy
 import sys
 from nail.nail import *
@@ -17,6 +16,11 @@ from args_analysis import args
 from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histos
+
+if args.flav_split:
+    from samplesFlavSplit import samples, flavourSplitting, flavourVVSplitting
+else:
+    from samples import samples, flavourSplitting, flavourVVSplitting
 
 if args.btag == "deepcsv":
     from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
@@ -48,7 +52,7 @@ if os.path.exists(f"{args.histfolder}/logger.log"):
 logger = setup_logger(f"{args.histfolder}/logger.log")
 
 
-logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 # Create the flow
 flow = SampleProcessing(
@@ -70,7 +74,7 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    ["OneB", "TwoB", "OneC", "Light", "HF", "LF"],
+    list(flavourSplitting.keys()) + list(flavourVVSplitting.keys()),
     histosPerSelection,
     [],
     "",
@@ -132,7 +136,7 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("sample %s: sumws %s, nevents %s" %(s, sumws, nevents))
+        logger.info("sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
     #    import jsonreader
@@ -159,19 +163,22 @@ def runSample(ar):
 
             if (
                 args.snapshot
-                and "training" in samples[s].keys()
-                and samples[s]["training"]
+                and "snapshot" in samples[s].keys()
+                and samples[s]["snapshot"]
             ):
                 sig_region = "SR_ee" if args.lep == "el" else "SR_mm"
                 # create snapshot directory
                 os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
                 processed_rdf = out.rdf.find(sig_region).second
                 if "xsec" in samples[s].keys():  # is MC
-                    processed_rdf=processed_rdf.Define(
-                        "DNN_weight", f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}"
+                    processed_rdf = processed_rdf.Define(
+                        "DNN_weight",
+                        f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}",
                     )
                 processed_rdf.Snapshot(
-                    "Events", f"{args.histfolder}/Snapshots/{s}_{sig_region}_Snapshot.root", snaplist
+                    "Events",
+                    f"{args.histfolder}/Snapshots/{s}_{sig_region}_Snapshot.root",
+                    snaplist,
                 )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
@@ -265,7 +272,7 @@ elif args.model[:5] == "model":
     for x in model.background:
         for y in model.background[x]:
             if x.endswith(
-                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
+                list(flavourSplitting.keys()) + list(flavourVVSplitting.keys())
             ):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
@@ -284,7 +291,7 @@ elif args.model[:5] == "model":
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
-logger.info("Will process %s" %  [x[0] for x in toproc])
+logger.info("Will process %s" % [x[0] for x in toproc])
 
 if nprocesses > 1:
     results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])

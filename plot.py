@@ -1053,17 +1053,17 @@ def makeplot(hn, saveintegrals=True):
                     logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
                     logger.info("setting bin content to 0")
 
-            for i in range(B.GetNbinsX() + 2):
-                logger.info(
-                    "histograms %s bin %i: S = %.2f, B = %.2f, S/sqrt(B) = %.2f"
-                    % (
-                        hn,
-                        i,
-                        S.GetBinContent(i),
-                        B.GetBinContent(i),
-                        Significance.GetBinContent(i),
-                    )
-                )
+            # for i in range(B.GetNbinsX() + 2):
+            #     logger.info(
+            #         "histograms %s bin %i: S = %.2f, B = %.2f, S/sqrt(B) = %.2f"
+            #         % (
+            #             hn,
+            #             i,
+            #             S.GetBinContent(i),
+            #             B.GetBinContent(i),
+            #             Significance.GetBinContent(i),
+            #         )
+            #     )
 
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")

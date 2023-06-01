@@ -29,6 +29,9 @@ parser.add_argument(
 parser.add_argument(
     "-e", "--eval-model", default="", help="Evaluate model", type=str,
 )
+parser.add_argument(
+    "-fs", "--flav-split", default=False, action="store_true", help="Flavour splitting"
+)
 parser.print_help()
 args = parser.parse_args()
 print(args)

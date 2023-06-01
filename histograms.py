@@ -13,6 +13,8 @@ histos = [
     "HZ_ptRatio",
     "btag_max",
     "btag_min",
+    "btag_max_hadronFlavour",
+    "btag_min_hadronFlavour",
     "jj_dphi",
     "jj_deta",
     "jj_dr",

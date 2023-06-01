@@ -15,10 +15,12 @@ elif [ "$lep" == "el" ]; then
     model="modelsElectron"
 fi
 
+if [[ "$suffix" == *"flavsplit"* ]]; then
+    model="${model}FlavSplit"
+fi
+
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
-
-
 
 $CMD \
     --model ${model} \
