@@ -1,4 +1,4 @@
-from samplesFlavSplit import *
+from samples import *
 from collections import defaultdict
 
 name = "HBB_flavSplit"

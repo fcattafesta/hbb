@@ -1,18 +1,26 @@
 from samples import *
+from collections import defaultdict
 
 name = "HBB"
 
-background = {
-    f"VV{flavour}": [
-        f"WWTo2L2Nu_{flavour}",
-        f"WZTo2Q2L_{flavour}",
-        f"WZTo3LNu_{flavour}",
-        f"ZZTo2L2Nu_{flavour}",
-        f"ZZTo2Q2L_{flavour}",
-        f"ZZTo4L_{flavour}",
-    ]
-    for flavour in flavourVVSplitting.keys()
+VV_flavourSplitting = {
+    "HF": ["bb", "b", "c"],
+    "LF": ["udsg"],
 }
+
+VV_background_list = [
+    "WWTo2L2Nu",
+    "WZTo2Q2L",
+    "WZTo3LNu",
+    "ZZTo2L2Nu",
+    "ZZTo2Q2L",
+    "ZZTo4L",
+]
+
+background = defaultdict(list)
+for name, flavours in VV_flavourSplitting.items():
+    for flav in flavours:
+        background[f"VV{name}"] += [f"{bkg}_{flav}" for bkg in VV_background_list]
 
 background.update(
     {

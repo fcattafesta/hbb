@@ -17,10 +17,7 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-if args.flav_split:
-    from samplesFlavSplit import samples, flavourSplitting, flavourVVSplitting
-else:
-    from samples import samples, flavourSplitting, flavourVVSplitting
+from samples import samples, flavourSplitting
 
 if args.btag == "deepcsv":
     from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
@@ -78,8 +75,7 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    [flavourSplitting[x] for x in flavourSplitting]
-    + [flavourVVSplitting[x] for x in flavourVVSplitting],
+    [flavourSplitting[x] for x in flavourSplitting],
     histosPerSelectionMC,
     [],
     "",
@@ -278,7 +274,7 @@ elif args.model[:5] == "model":
     for x in model.background:
         for y in model.background[x]:
             if x.endswith(
-                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
+                tuple(flavourSplitting.keys())
             ):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
