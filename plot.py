@@ -627,9 +627,11 @@ def fill_datasum(
         if makeWorkspace:
             all_histo_all_syst[hn][d] = {}
         if f[d]:
+            logger.info("Adding %s" % d)
             h = f[d].Get(hn)
             histoSingleSyst[hn][d] = {}
             if h:
+                logger.info("Adding %s %s" % (d, hn))
                 if hn.split("___")[0] in list(model.rebin.keys()):
                     # print "Rebin",hn
                     h = h.Rebin(
@@ -923,6 +925,7 @@ def makeplot(hn, saveintegrals=True):
         if postfit:
             YieldFileName = outpath + "/" + hn + "_postFit.txt"
         ftxt = open(YieldFileName, "w")
+        logger.info("YieldFileName=%s" % YieldFileName)
         # print "Making histo",hn
         histos[hn] = ROOT.THStack(hn, "")
         histosSig[hn] = ROOT.THStack(hn, "")
