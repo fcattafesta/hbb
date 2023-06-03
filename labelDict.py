@@ -41,6 +41,7 @@ labelVariable = {
     "btag_min": "btag_{min}",
     "hadronFlavour_btag_max": "btag_{max}^{hadronFlavour}",
     "hadronFlavour_btag_min": "btag_{min}^{hadronFlavour}",
+    "LHE_Nb": "N_{b}^{LHE}",
     "jj_dphi": "#Delta#phi(jj)",
     "jj_deta": "#Delta#eta(jj)",
     "jj_dr": "#DeltaR(jj)",

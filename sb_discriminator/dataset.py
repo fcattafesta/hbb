@@ -31,10 +31,10 @@ def load_data(args):
         files = os.listdir(x)
         for file in files:
             for signal in signal_list:
-                if signal in file:
+                if signal in file and "SR" in file:
                     sig_files.append(x + file)
             for background in background_list_noVV if args.noVV else background_list:
-                if background in file:
+                if background in file and "SR" in file:
                     bkg_files.append(x + file)
 
     # open each file and get the Events tree using uproot

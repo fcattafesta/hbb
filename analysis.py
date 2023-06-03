@@ -34,10 +34,12 @@ if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
     from histograms import histosPerSelectionMuonMC as histosPerSelectionMC
     from histograms import histosPerSelectionMuonData as histosPerSelectionData
+    from histograms import selsMu as sels
 elif args.lep == "el":
     from eventprocessingElectrons import getFlowElectrons as getFlow
     from histograms import histosPerSelectionElectronMC as histosPerSelectionMC
     from histograms import histosPerSelectionElectronData as histosPerSelectionData
+    from histograms import selsEle as sels
 else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
@@ -170,20 +172,20 @@ def runSample(ar):
                 and "snapshot" in samples[s].keys()
                 and samples[s]["snapshot"]
             ):
-                sig_region = "SR_ee" if args.lep == "el" else "SR_mm"
-                # create snapshot directory
-                os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
-                processed_rdf = out.rdf.find(sig_region).second
-                if "xsec" in samples[s].keys():  # is MC
-                    processed_rdf = processed_rdf.Define(
-                        "DNN_weight",
-                        f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}",
+                for region in sels:
+                    # create snapshot directory
+                    os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
+                    processed_rdf = out.rdf.find(region).second
+                    if "xsec" in samples[s].keys():  # is MC
+                        processed_rdf = processed_rdf.Define(
+                            "DNN_weight",
+                            f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}",
+                        )
+                    processed_rdf.Snapshot(
+                        "Events",
+                        f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
+                        snaplist,
                     )
-                processed_rdf.Snapshot(
-                    "Events",
-                    f"{args.histfolder}/Snapshots/{s}_{sig_region}_Snapshot.root",
-                    snaplist,
-                )
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
             if nthreads != 0:
