@@ -1140,7 +1140,7 @@ def makeplot(hn, saveintegrals=True):
                     if i < firstBlind:
                         firstBlind = i
                     lastBlind = i
-            if args.blind:  # blind!
+            if args.blind and hn in datasum.keys():
                 for i in range(firstBlind, lastBlind + 1):
                     datastack[hn].GetStack().Last().SetBinContent(i, 0)
                     datasum[hn].SetBinContent(i, 0)
