@@ -21,6 +21,8 @@ parser.add_argument("--out-dir", default="roc_curve")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
+os.makedirs(args.out_dir, exist_ok=True)
+
 logger = setup_logger(f"{args.out_dir}/logger.log")
 logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
@@ -186,6 +188,5 @@ if "__main__" == __name__:
         fpr, tpr, roc_auc = get_rates(data[1], data[0], [5], [1, 2, 3, 21])
         rates_dict[net] = [fpr, tpr, roc_auc]
 
-    os.makedirs(args.out_dir, exist_ok=True)
 
     plotting_function(args.out_dir, rates_dict)
