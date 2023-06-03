@@ -1215,7 +1215,7 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
-                setStyle(histos[hn], noData=True)
+                setStyle(histos[hn].GetStack().Last(), noData=True)
                 histos[hn].Draw("hist")
 
             #  histos[hn].Draw("hist")
