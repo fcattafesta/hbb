@@ -1,12 +1,17 @@
 import uproot
 import logging
 import os
+import sys
 import numpy as np
 import argparse
 import sklearn.metrics as _m
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import mplhep as hep
+
+sys.path.append("../")
+from logger import setup_logger
+
 
 
 parser = argparse.ArgumentParser()
@@ -16,7 +21,9 @@ parser.add_argument("--out-dir", default="roc_curve")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(f"{args.out_dir}/logger.log")
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
+
 
 TT_list = ["TTTo2L2Nu", "TTToSemiLeptonic", "TTToHadronic"]
 varibles_list = [
