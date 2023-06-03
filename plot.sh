@@ -15,7 +15,7 @@ elif [ "$lep" == "el" ]; then
     model="modelsElectron"
 fi
 
-if [[ "$suffix" == *"flavsplit"* ]]; then
+if [[ $flavsplit == true ]]; then
     model="${model}FlavSplit"
 fi
 

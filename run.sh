@@ -15,18 +15,15 @@ elif [[ "$lep" == "el" ]]; then
     model="modelsElectron"
 fi
 
-fs=""
-if [[ "$suffix" == *"flavsplit"* ]]; then
+if [[ $flavsplit == true ]]; then
     model="${model}FlavSplit"
-    fs="--flav-split"
 fi
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 
 $CMD \
-    --histfolder ${histodir}/${lep}/${suffix}/ \
     --model ${model} \
+    --histfolder ${histodir}/${lep}/${suffix}/ \
     --lep ${lep} \
     --snapshot \
-    ${fs} \
     "${@:3}"
