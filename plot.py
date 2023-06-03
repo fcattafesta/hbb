@@ -116,7 +116,9 @@ def setStyle(h, isRatio=False, noData=False):
         )
     else:
         # check if all bins are the same width
-        if all(h.GetBinWidth(1) == h.GetBinWidth(i) for i in range(1, h.GetNbinsX() + 1)):
+        if all(
+            h.GetBinWidth(1) == h.GetBinWidth(i) for i in range(1, h.GetNbinsX() + 1)
+        ):
             binWidht = str(h.GetBinWidth(1))[:4]
             if binWidht.endswith("."):
                 binWidht = binWidht[:3]
@@ -125,9 +127,10 @@ def setStyle(h, isRatio=False, noData=False):
             h.GetYaxis().SetTitle("Entries")
 
         if noData:
+            xKey = str(h.GetName()).split("___")[0]
             h.GetXaxis().SetTitle(
-            labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
-        )
+                labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
+            )
         else:
             h.GetXaxis().SetLabelSize(0)
             h.GetXaxis().SetTitleSize(0)
