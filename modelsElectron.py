@@ -3,7 +3,7 @@ from collections import defaultdict
 
 name = "HBB"
 
-VV_flavourSplitting = {
+flavourVVSplitting = {
     "HF": ["bb", "b", "c"],
     "LF": ["udsg"],
 }
@@ -18,7 +18,7 @@ VV_background_list = [
 ]
 
 background = defaultdict(list)
-for name, flavours in VV_flavourSplitting.items():
+for name, flavours in flavourVVSplitting.items():
     for flav in flavours:
         background[f"VV{name}"] += [f"{bkg}_{flav}" for bkg in VV_background_list]
 
