@@ -99,7 +99,7 @@ def makeRatioMCplot(h):
     return hMC
 
 
-def setStyle(h, isRatio=False):
+def setStyle(h, isRatio=False, noData=False):
     h.SetTitle("")
     w = 0.055 * (2.5 if isRatio else 1.0)
     h.GetYaxis().SetLabelSize(w)
@@ -115,13 +115,22 @@ def setStyle(h, isRatio=False):
             labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
         )
     else:
-        binWidht = str(h.GetBinWidth(1))[:4]
-        if binWidht.endswith("."):
-            binWidht = binWidht[:3]
-        h.GetXaxis().SetLabelSize(0)
-        h.GetYaxis().SetTitle("Entries/" + binWidht)
-        h.GetXaxis().SetLabelSize(0)
-        h.GetXaxis().SetTitleSize(0)
+        # check if all bins are the same width
+        if all(h.GetBinWidth(1) == h.GetBinWidth(i) for i in range(1, h.GetNbinsX() + 1)):
+            binWidht = str(h.GetBinWidth(1))[:4]
+            if binWidht.endswith("."):
+                binWidht = binWidht[:3]
+            h.GetYaxis().SetTitle("Entries/" + binWidht)
+        else:
+            h.GetYaxis().SetTitle("Entries")
+
+        if noData:
+            h.GetXaxis().SetTitle(
+            labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
+        )
+        else:
+            h.GetXaxis().SetLabelSize(0)
+            h.GetXaxis().SetTitleSize(0)
 
 
 def findSyst(hn, sy, f, silent=False):
@@ -1209,7 +1218,7 @@ def makeplot(hn, saveintegrals=True):
             histosum[hn].SetLineWidth(0)
             histosum[hn].SetFillColor(ROOT.kBlack)
             histosum[hn].SetFillStyle(3004)
-            setStyle(histos[hn].GetStack().Last())
+            setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
             c.Update()
             if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
                 histosum[hn].Draw("same E2")
