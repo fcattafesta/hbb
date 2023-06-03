@@ -1215,13 +1215,14 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
+                setStyle(histos[hn], noData=True)
                 histos[hn].Draw("hist")
 
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
             histosum[hn].SetFillColor(ROOT.kBlack)
             histosum[hn].SetFillStyle(3004)
-            setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
+            setStyle(histos[hn].GetStack().Last(), noData = hn not in datasum.keys())
             c.Update()
             if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
                 histosum[hn].Draw("same E2")
