@@ -27,8 +27,8 @@ TT_list = ["TTTo2L2Nu", "TTToSemiLeptonic", "TTToHadronic"]
 varibles_list = [
     "btag_max",
     "btag_min",
-    "btag_max_hadronFlavour",
-    "btag_min_hadronFlavour",
+    "hadronFlavour_btag_max",
+    "hadronFlavour_btag_min",
 ]
 
 

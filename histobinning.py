@@ -9,5 +9,6 @@ binningRules = [
     ("btag.*", "100, 0, 1"),
     ("SoftActivityJetNjets5", "12, -0.5, 11.5"),
     ("DNN_Score", "10000, 0, 1"),
-    ("atanhDNN_Score", "10000, 0, 7"),
+    ("atanhDNN_Score", "10000, 0, 15"),
+    ("hadronFlavour_btag.*", "6, -0.5, 5.5"),
 ]

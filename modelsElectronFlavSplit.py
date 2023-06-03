@@ -1,12 +1,12 @@
 from samplesFlavSplit import *
 from collections import defaultdict
 
-name = "HBB"
+name = "HBB_flavSplit"
 
 number_of_b = {
-    0: ["udsg", "c"],
-    1: ["b"],
     2: ["bb"],
+    1: ["b"],
+    0: ["udsg", "c"],
 }
 
 background_list = [

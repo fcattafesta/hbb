@@ -1,12 +1,12 @@
 from samplesFlavSplit import *
 from collections import defaultdict
 
-name = "HBB"
+name = "HBB_flavSplit"
 
 number_of_b = {
-    0: ["udsg", "c"],
-    1: ["b"],
     2: ["bb"],
+    1: ["b"],
+    0: ["udsg", "c"],
 }
 
 background_list = [
@@ -55,7 +55,7 @@ import ROOT
 
 # Color palette
 
-fillcolor = {bkg: ROOT.kAzure + i for i, bkg in zip([3, 0, 7], background)}
+fillcolor = {bkg: ROOT.kAzure + i for bkg, i in zip(background, [3, 0, 7])}
 fillcolor.update(
     {
         "ZH": ROOT.kRed + 2,

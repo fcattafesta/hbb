@@ -5,11 +5,11 @@ def getFlowMC(flow):
     ## MonteCarlo-only definitions ##
 
     flow.Define(
-        "btag_max_hadronFlavour",
+        "hadronFlavour_btag_max",
         "JetBtagMax_hadronFlavour",
     )
     flow.Define(
-        "btag_min_hadronFlavour",
+        "hadronFlavour_btag_min",
         "JetBtagMin_hadronFlavour",
     )
 
