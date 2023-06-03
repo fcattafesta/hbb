@@ -21,10 +21,6 @@ parser.add_argument("--out-dir", default="roc_curve")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
-os.makedirs(args.out_dir, exist_ok=True)
-
-logger = setup_logger(f"{args.out_dir}/logger.log")
-logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 
 TT_list = ["TTTo2L2Nu", "TTToSemiLeptonic", "TTToHadronic"]
@@ -45,10 +41,12 @@ def load_data(dirs):
             for background in TT_list:
                 if background in file:
                     files.append(x + file)
+                    print(f"Loading file {file}")
+    print("Loading files: {files}")
 
     # open each file and get the Events tree using uproot
     for i, file in enumerate(files):
-        logger.info(f"Loading file {file}")
+        print(f"Loading file {file}")
         file = uproot.open(f"{file}:Events")
         variables_array = np.array(
             [file[input].array(library="np") for input in varibles_list]
@@ -178,11 +176,16 @@ def plotting_function(out_dir, networks):
 
 
 if "__main__" == __name__:
+    os.makedirs(args.out_dir, exist_ok=True)
+
+    logger = setup_logger(f"{args.out_dir}/logger.log")
+    logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
+
     networks_dict = {}
-    rates_dict = {}
     networks_dict["csv"] = load_data(args.csv_dirs)
     networks_dict["flav"] = load_data(args.flav_dirs)
 
+    rates_dict = {}
     for net, data in networks_dict.items():
         # compute roc curve and auc
         fpr, tpr, roc_auc = get_rates(data[1], data[0], [5], [1, 2, 3, 21])
