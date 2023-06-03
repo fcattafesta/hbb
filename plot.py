@@ -880,6 +880,7 @@ def fill_datasum(
                     all_histo_all_syst[hn][d]["nom"] = h.Clone()
             else:
                 logger.info("Cannot open %s %s" % (d, hn))
+                return
                 exit(1)
             if gr in model.signal:
                 if gr not in list(histosSignal[hn].keys()):
@@ -969,7 +970,8 @@ def makeplot(hn, saveintegrals=True):
                 ftxt=ftxt,
                 data=True,
             )
-            myLegend_1.AddEntry(h, "Data", "PL")
+            if h:
+                myLegend_1.AddEntry(h, "Data", "PL")
 
         DataYieldLine = "sample,yield,uncert,fraction"
         for sy in systematicsSetToUse:
