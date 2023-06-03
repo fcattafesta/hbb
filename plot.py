@@ -1054,6 +1054,10 @@ def makeplot(hn, saveintegrals=True):
                     Significance.SetBinContent(i, 0)
                     logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
                     logger.info("setting bin content to 0")
+                except ValueError:
+                    Significance.SetBinContent(i, 0)
+                    logger.info("ValueError in bin %i in histogram %s" % (i, hn))
+                    logger.info("setting bin content to 0")
 
             # for i in range(B.GetNbinsX() + 2):
             #     logger.info(
