@@ -1192,9 +1192,9 @@ def makeplot(hn, saveintegrals=True):
                 c.cd(1)
             else:
                 ROOT.gStyle.SetPadLeftMargin(0.2)
-                c.cd()
                 myLegend_1.Draw()
                 myLegend_2.Draw()
+                c.cd()
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
@@ -1355,7 +1355,6 @@ def makeplot(hn, saveintegrals=True):
                 else:
                     c.SaveAs(outpath + "/%s.png" % hn)
                     c.SaveAs(outpath + "/%s.root" % hn)
-            # c.SaveAs("%s.root"%hn)
             else:
                 c.GetPad(1).SetLogy(True) if hn in datasum.keys() else c.SetLogy(True)
                 if postfit:
