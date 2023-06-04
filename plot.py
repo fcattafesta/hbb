@@ -102,12 +102,11 @@ def makeRatioMCplot(h):
 def setStyle(h, isRatio=False, noData=False):
     if type(h) == ROOT.THStack:
         h1 = h.GetStack().First()
-        #h=h.GetHistogram()
     else:
         h1 = h
 
     h.SetTitle("")
-    w = 0.055 * (2.5 if isRatio else 1.0)
+    w = 0.055 * (2.5 if isRatio else 0.5)
     h.GetYaxis().SetLabelSize(w)
     h.GetXaxis().SetLabelSize(w)
     h.GetYaxis().SetTitleSize(w)
@@ -1175,10 +1174,6 @@ def makeplot(hn, saveintegrals=True):
         canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
-            # ROOT.gStyle.SetPadLeftMargin(0.2)
-            # c.cd()
-            # myLegend_1.Draw()
-            # myLegend_2.Draw()
             if hn in datasum.keys():
                 c.Divide(1, 2)
                 c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
@@ -1244,7 +1239,6 @@ def makeplot(hn, saveintegrals=True):
                     )
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
-                #c.Update()
 
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
@@ -1264,7 +1258,7 @@ def makeplot(hn, saveintegrals=True):
                 histosNotStacked[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.45,
+                0.5,
                 0.85,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
@@ -1277,7 +1271,7 @@ def makeplot(hn, saveintegrals=True):
             t2 = makeText(0.45, 0.95, str(year), 42)
             t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
-                0.45,
+                0.5,
                 0.75,
                 labelLeptons[hn.split("___")[1]] + btag_label
                 if hn.split("___")[1] in list(labelLeptons.keys())
@@ -1295,7 +1289,7 @@ def makeplot(hn, saveintegrals=True):
             t4.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.45, 0.7, SignificanceSum_str, 42, size=0.025)
+                t_sig = makeText(0.5, 0.7, SignificanceSum_str, 42, size=0.025)
                 t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
