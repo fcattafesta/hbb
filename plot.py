@@ -1192,7 +1192,6 @@ def makeplot(hn, saveintegrals=True):
                 c.cd(1)
             else:
                 ROOT.gStyle.SetPadLeftMargin(0.2)
-                c.GetPad(1).SetPad(0.0, 0.0, 0.90, 1.0)
                 c.cd()
                 myLegend_1.Draw()
                 myLegend_2.Draw()
