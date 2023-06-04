@@ -101,7 +101,8 @@ def makeRatioMCplot(h):
 
 def setStyle(h, isRatio=False, noData=False):
     if type(h) == ROOT.THStack:
-        h1 = h.GetStack().Last()
+        h1 = h.GetStack().First()
+        #h=h.GetHistogram()
     else:
         h1 = h
 
@@ -1222,7 +1223,7 @@ def makeplot(hn, saveintegrals=True):
                         (histosum[hn].GetMaximum()) ** 2,
                     )
                 histos[hn].Draw("hist")
-                setStyle(histos[hn].GetStack().Last(), noData=True)
+                setStyle(histos[hn], noData=True)
                 c.Update()
 
             #  histos[hn].Draw("hist")
