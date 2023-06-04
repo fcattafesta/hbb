@@ -1175,26 +1175,40 @@ def makeplot(hn, saveintegrals=True):
         canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
-            ROOT.gStyle.SetPadLeftMargin(0.2)
-            c.cd()
-            myLegend_1.Draw()
-            myLegend_2.Draw()
+            # ROOT.gStyle.SetPadLeftMargin(0.2)
+            # c.cd()
+            # myLegend_1.Draw()
+            # myLegend_2.Draw()
             if hn in datasum.keys():
                 c.Divide(1, 2)
                 c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
                 c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
 
-                #ROOT.gStyle.SetPadLeftMargin(0.2)
+                ROOT.gStyle.SetPadLeftMargin(0.2)
                 c.GetPad(2).SetBottomMargin(0.35)
                 c.GetPad(2).SetTopMargin(0.0)
 
-                # c.cd()
+                c.cd()
 
-                # myLegend_1.Draw()  # NEW
-                # myLegend_2.Draw()  # NEW
+                myLegend_1.Draw()  # NEW
+                myLegend_2.Draw()  # NEW
 
                 c.cd(1)
+            else:
+                c.Divide(1, 2)
+                c.GetPad(2).SetPad(0.0, 0.0, 0.0, 0.0)
+                c.GetPad(1).SetPad(0.0, 0.0, 0.90, 1.0)
 
+                ROOT.gStyle.SetPadLeftMargin(0.2)
+                c.GetPad(2).SetBottomMargin(0.35)
+                c.GetPad(2).SetTopMargin(0.0)
+
+                c.cd()
+
+                myLegend_1.Draw()  # NEW
+                myLegend_2.Draw()  # NEW
+
+                c.cd(1)
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
@@ -1230,7 +1244,7 @@ def makeplot(hn, saveintegrals=True):
                     )
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
-                c.Update()
+                #c.Update()
 
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
@@ -1356,7 +1370,7 @@ def makeplot(hn, saveintegrals=True):
                     c.SaveAs(outpath + "/%s.png" % hn)
                     c.SaveAs(outpath + "/%s.root" % hn)
             else:
-                c.GetPad(1).SetLogy(True) if hn in datasum.keys() else c.SetLogy(True)
+                c.GetPad(1).SetLogy(True) # if hn in datasum.keys() else c.SetLogy(True)
                 if postfit:
                     c.SaveAs(outpath + "/%s_log_postFit.png" % hn)
                 else:
