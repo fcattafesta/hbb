@@ -106,7 +106,7 @@ def setStyle(h, isRatio=False, noData=False):
         h1 = h
 
     h.SetTitle("")
-    w = 0.055 * (2.5 if isRatio else 0.5)
+    w = 0.055 * (2.5 if isRatio else 0.8)
     h.GetYaxis().SetLabelSize(w)
     h.GetXaxis().SetLabelSize(w)
     h.GetYaxis().SetTitleSize(w)
