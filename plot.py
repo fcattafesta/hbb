@@ -1175,26 +1175,26 @@ def makeplot(hn, saveintegrals=True):
         canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
+            ROOT.gStyle.SetPadLeftMargin(0.2)
+            c.cd()
+            myLegend_1.Draw()
+            myLegend_2.Draw()
             if hn in datasum.keys():
                 c.Divide(1, 2)
                 c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
                 c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
 
-                ROOT.gStyle.SetPadLeftMargin(0.2)
+                #ROOT.gStyle.SetPadLeftMargin(0.2)
                 c.GetPad(2).SetBottomMargin(0.35)
                 c.GetPad(2).SetTopMargin(0.0)
 
-                c.cd()
+                # c.cd()
 
-                myLegend_1.Draw()  # NEW
-                myLegend_2.Draw()  # NEW
+                # myLegend_1.Draw()  # NEW
+                # myLegend_2.Draw()  # NEW
 
                 c.cd(1)
-            else:
-                c.cd()
-                ROOT.gStyle.SetPadLeftMargin(0.2)
-                myLegend_1.Draw()
-                myLegend_2.Draw()
+
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
