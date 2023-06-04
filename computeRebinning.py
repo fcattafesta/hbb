@@ -48,8 +48,8 @@ fSignal1 = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
 hSignal.Add(fSignal1.Get(variable + f"___{SR}").Clone(), samples[signalSample]["xsec"] * samples[data]["lumi"])
 
 
-xMax = 5. if variable == "atanhDNN_Score" else 1.
-binMinWidth = 0.25 if variable == "atanhDNN_Score" else 0.03
+xMax = 15. if variable == "atanhDNN_Score" else 1.
+binMinWidth = 0.5 if variable == "atanhDNN_Score" else 0.03
 Nbins_binning = hSignal.GetNbinsX()
 MinNumberOfBin_inBinning = int(binMinWidth / xMax * Nbins_binning)
 binLimitDown = Nbins_binning
