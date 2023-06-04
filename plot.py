@@ -1191,10 +1191,10 @@ def makeplot(hn, saveintegrals=True):
 
                 c.cd(1)
             else:
+                c.cd()
                 ROOT.gStyle.SetPadLeftMargin(0.2)
                 myLegend_1.Draw()
                 myLegend_2.Draw()
-                c.cd()
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
