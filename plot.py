@@ -1196,11 +1196,11 @@ def makeplot(hn, saveintegrals=True):
                 c.cd(1)
             else:
                 c.Divide(1, 2)
-                c.GetPad(2).SetPad(0.0, 0.0, 0.0, 0.0)
-                c.GetPad(1).SetPad(0.0, 0.0, 0.90, 1.0)
+                c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.01)
+                c.GetPad(1).SetPad(0.0, 0.01, 0.90, 1.0)
 
                 ROOT.gStyle.SetPadLeftMargin(0.2)
-                c.GetPad(2).SetBottomMargin(0.0)
+                c.GetPad(2).SetBottomMargin(0.35)
                 c.GetPad(2).SetTopMargin(0.0)
 
                 c.cd()
