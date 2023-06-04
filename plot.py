@@ -1063,6 +1063,7 @@ def makeplot(hn, saveintegrals=True):
             Significance = S.Clone()
             for i in range(Significance.GetNbinsX() + 1):
                 try:
+                    # TODO: sum the background in quadrature
                     Significance.SetBinContent(
                         i,
                         Significance.GetBinContent(i)
