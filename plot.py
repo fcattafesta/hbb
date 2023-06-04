@@ -131,6 +131,7 @@ def setStyle(h, isRatio=False, noData=False):
             h.GetXaxis().SetTitle(
                 labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
             )
+            logger.info("noData xKey %s", xKey)
         else:
             h.GetXaxis().SetLabelSize(0)
             h.GetXaxis().SetTitleSize(0)
@@ -1216,6 +1217,7 @@ def makeplot(hn, saveintegrals=True):
                         (histosum[hn].GetMaximum()) ** 2,
                     )
                 setStyle(histos[hn].GetStack().Last(), noData=True)
+                c.Update()
                 histos[hn].Draw("hist")
 
             #  histos[hn].Draw("hist")
