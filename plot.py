@@ -1175,20 +1175,27 @@ def makeplot(hn, saveintegrals=True):
         canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
-            c.Divide(1, 2)
-            c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
-            c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
+            if hn in datasum.keys():
+                c.Divide(1, 2)
+                c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
+                c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
 
-            ROOT.gStyle.SetPadLeftMargin(0.2)
-            c.GetPad(2).SetBottomMargin(0.35)
-            c.GetPad(2).SetTopMargin(0.0)
+                ROOT.gStyle.SetPadLeftMargin(0.2)
+                c.GetPad(2).SetBottomMargin(0.35)
+                c.GetPad(2).SetTopMargin(0.0)
 
-            c.cd()
+                c.cd()
 
-            myLegend_1.Draw()  # NEW
-            myLegend_2.Draw()  # NEW
+                myLegend_1.Draw()  # NEW
+                myLegend_2.Draw()  # NEW
 
-            c.cd(1)
+                c.cd(1)
+            else:
+                ROOT.gStyle.SetPadLeftMargin(0.2)
+                c.GetPad().SetPad(0.0, 0.0, 0.90, 1.0)
+                c.cd()
+                myLegend_1.Draw()
+                myLegend_2.Draw()
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
@@ -1341,7 +1348,7 @@ def makeplot(hn, saveintegrals=True):
                 tchi2.Draw()
                 tKS.Draw()
 
-            c.GetPad(2).SetGridy()
+                c.GetPad(2).SetGridy()
             if i == 0:
                 if postfit:
                     c.SaveAs(outpath + "/%s_postFit.png" % hn)
