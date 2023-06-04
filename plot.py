@@ -100,6 +100,11 @@ def makeRatioMCplot(h):
 
 
 def setStyle(h, isRatio=False, noData=False):
+    if type(h) == ROOT.THStack:
+        h1 = h.GetStack().Last()
+    else:
+        h1 = h
+
     h.SetTitle("")
     w = 0.055 * (2.5 if isRatio else 1.0)
     h.GetYaxis().SetLabelSize(w)
@@ -117,9 +122,9 @@ def setStyle(h, isRatio=False, noData=False):
     else:
         # check if all bins are the same width
         if all(
-            h.GetBinWidth(1) == h.GetBinWidth(i) for i in range(1, h.GetNbinsX() + 1)
+            h1.GetBinWidth(1) == h1.GetBinWidth(i) for i in range(1, h1.GetNbinsX() + 1)
         ):
-            binWidht = str(h.GetBinWidth(1))[:4]
+            binWidht = str(h1.GetBinWidth(1))[:4]
             if binWidht.endswith("."):
                 binWidht = binWidht[:3]
             h.GetYaxis().SetTitle("Entries/" + binWidht)
