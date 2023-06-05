@@ -1,7 +1,7 @@
 from samples import *
 from collections import defaultdict
 
-name = "HBB_flavSplit"
+name = "HBB_ee_flavSplit"
 
 number_of_b = {
     2: ["bb"],

@@ -1,9 +1,6 @@
 from samples import *
-from collections import defaultdict
 
-name = "DY"
-
-
+name = "DY_stack"
 background = {
     f"Z+{flavour}": [
         f"DYZpt-0To50_{flavour}",
@@ -24,13 +21,13 @@ import ROOT
 
 # Color palette
 
-fillcolor = {f"Z+{flavour}": ROOT.kWhite for flavour in flavourSplitting}
-
-linecolor = fillcolor
-linecolorNotStacked = {
+fillcolor = {
     f"Z+{flavour}": ROOT.kGreen + i
     for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
 }
+
+linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
+linecolorNotStacked = {}
 markercolor = fillcolor
 
 
@@ -41,7 +38,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histosNotStacked_list = [f"Z+{flavour}" for flavour in flavourSplitting.keys()]
+histosNotStacked_list = []
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]

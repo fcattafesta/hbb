@@ -1,7 +1,7 @@
 from samples import *
 from collections import defaultdict
 
-name = "HBB"
+name = "HBB_ee"
 
 flavourVVSplitting = {
     "HF": ["bb", "b", "c"],
