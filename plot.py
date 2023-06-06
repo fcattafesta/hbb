@@ -1134,7 +1134,7 @@ def makeplot(hn, saveintegrals=True):
             h.SetFillStyle(0)
             h.SetLineWidth(3)
             h.SetLineStyle(2)
-            myLegend_1.AddEntry(h, gr, "l")
+            myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
         firstBlind = 100000
         lastBlind = -1
@@ -1273,7 +1273,7 @@ def makeplot(hn, saveintegrals=True):
             t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
                 0.5,
-                0.75,
+                0.8,
                 labelLeptons[hn.split("___")[1]] + btag_label
                 if hn.split("___")[1] in list(labelLeptons.keys())
                 else hn.split("___")[1],
