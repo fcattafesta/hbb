@@ -1067,7 +1067,7 @@ def makeplot(hn, saveintegrals=True):
                     Significance.SetBinContent(
                         i,
                         Significance.GetBinContent(i)
-                        / (sqrt(B.GetBinContent(i))),# + 0.1 * B.GetBinContent(i)),
+                        / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i))**2)),
                     )
                 except ZeroDivisionError:
                     Significance.SetBinContent(i, 0)
@@ -1099,7 +1099,7 @@ def makeplot(hn, saveintegrals=True):
                 SignificanceSum += Significance.GetBinContent(i) ** 2
 
             SignificanceSum = sqrt(SignificanceSum)
-            SignificanceSum_str = " #sqrt{#sum (S/#sqrt{B})^{2}} = " + str(
+            SignificanceSum_str = " #sqrt{#sum (S/#sqrt{B+0.01B^{2}})^{2}} = " + str(
                 "%.2f" % SignificanceSum
             )
 
