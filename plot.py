@@ -1067,7 +1067,7 @@ def makeplot(hn, saveintegrals=True):
                     Significance.SetBinContent(
                         i,
                         Significance.GetBinContent(i)
-                        / (sqrt(B.GetBinContent(i)) + 0.1 * B.GetBinContent(i)),
+                        / (sqrt(B.GetBinContent(i))),# + 0.1 * B.GetBinContent(i)),
                     )
                 except ZeroDivisionError:
                     Significance.SetBinContent(i, 0)
@@ -1106,7 +1106,7 @@ def makeplot(hn, saveintegrals=True):
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
             t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.8, 0.95, SignificanceSum_str, 42, size=0.03)
+            t2 = makeText(0.8, 0.95, SignificanceSum_str, 42, size=0.02)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_Significance.png" % hn)
