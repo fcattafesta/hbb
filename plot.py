@@ -1360,17 +1360,17 @@ def makeplot(hn, saveintegrals=True):
 
             if i == 0:
                 if postfit:
-                    c.SaveAs(outpath + "/%s_postFit.png" % hn)
+                    c.SaveAs(outpath + "/%s_%s_postFit.png" % (args.btag, hn))
                 else:
-                    c.SaveAs(outpath + "/%s.png" % hn)
-                    c.SaveAs(outpath + "/%s.root" % hn)
+                    c.SaveAs(outpath + "/%s_%s.png" % (args.btag, hn))
+                    c.SaveAs(outpath + "/%s_%s.root" % (args.btag, hn))
             else:
                 c.GetPad(1).SetLogy(True) # if hn in datasum.keys() else c.SetLogy(True)
                 if postfit:
-                    c.SaveAs(outpath + "/%s_log_postFit.png" % hn)
+                    c.SaveAs(outpath + "/%s_%s_log_postFit.png" % (args.btag, hn))
                 else:
-                    c.SaveAs(outpath + "/%s_log.png" % hn)
-                    c.SaveAs(outpath + "/%s_log.root" % hn)
+                    c.SaveAs(outpath + "/%s_%s_log.png" % (args.btag, hn))
+                    c.SaveAs(outpath + "/%s_%s_log.root" % (args.btag, hn))
             del c
 
 
