@@ -1051,7 +1051,7 @@ def makeplot(hn, saveintegrals=True):
             B = histosum[hn].Clone()
             B.Add(S)
             R = S.Divide(B)
-            fR = ROOT.TFile.Open(outpath + "/%s_SBratio.root" % hn, "recreate")
+            fR = ROOT.TFile.Open(outpath + "/%s_%s_SBratio.root" % (hn, args.btag), "recreate")
             S.Write()
             fR.Close()
 
@@ -1091,7 +1091,7 @@ def makeplot(hn, saveintegrals=True):
             #     )
 
             # write the significance histogram to a file
-            fR = ROOT.TFile.Open(outpath + "/%s_Significance.root" % hn, "recreate")
+            fR = ROOT.TFile.Open(outpath + "/%s_%s_Significance.root" % (hn, args.btag), "recreate")
             Significance.Write()
             # sum the squared of the bins of the significance histogram
             SignificanceSum = 0
@@ -1109,7 +1109,7 @@ def makeplot(hn, saveintegrals=True):
             t2 = makeText(0.8, 0.95, SignificanceSum_str, 42, size=0.02)
             t1.Draw()
             t2.Draw()
-            c_significance.SaveAs(outpath + "/%s_Significance.png" % hn)
+            c_significance.SaveAs(outpath + "/%s_%s_Significance.png" % (hn, args.btag))
             SignificanceSum = getattr(ROOT, "TParameter<double>")(
                 "SignificanceSum", SignificanceSum
             )
