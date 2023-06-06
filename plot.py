@@ -1099,7 +1099,7 @@ def makeplot(hn, saveintegrals=True):
                 SignificanceSum += Significance.GetBinContent(i) ** 2
 
             SignificanceSum = sqrt(SignificanceSum)
-            SignificanceSum_str = " #sqrt{#sum (S/#sqrt{B+0.01B^{2}})^{2}} = " + str(
+            SignificanceSum_str = " #sqrt{#sum (#frac{S}{#sqrt{B+0.01B^{2}}})^{2}} = " + str(
                 "%.2f" % SignificanceSum
             )
 
