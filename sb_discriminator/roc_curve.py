@@ -147,7 +147,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.xlabel("True positive rate", fontsize=20, loc="right")
     plt.ylabel("False positive rate ", fontsize=20, loc="top")
     plt.xlim([0.23, 1.0005])
-    plt.ylim([0.8, 1.005])
+    plt.ylim([0.0008, 1.005])
     plt.text(
         0.7,
         0.1,
