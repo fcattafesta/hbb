@@ -156,7 +156,7 @@ def plt_fts(out_dir, name, fig_handle, show):
         fontsize=20,
         horizontalalignment="left",
         verticalalignment="bottom",
-        transform=plt.gca().transAxes,
+        #transform=plt.gca().transAxes,
     )
     minorLocator = MultipleLocator(0.05)
     ax = plt.gca()
