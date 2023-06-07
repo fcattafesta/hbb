@@ -23,6 +23,11 @@ variables_list = [
     "btag_max_hadronFlavour",
     "btag_min_hadronFlavour",
 ]
+tag_dict ={
+    "b vs udsg": [[5], [0], "solid"],
+    "b vs c": [[5], [4], "dashed"],
+}
+
 
 
 def load_data(dirs):
@@ -155,7 +160,7 @@ def plotting_function(out_dir, networks):
 
     fig_handle = plt.figure(figsize=(13, 10))
     for network, rates in networks.items():
-        plt.plot(rates[1], rates[0], label=f"{network} (AUC=%0.4f)" % rates[2])
+        plt.plot(rates[1], rates[0], label=f"{network} (AUC=%0.4f)" % rates[2], color= rates[3], linestyle=rates[4])
 
     plt_fts(out_dir, f"ROC_DeepCSV_DeepFlavour", fig_handle, args.show)
 
@@ -164,13 +169,14 @@ if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
     networks_dict = {}
-    networks_dict["DeepCSV"] = load_data(args.csv_dirs)
-    networks_dict["DeepFlavour"] = load_data(args.flav_dirs)
+    networks_dict["DeepCSV"] = load_data(args.csv_dirs) + ["r"]
+    networks_dict["DeepFlavour"] = load_data(args.flav_dirs) + ["b"]
 
     rates_dict = {}
     for net, data in networks_dict.items():
-        # compute roc curve and auc
-        fpr, tpr, roc_auc = get_rates(data[1], data[0], [5], [0])
-        rates_dict[net] = [fpr, tpr, roc_auc]
+        for tag_type, labels in tag_dict.items():
+            # compute roc curve and auc
+            fpr, tpr, roc_auc = get_rates(data[1], data[0], labels[0], labels[1])
+            rates_dict[f"{net} {tag_type}"] = [fpr, tpr, roc_auc, data[2], labels[2]]
 
     plotting_function(args.out_dir, rates_dict)

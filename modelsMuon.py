@@ -19,9 +19,9 @@ VV_background_list = [
 ]
 
 background = defaultdict(list)
-for name, flavours in flavourVVSplitting.items():
+for fs, flavours in flavourVVSplitting.items():
     for flav in flavours:
-        background[f"VV{name}"] += [f"{bkg}_{flav}" for bkg in VV_background_list]
+        background[f"VV{fs}"] += [f"{bkg}_{flav}" for bkg in VV_background_list]
 
 background.update(
     {
