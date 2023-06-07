@@ -1,6 +1,10 @@
 from multiprocessing import Pool
 import psutil
-from samples import samples, flavourSplitting, flavourVVSplitting
+
+# Samples for whole analysis
+# from samples import samples, flavourSplitting, flavourVVSplitting
+# Samples for DY analysis
+from samplesDY import samples, flavourSplitting
 import copy
 import sys
 from nail.nail import *
@@ -35,7 +39,8 @@ if not os.path.exists(args.histfolder):
 
 # Create the flow
 flow = SampleProcessing(
-    "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
+    "Analysis",
+    "/gpfs/ddn/cms/user/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/0CFD79EF-41AB-4B4A-8F62-06393273EEDE.root",
 )
 # Flow for data
 flowData = getFlowCommon(flow)
@@ -50,7 +55,13 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    ["OneB", "TwoB", "OneC", "Light", "HF", "LF"],
+    [
+        "OneB",
+        "TwoB",
+        "OneC",
+        "Light",
+        # "HF", "LF"
+    ],
     histosPerSelection,
     [],
     "",
@@ -233,7 +244,7 @@ elif args.model[:5] == "model":
     for x in model.background:
         for y in model.background[x]:
             if x.endswith(
-                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
+                tuple(flavourSplitting.keys())  # + tuple(flavourVVSplitting.keys())
             ):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
