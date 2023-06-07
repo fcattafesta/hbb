@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import mplhep as hep
 
-plt.rcParams["text.usetex"] = True
+#plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
