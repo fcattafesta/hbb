@@ -152,7 +152,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.text(
         0.7,
         0.1,
-        "$t\\bar{t}$\n$ \text{AK4jets} p_T > 20 \\text{GeV}$",
+        "$t\\bar{t}$\n$ \\mathrm{AK4jets}$ $(p_T > 20 \\mathrm{GeV})$",
         fontsize=20,
         horizontalalignment="left",
         verticalalignment="bottom",
