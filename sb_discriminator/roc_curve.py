@@ -148,16 +148,15 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.ylabel("False positive rate ", fontsize=20, loc="top")
     plt.xlim([0.3, 1.0005])
     plt.ylim([0.0005, 1.005])
-    # write text on the bottom right of the plot
-    plt.text(
-        0.7,
-        0.1,
-        "$t\\bar{t}$\n$ \\mathrm{AK4jets}$ $(p_T > 20 \\mathrm{GeV})$",
-        fontsize=20,
-        horizontalalignment="left",
-        verticalalignment="bottom",
-        #transform=plt.gca().transAxes,
-    )
+    # plt.text(
+    #     0.7,
+    #     0.1,
+    #     "$t\\bar{t}$\n$ \\mathrm{AK4jets}$ $(p_T > 20 \\mathrm{GeV})$",
+    #     fontsize=20,
+    #     horizontalalignment="left",
+    #     verticalalignment="bottom",
+    #     #transform=plt.gca().transAxes,
+    # )
     minorLocator = MultipleLocator(0.05)
     ax = plt.gca()
     ax.xaxis.set_minor_locator(minorLocator)
