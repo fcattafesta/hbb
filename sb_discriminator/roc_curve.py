@@ -7,10 +7,25 @@ from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import mplhep as hep
 
+plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--csv-dirs", nargs="+", default=["/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_csv_el/",  "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_csv_mu/"])
-parser.add_argument("--flav-dirs", nargs="+", default=["/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_flav_el/",  "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_flav_mu/"])
+parser.add_argument(
+    "--csv-dirs",
+    nargs="+",
+    default=[
+        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_csv_el/",
+        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_csv_mu/",
+    ],
+)
+parser.add_argument(
+    "--flav-dirs",
+    nargs="+",
+    default=[
+        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_flav_el/",
+        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_flav_mu/",
+    ],
+)
 parser.add_argument("--out-dir", default="roc_curve")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
@@ -23,11 +38,10 @@ variables_list = [
     "btag_max_hadronFlavour",
     "btag_min_hadronFlavour",
 ]
-tag_dict ={
+tag_dict = {
     "b vs udsg": [[5], [0], "solid"],
     "b vs c": [[5], [4], "dashed"],
 }
-
 
 
 def load_data(dirs):
@@ -105,7 +119,7 @@ def get_labels(y_true, y_score, labels_s, labels_b):
     return y_true_tot, y_score_tot
 
 
-def get_rates(y_t, y_s, l_s, l_b, weights=None):
+def get_rates(y_t, y_s, l_s, l_b):
     """Compute the ROC curve and the AUC
     :param    y_t : array with the true labels
     :param    y_s : array with the scores
@@ -133,7 +147,17 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.xlabel("True positive rate", fontsize=20, loc="right")
     plt.ylabel("False positive rate ", fontsize=20, loc="top")
     plt.xlim([0.3, 1.0005])
-    plt.ylim([0.0001, 1.005])
+    plt.ylim([0.0005, 1.005])
+    # write text on the bottom right of the plot
+    plt.text(
+        0.73,
+        0.07,
+        "$t\\bar{t}$\n$p_T > 20$ GeV",
+        fontsize=13,
+        horizontalalignment="left",
+        verticalalignment="bottom",
+        transform=plt.gca().transAxes,
+    )
     minorLocator = MultipleLocator(0.05)
     ax = plt.gca()
     ax.xaxis.set_minor_locator(minorLocator)
@@ -160,7 +184,13 @@ def plotting_function(out_dir, networks):
 
     fig_handle = plt.figure(figsize=(13, 10))
     for network, rates in networks.items():
-        plt.plot(rates[1], rates[0], label=f"{network} (AUC=%0.4f)" % rates[2], color= rates[3], linestyle=rates[4])
+        plt.plot(
+            rates[1],
+            rates[0],
+            label=f"{network} (AUC=%0.4f)" % rates[2],
+            color=rates[3],
+            linestyle=rates[4],
+        )
 
     plt_fts(out_dir, f"ROC_DeepCSV_DeepFlavour", fig_handle, args.show)
 
