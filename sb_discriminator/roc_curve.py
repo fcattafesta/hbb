@@ -152,8 +152,8 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.text(
         0.7,
         0.1,
-        "$t\\bar{t}$\n$p_T > 20 \text{GeV}$",
-        fontsize=30,
+        "$t\\bar{t}$\n$ \text{AK4jets} p_T > 20 \\text{GeV}$",
+        fontsize=20,
         horizontalalignment="left",
         verticalalignment="bottom",
         transform=plt.gca().transAxes,
