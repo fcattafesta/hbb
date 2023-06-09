@@ -34,7 +34,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histosNotStacked_list = [f"Z+{flavour}" for flavour in flavourSplitting.keys()]
+histosNotStacked_list = [f"Z+bb"]
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
