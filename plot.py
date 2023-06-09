@@ -15,6 +15,9 @@ from args_plot import args
 from labelDict import *
 from logger import setup_logger
 
+# NOTE: gr is the sample name and hn is the variable name
+
+
 btag_label = labelBtag[args.btag]
 
 outdir = args.workspace
@@ -658,6 +661,13 @@ def fill_datasum(
                         array("d", model.rebin[hn.split("___")[0]]),
                     )
                 h = h.Clone(hn + "rebinned")
+                if "atanhDNN" in hn:
+                    for bin in range(h.GetNbinsX() + 1):
+                        logger.info(
+                            "sample %s variable %s bin %s %s"
+                            % (d, hn, bin, h.GetBinContent(bin))
+                        )
+
                 if data:
                     h.SetMarkerStyle(20)
                     h.SetMarkerColor(ROOT.kBlack)
@@ -1051,7 +1061,9 @@ def makeplot(hn, saveintegrals=True):
             B = histosum[hn].Clone()
             B.Add(S)
             R = S.Divide(B)
-            fR = ROOT.TFile.Open(outpath + "/%s_%s_SBratio.root" % (hn, args.btag), "recreate")
+            fR = ROOT.TFile.Open(
+                outpath + "/%s_%s_SBratio.root" % (hn, args.btag), "recreate"
+            )
             S.Write()
             fR.Close()
 
@@ -1063,11 +1075,10 @@ def makeplot(hn, saveintegrals=True):
             Significance = S.Clone()
             for i in range(Significance.GetNbinsX() + 1):
                 try:
-                    # TODO: sum the background in quadrature
                     Significance.SetBinContent(
                         i,
                         Significance.GetBinContent(i)
-                        / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i))**2)),
+                        / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)),
                     )
                 except ZeroDivisionError:
                     Significance.SetBinContent(i, 0)
@@ -1091,7 +1102,9 @@ def makeplot(hn, saveintegrals=True):
             #     )
 
             # write the significance histogram to a file
-            fR = ROOT.TFile.Open(outpath + "/%s_%s_Significance.root" % (hn, args.btag), "recreate")
+            fR = ROOT.TFile.Open(
+                outpath + "/%s_%s_Significance.root" % (hn, args.btag), "recreate"
+            )
             Significance.Write()
             # sum the squared of the bins of the significance histogram
             SignificanceSum = 0
@@ -1099,8 +1112,9 @@ def makeplot(hn, saveintegrals=True):
                 SignificanceSum += Significance.GetBinContent(i) ** 2
 
             SignificanceSum = sqrt(SignificanceSum)
-            SignificanceSum_str = " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = " + str(
-                "%.2f" % SignificanceSum
+            SignificanceSum_str = (
+                " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
+                + str("%.2f" % SignificanceSum)
             )
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
@@ -1165,7 +1179,7 @@ def makeplot(hn, saveintegrals=True):
                     datasum[hn].SetBinContent(i, 0)
                     logger.info("blinded %s bin %i" % (hn, i))
 
-        if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
+        if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
             myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
         canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
@@ -1245,9 +1259,9 @@ def makeplot(hn, saveintegrals=True):
             histosum[hn].SetLineWidth(0)
             histosum[hn].SetFillColor(ROOT.kBlack)
             histosum[hn].SetFillStyle(3004)
-            setStyle(histos[hn].GetStack().Last(), noData = hn not in datasum.keys())
+            setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
             c.Update()
-            if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
+            if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
                 histosum[hn].Draw("same E2")
 
             if hn in datasum.keys():
@@ -1255,6 +1269,18 @@ def makeplot(hn, saveintegrals=True):
                 datasum[hn].Draw("E P same")
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
+                if "atanhDNN" in hn:
+                    for bin in range(1, histosSignal[hn][gr].GetNbinsX() + 1):
+                        logger.info(
+                            "signal %s in sample %s in bin %i: %f"
+                            % (
+                                gr,
+                                hn,
+                                bin,
+                                histosSignal[hn][gr].GetBinContent(bin),
+                            )
+                        )
+
             for gr in model.histosNotStacked_list:
                 histosNotStacked[hn][gr].Draw("hist same")
 
@@ -1365,7 +1391,9 @@ def makeplot(hn, saveintegrals=True):
                     c.SaveAs(outpath + "/%s_%s.png" % (hn, args.btag))
                     c.SaveAs(outpath + "/%s_%s.root" % (hn, args.btag))
             else:
-                c.GetPad(1).SetLogy(True) # if hn in datasum.keys() else c.SetLogy(True)
+                c.GetPad(1).SetLogy(
+                    True
+                )  # if hn in datasum.keys() else c.SetLogy(True)
                 if postfit:
                     c.SaveAs(outpath + "/%s_%s_log_postFit.png" % (hn, args.btag))
                 else:
