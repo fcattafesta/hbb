@@ -159,5 +159,3 @@ runs/
 roc_curve/
 model_*
 models/
-!model_deepflav.onnx
-!model_deepcsv.onnx
