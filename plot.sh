@@ -22,8 +22,10 @@ if [[ $flavsplit == true ]]; then
 fi
 
 btag=""
-if [[ $suffix == *csv* ]]; then
+if [[ $suffix == *deepcsv* ]]; then
     btag="--btag deepcsv"
+elif [[ $suffix == *deepflav* ]]; then
+    btag="--btag deepflav"
 fi
 
 
