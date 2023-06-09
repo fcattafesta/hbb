@@ -558,7 +558,7 @@ f = {}
 folder = args.histfolder
 for group in model.signal:
     for s in model.signal[group]:
-        f[s] = ROOT.TFile.Open(folder + "%s_Histos.root" % s)
+        f[s] = ROOT.TFile.Open(folder + "/%s_Histos.root" % s)
 for group in model.background:
     for b in model.background[group]:
         f[b] = ROOT.TFile.Open(folder + "/%s_Histos.root" % b)
