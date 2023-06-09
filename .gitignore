@@ -156,7 +156,8 @@ libNailExternals.so
 # Matteo personal stuff
 to_do.txt
 runs/
-model_*
 roc_curve/
+model_*
+models/
 !model_deepflav.onnx
 !model_deepcsv.onnx
