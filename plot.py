@@ -661,7 +661,7 @@ def fill_datasum(
                         array("d", model.rebin[hn.split("___")[0]]),
                     )
                 h = h.Clone(hn + "rebinned")
-                if "atanhDNN" in hn:
+                if "atanhDNN" in hn and d in [model.background[x] for x in model.background]:
                     for bin in range(h.GetNbinsX() + 1):
                         logger.info(
                             "sample %s variable %s bin %s %s"
