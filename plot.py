@@ -648,7 +648,6 @@ def fill_datasum(
         if makeWorkspace:
             all_histo_all_syst[hn][d] = {}
         if f[d]:
-            logger.info("Adding %s" % d)
             h = f[d].Get(hn)
             histoSingleSyst[hn][d] = {}
             if h:
@@ -661,11 +660,11 @@ def fill_datasum(
                         array("d", model.rebin[hn.split("___")[0]]),
                     )
                 h = h.Clone(hn + "rebinned")
-                if "atanhDNN" in hn and gr in model.background:
+                if "atanhDNN" in hn and d in [x for y in model.background.values() for x in y]:
                     for bin in range(h.GetNbinsX() + 1):
                         logger.info(
                             "sample %s variable %s bin %s %s"
-                            % (gr, hn, bin, h.GetBinContent(bin))
+                            % (d, hn, bin, h.GetBinContent(bin))
                         )
 
                 if data:
