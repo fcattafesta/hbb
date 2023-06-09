@@ -1,4 +1,4 @@
-from samples import *
+from samplesDY import *
 
 name = "HBB"
 

@@ -40,7 +40,7 @@ if not os.path.exists(args.histfolder):
 # Create the flow
 flow = SampleProcessing(
     "Analysis",
-    "/gpfs/ddn/cms/user/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/0CFD79EF-41AB-4B4A-8F62-06393273EEDE.root",
+    "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root",
 )
 # Flow for data
 flowData = getFlowCommon(flow)
