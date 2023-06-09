@@ -1240,7 +1240,7 @@ if args.variablesToFit != None:
     systematicsSetToUse = model.systematicsForDC
 systematicsSetToUse.sort()
 postfit = False
-postfit = args.postfit
+# postfit = args.postfit
 
 print("makeWorkspace", makeWorkspace)
 print("variablesToFit", variablesToFit)
