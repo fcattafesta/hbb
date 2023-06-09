@@ -51,14 +51,6 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
-
-# To be added
-
-data = {}
-
-
-signal = {}
-
 import ROOT
 
 # Color palette
@@ -67,6 +59,20 @@ fillcolor = {
     f"Z+{flavour}": ROOT.kGreen + i
     for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
 }
+fillcolor.update(
+    {
+        f"VV{flavour}": ROOT.kOrange + i
+        for i, flavour in zip([0, -1], flavourVVSplitting)
+    }
+)
+fillcolor.update(
+    {
+        "TT": ROOT.kBlue - 4,
+        "ST": ROOT.kBlue + 2,
+        "ZH": ROOT.kRed + 2,
+        "ggZH": ROOT.kRed - 3,
+    }
+)
 linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
 markercolor = fillcolor
 
