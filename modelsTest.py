@@ -1,13 +1,12 @@
 from samples import *
 
-name = "DY_overlay"
+name = "Test"
 
 # TODO: add the inclusive DY sample
 background = {
-    f"Z+{flavour}": [
-        f"DYZpt-50To100_{flavour}",
+    f"Z+bb": [
+        f"DYZpt-50To100_bb",
     ]
-    for flavour in flavourSplitting.keys()
 }
 
 data = {}
