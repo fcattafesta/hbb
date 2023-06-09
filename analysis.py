@@ -4,7 +4,7 @@ import psutil
 # Samples for whole analysis
 # from samples import samples, flavourSplitting, flavourVVSplitting
 # Samples for DY analysis
-from samplesDY import samples, flavourSplitting
+from samplesDY import samples, flavourSplitting, flavourVVSplitting
 import copy
 import sys
 from nail.nail import *
@@ -244,7 +244,7 @@ elif args.model[:5] == "model":
     for x in model.background:
         for y in model.background[x]:
             if x.endswith(
-                tuple(flavourSplitting.keys())  # + tuple(flavourVVSplitting.keys())
+                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
             ):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
