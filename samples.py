@@ -2,9 +2,9 @@
 import glob
 
 flavourSplitting = {
-    "b": "OneB",
     "bb": "TwoB",
-    "c": "OneC",
+    "b": "OneB",
+    "c": "C",
     "udsg": "Light",
 }
 
