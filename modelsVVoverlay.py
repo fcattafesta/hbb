@@ -1,7 +1,7 @@
 from samples import *
 from collections import defaultdict
 
-name = "VV"
+name = "VV_overlay"
 
 
 flavourVVSplitting = {
@@ -37,7 +37,7 @@ fillcolor = {f"VV{flavour}": ROOT.kWhite for flavour in flavourVVSplitting}
 
 linecolor = fillcolor
 linecolorNotStacked = {
-    f"VV{flavour}": ROOT.kOrange + i for i, flavour in zip([0, -1], flavourVVSplitting)
+    f"VV{flavour}": ROOT.kOrange + i for i, flavour in zip([-1, 0], flavourVVSplitting)
 }
 markercolor = fillcolor
 

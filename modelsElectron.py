@@ -73,7 +73,7 @@ fillcolor = {
 fillcolor.update(
     {
         f"VV{flavour}": ROOT.kOrange + i
-        for i, flavour in zip([0, -1], flavourVVSplitting)
+        for i, flavour in zip([-1, 0], flavourVVSplitting)
     }
 )
 fillcolor.update(
