@@ -5,6 +5,7 @@ DNN_input_variables = [
     "Dijets_pt",
     "MET_pt",
     "ZH_dphi",
+    # NOTE: deta is correct?
     "ZH_deta",
     "ZH_dr",
     "HZ_ptRatio",

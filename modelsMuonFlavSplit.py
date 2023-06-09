@@ -9,6 +9,7 @@ number_of_b = {
     0: ["udsg", "c"],
 }
 
+# TODO: add the inclusive DY sample
 background_list = [
     "WWTo2L2Nu",
     "WZTo2Q2L",

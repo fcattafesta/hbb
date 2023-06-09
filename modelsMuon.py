@@ -23,6 +23,7 @@ for fs, flavours in flavourVVSplitting.items():
     for flav in flavours:
         background[f"VV{fs}"] += [f"{bkg}_{flav}" for bkg in VV_background_list]
 
+# TODO: add the inclusive DY sample
 background.update(
     {
         f"Z+{flavour}": [
