@@ -169,7 +169,7 @@ for sample in samples:
     if "subsamples" in samples[sample].keys():
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
-    if sample is "DYM50":
+    if sample == "DYM50":
         samples[sample]["files"] = [
             x
             for x in glob.glob(
