@@ -37,19 +37,19 @@ background_list = [
 ]
 
 # divide all backgrounds into b, bb, c+udsg
-background = defaultdict(list)
+signal = defaultdict(list)
 for num_b, flavours in number_of_b.items():
     for flav in flavours:
-        background[f"bkg_{num_b}b"] += [f"{bkg}_{flav}" for bkg in background_list]
+        signal[f"bkg_{num_b}b"] += [f"{bkg}_{flav}" for bkg in background_list]
 
 data = {
     "2018": ["SingleMuon_2018"],
 }
 
 
-signal = {
-    "ggZH": ["ggZH"],
+background = {
     "ZH": ["ZH"],
+    "ggZH": ["ggZH"],
 }
 
 import ROOT
