@@ -22,7 +22,7 @@ btag_label = labelBtag[args.btag]
 
 outdir = args.workspace
 
-model = importlib.import_module(args.model)
+model = importlib.import_module(args.model.replace(".py", ""))
 samples = model.samples
 year = "+".join(list(model.data.keys()))
 lumi = "%2.1f fb^{-1}"
@@ -114,6 +114,7 @@ def setStyle(h, isRatio=False, noData=False):
     h.GetXaxis().SetLabelSize(w)
     h.GetYaxis().SetTitleSize(w)
     h.GetXaxis().SetTitleSize(w)
+    h.GetYaxis().SetMaxDigits(2)
     if isRatio:
         h.GetYaxis().SetTitle("Data/MC - 1")
         h.GetYaxis().SetTitleOffset(0.5)
@@ -1217,7 +1218,6 @@ def makeplot(hn, saveintegrals=True):
                             (histosum[hn].GetMaximum()) ** 2,
                         )
                     )  # zoom out y axis
-                datasum[hn].GetYaxis().SetMaxDigits(2)
                 datasum[hn].Draw("E P")
                 # datastack[hn].GetXaxis().SetTitle(hn)
                 setStyle(datasum[hn])
@@ -1233,7 +1233,6 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
-                histos[hn].GetStack().First().GetYaxis().SetMaxDigits(2)
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
