@@ -660,12 +660,6 @@ def fill_datasum(
                         array("d", model.rebin[hn.split("___")[0]]),
                     )
                 h = h.Clone(hn + "rebinned")
-                if "atanhDNN" in hn and d not in [x for y in model.data.values() for x in y]:
-                    for bin in range(h.GetNbinsX() + 1):
-                        logger.info(
-                            "sample %s variable %s bin %s %s normalized = %s"
-                            % (d, hn, bin, h.GetBinContent(bin), h.GetBinContent(bin)* lumi * samples[d]["xsec"])
-                        )
 
                 if data:
                     h.SetMarkerStyle(20)
@@ -1088,18 +1082,6 @@ def makeplot(hn, saveintegrals=True):
                     logger.info("ValueError in bin %i in histogram %s" % (i, hn))
                     logger.info("setting bin content to 0")
 
-            # for i in range(B.GetNbinsX() + 2):
-            #     logger.info(
-            #         "histograms %s bin %i: S = %.2f, B = %.2f, S/sqrt(B) = %.2f"
-            #         % (
-            #             hn,
-            #             i,
-            #             S.GetBinContent(i),
-            #             B.GetBinContent(i),
-            #             Significance.GetBinContent(i),
-            #         )
-            #     )
-
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(
                 outpath + "/%s_%s_Significance.root" % (hn, args.btag), "recreate"
@@ -1254,27 +1236,6 @@ def makeplot(hn, saveintegrals=True):
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
-            if "atanhDNN" in hn:
-                for histo_ in histos[hn].GetStack():
-                    for bin in range(1, histo_.GetNbinsX() + 1):
-                        logger.info(
-                            "stack name %s     bin %i: %f"
-                            % (
-                                histo_.GetName(),
-                                bin,
-                                histo_.GetBinContent(bin),
-                            )
-                        )
-                for histo_ in histos[hn].GetHists():
-                    for bin in range(1, histo_.GetNbinsX() + 1):
-                        logger.info(
-                            "hists name %s     bin %i: %f"
-                            % (
-                                histo_.GetName(),
-                                bin,
-                                histo_.GetBinContent(bin),
-                            )
-                        )
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
             histosum[hn].SetFillColor(ROOT.kBlack)
@@ -1289,18 +1250,6 @@ def makeplot(hn, saveintegrals=True):
                 datasum[hn].Draw("E P same")
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
-                if "atanhDNN" in hn:
-                    for bin in range(1, histosSignal[hn][gr].GetNbinsX() + 1):
-                        logger.info(
-                            "signal %s in sample %s in bin %i: %f"
-                            % (
-                                gr,
-                                hn,
-                                bin,
-                                histosSignal[hn][gr].GetBinContent(bin),
-                            )
-                        )
-
             for gr in model.histosNotStacked_list:
                 histosNotStacked[hn][gr].Draw("hist same")
 
