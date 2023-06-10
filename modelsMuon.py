@@ -57,8 +57,8 @@ data = {"2018": ["SingleMuon_2018"]}
 
 
 signal = {
-    "ZH": ["ZH"],
-    "ggZH": ["ggZH"],
+    # "ZH": ["ZH"],
+    # "ggZH": ["ggZH"],
 }
 
 import ROOT

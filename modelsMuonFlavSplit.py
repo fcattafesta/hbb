@@ -48,8 +48,8 @@ data = {
 
 
 signal = {
-    "ZH": ["ZH"],
-    "ggZH": ["ggZH"],
+    # "ZH": ["ZH"],
+    # "ggZH": ["ggZH"],
 }
 
 import ROOT
