@@ -1217,7 +1217,7 @@ def makeplot(hn, saveintegrals=True):
                             (histosum[hn].GetMaximum()) ** 2,
                         )
                     )  # zoom out y axis
-
+                datasum[hn].GetYaxis().SetMaxDigits(2)
                 datasum[hn].Draw("E P")
                 # datastack[hn].GetXaxis().SetTitle(hn)
                 setStyle(datasum[hn])
@@ -1233,6 +1233,7 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
+                histos[hn].GetYaxis().SetMaxDigits(2)
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
