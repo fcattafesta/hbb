@@ -1264,8 +1264,8 @@ def makeplot(hn, saveintegrals=True):
                 size=0.04,
             )
 
-            t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.45, 0.95, str(year), 42)
+            t1 = makeText(0.3, 0.95, "CMS", 61)
+            t2 = makeText(0.5, 0.95, str(year), 42)
             t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
                 0.5,
@@ -1335,7 +1335,7 @@ def makeplot(hn, saveintegrals=True):
                 # myLegend_sy.Draw()
 
                 tchi2 = makeText(
-                    0.25,
+                    0.3,
                     0.26,
                     "#chi^{2}="
                     + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
@@ -1343,7 +1343,7 @@ def makeplot(hn, saveintegrals=True):
                     0.025,
                 )
                 tKS = makeText(
-                    0.35,
+                    0.4,
                     0.26,
                     "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                     42,
