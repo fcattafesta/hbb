@@ -36,7 +36,7 @@ import ROOT
 fillcolor = {f"VV{flavour}": ROOT.kWhite for flavour in flavourVVSplitting}
 
 linecolor = fillcolor
-linecolorNotStacked = {
+linecolorOverlayed = {
     f"VV{flavour}": ROOT.kOrange + i for i, flavour in zip([-1, 0], flavourVVSplitting)
 }
 markercolor = fillcolor
@@ -49,7 +49,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histosNotStacked_list = [f"VV{flavour}" for flavour in flavourVVSplitting.keys()]
+histosOverlayed_list = [f"VV{flavour}" for flavour in flavourVVSplitting.keys()]
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]

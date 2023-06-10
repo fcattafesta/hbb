@@ -2,10 +2,10 @@
 import glob
 
 flavourSplitting = {
+    "udsg": "Light",
     "bb": "TwoB",
     "b": "OneB",
     "c": "C",
-    "udsg": "Light",
 }
 
 samples = {

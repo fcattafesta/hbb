@@ -84,7 +84,7 @@ fillcolor.update(
     }
 )
 linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
-linecolorNotStacked = {}
+linecolorOverlayed = {}
 markercolor = fillcolor
 
 
@@ -95,7 +95,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histosNotStacked_list = []
+histosOverlayed_list = []
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]

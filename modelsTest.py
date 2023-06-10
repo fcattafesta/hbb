@@ -20,7 +20,7 @@ import ROOT
 fillcolor = {f"Z+{flavour}": ROOT.kWhite for flavour in flavourSplitting}
 
 linecolor = fillcolor
-linecolorNotStacked = {
+linecolorOverlayed = {
     f"Z+{flavour}": ROOT.kGreen + i
     for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
 }
@@ -34,7 +34,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histosNotStacked_list = [f"Z+bb"]
+histosOverlayed_list = [f"Z+bb"]
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
