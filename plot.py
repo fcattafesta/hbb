@@ -1233,7 +1233,7 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
-                histos[hn].GetYaxis().SetMaxDigits(2)
+                histos[hn].GetStack().First().GetYaxis().SetMaxDigits(2)
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
