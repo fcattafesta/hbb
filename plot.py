@@ -1258,11 +1258,21 @@ def makeplot(hn, saveintegrals=True):
                 for histo_ in histos[hn].GetStack():
                     for bin in range(1, histo_.GetNbinsX() + 1):
                         logger.info(
-                            "bin %i: %f     name %s"
+                            "stack name %s     bin %i: %f"
                             % (
+                                histo_.GetName(),
                                 bin,
                                 histo_.GetBinContent(bin),
+                            )
+                        )
+                for histo_ in histos[hn].GetHists():
+                    for bin in range(1, histo_.GetNbinsX() + 1):
+                        logger.info(
+                            "hists name %s     bin %i: %f"
+                            % (
                                 histo_.GetName(),
+                                bin,
+                                histo_.GetBinContent(bin),
                             )
                         )
             #  histos[hn].Draw("hist")
