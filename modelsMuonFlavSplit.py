@@ -4,9 +4,9 @@ from collections import defaultdict
 name = "HBB_mm_flavSplit"
 
 number_of_b = {
-    0: ["udsg", "c"],
-    1: ["b"],
     2: ["bb"],
+    1: ["b"],
+    0: ["udsg", "c"],
 }
 
 # TODO: add the inclusive DY sample
@@ -37,17 +37,17 @@ background_list = [
 ]
 
 # divide all backgrounds into b, bb, c+udsg
-signal = defaultdict(list)
+background = defaultdict(list)
 for num_b, flavours in number_of_b.items():
     for flav in flavours:
-        signal[f"bkg_{num_b}b"] += [f"{bkg}_{flav}" for bkg in background_list]
+        background[f"bkg_{num_b}b"] += [f"{bkg}_{flav}" for bkg in background_list]
 
 data = {
     "2018": ["SingleMuon_2018"],
 }
 
 
-background = {
+signal = {
     "ZH": ["ZH"],
     "ggZH": ["ggZH"],
 }
@@ -56,7 +56,7 @@ import ROOT
 
 # Color palette
 
-fillcolor = {bkg: ROOT.kAzure + i for bkg, i in zip(signal, [3, 0, 7])}
+fillcolor = {bkg: ROOT.kAzure + i for bkg, i in zip(background, [3, 0, 7])}
 fillcolor.update(
     {
         "ZH": ROOT.kRed + 2,
