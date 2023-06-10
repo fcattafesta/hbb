@@ -660,11 +660,11 @@ def fill_datasum(
                         array("d", model.rebin[hn.split("___")[0]]),
                     )
                 h = h.Clone(hn + "rebinned")
-                if "atanhDNN" in hn and d in [x for y in model.background.values() for x in y]:
+                if "atanhDNN" in hn:
                     for bin in range(h.GetNbinsX() + 1):
                         logger.info(
-                            "sample %s variable %s bin %s %s"
-                            % (d, hn, bin, h.GetBinContent(bin))
+                            "sample %s variable %s bin %s %s normalized = %s"
+                            % (d, hn, bin, h.GetBinContent(bin), h.GetBinContent(bin)* lumi * samples[d]["xsec"])
                         )
 
                 if data:
