@@ -1254,6 +1254,17 @@ def makeplot(hn, saveintegrals=True):
                 histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
+            if "atanhDNN" in hn:
+                for histo_ in histos[hn].GetStack():
+                    for bin in range(1, histo_.GetNbinsX() + 1):
+                        logger.info(
+                            "bin %i: %f     name %s"
+                            % (
+                                bin,
+                                histo_.GetBinContent(bin),
+                                histo_.GetName(),
+                            )
+                        )
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
             histosum[hn].SetFillColor(ROOT.kBlack)
