@@ -1101,8 +1101,8 @@ def makeplot(hn, saveintegrals=True):
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
-            t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.7, 0.95, SignificanceSum_str, 42, size=0.01)
+            t1 = makeText(0.28, 0.95, "CMS", 61)
+            t2 = makeText(0.75, 0.97, SignificanceSum_str, 42, size=0.02)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_%s_Significance.png" % (hn, args.btag))
@@ -1262,9 +1262,9 @@ def makeplot(hn, saveintegrals=True):
                 size=0.04,
             )
 
-            t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.35, 0.95, str(year), 42)
-            t3 = makeText(0.7, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t1 = makeText(0.28, 0.95, "CMS", 61)
+            t2 = makeText(0.38, 0.95, str(year), 42)
+            t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
                 0.25,
                 0.8,
@@ -1333,7 +1333,7 @@ def makeplot(hn, saveintegrals=True):
                 # myLegend_sy.Draw()
 
                 tchi2 = makeText(
-                    0.15,
+                    0.2,
                     0.26,
                     "#chi^{2}="
                     + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
@@ -1341,7 +1341,7 @@ def makeplot(hn, saveintegrals=True):
                     0.025,
                 )
                 tKS = makeText(
-                    0.25,
+                    0.3,
                     0.26,
                     "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                     42,

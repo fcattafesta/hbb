@@ -56,7 +56,7 @@ import ROOT
 
 # Color palette
 
-fillcolor = {bkg: ROOT.kAzure + i for i, bkg in zip([3, 0, 7], background)}
+fillcolor = {bkg: ROOT.kAzure + i for i, bkg in zip([7, 0, 3], background)}
 fillcolor.update(
     {
         "ZH": ROOT.kRed + 2,
