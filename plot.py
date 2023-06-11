@@ -1102,7 +1102,7 @@ def makeplot(hn, saveintegrals=True):
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
             t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.8, 0.95, SignificanceSum_str, 42, size=0.02)
+            t2 = makeText(0.7, 0.95, SignificanceSum_str, 42, size=0.01)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_%s_Significance.png" % (hn, args.btag))
@@ -1253,7 +1253,7 @@ def makeplot(hn, saveintegrals=True):
                 histosOverlayed[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.5,
+                0.25,
                 0.85,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
@@ -1262,11 +1262,11 @@ def makeplot(hn, saveintegrals=True):
                 size=0.04,
             )
 
-            t1 = makeText(0.3, 0.95, "CMS", 61)
-            t2 = makeText(0.5, 0.95, str(year), 42)
-            t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t1 = makeText(0.25, 0.95, "CMS", 61)
+            t2 = makeText(0.35, 0.95, str(year), 42)
+            t3 = makeText(0.7, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
-                0.5,
+                0.25,
                 0.8,
                 labelLeptons[hn.split("___")[1]] + btag_label
                 if hn.split("___")[1] in list(labelLeptons.keys())
@@ -1284,7 +1284,7 @@ def makeplot(hn, saveintegrals=True):
             t4.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.5, 0.7, SignificanceSum_str, 42, size=0.025)
+                t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.025)
                 t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
@@ -1333,7 +1333,7 @@ def makeplot(hn, saveintegrals=True):
                 # myLegend_sy.Draw()
 
                 tchi2 = makeText(
-                    0.3,
+                    0.15,
                     0.26,
                     "#chi^{2}="
                     + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
@@ -1341,7 +1341,7 @@ def makeplot(hn, saveintegrals=True):
                     0.025,
                 )
                 tKS = makeText(
-                    0.4,
+                    0.25,
                     0.26,
                     "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                     42,
@@ -1432,3 +1432,4 @@ for s in totevCount:
     tot += totevSkim[s]
 
 logger.info("%d input events" % tot)
+logger.info("outpath %s" % outpath)
