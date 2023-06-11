@@ -4,9 +4,9 @@ from collections import defaultdict
 name = "HBB_ee_flavSplit"
 
 number_of_b = {
-    2: ["bb"],
-    1: ["b"],
     0: ["udsg", "c"],
+    1: ["b"],
+    2: ["bb"],
 }
 
 # TODO: add the inclusive DY sample

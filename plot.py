@@ -58,7 +58,7 @@ def makeLegend(xDown, xUp, yDown, yUp, name=""):
 def makeText(x, y, someText, font, size=0.05):
     tex = ROOT.TLatex(x, y, someText)
     tex.SetNDC()
-    tex.SetTextAlign(35)
+    tex.SetTextAlign(11) #35
     tex.SetTextFont(font)
     tex.SetTextSize(size)
     tex.SetLineWidth(2)
@@ -1121,15 +1121,14 @@ def makeplot(hn, saveintegrals=True):
             h.SetLineWidth(3)
             h.SetLineStyle(2)
             # h.Scale(5000.0)
-            # myLegend_1.AddEntry(h, gr + " x5k", "l")
+            myLegend_1.AddEntry(h, gr, "l")
 
         for gr in model.histosOverlayed_list:
             h = histosOverlayed[hn][gr]
-            #histos[hn].Add(h.Clone())
             h.SetLineColor(model.linecolorOverlayed[gr])
             h.SetFillStyle(0)
             h.SetLineWidth(3)
-            h.SetLineStyle(2)
+            h.SetLineStyle(1)
             myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
         firstBlind = 100000

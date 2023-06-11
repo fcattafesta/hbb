@@ -1,11 +1,12 @@
 # This file contains the samples used in the analysis.
 import glob
 
+# NOTE: change order of flavsplit?
 flavourSplitting = {
-    "udsg": "Light",
     "bb": "TwoB",
     "b": "OneB",
     "c": "C",
+    "udsg": "Light",
 }
 
 samples = {
