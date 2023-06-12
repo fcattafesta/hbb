@@ -14,6 +14,16 @@ labelBtag = {
     # "deepcsv": " DeepCSV",
 }
 
+labelLeptons = {
+    "SR_ee": "Electrons",
+    "CR_Zee_bjets": "Electrons",
+    "CR_Zee_lightjets": "Electrons",
+    "CR_ee_ttbar": "Electrons",
+    "SR_mm": "Muons",
+    "CR_Zmm_bjets": "Muons",
+    "CR_Zmm_lightjets": "Muons",
+    "CR_mm_ttbar": "Muons",
+}
 
 labelVariable = {
     "Zee_mass": "m_{ee}",
