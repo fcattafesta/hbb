@@ -14,8 +14,8 @@ if "DNN_weight" in DNN_input_variables:
 
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
-        if flow is not None:
-            flow.AddCppCode('\n#include "TMVA_SOFIE_ONNX.h"\n')
+        if flow:
+            ROOT.gInterpreter.Declare('\n#include "TMVA_SOFIE_ONNX.h"\n')
         else:
             ROOT.gInterpreter.Declare('\n#include "TMVA_SOFIE_ONNX.h"\n')
         ROOT.TMVA_SOFIE_ONNX(model)
@@ -25,10 +25,10 @@ def getFlowDNN(model, flow=None):
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
     nl = "\n"
-    if flow is not None:
-        flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
-        flow.AddCppCode('\n#include "TMVA/SOFIEHelpers.hxx"\n')
-        flow.AddCppCode(
+    if flow:
+        ROOT.gInterpreter.Declare(f'{nl}#include "{modelName}.hxx"{nl}')
+        ROOT.gInterpreter.Declare('\n#include "TMVA/SOFIEHelpers.hxx"\n')
+        ROOT.gInterpreter.Declare(
             f"{nl}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
             + f"::Session>({args.nthreads});{nl}"
@@ -42,7 +42,7 @@ def getFlowDNN(model, flow=None):
         )
 
 
-    if flow is not None:
+    if flow:
         eval_string = "sofie_functor(__slot,"
         for i in DNN_input_variables:
             eval_string += i + ", "
