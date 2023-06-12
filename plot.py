@@ -1,4 +1,3 @@
-from labelDict import *
 import re
 from array import array
 from math import *
@@ -9,15 +8,24 @@ import importlib
 import time
 
 # import postfitPlot
-import argparse
 import copy
 import ctypes
 
 from args_plot import args
+from labelDict import *
+from logger import setup_logger
+
+# NOTE: gr is the sample name and hn is the variable name
+
+
+if labelBtag:
+    btag_label = labelBtag[args.btag]
+else:
+    btag_label = ""
 
 outdir = args.workspace
 
-model = importlib.import_module(args.model)
+model = importlib.import_module(args.model.replace(".py", ""))
 samples = model.samples
 year = "+".join(list(model.data.keys()))
 lumi = "%2.1f fb^{-1}"
@@ -30,6 +38,14 @@ totevCount = {}
 totevSkim = {}
 hnForSys = {}
 systematicsSetToUse = []
+
+date_time = time.strftime("%m%d-%H%M%S")
+
+outpath = f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
+os.system("mkdir -p " + outpath)
+
+logger = setup_logger(outpath + "/logger.log")
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 
 def makeLegend(xDown, xUp, yDown, yUp, name=""):
@@ -45,7 +61,7 @@ def makeLegend(xDown, xUp, yDown, yUp, name=""):
 def makeText(x, y, someText, font, size=0.05):
     tex = ROOT.TLatex(x, y, someText)
     tex.SetNDC()
-    tex.SetTextAlign(35)
+    tex.SetTextAlign(11)  # 35
     tex.SetTextFont(font)
     tex.SetTextSize(size)
     tex.SetLineWidth(2)
@@ -89,13 +105,19 @@ def makeRatioMCplot(h):
     return hMC
 
 
-def setStyle(h, isRatio=False):
+def setStyle(h, isRatio=False, noData=False):
+    if type(h) == ROOT.THStack:
+        h1 = h.GetStack().First()
+    else:
+        h1 = h
+
     h.SetTitle("")
-    w = 0.055 * (2.5 if isRatio else 1.0)
+    w = 0.055 * (2.5 if isRatio else 0.8)
     h.GetYaxis().SetLabelSize(w)
     h.GetXaxis().SetLabelSize(w)
     h.GetYaxis().SetTitleSize(w)
     h.GetXaxis().SetTitleSize(w)
+    h.GetYaxis().SetMaxDigits(2)
     if isRatio:
         h.GetYaxis().SetTitle("Data/MC - 1")
         h.GetYaxis().SetTitleOffset(0.5)
@@ -105,13 +127,26 @@ def setStyle(h, isRatio=False):
             labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
         )
     else:
-        binWidht = str(h.GetBinWidth(1))[:4]
-        if binWidht.endswith("."):
-            binWidht = binWidht[:3]
-        h.GetXaxis().SetLabelSize(0)
-        h.GetYaxis().SetTitle("Entries/" + binWidht)
-        h.GetXaxis().SetLabelSize(0)
-        h.GetXaxis().SetTitleSize(0)
+        # check if all bins are the same width
+        if all(
+            h1.GetBinWidth(1) == h1.GetBinWidth(i) for i in range(1, h1.GetNbinsX() + 1)
+        ):
+            binWidht = str(h1.GetBinWidth(1))[:4]
+            if binWidht.endswith("."):
+                binWidht = binWidht[:3]
+            h.GetYaxis().SetTitle("Entries/" + binWidht)
+        else:
+            h.GetYaxis().SetTitle("Entries")
+
+        if noData:
+            xKey = str(h.GetName()).split("___")[0]
+            h.GetXaxis().SetTitle(
+                labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
+            )
+            logger.info("noData xKey %s", xKey)
+        else:
+            h.GetXaxis().SetLabelSize(0)
+            h.GetXaxis().SetTitleSize(0)
 
 
 def findSyst(hn, sy, f, silent=False):
@@ -136,7 +171,7 @@ def findSyst(hn, sy, f, silent=False):
         hnForSys[hn][sy] = h3
         return h3
     if not silent:
-        print("none matching", hn, sy, f)
+        logger.info("none matching %s %s %s" % (hn, sy, f))
     return ""
 
 
@@ -180,9 +215,9 @@ def makeAlternativeShape(
 ):
     (altSampleUp, altSampleDown) = alternativeSamples
     if not altSampleUp in f:
-        f[altSampleUp] = ROOT.TFile.Open(folder + "/%sHistos.root" % altSampleUp)
+        f[altSampleUp] = ROOT.TFile.Open(folder + "/%s_Histos.root" % altSampleUp)
     if not altSampleDown in f:
-        f[altSampleDown] = ROOT.TFile.Open(folder + "/%sHistos.root" % altSampleDown)
+        f[altSampleDown] = ROOT.TFile.Open(folder + "/%s_Histos.root" % altSampleDown)
     histoNameNom = hn + "rebin"
     histoNameUp = hn + "rebinAltSampleUp"
     histoNameDown = hn + "rebinAltSampleDown"
@@ -220,7 +255,7 @@ def makeAlternativeShape(
     elif "Down" in sy:
         alpha = alphaDown
     else:
-        print("No alternative sample for %s" % d)
+        logger.info("No alternative sample for %s" % d)
     if alpha:
         histoSyst.Multiply(powerHisto(ratio, alpha))
     #    print "Making %s using %s %s %s %s %s %f"%(sy, nominalSample, alternativeSamples, str(alpha), hn, histoNameSyst, histoSyst.GetMean()/histoNom.GetMean())
@@ -264,7 +299,7 @@ def makeEnvelopeShape(hn, sy, f, d, model):
     elif f[d].Get(findSyst(hn, pdfReplica + "0", f[d], silent=True)):
         pdf = pdfReplica
     else:
-        print(
+        logger.info(
             "makeEnvelopeShape - Warning: neither LHEPdfHessian nor LHEPdfReplica found for %s %s"
             % (d, hn)
         )
@@ -274,8 +309,11 @@ def makeEnvelopeShape(hn, sy, f, d, model):
         LHApdf_min = f[d].Get("LHApdf_down").GetVal()
         LHApdf_max = f[d].Get("LHApdf_up").GetVal()
     except:
-        print("WARNING makeEnvelopeShape: LHApdf_down not found", hn, sy, f, d, model)
-        print("I will consider ", pdf)
+        logger.info(
+            "WARNING makeEnvelopeShape: LHApdf_down not found %s %s %s %s"
+            % (hn, sy, f, d, model)
+        )
+        logger.info("I will consider %s" % pdf)
         LHApdf_min = -1
         LHApdf_max = -1
 
@@ -321,16 +359,9 @@ def makeEnvelopeShape(hn, sy, f, d, model):
             ) ** 2
         else:
             badFit += 1
-            print(
-                "BAD Fit",
-                hn,
-                sy,
-                f,
-                d,
-                model,
-                funct.GetParameter(0),
-                funct.GetParameter(1),
-                end=" ",
+            logger.info(
+                "BAD Fit %s %s %s %s %s %f %f"
+                % (hn, sy, f, d, model, funct.GetParameter(0), funct.GetParameter(1))
             )
         i = i + 1
         hs = f[d].Get(findSyst(hn, pdf + str(i), f[d]))
@@ -356,7 +387,7 @@ def makeEnvelopeShape(hn, sy, f, d, model):
         )
         and (i - badFit) > 0
     ):
-        print("REPLICAS, not HESSIAN for", hn, sy, f, d, model)
+        logger.info("REPLICAS, not HESSIAN for %s %s %s %s %s" % (hn, sy, f, d, model))
         par2 = par2 / (i - badFit)
 
     funct.SetParameters(*envelopeFunctionParameterValues)
@@ -375,11 +406,10 @@ def makeEnvelopeShape(hn, sy, f, d, model):
 
     nhisto = nomHistoRebinned.Clone(hn + sy)
     nhisto.Multiply(funct)
-    print(
-        "Creating %s using %s" % (nhisto.GetName(), pdf),
-        nhisto.Integral(),
-        funct.GetParameters()[0],
-        funct.GetParameters()[1],
+    logger.info("Creating %s using %s" % (nhisto.GetName(), pdf))
+    logger.info(
+        "%s, %s, %s"
+        % (nhisto.Integral(), funct.GetParameters()[0], funct.GetParameters()[1])
     )
     return copy.copy(nhisto)
 
@@ -422,7 +452,7 @@ def makeEnvelopeShapeOld(hn, sy, f, d, model):
     elif f[d].Get(findSyst(hn, pdfReplica + "0", f[d], silent=True)):
         pdf = pdfReplica
     else:
-        print(
+        logger.info(
             "makeEnvelopeShape - Warning: neither LHEPdfHessian nor LHEPdfReplica found for %s %s"
             % (d, hn)
         )
@@ -432,8 +462,11 @@ def makeEnvelopeShapeOld(hn, sy, f, d, model):
         LHApdf_min = f[d].Get("LHApdf_down").GetVal()
         LHApdf_max = f[d].Get("LHApdf_up").GetVal()
     except:
-        print("WARNING makeEnvelopeShape: LHApdf_down not found", hn, sy, f, d, model)
-        print("I will consider ", pdf)
+        logger.info(
+            "WARNING makeEnvelopeShape: LHApdf_down not found for %s %s %s %s "
+            % (hn, sy, f, d, model)
+        )
+        logger.info("I will consider %s" % pdf)
         LHApdf_min = -1
         LHApdf_max = -1
 
@@ -532,16 +565,13 @@ f = {}
 folder = args.histfolder
 for group in model.signal:
     for s in model.signal[group]:
-        f[s] = ROOT.TFile.Open(folder + "%sHistos.root" % s)
-#        f[s]=ROOT.TFile.Open("out/%sHistos.root"%s)
+        f[s] = ROOT.TFile.Open(folder + "/%s_Histos.root" % s)
 for group in model.background:
     for b in model.background[group]:
-        #        f[b]=ROOT.TFile.Open("out/%sHistos.root"%b)
-        f[b] = ROOT.TFile.Open(folder + "/%sHistos.root" % b)
+        f[b] = ROOT.TFile.Open(folder + "/%s_Histos.root" % b)
 for group in model.data:
     for d in model.data[group]:
-        #       f[d]=ROOT.TFile.Open("out/%sHistos.root"%d)
-        f[d] = ROOT.TFile.Open(folder + "/%sHistos.root" % d)
+        f[d] = ROOT.TFile.Open(folder + "/%s_Histos.root" % d)
 
 histoNames = list(
     set([x.GetName() for y in list(f.keys()) for x in f[y].GetListOfKeys()])
@@ -559,6 +589,7 @@ datasumSyst = {}
 histosumSyst = {}
 histoSigsumSyst = {}
 histosSignal = {}
+histosOverlayed = {}
 all_histo_all_syst = {}
 
 integral = {}
@@ -624,6 +655,7 @@ def fill_datasum(
             h = f[d].Get(hn)
             histoSingleSyst[hn][d] = {}
             if h:
+                logger.info("Adding %s %s" % (d, hn))
                 if hn.split("___")[0] in list(model.rebin.keys()):
                     # print "Rebin",hn
                     h = h.Rebin(
@@ -632,17 +664,21 @@ def fill_datasum(
                         array("d", model.rebin[hn.split("___")[0]]),
                     )
                 h = h.Clone(hn + "rebinned")
+
                 if data:
                     h.SetMarkerStyle(20)
                     h.SetMarkerColor(ROOT.kBlack)
                     h.SetLineColor(ROOT.kBlack)
                 else:
                     # if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
-                    print(
-                        h.GetSumOfWeights(),
-                        h.GetEntries(),
-                        lumi * samples[d]["xsec"],
-                        d,
+                    logger.info(
+                        "%s %s %s %s"
+                        % (
+                            h.GetSumOfWeights(),
+                            h.GetEntries(),
+                            lumi * samples[d]["xsec"],
+                            d,
+                        )
                     )
                     h.Scale(samples[d]["xsec"] * lumi)
                     error_b = ctypes.c_double(0)
@@ -745,7 +781,7 @@ def fill_datasum(
                                     makeWorkspace,
                                 )
                             else:
-                                print("missing", sy, "for", hn, gr, d)
+                                logger.info("missing %s for %s %s %s " % (s, hn, gr, d))
                                 addHistoInTStack(
                                     h,
                                     stackSys,
@@ -849,7 +885,7 @@ def fill_datasum(
                                 makeWorkspace,
                             )
                         else:
-                            print("missing", sy, "for", hn, gr, d)
+                            logger.info("missing %s for %s %s %s " % (s, hn, gr, d))
                             addHistoInTStack(
                                 h,
                                 stackSys,
@@ -868,13 +904,19 @@ def fill_datasum(
                 if makeWorkspace:
                     all_histo_all_syst[hn][d]["nom"] = h.Clone()
             else:
-                print("Cannot open", d, hn)
+                logger.info("Cannot open %s %s" % (d, hn))
+                return
                 exit(1)
             if gr in model.signal:
                 if gr not in list(histosSignal[hn].keys()):
                     histosSignal[hn][gr] = h.Clone()
                 else:
                     histosSignal[hn][gr].Add(h)
+            if gr in model.histosOverlayed_list:
+                if gr not in list(histosOverlayed[hn].keys()):
+                    histosOverlayed[hn][gr] = h.Clone()
+                else:
+                    histosOverlayed[hn][gr].Add(h)
     if not data:
         writeYields(
             ftxt,
@@ -891,9 +933,6 @@ def fill_datasum(
     return h
 
 
-date_time = time.strftime("%m%d-%H%M%S")
-
-
 def makeplot(hn, saveintegrals=True):
     if "__syst__" not in hn:
         dictLegendBackground = dict()
@@ -903,11 +942,8 @@ def makeplot(hn, saveintegrals=True):
         myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
         myLegend_sy = makeLegend(0.85, 1, 0.1, 0.15 + 0.015 * len(systematicsSetToUse))
-        outpath = (
-            f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
-        )
-        os.system("mkdir -p " + outpath)
-        os.system("cp " + args.histfolder + "/description.txt " + outpath)
+
+        # os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
         #        os.system("git diff HEAD > "+outpath+"/git_diff.txt")
         #        os.system("git status HEAD > "+outpath+"/git_status.txt")
@@ -915,6 +951,7 @@ def makeplot(hn, saveintegrals=True):
         if postfit:
             YieldFileName = outpath + "/" + hn + "_postFit.txt"
         ftxt = open(YieldFileName, "w")
+        logger.info("YieldFileName=%s" % YieldFileName)
         # print "Making histo",hn
         histos[hn] = ROOT.THStack(hn, "")
         histosSig[hn] = ROOT.THStack(hn, "")
@@ -928,11 +965,11 @@ def makeplot(hn, saveintegrals=True):
 
         lumitot = 0
         lumis = {}
-        print(("model.data=", model.data))
+        logger.info("model.data= %s" % model.data)
         for gr in model.data:
             for d in model.data[gr]:
                 lumitot += samples[d]["lumi"]
-                print("lumitot=%f" % lumitot)
+                logger.info("lumitot=%f" % lumitot)
                 # yr = getYear(d)
                 yr = "2018"
                 if yr in lumis:
@@ -940,10 +977,11 @@ def makeplot(hn, saveintegrals=True):
                 else:
                     lumis[yr] = samples[d]["lumi"]
 
-        print(("lumis=", lumis))
+        logger.info("lumis= %s" % lumis)
 
         histoSingleSyst[hn] = {}
         histosSignal[hn] = {}
+        histosOverlayed[hn] = {}
         for gr in model.data:
             h = fill_datasum(
                 f,
@@ -957,7 +995,8 @@ def makeplot(hn, saveintegrals=True):
                 ftxt=ftxt,
                 data=True,
             )
-            myLegend_1.AddEntry(h, "Data", "PL")
+            if h:
+                myLegend_1.AddEntry(h, "Data", "PL")
 
         DataYieldLine = "sample,yield,uncert,fraction"
         for sy in systematicsSetToUse:
@@ -1001,10 +1040,12 @@ def makeplot(hn, saveintegrals=True):
 
         # myLegend.AddEntry(None, "", "")
         for gr in model.backgroundSortedForLegend:
-            myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
+            if model.fillcolor[gr] != ROOT.kWhite:
+                myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         for gr in model.signalSortedForLegend:
-            myLegend_1.AddEntry(dictLegendSignal[gr], labelLegend[gr], "FL")
+            if model.fillcolor[gr] != ROOT.kWhite:
+                myLegend_1.AddEntry(dictLegendSignal[gr], labelLegend[gr], "FL")
         # myLegend.AddEntry(None, "", "")
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
         # if makeWorkspace : return
@@ -1017,22 +1058,84 @@ def makeplot(hn, saveintegrals=True):
             B = histosum[hn].Clone()
             B.Add(S)
             R = S.Divide(B)
-            fR = ROOT.TFile.Open(outpath + "/%s_SBratio.root" % hn, "recreate")
+            fR = ROOT.TFile.Open(
+                outpath + "/%s_%s_SBratio.root" % (hn, args.btag), "recreate"
+            )
             S.Write()
             fR.Close()
 
-        # for gr in model.signalSortedForLegend:
-        #     h = histosSignal[hn][gr]
-        #     histos[hn].Add(h.Clone())
-        #     h.SetLineColor(model.linecolor[gr])
-        #     h.SetFillStyle(0)
-        #     h.SetLineWidth(3)
-        #     h.SetLineStyle(2)
-        #     h.Scale(5000.0)
-        #     myLegend_1.AddEntry(h, gr + " x5k", "l")
+        SignificanceSum_str = ""
+        if "DNN" in hn and hn in histoSigsum.keys():
+            S = histoSigsum[hn].Clone()
+            B = histosum[hn].Clone()
+            # histogram of significance (S/sqrt(B)) for each bin of the DNN
+            Significance = S.Clone()
+            for i in range(Significance.GetNbinsX() + 1):
+                try:
+                    Significance.SetBinContent(
+                        i,
+                        Significance.GetBinContent(i)
+                        / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)),
+                    )
+                except ZeroDivisionError:
+                    Significance.SetBinContent(i, 0)
+                    logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
+                    logger.info("setting bin content to 0")
+                except ValueError:
+                    Significance.SetBinContent(i, 0)
+                    logger.info("ValueError in bin %i in histogram %s" % (i, hn))
+                    logger.info("setting bin content to 0")
+
+            # write the significance histogram to a file
+            fR = ROOT.TFile.Open(
+                outpath + "/%s_%s_Significance.root" % (hn, args.btag), "recreate"
+            )
+            Significance.Write()
+            # sum the squared of the bins of the significance histogram
+            SignificanceSum = 0
+            for i in range(Significance.GetNbinsX() + 1):
+                SignificanceSum += Significance.GetBinContent(i) ** 2
+
+            SignificanceSum = sqrt(SignificanceSum)
+            SignificanceSum_str = (
+                " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
+                + str("%.2f" % SignificanceSum)
+            )
+
+            c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
+            Significance.Draw("hist")
+            t1 = makeText(0.22, 0.95, "CMS", 61)
+            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
+            t1.Draw()
+            t2.Draw()
+            c_significance.SaveAs(outpath + "/%s_%s_Significance.png" % (hn, args.btag))
+            SignificanceSum = getattr(ROOT, "TParameter<double>")(
+                "SignificanceSum", SignificanceSum
+            )
+            SignificanceSum.Write()
+            c_significance.Write()
+            fR.Close()
+
+        for gr in model.signalSortedForLegend:
+            h = histosSignal[hn][gr]
+            histos[hn].Add(h.Clone())
+            h.SetLineColor(model.linecolor[gr])
+            h.SetFillStyle(0)
+            h.SetLineWidth(3)
+            h.SetLineStyle(2)
+            # h.Scale(5000.0)
+            myLegend_1.AddEntry(h, gr, "l")
+
+        for gr in model.histosOverlayed_list:
+            h = histosOverlayed[hn][gr]
+            h.SetLineColor(model.linecolorOverlayed[gr])
+            h.SetFillStyle(0)
+            h.SetLineWidth(3)
+            h.SetLineStyle(model.linestyleOverlayed[gr])
+            myLegend_1.AddEntry(h, labelLegend[gr], "l")
+
         firstBlind = 100000
         lastBlind = -1
-
         if model.signal:
             for i in range(histosSig[hn].GetStack().Last().GetNbinsX() + 1):
                 if (
@@ -1042,17 +1145,26 @@ def makeplot(hn, saveintegrals=True):
                     / (0.001 + abs(histos[hn].GetStack().Last().GetBinContent(i)))
                     > 0.05
                 ):
-                    # print "to blind",hn,i,abs(histos[hn].GetStack().Last().GetBinContent(i)), histosSig[hn].GetStack().Last().GetBinContent(i)
+                    logger.info(
+                        "to blind %s bin %i: %f %f"
+                        % (
+                            hn,
+                            i,
+                            abs(histos[hn].GetStack().Last().GetBinContent(i)),
+                            histosSig[hn].GetStack().Last().GetBinContent(i),
+                        )
+                    )
                     if i < firstBlind:
                         firstBlind = i
                     lastBlind = i
-            if False:  # blind!
+            if args.blind and hn in datasum.keys():
                 for i in range(firstBlind, lastBlind + 1):
                     datastack[hn].GetStack().Last().SetBinContent(i, 0)
                     datasum[hn].SetBinContent(i, 0)
-                    # print "blinded",i,hn
+                    logger.info("blinded %s bin %i" % (hn, i))
 
-        myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
+        if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
+            myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
         canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
         # canvas[hn].SetRightMargin(.0);
@@ -1061,20 +1173,36 @@ def makeplot(hn, saveintegrals=True):
         canvas_tuple = (canvas_log, canvas[hn])
 
         for i, c in enumerate(canvas_tuple):
-            c.Divide(1, 2)
-            c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
-            c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
+            if hn in datasum.keys():
+                c.Divide(1, 2)
+                c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
+                c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
 
-            ROOT.gStyle.SetPadLeftMargin(0.2)
-            c.GetPad(2).SetBottomMargin(0.35)
-            c.GetPad(2).SetTopMargin(0.0)
+                ROOT.gStyle.SetPadLeftMargin(0.2)
+                c.GetPad(2).SetBottomMargin(0.35)
+                c.GetPad(2).SetTopMargin(0.0)
 
-            c.cd()
+                c.cd()
 
-            myLegend_1.Draw()  # NEW
-            myLegend_2.Draw()  # NEW
+                myLegend_1.Draw()  # NEW
+                myLegend_2.Draw()  # NEW
 
-            c.cd(1)
+                c.cd(1)
+            else:
+                c.Divide(1, 2)
+                c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.01)
+                c.GetPad(1).SetPad(0.0, 0.01, 0.90, 1.0)
+
+                ROOT.gStyle.SetPadLeftMargin(0.2)
+                c.GetPad(2).SetBottomMargin(0.35)
+                c.GetPad(2).SetTopMargin(0.0)
+
+                c.cd()
+
+                myLegend_1.Draw()  # NEW
+                myLegend_2.Draw()  # NEW
+
+                c.cd(1)
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
@@ -1092,7 +1220,6 @@ def makeplot(hn, saveintegrals=True):
                             (histosum[hn].GetMaximum()) ** 2,
                         )
                     )  # zoom out y axis
-
                 datasum[hn].Draw("E P")
                 # datastack[hn].GetXaxis().SetTitle(hn)
                 setStyle(datasum[hn])
@@ -1103,44 +1230,53 @@ def makeplot(hn, saveintegrals=True):
                     max(0.1 * histos[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
                 if i == 0:
-                    histos[hn].SetMaximum(
-                        max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
-                    )
+                    histos[hn].SetMaximum(2 * histosum[hn].GetMaximum())
                 else:
                     histos[hn].SetMaximum(
-                        max(
-                            (datasum[hn].GetMaximum()) ** 2,
-                            (histosum[hn].GetMaximum()) ** 2,
-                        )
+                        (histosum[hn].GetMaximum()) ** 2,
                     )
                 histos[hn].Draw("hist")
+                setStyle(histos[hn], noData=True)
 
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
             histosum[hn].SetFillColor(ROOT.kBlack)
             histosum[hn].SetFillStyle(3004)
-            setStyle(histos[hn].GetStack().Last())
+            setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
             c.Update()
-            histosum[hn].Draw("same E2")
+            if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
+                histosum[hn].Draw("same E2")
 
             if hn in datasum.keys():
                 datasum[hn].Draw("E P sameaxis")
                 datasum[hn].Draw("E P same")
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
+            for gr in model.histosOverlayed_list:
+                histosOverlayed[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.4,
-                0.8,
+                0.25,
+                0.85,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
                 else hn.split("___")[1],
                 42,
                 size=0.04,
             )
-            t1 = makeText(0.25, 0.95, "CMS", 61)
-            t2 = makeText(0.45, 0.95, str(year), 42)
-            t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+
+            t1 = makeText(0.28 if i == 0 else 0.22, 0.95, "CMS", 61)
+            t2 = makeText(0.38 if i == 0 else 0.32, 0.95, str(year), 42)
+            t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t4 = makeText(
+                0.25,
+                0.8,
+                labelLeptons[hn.split("___")[1]] + btag_label
+                if hn.split("___")[1] in list(labelLeptons.keys())
+                else hn.split("___")[1],
+                42,
+                size=0.04,
+            )
             # td = makeText(
             #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
             # )
@@ -1148,7 +1284,11 @@ def makeplot(hn, saveintegrals=True):
             t1.Draw()
             t2.Draw()
             t3.Draw()
+            t4.Draw()
             # td.Draw()
+            if SignificanceSum_str:
+                t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.025)
+                t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
                 datasum[hn].SetMarkerColor(ROOT.kBlack)
@@ -1196,7 +1336,7 @@ def makeplot(hn, saveintegrals=True):
                 # myLegend_sy.Draw()
 
                 tchi2 = makeText(
-                    0.25,
+                    0.19,
                     0.26,
                     "#chi^{2}="
                     + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
@@ -1204,7 +1344,7 @@ def makeplot(hn, saveintegrals=True):
                     0.025,
                 )
                 tKS = makeText(
-                    0.35,
+                    0.29,
                     0.26,
                     "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
                     42,
@@ -1213,21 +1353,23 @@ def makeplot(hn, saveintegrals=True):
                 tchi2.Draw()
                 tKS.Draw()
 
-            c.GetPad(2).SetGridy()
+                c.GetPad(2).SetGridy()
+
             if i == 0:
                 if postfit:
-                    c.SaveAs(outpath + "/%s_postFit.png" % hn)
+                    c.SaveAs(outpath + "/%s_%s_postFit.png" % (hn, args.btag))
                 else:
-                    c.SaveAs(outpath + "/%s.png" % hn)
-                    c.SaveAs(outpath + "/%s.root" % hn)
-            # c.SaveAs("%s.root"%hn)
+                    c.SaveAs(outpath + "/%s_%s.png" % (hn, args.btag))
+                    c.SaveAs(outpath + "/%s_%s.root" % (hn, args.btag))
             else:
-                c.GetPad(1).SetLogy(True)
+                c.GetPad(1).SetLogy(
+                    True
+                )  # if hn in datasum.keys() else c.SetLogy(True)
                 if postfit:
-                    c.SaveAs(outpath + "/%s_log_postFit.png" % hn)
+                    c.SaveAs(outpath + "/%s_%s_log_postFit.png" % (hn, args.btag))
                 else:
-                    c.SaveAs(outpath + "/%s_log.png" % hn)
-                    c.SaveAs(outpath + "/%s_log.root" % hn)
+                    c.SaveAs(outpath + "/%s_%s_log.png" % (hn, args.btag))
+                    c.SaveAs(outpath + "/%s_%s_log.root" % (hn, args.btag))
             del c
 
 
@@ -1240,23 +1382,23 @@ if args.variablesToFit != None:
     systematicsSetToUse = model.systematicsForDC
 systematicsSetToUse.sort()
 postfit = False
-# postfit = args.postfit
+postfit = args.postfit
 
-print("makeWorkspace", makeWorkspace)
-print("variablesToFit", variablesToFit)
+logger.info("makeWorkspace %s" % makeWorkspace)
+logger.info("variablesToFit %s" % variablesToFit)
 
 
 his = [x for x in histoNames if "__syst__" not in x and "sumWeight" not in x]
-print(his[0])
+logger.info(his[0])
 # do once for caching normalizations and to dump integrals
 makeplot(variablesToFit[0] if makeWorkspace else his[0], True)
 
 if not makeWorkspace:
-    print("Preload")
+    logger.info("Preload")
     for ff in f:
         for h in histoNames:
             f[ff].Get(h)
-    print("Preload-done")
+    logger.info("Preload-done")
 
 if makeWorkspace:
     for hn in variablesToFit[1:]:
@@ -1292,4 +1434,5 @@ tot = 0
 for s in totevCount:
     tot += totevSkim[s]
 
-print(tot, "input events")
+logger.info("%d input events" % tot)
+logger.info("outpath %s" % outpath)

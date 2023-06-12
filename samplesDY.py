@@ -2,10 +2,10 @@
 import glob
 
 flavourSplitting = {
-    "b": "OneB",
-    "bb": "TwoB",
-    "c": "OneC",
-    "udsg": "Light",
+    # "b": "OneB",
+    # "bb": "TwoB",
+    # "c": "OneC",
+    # "udsg": "Light",
 }
 
 flavourVVSplitting = {
@@ -15,6 +15,11 @@ flavourVVSplitting = {
 
 samples = {
     "DYM50": {
+        "xsec": 5765.40,
+        "subsamples": flavourSplitting,
+        "training": True,
+    },
+    "DYM50_full": {
         "xsec": 5765.40,
         "subsamples": flavourSplitting,
         "training": True,
@@ -175,6 +180,13 @@ for sample in samples:
             for x in glob.glob(
                 "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/230000/*.root",
                 recursive=True,
+            )
+        ]
+    elif sample == "DYM50_full":
+        samples[sample]["files"] = [
+            x
+            for x in glob.glob(
+                "/scratchnvme/malucchi/hbb_samples/DYM50/**/*.root", recursive=True
             )
         ]
     else:

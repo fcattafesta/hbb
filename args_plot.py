@@ -3,7 +3,7 @@ import argparse
 parser = argparse.ArgumentParser()
 
 # Plot
-parser.add_argument("model", help="Model to plot")
+parser.add_argument("-m", "--model", help="Model to plot", type=str)
 parser.add_argument("-p", "--postfit", help="plot postfit plot", action="store_true")
 parser.add_argument("-v", "--variablesToFit", nargs="*")
 parser.add_argument(
@@ -16,7 +16,11 @@ parser.add_argument(
 parser.add_argument(
     "-fsub", "--foldersuffix", default="", help="Folder suffix for annotations"
 )
-
+parser.add_argument("--blind", help="Blind data in plots", action="store_true")
+parser.add_argument(
+    "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
+)
 
 parser.print_help()
 args = parser.parse_args()
+print(args)

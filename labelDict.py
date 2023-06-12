@@ -9,6 +9,11 @@ labelRegion = {
     "CR_mm_ttbar": "t#bar{t} Region",
 }
 
+labelBtag = {
+    # "deepflav": " DeepFlav",
+    # "deepcsv": " DeepCSV",
+}
+
 
 labelVariable = {
     "Zee_mass": "m_{ee}",
