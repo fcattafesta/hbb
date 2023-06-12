@@ -50,4 +50,6 @@ labelLegend = {
     "Z+c": "Z+c",
     "VVHF": "VVHF",
     "VVLF": "VVLF",
+    "FlashSim": "FlashSim",
+    "FullSim": "FullSim",
 }
