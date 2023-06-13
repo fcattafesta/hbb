@@ -1319,11 +1319,11 @@ def makeplot(hn, saveintegrals=True):
             t4.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.023)
+                t_sig = makeText(0.25, 0.72, SignificanceSum_str, 42, size=0.023)
                 t_sig.Draw()
             if SignificanceSum_str_rescaled:
                 t_sig_rescaled = makeText(
-                    0.25, 0.65, SignificanceSum_str_rescaled, 42, size=0.023
+                    0.25, 0.67, SignificanceSum_str_rescaled, 42, size=0.023
                 )
                 t_sig_rescaled.Draw()
 
