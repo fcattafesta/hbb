@@ -54,10 +54,9 @@ def load_data(dirs, variables_list):
         file = uproot.open(f"{file}:Events")
         variables = [file[input].array(library="np") for input in variables_list]
 
-        # mask the variables to exclude the elements for which
-        # the first column is -1
-        mask = variables[0] != np.array(-1, dtype=np.float32)
-        variables = [variable[mask] for variable in variables]
+        # exclude the events with -1 in the DeepCSV column
+        mask = np.array(variables[:, 0] != -1)
+        variables = variables[mask]
 
         for j, btag in enumerate(networks_dict.keys()):
             # get the score columns
