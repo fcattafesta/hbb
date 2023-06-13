@@ -58,7 +58,7 @@ def makeLegend(xDown, xUp, yDown, yUp, name=""):
 def makeText(x, y, someText, font, size=0.05):
     tex = ROOT.TLatex(x, y, someText)
     tex.SetNDC()
-    tex.SetTextAlign(11) #35
+    tex.SetTextAlign(11)  # 35
     tex.SetTextFont(font)
     tex.SetTextSize(size)
     tex.SetLineWidth(2)
@@ -101,6 +101,7 @@ def makeRatioMCplot(h):
         hMC.SetBinContent(n, 0.0)
     return hMC
 
+
 def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
     S = sig_histo[hn].Clone()
     B = bkg_histo[hn].Clone()
@@ -124,7 +125,9 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
 
     # write the significance histogram to a file
     fR = ROOT.TFile.Open(
-        outpath + "/%s_%s_Significance%s.root" % (hn, args.btag, "Rescaled" if rescale else ""), "recreate"
+        outpath
+        + "/%s_%s_Significance%s.root" % (hn, args.btag, "Rescaled" if rescale else ""),
+        "recreate",
     )
     Significance.Write()
     # sum the squared of the bins of the significance histogram
@@ -136,7 +139,9 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
     SignificanceSum_str = (
         " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
         + str("%.2f" % SignificanceSum)
-        + "  (rescaled)" if rescale else ""
+        + "  (rescaled)"
+        if rescale
+        else ""
     )
 
     c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
@@ -149,7 +154,10 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
     t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
     t1.Draw()
     t2.Draw()
-    c_significance.SaveAs(outpath + "/%s_%s_Significance%s.png" % (hn, args.btag, "Rescaled" if rescale else ""))
+    c_significance.SaveAs(
+        outpath
+        + "/%s_%s_Significance%s.png" % (hn, args.btag, "Rescaled" if rescale else "")
+    )
     SignificanceSum = getattr(ROOT, "TParameter<double>")(
         "SignificanceSum", SignificanceSum
     )
@@ -956,7 +964,7 @@ def fill_datasum(
                             )
                 if gr in model.rescaleSample:
                     logger.info("rescale %s %s %s " % (hn, gr, model.rescaleSample[gr]))
-                    hr= h.Clone()
+                    hr = h.Clone()
                     hr.Scale(model.rescaleSample[gr])
                     if hn not in SumTH1Rescaled:
                         SumTH1Rescaled[hn] = hr
@@ -1136,9 +1144,11 @@ def makeplot(hn, saveintegrals=True):
         SignificanceSum_str = ""
         SignificanceSum_str_rescaled = ""
         if "DNN" in hn and hn in histoSigsum.keys():
-            SignificanceSum_str=significanceHandler(histoSigsum[hn],histosum[hn],hn)
+            SignificanceSum_str = significanceHandler(histoSigsum, histosum, hn)
             if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
-                SignificanceSum_str_rescaled=significanceHandler(histoSigsumRescaled[hn],histosumRescaled[hn],hn, rescale=True)
+                SignificanceSum_str_rescaled = significanceHandler(
+                    histoSigsumRescaled, histosumRescaled, hn, rescale=True
+                )
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
@@ -1289,8 +1299,8 @@ def makeplot(hn, saveintegrals=True):
                 size=0.04,
             )
 
-            t1 = makeText(0.28 if i==0 else 0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.38 if i==0 else 0.32, 0.95, str(year), 42)
+            t1 = makeText(0.28 if i == 0 else 0.22, 0.95, "CMS", 61)
+            t2 = makeText(0.38 if i == 0 else 0.32, 0.95, str(year), 42)
             t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
                 0.25,
@@ -1314,7 +1324,9 @@ def makeplot(hn, saveintegrals=True):
                 t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.023)
                 t_sig.Draw()
             if SignificanceSum_str_rescaled:
-                t_sig_rescaled = makeText(0.25, 0.65, SignificanceSum_str_rescaled, 42, size=0.023)
+                t_sig_rescaled = makeText(
+                    0.25, 0.65, SignificanceSum_str_rescaled, 42, size=0.023
+                )
                 t_sig_rescaled.Draw()
 
             if hn in datasum.keys():
