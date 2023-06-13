@@ -52,7 +52,7 @@ def load_data(dirs, variables_list):
     for file in files:
         print(f"Loading file {file}")
         file = uproot.open(f"{file}:Events")
-        variables = [np.concatenate(file[input].array(library="np")) for input in variables_list]
+        variables = np.array([np.concatenate(file[input].array(library="np")) for input in variables_list])
 
         print(variables, len(variables))
         # exclude the events with -1 in the DeepCSV column
