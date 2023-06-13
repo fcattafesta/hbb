@@ -52,7 +52,12 @@ def load_data(dirs, variables_list):
     for file in files:
         print(f"Loading file {file}")
         file = uproot.open(f"{file}:Events")
-        variables = np.array([np.concatenate(file[input].array(library="np")) for input in variables_list])
+        variables = np.array(
+            [
+                np.concatenate(file[input].array(library="np"))
+                for input in variables_list
+            ]
+        )
 
         print(variables, len(variables))
         # exclude the events with -1 in the DeepCSV column
@@ -61,10 +66,10 @@ def load_data(dirs, variables_list):
 
         for j, btag in enumerate(networks_dict.keys()):
             # get the score columns
-            score = np.concatenate(variables[j])
+            score = variables[j]
 
             # ge the hadronFlavour columns
-            hadronFlavour = np.concatenate(variables[2])
+            hadronFlavour = variables[2]
 
             networks_dict[btag][0] = np.concatenate(
                 (networks_dict[btag][0], score), axis=0
