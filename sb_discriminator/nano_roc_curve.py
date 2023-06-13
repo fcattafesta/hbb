@@ -39,7 +39,7 @@ def load_data(dirs, variables_list):
     files = []
     for x in dirs:
         for i, file in enumerate(glob.glob("%s/**/*.root" % x, recursive=True)):
-            if i < 20:
+            if i < 1:
                 files.append(file)
     print(f"Loading files: {files}")
 
@@ -66,6 +66,8 @@ def load_data(dirs, variables_list):
             networks_dict[btag][1] = np.concatenate(
                 (networks_dict[btag][1], hadronFlavour), axis=0
             )
+
+            print(btag, networks_dict[btag][0].shape, networks_dict[btag][0], networks_dict[btag][1].shape, networks_dict[btag][1])
 
     return networks_dict
 
