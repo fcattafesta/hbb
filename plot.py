@@ -101,6 +101,64 @@ def makeRatioMCplot(h):
         hMC.SetBinContent(n, 0.0)
     return hMC
 
+def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
+    S = sig_histo[hn].Clone()
+    B = bkg_histo[hn].Clone()
+    # histogram of significance (S/sqrt(B)) for each bin of the DNN
+    Significance = S.Clone()
+    for i in range(1, Significance.GetNbinsX() + 1):
+        try:
+            Significance.SetBinContent(
+                i,
+                Significance.GetBinContent(i)
+                / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)),
+            )
+        except ZeroDivisionError:
+            Significance.SetBinContent(i, 0)
+            logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
+            logger.info("setting bin content to 0")
+        except ValueError:
+            Significance.SetBinContent(i, 0)
+            logger.info("ValueError in bin %i in histogram %s" % (i, hn))
+            logger.info("setting bin content to 0")
+
+    # write the significance histogram to a file
+    fR = ROOT.TFile.Open(
+        outpath + "/%s_%s_Significance%s.root" % (hn, args.btag, "Rescaled" if rescale else ""), "recreate"
+    )
+    Significance.Write()
+    # sum the squared of the bins of the significance histogram
+    SignificanceSum = 0
+    for i in range(Significance.GetNbinsX() + 1):
+        SignificanceSum += Significance.GetBinContent(i) ** 2
+
+    SignificanceSum = sqrt(SignificanceSum)
+    SignificanceSum_str = (
+        " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
+        + str("%.2f" % SignificanceSum)
+        + "  (rescaled)" if rescale else ""
+    )
+
+    c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
+    Significance.SetFillStyle(0)
+    Significance.SetLineWidth(3)
+    Significance.SetLineStyle(1)
+    Significance.SetLineColor(ROOT.kRed)
+    Significance.Draw("hist")
+    t1 = makeText(0.22, 0.95, "CMS", 61)
+    t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
+    t1.Draw()
+    t2.Draw()
+    c_significance.SaveAs(outpath + "/%s_%s_Significance%s.png" % (hn, args.btag, "Rescaled" if rescale else ""))
+    SignificanceSum = getattr(ROOT, "TParameter<double>")(
+        "SignificanceSum", SignificanceSum
+    )
+    SignificanceSum.Write()
+    c_significance.Write()
+    fR.Close()
+
+    return SignificanceSum_str
+
 
 def setStyle(h, isRatio=False, noData=False):
     if type(h) == ROOT.THStack:
@@ -579,8 +637,10 @@ datastack = {}
 datasum = {}
 histos = {}
 histosum = {}
+histosumRescaled = {}
 histosSig = {}
 histoSigsum = {}
+histoSigsumRescaled = {}
 
 datasumSyst = {}
 histosumSyst = {}
@@ -634,6 +694,7 @@ def fill_datasum(
     ftxt,
     lumis=[],
     data=False,
+    SumTH1Rescaled={},
 ):
     integral[gr] = {}
     integral[gr]["nom"] = 0
@@ -893,6 +954,13 @@ def fill_datasum(
                                 d,
                                 makeWorkspace,
                             )
+                if gr in model.rescaleSample:
+                    logger.info("rescale %s %s %s " % (hn, gr, model.rescaleSample[gr]))
+                    if hn not in SumTH1Rescaled:
+                        SumTH1Rescaled[hn] = h.Clone().Scale(model.rescaleSample[gr])
+                    else:
+                        SumTH1Rescaled[hn].Add(h.Clone().Scale(model.rescaleSample[gr]))
+
                 stack[hn].Add(h)
                 # if n==0 : stack[hn].Add(h)
                 # else :
@@ -1017,6 +1085,7 @@ def makeplot(hn, saveintegrals=True):
                 myLegend=myLegend_1,
                 ftxt=ftxt,
                 lumis=lumis,
+                SumTH1Rescaled=histosumRescaled,
             )
             dictLegendBackground[gr] = h
 
@@ -1032,6 +1101,7 @@ def makeplot(hn, saveintegrals=True):
                 myLegend=myLegend_1,
                 ftxt=ftxt,
                 lumis=lumis,
+                SumTH1Rescaled=histoSigsumRescaled,
             )
             dictLegendSignal[gr] = h
 
@@ -1062,56 +1132,11 @@ def makeplot(hn, saveintegrals=True):
             fR.Close()
 
         SignificanceSum_str = ""
+        SignificanceSum_str_rescaled = ""
         if "DNN" in hn and hn in histoSigsum.keys():
-            S = histoSigsum[hn].Clone()
-            B = histosum[hn].Clone()
-            # histogram of significance (S/sqrt(B)) for each bin of the DNN
-            Significance = S.Clone()
-            for i in range(1, Significance.GetNbinsX() + 1):
-                try:
-                    Significance.SetBinContent(
-                        i,
-                        Significance.GetBinContent(i)
-                        / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)),
-                    )
-                except ZeroDivisionError:
-                    Significance.SetBinContent(i, 0)
-                    logger.info("ZeroDivisionError in bin %i in histogram %s" % (i, hn))
-                    logger.info("setting bin content to 0")
-                except ValueError:
-                    Significance.SetBinContent(i, 0)
-                    logger.info("ValueError in bin %i in histogram %s" % (i, hn))
-                    logger.info("setting bin content to 0")
-
-            # write the significance histogram to a file
-            fR = ROOT.TFile.Open(
-                outpath + "/%s_%s_Significance.root" % (hn, args.btag), "recreate"
-            )
-            Significance.Write()
-            # sum the squared of the bins of the significance histogram
-            SignificanceSum = 0
-            for i in range(Significance.GetNbinsX() + 1):
-                SignificanceSum += Significance.GetBinContent(i) ** 2
-
-            SignificanceSum = sqrt(SignificanceSum)
-            SignificanceSum_str = (
-                " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
-                + str("%.2f" % SignificanceSum)
-            )
-
-            c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
-            Significance.Draw("hist")
-            t1 = makeText(0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
-            t1.Draw()
-            t2.Draw()
-            c_significance.SaveAs(outpath + "/%s_%s_Significance.png" % (hn, args.btag))
-            SignificanceSum = getattr(ROOT, "TParameter<double>")(
-                "SignificanceSum", SignificanceSum
-            )
-            SignificanceSum.Write()
-            c_significance.Write()
-            fR.Close()
+            SignificanceSum_str=significanceHandler(histoSigsum[hn],histosum[hn],hn)
+            if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
+                SignificanceSum_str_rescaled=significanceHandler(histoSigsumRescaled[hn],histosumRescaled[hn],hn, rescale=True)
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
@@ -1284,8 +1309,12 @@ def makeplot(hn, saveintegrals=True):
             t4.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.025)
+                t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.023)
                 t_sig.Draw()
+            if SignificanceSum_str_rescaled:
+                t_sig_rescaled = makeText(0.25, 0.65, SignificanceSum_str_rescaled, 42, size=0.023)
+                t_sig_rescaled.Draw()
+
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
                 datasum[hn].SetMarkerColor(ROOT.kBlack)

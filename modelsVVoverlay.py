@@ -56,4 +56,4 @@ systematicsToPlot = []
 systematicDetail = {}
 systematicsForDC = []
 
-rescale_sample = {}
+rescaleSample = {}

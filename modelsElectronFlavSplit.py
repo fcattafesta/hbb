@@ -82,7 +82,7 @@ systematicsToPlot = []
 systematicDetail = {}
 systematicsForDC = []
 
-rescale_sample = {
+rescaleSample = {
     "bkg_0b": 1.0,
     "bkg_1b": 1.15,
     "bkg_2b": 1.15**2,
