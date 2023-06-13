@@ -22,7 +22,7 @@ def getFlowCommon(flow):
 
     ### Preselction for Jets ###
     # NOTE: JEC?
-    # NOTE: FSR, PUId=0, JET_pt=30
+    # NOTE: FSR, JET_pt=30
     flow.MatchDeltaR("SelectedElectron", "Jet")
     flow.MatchDeltaR("SelectedMuon", "Jet")
     flow.SubCollection(
@@ -54,7 +54,7 @@ def getFlowCommon(flow):
         requires=["twoJets"],
     )
 
-    # Define p4 
+    # Define p4
     flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
 
     # Order by btag score
@@ -95,11 +95,11 @@ def getFlowCommon(flow):
     # B-tagging distributions for JetBtagMax and JetBtagMin
     flow.Define(
         "btag_max",
-        "int((JetBtagMax_btagDeepFlavB > 0.7100)) + int((JetBtagMax_btagDeepFlavB > 0.2783)) + int((JetBtagMax_btagDeepFlavB > 0.0490))",
+        "JetBtagMax_btagDeepFlavB",
     )
     flow.Define(
         "btag_min",
-        "int((JetBtagMin_btagDeepFlavB > 0.7100)) + int((JetBtagMin_btagDeepFlavB > 0.2783)) + int((JetBtagMin_btagDeepFlavB > 0.0490))",
+        "JetBtagMin_btagDeepFlavB",
     )
 
     return flow
