@@ -956,10 +956,12 @@ def fill_datasum(
                             )
                 if gr in model.rescaleSample:
                     logger.info("rescale %s %s %s " % (hn, gr, model.rescaleSample[gr]))
+                    hr= h.Clone()
+                    hr.Scale(model.rescaleSample[gr])
                     if hn not in SumTH1Rescaled:
-                        SumTH1Rescaled[hn] = h.Clone().Scale(model.rescaleSample[gr])
+                        SumTH1Rescaled[hn] = hr
                     else:
-                        SumTH1Rescaled[hn].Add(h.Clone().Scale(model.rescaleSample[gr]))
+                        SumTH1Rescaled[hn].Add(hr)
 
                 stack[hn].Add(h)
                 # if n==0 : stack[hn].Add(h)
