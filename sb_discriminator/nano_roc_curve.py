@@ -54,6 +54,7 @@ def load_data(dirs, variables_list):
         file = uproot.open(f"{file}:Events")
         variables = [file[input].array(library="np") for input in variables_list]
 
+        print(variables, len(variables))
         # exclude the events with -1 in the DeepCSV column
         mask = np.array(variables[:, 0] != -1)
         variables = variables[mask]
