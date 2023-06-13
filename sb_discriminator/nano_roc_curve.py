@@ -54,7 +54,7 @@ def load_data(dirs, variables_list):
         score = variables_array[0]
 
         # ge the hadronFlavour columns
-        hadronFlavour = (variables_array[1],)
+        hadronFlavour = variables_array[1]
 
         if i == 0:
             score_total = score
