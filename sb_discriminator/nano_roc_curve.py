@@ -59,10 +59,12 @@ def load_data(dirs, variables_list):
             ]
         )
 
-        print(variables, len(variables))
+        print("variables", variables, len(variables))
         # exclude the events with -1 in the DeepCSV column
         mask = np.array(variables[:, 0] != -1)
+        print("mask", mask)
         variables = variables[mask]
+        print("variables_mask", variables, len(variables))
 
         for j, btag in enumerate(networks_dict.keys()):
             # get the score columns
