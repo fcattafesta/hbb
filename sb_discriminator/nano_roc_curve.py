@@ -42,7 +42,7 @@ def load_data(dirs, variables_list):
             "%s/**/*.root" % x, recursive=True
         )):
             if i < 20:
-                files.append(x + file[2])
+                files.append(file)
     print(f"Loading files: {files}")
 
     # open each file and get the Events tree using uproot
