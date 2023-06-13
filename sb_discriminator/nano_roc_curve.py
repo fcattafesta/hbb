@@ -6,6 +6,8 @@ import sklearn.metrics as _m
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import mplhep as hep
+import glob
+
 
 #plt.rcParams["text.usetex"] = True
 
@@ -36,7 +38,9 @@ def load_data(dirs, variables_list):
     # list of all the files
     files = []
     for x in dirs:
-        for i, file in enumerate(os.walk(x)):
+        for i, file in enumerate(glob.glob(
+            "%s/**/*.root" % x, recursive=True
+        )):
             if i < 20:
                 files.append(x + file[2])
     print(f"Loading files: {files}")
