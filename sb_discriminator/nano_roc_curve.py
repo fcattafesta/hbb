@@ -9,7 +9,7 @@ import mplhep as hep
 import glob
 
 
-#plt.rcParams["text.usetex"] = True
+# plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -17,7 +17,7 @@ parser.add_argument(
     nargs="+",
     default=[
         "/scratchnvme/malucchi/hbb_samples/TTToHadronic/"
-        #"/m100_scratch/userexternal/mmalucch/hbb_DNN_input/nano_roc_inputs/",
+        # "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/nano_roc_inputs/",
     ],
 )
 
@@ -38,9 +38,7 @@ def load_data(dirs, variables_list):
     # list of all the files
     files = []
     for x in dirs:
-        for i, file in enumerate(glob.glob(
-            "%s/**/*.root" % x, recursive=True
-        )):
+        for i, file in enumerate(glob.glob("%s/**/*.root" % x, recursive=True)):
             if i < 20:
                 files.append(file)
     print(f"Loading files: {files}")
@@ -53,22 +51,10 @@ def load_data(dirs, variables_list):
             [file[input].array(library="np") for input in variables_list]
         )
         # get the score columns
-        score = np.concatenate(
-            (
-                variables_array[0],
-                variables_array[1],
-            ),
-            axis=0,
-        )
+        score = variables_array[0]
 
         # ge the hadronFlavour columns
-        hadronFlavour = np.concatenate(
-            (
-                variables_array[2],
-                variables_array[3],
-            ),
-            axis=0,
-        )
+        hadronFlavour = (variables_array[1],)
 
         if i == 0:
             score_total = score
@@ -189,8 +175,12 @@ if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
     networks_dict = {}
-    networks_dict["DeepCSV"] = load_data(args.dirs, ["Jet_btagDeepB", "Jet_hadronFlavour"]) + ["r"]
-    networks_dict["DeepFlavour"] = load_data(args.dirs, ["btagDeepFlavB", "Jet_hadronFlavour"]) + ["b"]
+    networks_dict["DeepCSV"] = load_data(
+        args.dirs, ["Jet_btagDeepB", "Jet_hadronFlavour"]
+    ) + ["r"]
+    networks_dict["DeepFlavour"] = load_data(
+        args.dirs, ["btagDeepFlavB", "Jet_hadronFlavour"]
+    ) + ["b"]
 
     rates_dict = {}
     for net, data in networks_dict.items():
