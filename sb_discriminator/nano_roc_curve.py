@@ -52,22 +52,31 @@ def load_data(dirs, variables_list):
     for file in files:
         print(f"Loading file {file}")
         file = uproot.open(f"{file}:Events")
-        variables_array = np.array(
-            [file[input].array(library="np") for input in variables_list]
-        )
+        variables = [file[input].array(library="np") for input in variables_list]
+
         for j, btag in enumerate(networks_dict.keys()):
             # get the score columns
-            score = variables_array[j]
+            score = np.array(variables[j])
+            print(score)
 
             # ge the hadronFlavour columns
-            hadronFlavour = variables_array[2]
+            hadronFlavour = np.array(variables[2])
+            print(hadronFlavour)
 
-            networks_dict[btag][0] = np.concatenate((networks_dict[btag][0], score), axis=0)
+            networks_dict[btag][0] = np.concatenate(
+                (networks_dict[btag][0], score), axis=0
+            )
             networks_dict[btag][1] = np.concatenate(
                 (networks_dict[btag][1], hadronFlavour), axis=0
             )
 
-            print(btag, networks_dict[btag][0].shape, networks_dict[btag][0], networks_dict[btag][1].shape, networks_dict[btag][1])
+            print(
+                btag,
+                networks_dict[btag][0].shape,
+                networks_dict[btag][0],
+                networks_dict[btag][1].shape,
+                networks_dict[btag][1],
+            )
 
     return networks_dict
 
@@ -178,7 +187,7 @@ def plotting_function(out_dir, networks):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    networks_dict=load_data(
+    networks_dict = load_data(
         args.dirs, ["Jet_btagDeepB", "Jet_btagDeepFlavB", "Jet_hadronFlavour"]
     )
 
