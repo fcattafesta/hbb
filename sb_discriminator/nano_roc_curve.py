@@ -56,12 +56,12 @@ def load_data(dirs, variables_list):
 
         # mask the variables to exclude the elements for which
         # the first column is -1
-        mask = variables[0] != -1
+        mask = variables[0] != np.array(-1, dtype=np.float32)
         variables = [variable[mask] for variable in variables]
 
         for j, btag in enumerate(networks_dict.keys()):
             # get the score columns
-            score =np.concatenate(variables[j])
+            score = np.concatenate(variables[j])
 
             # ge the hadronFlavour columns
             hadronFlavour = np.concatenate(variables[2])
