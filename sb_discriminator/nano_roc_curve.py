@@ -55,12 +55,14 @@ def load_data(dirs, variables_list):
         variables = [file[input].array(library="np") for input in variables_list]
 
         for j, btag in enumerate(networks_dict.keys()):
-            # get the score columns
-            score = np.array(variables[j])
+            # variables[0] is a list of arrays
+            # concatenate all the arrays in the list
+            # to get a single array
+            score =np.concatenate(variables[0])
             print(score)
 
             # ge the hadronFlavour columns
-            hadronFlavour = np.array(variables[2])
+            hadronFlavour = np.concatenate(variables[2])
             print(hadronFlavour)
 
             networks_dict[btag][0] = np.concatenate(
