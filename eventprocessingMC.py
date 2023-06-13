@@ -4,44 +4,41 @@ from nail.nail import *
 def getFlowMC(flow):
     ## MonteCarlo-only definitions ##
 
+    flow.Define(
+        "hadronFlavour_btag_max",
+        "JetBtagMax_hadronFlavour",
+    )
+    flow.Define(
+        "hadronFlavour_btag_min",
+        "JetBtagMin_hadronFlavour",
+    )
+
     flow.CentralWeight("genWeight")  # add a central weight
 
-    # Cleaning of GenJet collection from GenLeptons
     flow.SubCollection(
-        "GenLepton",
-        "GenPart",
-        sel="abs(GenPart_pdgId) == 11 || abs(GenPart_pdgId) == 13 || abs(GenPart_pdgId) == 15",
-    )
-    flow.MatchDeltaR("GenLepton", "GenJet")
-    flow.SubCollection(
-        "CleanGenJet",
+        "SelectedGenJet",
         "GenJet",
-        sel="GenJet_GenLeptonDr > 0.3 || GenJet_GenLeptonIdx==-1",
+        sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
     )
 
-    # Defining subsamples based on flavour of the leading and subleading GenJets
-    flow.Define(
-        "OneB",
-        "(nCleanGenJet >= 1  && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
-    )
+    ## Defining subsamples
+
+    # TwoB if there are at least two b jets, not necessarily the first two
     flow.Define(
         "TwoB",
-        "nCleanGenJet >= 2 && CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] == 5",
+        "Sum(SelectedGenJet_hadronFlavour == 5) >= 2",
     )
     flow.Define(
-        "OneC",
-        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
+        "OneB",
+        "Sum(SelectedGenJet_hadronFlavour == 5) == 1",
+    )
+    flow.Define(
+        "C",
+        "Sum(SelectedGenJet_hadronFlavour == 4) >= 1 && Sum(SelectedGenJet_hadronFlavour == 5) == 0",
     )
     flow.Define(
         "Light",
-        "!TwoB && !OneB && !OneC ",
+        "!TwoB && !OneB && !C ",
     )
-
-    # Flavour splitting for Diboson processes
-    flow.Define(
-        "HF",
-        "OneB || TwoB || OneC",
-    )
-    flow.Define("LF", "!HF")
 
     return flow
