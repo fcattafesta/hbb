@@ -1067,7 +1067,7 @@ def makeplot(hn, saveintegrals=True):
             B = histosum[hn].Clone()
             # histogram of significance (S/sqrt(B)) for each bin of the DNN
             Significance = S.Clone()
-            for i in range(Significance.GetNbinsX() + 1):
+            for i in range(1, Significance.GetNbinsX() + 1):
                 try:
                     Significance.SetBinContent(
                         i,

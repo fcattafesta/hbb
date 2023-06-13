@@ -9,6 +9,18 @@ flavourSplitting = {
     "udsg": "Light",
 }
 
+flavourVVSplitting = {
+    "HF": ["bb", "b", "c"],
+    "LF": ["udsg"],
+}
+
+
+number_of_b = {
+    "0b": ["udsg", "c"],
+    "1b": ["b"],
+    "2b": ["bb"],
+}
+
 samples = {
     "DYM50": {
         "xsec": 5765.40,
@@ -184,3 +196,6 @@ for sample in samples:
         )
     ]
 samples.update(addSubSamples)
+
+for x in samples:
+    print(x, samples[x])

@@ -45,3 +45,5 @@ from rebinning import *
 systematicsToPlot = []
 systematicDetail = {}
 systematicsForDC = []
+
+rescale_sample = {}

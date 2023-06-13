@@ -4,11 +4,6 @@ from collections import defaultdict
 name = "HBB_mm"
 
 
-flavourVVSplitting = {
-    "HF": ["bb", "b", "c"],
-    "LF": ["udsg"],
-}
-
 VV_background_list = [
     "WWTo2L2Nu",
     "WZTo2Q2L",
@@ -61,6 +56,7 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
+print(background)
 import ROOT
 
 # Color palette
@@ -106,3 +102,5 @@ from rebinning import *
 systematicsToPlot = []
 systematicDetail = {}
 systematicsForDC = []
+
+rescale_sample = {}

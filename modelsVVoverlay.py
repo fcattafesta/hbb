@@ -4,11 +4,6 @@ from collections import defaultdict
 name = "VV_overlay"
 
 
-flavourVVSplitting = {
-    "HF": ["bb", "b", "c"],
-    "LF": ["udsg"],
-}
-
 VV_background_list = [
     "WWTo2L2Nu",
     "WZTo2Q2L",
@@ -60,3 +55,5 @@ from rebinning import *
 systematicsToPlot = []
 systematicDetail = {}
 systematicsForDC = []
+
+rescale_sample = {}

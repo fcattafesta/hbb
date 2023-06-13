@@ -3,11 +3,6 @@ from collections import defaultdict
 
 name = "HBB_mm_flavSplit"
 
-number_of_b = {
-    0: ["udsg", "c"],
-    1: ["b"],
-    2: ["bb"],
-}
 
 # TODO: add the inclusive DY sample
 background_list = [
@@ -40,7 +35,7 @@ background_list = [
 background = defaultdict(list)
 for num_b, flavours in number_of_b.items():
     for flav in flavours:
-        background[f"bkg_{num_b}b"] += [f"{bkg}_{flav}" for bkg in background_list]
+        background[f"bkg_{num_b}"] += [f"{bkg}_{flav}" for bkg in background_list]
 
 data = {
     "2018": ["SingleMuon_2018"],
@@ -52,6 +47,7 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
+print(background)
 import ROOT
 
 # Color palette
@@ -86,3 +82,12 @@ from rebinning import *
 systematicsToPlot = []
 systematicDetail = {}
 systematicsForDC = []
+
+
+rescale_sample = {
+    "bkg_0b": 1.0,
+    "bkg_1b": 1.15,
+    "bkg_2b": 1.15**2,
+    "ZH": 1.15**2,
+    "ggZH": 1.15**2,
+}

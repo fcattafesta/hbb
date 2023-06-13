@@ -17,7 +17,7 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-from samples import samples, flavourSplitting
+from samples import *
 
 if args.btag == "deepcsv":
     from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
@@ -273,12 +273,12 @@ elif args.model[:5] == "model":
     allmc = []
     for x in model.background:
         for y in model.background[x]:
-            if x.endswith(
-                tuple(flavourSplitting.keys())
-            ):
-                allmc.append(y.rsplit("_", 1)[0])
+            if x.endswith(tuple(flavourSplitting.keys())+tuple(flavourVVSplitting.keys())+tuple(number_of_b.keys())):
+                if y.rsplit("_", 1)[0] not in allmc:
+                    allmc.append(y.rsplit("_", 1)[0])
             else:
-                allmc.append(y)
+                if y not in allmc:
+                    allmc.append(y)
 
     allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
