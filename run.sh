@@ -19,6 +19,14 @@ if [[ $flavsplit == true ]]; then
     model="${model}FlavSplit"
 fi
 
+btag=""
+if [[ $suffix == *deepcsv* ]]; then
+    btag="--btag deepcsv"
+elif [[ $suffix == *deepflav* ]]; then
+    btag="--btag deepflav"
+fi
+
+
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 
 $CMD \
@@ -26,4 +34,5 @@ $CMD \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --lep ${lep} \
     --snapshot \
+    ${btag} \
     "${@:3}"
