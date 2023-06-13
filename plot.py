@@ -139,9 +139,7 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
     SignificanceSum_str = (
         " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
         + str("%.2f" % SignificanceSum)
-        + "  (rescaled)"
-        if rescale
-        else ""
+        + ("  (rescaled)" if rescale else "")
     )
 
     c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
