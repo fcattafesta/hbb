@@ -1323,7 +1323,7 @@ def makeplot(hn, saveintegrals=True):
                 t_sig.Draw()
             if SignificanceSum_str_rescaled:
                 t_sig_rescaled = makeText(
-                    0.25, 0.57, SignificanceSum_str_rescaled, 42, size=0.023
+                    0.25, 0.61, SignificanceSum_str_rescaled, 42, size=0.023
                 )
                 t_sig_rescaled.Draw()
 
