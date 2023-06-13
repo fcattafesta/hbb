@@ -43,29 +43,31 @@ def load_data(dirs, variables_list):
                 files.append(file)
     print(f"Loading files: {files}")
 
+    networks_dict = {
+        "DeepCSV": [np.array([]), np.array([]), "r"],
+        "DeepFlav": [np.array([]), np.array([]), "b"],
+    }
+
     # open each file and get the Events tree using uproot
-    for i, file in enumerate(files):
+    for file in files:
         print(f"Loading file {file}")
         file = uproot.open(f"{file}:Events")
         variables_array = np.array(
             [file[input].array(library="np") for input in variables_list]
         )
-        # get the score columns
-        score = variables_array[0]
+        for j, btag in enumerate(networks_dict.keys()):
+            # get the score columns
+            score = variables_array[j]
 
-        # ge the hadronFlavour columns
-        hadronFlavour = variables_array[1]
+            # ge the hadronFlavour columns
+            hadronFlavour = variables_array[2]
 
-        if i == 0:
-            score_total = score
-            hadronFlavour_total = hadronFlavour
-        else:
-            score_total = np.concatenate((score_total, score), axis=0)
-            hadronFlavour_total = np.concatenate(
-                (hadronFlavour_total, hadronFlavour), axis=0
+            networks_dict[btag][0] = np.concatenate((networks_dict[btag][0], score), axis=0)
+            networks_dict[btag][1] = np.concatenate(
+                (networks_dict[btag][1], hadronFlavour), axis=0
             )
 
-    return [score_total, hadronFlavour_total]
+    return networks_dict
 
 
 def get_labels(y_true, y_score, labels_s, labels_b):
@@ -174,13 +176,9 @@ def plotting_function(out_dir, networks):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    networks_dict = {}
-    networks_dict["DeepCSV"] = load_data(
-        args.dirs, ["Jet_btagDeepB", "Jet_hadronFlavour"]
-    ) + ["r"]
-    networks_dict["DeepFlavour"] = load_data(
-        args.dirs, ["btagDeepFlavB", "Jet_hadronFlavour"]
-    ) + ["b"]
+    networks_dict=load_data(
+        args.dirs, ["Jet_btagDeepB", "Jet_btagDeepFlavB", "Jet_hadronFlavour"]
+    )
 
     rates_dict = {}
     for net, data in networks_dict.items():
