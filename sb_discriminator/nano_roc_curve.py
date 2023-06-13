@@ -36,9 +36,9 @@ def load_data(dirs, variables_list):
     # list of all the files
     files = []
     for x in dirs:
-        for i, file in enumerate(os.listdir(x)):
+        for i, file in enumerate(os.walk(x)):
             if i < 20:
-                files.append(x + file)
+                files.append(x + file[2])
     print(f"Loading files: {files}")
 
     # open each file and get the Events tree using uproot
