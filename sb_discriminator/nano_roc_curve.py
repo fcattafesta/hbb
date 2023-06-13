@@ -27,6 +27,13 @@ args = parser.parse_args()
 
 
 TT_list = ["TTToHadronic"]
+var_list = [
+    "Jet_btagDeepB",
+    "Jet_btagDeepFlavB",
+    "Jet_hadronFlavour",
+    "Jet_pt",
+    "Jet_eta",
+]
 
 tag_dict = {
     "b vs udsg": [[5], [0], "solid"],
@@ -61,9 +68,14 @@ def load_data(dirs, variables_list):
 
         print("variables", variables, len(variables))
         # exclude the events with -1 in the DeepCSV column
-        mask = np.array(variables[0, :] != -1)
+        mask = (
+            np.array(variables[0, :] != -1)
+            * np.array(variables[3, :] > 30)
+            * np.array(variables[3, :] < 200)
+            * np.array(variables[4, :] < 1.4)
+        )
         print("mask", mask)
-        variables = variables[:,mask]
+        variables = variables[:, mask]
         print("variables_mask", variables, len(variables))
 
         for j, btag in enumerate(networks_dict.keys()):
@@ -197,9 +209,7 @@ def plotting_function(out_dir, networks):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    networks_dict = load_data(
-        args.dirs, ["Jet_btagDeepB", "Jet_btagDeepFlavB", "Jet_hadronFlavour"]
-    )
+    networks_dict = load_data(args.dirs, var_list)
 
     rates_dict = {}
     for net, data in networks_dict.items():
