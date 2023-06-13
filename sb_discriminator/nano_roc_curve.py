@@ -54,16 +54,17 @@ def load_data(dirs, variables_list):
         file = uproot.open(f"{file}:Events")
         variables = [file[input].array(library="np") for input in variables_list]
 
+        # mask the variables to exclude the elements for which
+        # the first column is -1
+        mask = variables[0] != -1
+        variables = [variable[mask] for variable in variables]
+
         for j, btag in enumerate(networks_dict.keys()):
-            # variables[0] is a list of arrays
-            # concatenate all the arrays in the list
-            # to get a single array
-            score =np.concatenate(variables[0])
-            print(score)
+            # get the score columns
+            score =np.concatenate(variables[j])
 
             # ge the hadronFlavour columns
             hadronFlavour = np.concatenate(variables[2])
-            print(hadronFlavour)
 
             networks_dict[btag][0] = np.concatenate(
                 (networks_dict[btag][0], score), axis=0
