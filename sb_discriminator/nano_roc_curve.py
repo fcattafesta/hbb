@@ -164,7 +164,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.text(
         0.05,
         0.6,
-        r'$t\bar{t} (\mathrm{AK4jets})$' + '\n' + r'$p_T \in (30, 200) \mathrm{GeV}$ , |\eta| < 1.4',
+        r'$t\bar{t} (\mathrm{AK4jets})$' + '\n' + r'$p_T \in (30, 200) \mathrm{GeV} , |\eta| < 1.4$',
         fontsize=18,
         horizontalalignment="left",
         verticalalignment="bottom",
