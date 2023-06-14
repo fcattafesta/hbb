@@ -227,7 +227,7 @@ if "__main__" == __name__:
     plotting_function(args.out_dir, rates_dict)
 
     # save the fpr, tpr and threshold for each network to a file
-    with open(f"{args.out_dir}/roc_data.txt", "wb") as f:
+    with open(f"{args.out_dir}/roc_data.txt", "w") as f:
         for net, rates in rates_dict.items():
             a=True
             b=True
