@@ -73,6 +73,7 @@ def load_data(dirs, variables_list):
             * np.array(variables[3, :] > 30)
             * np.array(variables[3, :] < 200)
             * np.array(variables[4, :] < 1.4)
+            * np.array(variables[4, :] > -1.4)
         )
         print("mask", mask)
         variables = variables[:, mask]
@@ -161,10 +162,10 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.xlim([0.23, 1.0005])
     plt.ylim([0.0008, 1.005])
     plt.text(
-        0.7,
-        0.1,
-        "$t\\bar{t}$\n$ \\mathrm{AK4jets}$ $(p_T > 20 \\mathrm{GeV})$",
-        fontsize=20,
+        0.05,
+        0.6,
+        "$t\\bar{t} (\\mathrm{AK4jets})$\n$p_T \\in (30, 200) \\mathrm{GeV}$ , |\\eta| < 1.4",
+        fontsize=18,
         horizontalalignment="left",
         verticalalignment="bottom",
         transform=plt.gca().transAxes,
