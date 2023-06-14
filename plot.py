@@ -104,9 +104,13 @@ def makeRatioMCplot(h):
     return hMC
 
 
-def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=False):
-    S = sig_histo[hn].Clone()
-    B = bkg_histo[hn].Clone()
+def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=None):
+    if not btag_rescale:
+        S = sig_histo[hn].Clone()
+        B = bkg_histo[hn].Clone()
+    else:
+        S = sig_histo[btag_rescale].Clone()
+        B = bkg_histo[btag_rescale].Clone()
     # histogram of significance (S/sqrt(B)) for each bin of the DNN
     Significance = S.Clone()
     for i in range(1, Significance.GetNbinsX() + 1):
@@ -1180,7 +1184,7 @@ def makeplot(hn, saveintegrals=True):
                         histosumRescaledDict[hn][btag_rescale],
                         hn,
                         rescale=True,
-                        btag_rescale=True,
+                        btag_rescale=btag_rescale,
                     )
                     SignificanceSum_list[0].append(btag_rescale)
                     SignificanceSum_list[1].append(SignificanceSum)
