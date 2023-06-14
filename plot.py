@@ -1,3 +1,4 @@
+import csv
 import re
 from array import array
 from math import *
@@ -6,6 +7,7 @@ import sys
 import os
 import importlib
 import time
+import numpy as np
 
 # import postfitPlot
 import copy
@@ -102,7 +104,7 @@ def makeRatioMCplot(h):
     return hMC
 
 
-def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
+def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=False):
     S = sig_histo[hn].Clone()
     B = bkg_histo[hn].Clone()
     # histogram of significance (S/sqrt(B)) for each bin of the DNN
@@ -123,47 +125,53 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False):
             logger.info("ValueError in bin %i in histogram %s" % (i, hn))
             logger.info("setting bin content to 0")
 
-    # write the significance histogram to a file
-    fR = ROOT.TFile.Open(
-        outpath
-        + "/%s_%s_Significance%s.root" % (hn, args.btag, "Rescaled" if rescale else ""),
-        "recreate",
-    )
-    Significance.Write()
     # sum the squared of the bins of the significance histogram
     SignificanceSum = 0
     for i in range(Significance.GetNbinsX() + 1):
         SignificanceSum += Significance.GetBinContent(i) ** 2
 
     SignificanceSum = sqrt(SignificanceSum)
-    SignificanceSum_str = (
-        " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
-        + str("%.2f" % SignificanceSum)
-        + ("  (rescaled)" if rescale else "")
-    )
 
-    c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
-    Significance.SetFillStyle(0)
-    Significance.SetLineWidth(3)
-    Significance.SetLineStyle(1)
-    Significance.SetLineColor(ROOT.kRed)
-    Significance.Draw("hist")
-    t1 = makeText(0.22, 0.95, "CMS", 61)
-    t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
-    t1.Draw()
-    t2.Draw()
-    c_significance.SaveAs(
-        outpath
-        + "/%s_%s_Significance%s.png" % (hn, args.btag, "Rescaled" if rescale else "")
-    )
-    SignificanceSum = getattr(ROOT, "TParameter<double>")(
-        "SignificanceSum", SignificanceSum
-    )
-    SignificanceSum.Write()
-    c_significance.Write()
-    fR.Close()
+    if not btag_rescale:
+        SignificanceSum_str = (
+            " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
+            + str("%.2f" % SignificanceSum)
+            + ("  (rescaled)" if rescale else "")
+        )
+        # write the significance histogram to a file
+        fR = ROOT.TFile.Open(
+            outpath
+            + "/%s_%s_Significance%s.root"
+            % (hn, args.btag, "Rescaled" if rescale else ""),
+            "recreate",
+        )
+        Significance.Write()
 
-    return SignificanceSum_str
+        c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
+        Significance.SetFillStyle(0)
+        Significance.SetLineWidth(3)
+        Significance.SetLineStyle(1)
+        Significance.SetLineColor(ROOT.kRed)
+        Significance.Draw("hist")
+        t1 = makeText(0.22, 0.95, "CMS", 61)
+        t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
+        t1.Draw()
+        t2.Draw()
+        c_significance.SaveAs(
+            outpath
+            + "/%s_%s_Significance%s.png"
+            % (hn, args.btag, "Rescaled" if rescale else "")
+        )
+        SignificanceSum_param = getattr(ROOT, "TParameter<double>")(
+            "SignificanceSum", SignificanceSum
+        )
+        SignificanceSum_param.Write()
+        c_significance.Write()
+        fR.Close()
+    else:
+        SignificanceSum_str = ""
+
+    return SignificanceSum_str, SignificanceSum
 
 
 def setStyle(h, isRatio=False, noData=False):
@@ -644,9 +652,11 @@ datasum = {}
 histos = {}
 histosum = {}
 histosumRescaled = {}
+histosumRescaledDict = {}
 histosSig = {}
 histoSigsum = {}
 histoSigsumRescaled = {}
+histoSigsumRescaledDict = {}
 
 datasumSyst = {}
 histosumSyst = {}
@@ -654,6 +664,8 @@ histoSigsumSyst = {}
 histosSignal = {}
 histosOverlayed = {}
 all_histo_all_syst = {}
+
+SignificanceSum_list = [[], []]
 
 integral = {}
 error = {}
@@ -701,6 +713,7 @@ def fill_datasum(
     lumis=[],
     data=False,
     SumTH1Rescaled={},
+    SumTH1RescaledDict={},
 ):
     integral[gr] = {}
     integral[gr]["nom"] = 0
@@ -960,14 +973,23 @@ def fill_datasum(
                                 d,
                                 makeWorkspace,
                             )
-                if gr in model.rescaleSample:
-                    logger.info("rescale %s %s %s " % (hn, gr, model.rescaleSample[gr]))
+                if gr in model.rescaleSample and "atanhDNN" in hn:
+                    logger.info(
+                        "rescale %s %s %s " % (hn, gr, model.rescaleSample[gr][0])
+                    )
                     hr = h.Clone()
-                    hr.Scale(model.rescaleSample[gr])
+                    hr.Scale(model.rescaleSample[gr][0])
                     if hn not in SumTH1Rescaled:
                         SumTH1Rescaled[hn] = hr
                     else:
                         SumTH1Rescaled[hn].Add(hr)
+                    for btag_rescale in model.rescaleSample[gr][1]:
+                        hr = h.Clone()
+                        hr.Scale(btag_rescale)
+                        if hn not in SumTH1RescaledDict:
+                            SumTH1RescaledDict[hn][btag_rescale] = hr
+                        else:
+                            SumTH1RescaledDict[hn][btag_rescale].Add(hr)
 
                 stack[hn].Add(h)
                 # if n==0 : stack[hn].Add(h)
@@ -1080,6 +1102,9 @@ def makeplot(hn, saveintegrals=True):
             ftxt.write(
                 "DATA,%s \n" % (datasum[hn].Integral(0, datasum[hn].GetNbinsX() + 1))
             )
+        if "atanhDNN" in hn:
+            histosumRescaledDict[hn] = {}
+            histoSigsumRescaledDict[hn] = {}
 
         for gr in model.backgroundSorted:
             h = fill_datasum(
@@ -1094,6 +1119,7 @@ def makeplot(hn, saveintegrals=True):
                 ftxt=ftxt,
                 lumis=lumis,
                 SumTH1Rescaled=histosumRescaled,
+                SumTH1RescaledDict=histosumRescaledDict,
             )
             dictLegendBackground[gr] = h
 
@@ -1110,6 +1136,7 @@ def makeplot(hn, saveintegrals=True):
                 ftxt=ftxt,
                 lumis=lumis,
                 SumTH1Rescaled=histoSigsumRescaled,
+                SumTH1RescaledDict=histoSigsumRescaledDict,
             )
             dictLegendSignal[gr] = h
 
@@ -1141,12 +1168,32 @@ def makeplot(hn, saveintegrals=True):
 
         SignificanceSum_str = ""
         SignificanceSum_str_rescaled = ""
-        if "DNN" in hn and hn in histoSigsum.keys():
-            SignificanceSum_str = significanceHandler(histoSigsum, histosum, hn)
+        if "atanhDNN" in hn and hn in histoSigsum.keys():
+            SignificanceSum_str, _ = significanceHandler(histoSigsum, histosum, hn)
             if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
-                SignificanceSum_str_rescaled = significanceHandler(
+                SignificanceSum_str_rescaled, SignificanceSum_rescaled = significanceHandler(
                     histoSigsumRescaled, histosumRescaled, hn, rescale=True
                 )
+                for btag_rescale, histo_rescale in histoSigsumRescaledDict[hn].items():
+                    _, SignificanceSum = significanceHandler(
+                        histo_rescale,
+                        histosumRescaledDict[hn][btag_rescale],
+                        hn,
+                        rescale=True,
+                        btag_rescale=True,
+                    )
+                    SignificanceSum_list[0].append(btag_rescale)
+                    SignificanceSum_list[1].append(SignificanceSum)
+                # save significance_list to file
+                with open(
+                    outpath + "/%s_%s_SignificanceSum_list.csv"
+                    % (hn, args.btag),
+                    "w",
+                ) as f:
+                    writer = csv.writer(f)
+                    for k, v in model.rescaleSample.items():
+                        writer.writerow([k, v])
+                    writer.writerows(SignificanceSum_list)
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]

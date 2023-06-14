@@ -1,3 +1,4 @@
+import numpy as np
 from samples import *
 from collections import defaultdict
 
@@ -85,9 +86,9 @@ systematicsForDC = []
 
 
 rescaleSample = {
-    "bkg_0b": 1.0,
-    "bkg_1b": 1.12,
-    "bkg_2b": 1.12**2,
-    "ZH": 1.12**2,
-    "ggZH": 1.12**2,
+    "bkg_0b": [1.0, np.ones(10)],
+    "bkg_1b": [1.1, np.linspace(1.0, 1.4, 10)],
+    "bkg_2b":  [1.1**2, np.linspace(1.0, 1.4, 10)**2],
+    "ZH":  [1.1**2, np.linspace(1.0, 1.4, 10)**2],
+    "ggZH": [1.1**2, np.linspace(1.0, 1.4, 10)**2],
 }
