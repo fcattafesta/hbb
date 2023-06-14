@@ -188,9 +188,9 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.close()
 
 def printer(f, rates, i):
-    f.write(f"threshold: {rates[5][i]} \n")
-    f.write(f"fpr: {rates[0][i]} \n")
-    f.write(f"tpr: {rates[1][i]} \n")
+    f.write(f"threshold: {rates[5][i]}")
+    f.write(f"fpr: {rates[0][i]}")
+    f.write(f"tpr: {rates[1][i]}")
 
 
 def plotting_function(out_dir, networks):
@@ -232,7 +232,7 @@ if "__main__" == __name__:
             a=True
             b=True
             c=True
-            f.write(f"network: {net} \n")
+            f.write(f"network: {net}")
             for i in range(len(rates[0])):
                 if rates[0][i] >= 0.001 and a:
                     printer(f, rates, i)
