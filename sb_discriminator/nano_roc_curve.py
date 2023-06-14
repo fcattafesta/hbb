@@ -9,7 +9,7 @@ import mplhep as hep
 import glob
 
 
-# plt.rcParams["text.usetex"] = True
+plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -164,7 +164,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.text(
         0.05,
         0.6,
-        "$t\\bar{t} (\\mathrm{AK4jets})$\n$p_T \\in (30, 200) \\mathrm{GeV}$ , |\\eta| < 1.4",
+        "$t\\bar{t} (\\mathrm{AK4jets})$\n$p_T \\in (30, 200) \\mathrm{GeV}$ , |\eta| < 1.4",
         fontsize=18,
         horizontalalignment="left",
         verticalalignment="bottom",
