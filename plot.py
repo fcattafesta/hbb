@@ -1189,8 +1189,8 @@ def makeplot(hn, saveintegrals=True):
                     outpath + "/%s_%s_SignificanceSum_list.csv"
                     % (hn, args.btag),
                     "w",
-                ) as f:
-                    writer = csv.writer(f)
+                ) as file:
+                    writer = csv.writer(file)
                     for k, v in model.rescaleSample.items():
                         writer.writerow([k, v])
                     writer.writerows(SignificanceSum_list)
