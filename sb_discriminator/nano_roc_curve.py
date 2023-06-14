@@ -9,7 +9,7 @@ import mplhep as hep
 import glob
 
 
-plt.rcParams["text.usetex"] = True
+#plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -164,7 +164,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.text(
         0.05,
         0.6,
-        "$t\\bar{t} (\\mathrm{AK4jets})$\n$p_T \\in (30, 200) \\mathrm{GeV}$ , |\eta| < 1.4",
+        r"$t\bar{t} (\mathrm{AK4jets})$\n$p_T \in (30, 200) \mathrm{GeV}$ , |\eta| < 1.4",
         fontsize=18,
         horizontalalignment="left",
         verticalalignment="bottom",
@@ -194,7 +194,7 @@ def plotting_function(out_dir, networks):
     :param    networks :  networks to plot
     """
 
-    fig_handle = plt.figure(figsize=(13, 10))
+    fig_handle = plt.figure(figsize=(7, 5))
     for network, rates in networks.items():
         plt.plot(
             rates[1],
