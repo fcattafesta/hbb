@@ -109,8 +109,8 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         S = sig_histo[hn].Clone()
         B = bkg_histo[hn].Clone()
     else:
-        S = sig_histo[btag_rescale].Clone()
-        B = bkg_histo[btag_rescale].Clone()
+        S = sig_histo.Clone()
+        B = bkg_histo.Clone()
     # histogram of significance (S/sqrt(B)) for each bin of the DNN
     Significance = S.Clone()
     for i in range(1, Significance.GetNbinsX() + 1):
