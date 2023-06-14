@@ -147,7 +147,7 @@ def get_rates(y_t, y_s, l_s, l_b):
     y_true, y_score = get_labels(y_t, y_s, l_s, l_b)
     fpr, tpr, threshold = _m.roc_curve(y_true, y_score)
     roc_auc = _m.roc_auc_score(y_true, y_score)
-    return fpr, tpr, roc_auc
+    return fpr, tpr, roc_auc, threshold
 
 
 def plt_fts(out_dir, name, fig_handle, show):
@@ -165,7 +165,7 @@ def plt_fts(out_dir, name, fig_handle, show):
         0.05,
         0.6,
         r'$t\bar{t} (\mathrm{AK4jets})$' + '\n' + r'$p_T \in (30, 200) \mathrm{GeV} , |\eta| < 1.4$',
-        fontsize=18,
+        fontsize=20,
         horizontalalignment="left",
         verticalalignment="bottom",
         transform=plt.gca().transAxes,
@@ -186,6 +186,11 @@ def plt_fts(out_dir, name, fig_handle, show):
     if show:
         plt.show()
     plt.close()
+
+def printer(f, rates, i):
+    f.write(f"threshold: {rates[5][i]} \n")
+    f.write(f"fpr: {rates[0][i]} \n")
+    f.write(f"tpr: {rates[1][i]} \n")
 
 
 def plotting_function(out_dir, networks):
@@ -216,7 +221,25 @@ if "__main__" == __name__:
     for net, data in networks_dict.items():
         for tag_type, labels in tag_dict.items():
             # compute roc curve and auc
-            fpr, tpr, roc_auc = get_rates(data[1], data[0], labels[0], labels[1])
-            rates_dict[f"{net} {tag_type}"] = [fpr, tpr, roc_auc, data[2], labels[2]]
+            fpr, tpr, roc_auc, threshold = get_rates(data[1], data[0], labels[0], labels[1])
+            rates_dict[f"{net} {tag_type}"] = [fpr, tpr, roc_auc, data[2], labels[2], threshold]
 
     plotting_function(args.out_dir, rates_dict)
+
+    # save the fpr, tpr and threshold for each network to a file
+    with open(f"{args.out_dir}/roc_data.txt", "wb") as f:
+        for net, rates in rates_dict.items():
+            a=True
+            b=True
+            c=True
+            f.write(f"network: {net} \n")
+            for i in range(len(rates[0])):
+                if rates[0][i] >= 0.001 and a:
+                    printer(f, rates, i)
+                    a=False
+                elif rates[0][i] >= 0.01 and b:
+                    printer(f, rates, i)
+                    b=False
+                elif rates[0][i] >= 0.1 and c:
+                    printer(f, rates, i)
+                    c=False
