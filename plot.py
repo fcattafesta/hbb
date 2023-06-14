@@ -1175,7 +1175,10 @@ def makeplot(hn, saveintegrals=True):
         if "atanhDNN" in hn and hn in histoSigsum.keys():
             SignificanceSum_str, _ = significanceHandler(histoSigsum, histosum, hn)
             if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
-                SignificanceSum_str_rescaled, SignificanceSum_rescaled = significanceHandler(
+                (
+                    SignificanceSum_str_rescaled,
+                    SignificanceSum_rescaled,
+                ) = significanceHandler(
                     histoSigsumRescaled, histosumRescaled, hn, rescale=True
                 )
                 for btag_rescale, histo_rescale in histoSigsumRescaledDict[hn].items():
@@ -1190,8 +1193,7 @@ def makeplot(hn, saveintegrals=True):
                     SignificanceSum_list[1].append(SignificanceSum)
                 # save significance_list to file
                 with open(
-                    outpath + "/%s_%s_SignificanceSum_list.csv"
-                    % (hn, args.btag),
+                    outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args.btag),
                     "w",
                 ) as file:
                     writer = csv.writer(file)
@@ -1199,6 +1201,13 @@ def makeplot(hn, saveintegrals=True):
                         writer.writerow([k, v])
                     writer.writerow(["btag_rescale", SignificanceSum_list[0]])
                     writer.writerow(["SignificanceSum", SignificanceSum_list[1]])
+                    writer.writerow(
+                        [
+                            "RescaleFactors",
+                            model.rescaleSample["bkg_1b"],
+                            SignificanceSum_rescaled,
+                        ]
+                    )
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
