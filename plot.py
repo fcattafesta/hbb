@@ -987,13 +987,13 @@ def fill_datasum(
                         SumTH1Rescaled[hn] = hr
                     else:
                         SumTH1Rescaled[hn].Add(hr)
-                    for btag_rescale in model.rescaleSample[gr][1]:
+                    for i, btag_rescale in enumerate(model.rescaleSample[gr][1]):
                         hr = h.Clone()
                         hr.Scale(btag_rescale)
-                        if btag_rescale not in SumTH1RescaledDict[hn]:
-                            SumTH1RescaledDict[hn][btag_rescale] = hr
+                        if model.rescaleArray[i] not in SumTH1RescaledDict[hn]:
+                            SumTH1RescaledDict[hn][model.rescaleArray[i]] = hr
                         else:
-                            SumTH1RescaledDict[hn][btag_rescale].Add(hr)
+                            SumTH1RescaledDict[hn][model.rescaleArray[i]].Add(hr)
 
                 stack[hn].Add(h)
                 # if n==0 : stack[hn].Add(h)

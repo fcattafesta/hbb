@@ -88,7 +88,8 @@ systematicsForDC = []
 rescaleSample = {
     "bkg_0b": [1.0, np.ones(10)],
     "bkg_1b": [1.1, np.linspace(1.0, 1.4, 10)],
-    "bkg_2b":  [1.1**2, np.linspace(1.0, 1.4, 10)**2],
-    "ZH":  [1.1**2, np.linspace(1.0, 1.4, 10)**2],
-    "ggZH": [1.1**2, np.linspace(1.0, 1.4, 10)**2],
+    "bkg_2b": [1.1**2, np.linspace(1.0, 1.4, 10) ** 2],
+    "ZH": [1.1**2, np.linspace(1.0, 1.4, 10) ** 2],
+    "ggZH": [1.1**2, np.linspace(1.0, 1.4, 10) ** 2],
 }
+rescaleArray = np.linspace(1.0, 1.4, 10)

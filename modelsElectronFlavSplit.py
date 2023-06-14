@@ -90,3 +90,4 @@ rescaleSample = {
     "ZH":  [1.1**2, np.linspace(1.0, 1.4, 10)**2],
     "ggZH": [1.1**2, np.linspace(1.0, 1.4, 10)**2],
 }
+rescaleArray = np.linspace(1.0, 1.4, 10)
