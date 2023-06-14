@@ -1204,7 +1204,7 @@ def makeplot(hn, saveintegrals=True):
                     writer.writerow(
                         [
                             "RescaleFactors",
-                            model.rescaleSample["bkg_1b"],
+                            model.rescaleSample["bkg_1b"][0],
                             SignificanceSum_rescaled,
                         ]
                     )
