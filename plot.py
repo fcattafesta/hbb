@@ -1197,8 +1197,10 @@ def makeplot(hn, saveintegrals=True):
                     writer = csv.writer(file)
                     for k, v in model.rescaleSample.items():
                         writer.writerow([k, v])
-                    writer.writerows([SignificanceSum_list[0]])
-                    writer.writerows([SignificanceSum_list[1]])
+                    writer.writerow(["btag_rescale"])
+                    writer.writerows(SignificanceSum_list[0])
+                    writer.writerow(["SignificanceSum"])
+                    writer.writerows(SignificanceSum_list[1])
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
