@@ -84,8 +84,8 @@ systematicsForDC = []
 
 rescaleSample = {
     "bkg_0b": 1.0,
-    "bkg_1b": 1.07,
-    "bkg_2b":  1.07**2,
-    "ZH":  1.07**2,
-    "ggZH":  1.07**2,
+    "bkg_1b": 1.12,
+    "bkg_2b":  1.12**2,
+    "ZH":  1.12**2,
+    "ggZH":  1.12**2,
 }
