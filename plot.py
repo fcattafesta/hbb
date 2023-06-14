@@ -986,7 +986,7 @@ def fill_datasum(
                     for btag_rescale in model.rescaleSample[gr][1]:
                         hr = h.Clone()
                         hr.Scale(btag_rescale)
-                        if hn not in SumTH1RescaledDict:
+                        if btag_rescale not in SumTH1RescaledDict[hn]:
                             SumTH1RescaledDict[hn][btag_rescale] = hr
                         else:
                             SumTH1RescaledDict[hn][btag_rescale].Add(hr)
