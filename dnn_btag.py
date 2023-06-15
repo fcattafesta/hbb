@@ -51,16 +51,20 @@ def load_data(dir, variables_list):
 
     # open each file and get the Events tree using uproot
     for file in files:
-        print(f"Loading file {file}")
-        file = uproot.open(f"{file}:Events")
-        variables = np.array(
-            [
-                file[input].array(library="np")
-                for input in variables_list
-            ]
-        )
+        try:
+            print(f"Loading file {file}")
+            file = uproot.open(f"{file}:Events")
+            variables = np.array(
+                [
+                    file[input].array(library="np")
+                    for input in variables_list
+                ]
+            )
+        except uproot.exceptions.KeyInFileError:
+            print(f"File {file} empty")
+            continue
 
-        print("variables", variables, len(variables))
+    print("variables", variables, len(variables))
 
 
     return variables
