@@ -7,11 +7,11 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--fileCSV-mu",
-    default="input.csv",
+    default="atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list.csv",
 )
 parser.add_argument(
     "--fileCSV-el",
-    default="input.csv",
+    default="atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list.csv",
 )
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
@@ -33,10 +33,12 @@ def load_data(file):
                 )
                 sig_sum_list = [float(x) for x in sig_sum_list.split(",")]
             elif "RescaleFactors" in elem:
-                btag_rescale = (
-                    float(elem[1].replace("^M", "").replace("[", "").replace("]", ""))
+                btag_rescale = float(
+                    elem[1].replace("^M", "").replace("[", "").replace("]", "")
                 )
-                sig_sum = float(elem[2].replace("^M", "").replace("[", "").replace("]", ""))
+                sig_sum = float(
+                    elem[2].replace("^M", "").replace("[", "").replace("]", "")
+                )
 
     print(btag_rescale_list)
     print(sig_sum_list)
@@ -62,7 +64,8 @@ def plot_data(
     plt.xlabel("btag rescale")
     plt.ylabel("significance sum")
     plt.legend()
-    plt.show()
+    if args.show:
+        plt.show()
 
 
 if __name__ == "__main__":
@@ -82,7 +85,7 @@ if __name__ == "__main__":
         btag_rescale_el,
         sig_sum_el,
     )
-    #TODO: the point to plot is not the one I put
+    # TODO: the point to plot is not the one I put
     # but is the significance of the deepflav point
 
     # add deepflav files with significance for mu and el and btag gain of the 2 wp
