@@ -111,8 +111,8 @@ def plot_data(
     # fill between the average and the two lines
     plt.fill_between(
         btag_rescale_list_mu,
-        sig_sum_list_average-sig_sum_list_std_dev,
-        sig_sum_list_average+sig_sum_list_std_dev,
+        np.subtract(sig_sum_list_average, sig_sum_list_std_dev),
+        np.add(sig_sum_list_average, sig_sum_list_std_dev),
         color="yellow",
         alpha=0.5,
         label="one sigma",
