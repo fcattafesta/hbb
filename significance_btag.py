@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import argparse
 import mplhep as hep
-
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -16,6 +16,7 @@ parser.add_argument(
     default="atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list.csv",
     help="file name for CSV in el channel",
 )
+parser.add_argument("--out-dir", default="btag_plots")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
@@ -193,12 +194,13 @@ def plot_data(
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
     plt.legend()  # loc="upper left", fontsize=20)
-    plt.savefig("plot_btag_vs_significance.png")
+    plt.savefig(f"{args.out_dir}/plot_btag_vs_significance.png")
     if args.show:
         plt.show()
 
 
 if __name__ == "__main__":
+    os.makedirs(args.out_dir, exist_ok=True)
     btag_rescale_list_mu, sig_sum_list_mu, btag_rescale_mu, sig_sum_mu = load_data(
         args.mu
     )
