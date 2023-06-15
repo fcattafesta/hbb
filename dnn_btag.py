@@ -37,10 +37,10 @@ var_list = [
 def load_data(dir, variables_list):
     # list of all the files
     files = []
-    for x in dir:
-        for i, file in enumerate(glob.glob("%s/**/*.root" % x, recursive=True)):
-            if i < 10000:
-                files.append(file)
+
+    for i, file in enumerate(glob.glob("%s/**/*.root" % dir, recursive=True)):
+        if i < 10000:
+            files.append(file)
     print(f"Loading files: {files}")
 
 
