@@ -6,89 +6,102 @@ import sklearn.metrics as _m
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import mplhep as hep
+import glob
+
 
 #plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--csv-dirs",
+    "--dirs",
     nargs="+",
     default=[
-        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_csv_el/",
-        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_csv_mu/",
+        "/scratchnvme/malucchi/hbb_samples/TTToHadronic/"
+        # "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/nano_roc_inputs/",
     ],
 )
-parser.add_argument(
-    "--flav-dirs",
-    nargs="+",
-    default=[
-        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_flav_el/",
-        "/m100_scratch/userexternal/mmalucch/hbb_DNN_input/roc_inputs_flav_mu/",
-    ],
-)
+
 parser.add_argument("--out-dir", default="roc_curve")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
 
-TT_list = ["TTTo2L2Nu", "TTToSemiLeptonic", "TTToHadronic"]
-variables_list = [
-    "btag_max",
-    "btag_min",
-    "btag_max_hadronFlavour",
-    "btag_min_hadronFlavour",
+TT_list = ["TTToHadronic"]
+var_list = [
+    "Jet_btagDeepB",
+    "Jet_btagDeepFlavB",
+    "Jet_hadronFlavour",
+    "Jet_pt",
+    "Jet_eta",
 ]
+
 tag_dict = {
     "b vs udsg": [[5], [0], "solid"],
     "b vs c": [[5], [4], "dashed"],
 }
 
 
-def load_data(dirs):
+def load_data(dirs, variables_list):
     # list of all the files
     files = []
     for x in dirs:
-        for file in os.listdir(x):
-            for background in TT_list:
-                if background in file:
-                    files.append(x + file)
+        for i, file in enumerate(glob.glob("%s/**/*.root" % x, recursive=True)):
+            if i < 1:
+                files.append(file)
     print(f"Loading files: {files}")
 
+    networks_dict = {
+        "DeepCSV": [np.array([]), np.array([]), "r"],
+        "DeepFlav": [np.array([]), np.array([]), "b"],
+    }
+
     # open each file and get the Events tree using uproot
-    for i, file in enumerate(files):
+    for file in files:
         print(f"Loading file {file}")
         file = uproot.open(f"{file}:Events")
-        variables_array = np.array(
-            [file[input].array(library="np") for input in variables_list]
-        )
-        # get the score columns
-        score = np.concatenate(
-            (
-                variables_array[0],
-                variables_array[1],
-            ),
-            axis=0,
+        variables = np.array(
+            [
+                np.concatenate(file[input].array(library="np"))
+                for input in variables_list
+            ]
         )
 
-        # ge the hadronFlavour columns
-        hadronFlavour = np.concatenate(
-            (
-                variables_array[2],
-                variables_array[3],
-            ),
-            axis=0,
+        print("variables", variables, len(variables))
+        # exclude the events with -1 in the DeepCSV column
+        mask = (
+            np.array(variables[0, :] != -1)
+            * np.array(variables[3, :] > 30)
+            * np.array(variables[3, :] < 200)
+            * np.array(variables[4, :] < 1.4)
+            * np.array(variables[4, :] > -1.4)
         )
+        print("mask", mask)
+        variables = variables[:, mask]
+        print("variables_mask", variables, len(variables))
 
-        if i == 0:
-            score_total = score
-            hadronFlavour_total = hadronFlavour
-        else:
-            score_total = np.concatenate((score_total, score), axis=0)
-            hadronFlavour_total = np.concatenate(
-                (hadronFlavour_total, hadronFlavour), axis=0
+        for j, btag in enumerate(networks_dict.keys()):
+            # get the score columns
+            score = variables[j]
+
+            # ge the hadronFlavour columns
+            hadronFlavour = variables[2]
+
+            networks_dict[btag][0] = np.concatenate(
+                (networks_dict[btag][0], score), axis=0
+            )
+            networks_dict[btag][1] = np.concatenate(
+                (networks_dict[btag][1], hadronFlavour), axis=0
             )
 
-    return [score_total, hadronFlavour_total]
+            print(
+                btag,
+                networks_dict[btag][0].shape,
+                networks_dict[btag][0],
+                networks_dict[btag][1].shape,
+                networks_dict[btag][1],
+            )
+
+    return networks_dict
 
 
 def get_labels(y_true, y_score, labels_s, labels_b):
@@ -134,7 +147,7 @@ def get_rates(y_t, y_s, l_s, l_b):
     y_true, y_score = get_labels(y_t, y_s, l_s, l_b)
     fpr, tpr, threshold = _m.roc_curve(y_true, y_score)
     roc_auc = _m.roc_auc_score(y_true, y_score)
-    return fpr, tpr, roc_auc
+    return fpr, tpr, roc_auc, threshold
 
 
 def plt_fts(out_dir, name, fig_handle, show):
@@ -149,9 +162,9 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.xlim([0.23, 1.0005])
     plt.ylim([0.0008, 1.005])
     plt.text(
-        0.7,
-        0.1,
-        "$t\\bar{t}$\n$ \\mathrm{AK4jets}$ $(p_T > 20 \\mathrm{GeV})$",
+        0.05,
+        0.6,
+        r'$t\bar{t} (\mathrm{AK4jets})$' + '\n' + r'$p_T \in (30, 200) \mathrm{GeV} , |\eta| < 1.4$',
         fontsize=20,
         horizontalalignment="left",
         verticalalignment="bottom",
@@ -174,6 +187,11 @@ def plt_fts(out_dir, name, fig_handle, show):
         plt.show()
     plt.close()
 
+def printer(f, rates, i):
+    f.write("threshold: %.4f \n" % rates[5][i])
+    f.write("fpr: %.4f \n" % rates[0][i])
+    f.write("tpr: %.4f \n" % rates[1][i])
+
 
 def plotting_function(out_dir, networks):
     """Plot the roc curves for a epoch and a roc type for each network
@@ -186,7 +204,7 @@ def plotting_function(out_dir, networks):
         plt.plot(
             rates[1],
             rates[0],
-            label=f"{network} (AUC=%0.4f)" % rates[2],
+            label=f"{network} (AUC=%.4f)" % rates[2],
             color=rates[3],
             linestyle=rates[4],
         )
@@ -197,15 +215,32 @@ def plotting_function(out_dir, networks):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    networks_dict = {}
-    networks_dict["DeepCSV"] = load_data(args.csv_dirs) + ["r"]
-    networks_dict["DeepFlavour"] = load_data(args.flav_dirs) + ["b"]
+    networks_dict = load_data(args.dirs, var_list)
 
     rates_dict = {}
     for net, data in networks_dict.items():
         for tag_type, labels in tag_dict.items():
             # compute roc curve and auc
-            fpr, tpr, roc_auc = get_rates(data[1], data[0], labels[0], labels[1])
-            rates_dict[f"{net} {tag_type}"] = [fpr, tpr, roc_auc, data[2], labels[2]]
+            fpr, tpr, roc_auc, threshold = get_rates(data[1], data[0], labels[0], labels[1])
+            rates_dict[f"{net} {tag_type}"] = [fpr, tpr, roc_auc, data[2], labels[2], threshold]
 
     plotting_function(args.out_dir, rates_dict)
+
+    # save the fpr, tpr and threshold for each network to a file
+    with open(f"{args.out_dir}/roc_data.txt", "w") as f:
+        for net, rates in rates_dict.items():
+            a=True
+            b=True
+            c=True
+            f.write("network: %s\n" % net)
+            for i in range(len(rates[0])):
+                if rates[0][i] >= 0.001 and a:
+                    printer(f, rates, i)
+                    a=False
+                elif rates[0][i] >= 0.01 and b:
+                    printer(f, rates, i)
+                    b=False
+                elif rates[0][i] >= 0.1 and c:
+                    printer(f, rates, i)
+                    c=False
+            f.write("\n############################################\n")
