@@ -48,7 +48,7 @@ def load_data(dir, variables_list):
         if i < 10000:
             files.append(file)
 
-
+    var_tot = np.array([])
     # open each file and get the Events tree using uproot
     for file in files:
         try:
@@ -60,14 +60,15 @@ def load_data(dir, variables_list):
                     for input in variables_list
                 ]
             )
+            var_tot = np.concatenate((var_tot, variables), axis=1)
         except uproot.exceptions.KeyInFileError:
             print(f"File {file} empty")
             continue
 
-    print("variables", variables, len(variables))
+    print("var_tot", var_tot, len(var_tot))
 
 
-    return variables
+    return var_tot
 
 def plt_fts(out_dir, name, fig_handle, show):
     """Plot features
