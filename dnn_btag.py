@@ -120,7 +120,7 @@ def plotting_function(out_dir, variables, type):
         cmap=plt.cm.jet,
         density=True,
         range=[[0, 1], [0, 10]],
-        #norm=mpl.colors.LogNorm(),
+        norm=mpl.colors.LogNorm(),
     )
     ax = plt.gca()
     cmap = mpl.cm.jet
