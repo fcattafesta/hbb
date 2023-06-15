@@ -29,8 +29,12 @@ args = parser.parse_args()
 
 main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Snapshots/"
 
-var_list = [
-    "Jet_btagDeepB" if args.btag == "deepcsv" else "Jet_btagDeepFlavB",
+var_list_max = [
+    "btag_max",
+    "atanhDNNScore",
+]
+var_list_min = [
+    "btag_min",
     "atanhDNNScore",
 ]
 
@@ -88,7 +92,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.close()
 
 
-def plotting_function(out_dir, variables):
+def plotting_function(out_dir, variables, type):
     fig_handle = plt.figure(figsize=(13, 10))
 
     # plot scatter plot
@@ -100,7 +104,7 @@ def plotting_function(out_dir, variables):
         density=True,
         range=[[0, 1], [0, 10]],
     )
-
+    ax = plt.gca()
     cmap = mpl.cm.jet
     norm = mpl.colors.Normalize(vmin=0, vmax=1.0)
     plt.colorbar(
@@ -112,12 +116,14 @@ def plotting_function(out_dir, variables):
         fig_handle,
     )
 
-    plt_fts(out_dir, f"ROC_DeepCSV_DeepFlavour", fig_handle, args.show)
+    plt_fts(out_dir, f"btag_VS_DNN_{args.lep}_{args.btag}_ {type}", fig_handle, args.show)
 
 
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    variables = load_data(main_dir, var_list)
+    variables_max = load_data(main_dir, var_list_max)
+    plotting_function(args.out_dir, variables_max, "max")
 
-    plotting_function(args.out_dir, variables)
+    variables_min = load_data(main_dir, var_list_min)
+    plotting_function(args.out_dir, variables_min, "min")
