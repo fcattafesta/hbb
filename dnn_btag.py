@@ -27,7 +27,7 @@ parser.add_argument("--out-dir", default="btag_plots")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
-main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/SnapShots/"
+main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Snapshots/"
 
 var_list = [
     "Jet_btagDeepB" if args.btag == "deepcsv" else "Jet_btagDeepFlavB",
