@@ -114,11 +114,6 @@ def plotting_function(out_dir, variables, type):
     plt.colorbar(
         mpl.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax
     ).set_label("Normalized counts", loc="center", fontsize=20)
-    plt_fts(
-        out_dir,
-        f"btag_VS_DNN_{args.lep}_{args.btag}",
-        fig_handle,
-    )
 
     plt_fts(out_dir, f"btag_VS_DNN_{args.lep}_{args.btag}_ {type}", fig_handle, args.show)
 
