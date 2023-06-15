@@ -31,11 +31,11 @@ main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Sna
 
 var_list_max = [
     "btag_max",
-    "atanhDNNScore",
+    "atanhDNN_Score",
 ]
 var_list_min = [
     "btag_min",
-    "atanhDNNScore",
+    "atanhDNN_Score",
 ]
 
 def load_data(dir, variables_list):
