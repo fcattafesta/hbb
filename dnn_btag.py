@@ -29,14 +29,12 @@ args = parser.parse_args()
 
 main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Snapshots/"
 
-var_list_max = [
+var_list = [
     "btag_max",
-    "atanhDNN_Score",
-]
-var_list_min = [
     "btag_min",
     "atanhDNN_Score",
 ]
+
 
 def load_data(dir, variables_list):
     # list of all the files
@@ -89,8 +87,6 @@ def plt_fts(out_dir, name, fig_handle, show):
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
 
-    plt.legend(loc="upper left", fontsize=20)
-
     plt.savefig(f"{out_dir}/{name}.png", dpi=200, bbox_inches="tight")
     if show:
         plt.show()
@@ -122,8 +118,10 @@ def plotting_function(out_dir, variables, type):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    variables_max = load_data(main_dir, var_list_max)
-    plotting_function(args.out_dir, variables_max, "max")
+    variables = load_data(main_dir, var_list)
 
-    variables_min = load_data(main_dir, var_list_min)
+    variables_max = np.array([variables[0], variables[2]])
+    variables_min = np.array([variables[1], variables[2]])
+    
+    plotting_function(args.out_dir, variables_max, "max")
     plotting_function(args.out_dir, variables_min, "min")
