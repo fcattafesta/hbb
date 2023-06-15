@@ -124,7 +124,7 @@ def plotting_function(out_dir, variables, type):
     )
     ax = plt.gca()
     cmap = mpl.cm.jet
-    norm = mpl.colors.LogNorm(vmin=0, vmax=1.0)
+    norm = mpl.colors.LogNorm(vmin=0.00001, vmax=1.0)
     plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax).set_label(
         "Log Normalized counts", loc="center", fontsize=20
     )
