@@ -46,7 +46,7 @@ def load_data(dir, variables_list):
         if i < 10000:
             files.append(file)
 
-    var_tot = np.array([[], []])
+    var_tot = np.array([[], [], []])
     # open each file and get the Events tree using uproot
     for file in files:
         try:
@@ -58,12 +58,13 @@ def load_data(dir, variables_list):
                     for input in variables_list
                 ]
             )
+            print(variables.shape)
             var_tot = np.concatenate((var_tot, variables), axis=1)
         except uproot.exceptions.KeyInFileError:
             print(f"File {file} empty")
             continue
 
-    print("var_tot", var_tot, len(var_tot))
+    print("var_tot", var_tot, var_tot.shape)
 
 
     return var_tot
@@ -122,6 +123,6 @@ if "__main__" == __name__:
 
     variables_max = np.array([variables[0], variables[2]])
     variables_min = np.array([variables[1], variables[2]])
-    
+
     plotting_function(args.out_dir, variables_max, "max")
     plotting_function(args.out_dir, variables_min, "min")
