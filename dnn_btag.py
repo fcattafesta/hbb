@@ -34,10 +34,10 @@ var_list = [
     "atanhDNNScore",
 ]
 
-def load_data(dirs, variables_list):
+def load_data(dir, variables_list):
     # list of all the files
     files = []
-    for x in dirs:
+    for x in dir:
         for i, file in enumerate(glob.glob("%s/**/*.root" % x, recursive=True)):
             if i < 10000:
                 files.append(file)
@@ -117,6 +117,6 @@ def plotting_function(out_dir, variables):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    variables = load_data(args.dirs, var_list)
+    variables = load_data(args.dir, var_list)
 
     plotting_function(args.out_dir, variables)
