@@ -42,11 +42,11 @@ def load_data(dir, variables_list):
     # list of all the files
     files = []
     print(dir)
+    print(variables_list)
 
     for i, file in enumerate(glob.glob("%s/**/*.root" % dir, recursive=True)):
         if i < 10000:
             files.append(file)
-    print(f"Loading files: {files}")
 
 
     # open each file and get the Events tree using uproot
@@ -55,7 +55,7 @@ def load_data(dir, variables_list):
         file = uproot.open(f"{file}:Events")
         variables = np.array(
             [
-                np.concatenate(file[input].array(library="np"))
+                file[input].array(library="np")
                 for input in variables_list
             ]
         )
