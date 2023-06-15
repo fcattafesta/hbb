@@ -76,8 +76,10 @@ def plot_data(
     sig_sum_el,
 ):
     fig_handle = plt.figure(figsize=(13, 10))
-    plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="muon channel", color="blue")
-    plt.plot(btag_rescale_list_el, sig_sum_list_el, label="electron channel", color="dodgerblue")
+    plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="muon", color="blue")
+    plt.plot(
+        btag_rescale_list_el, sig_sum_list_el, label="electron", color="dodgerblue"
+    )
 
     # fill between the two lines
     plt.fill_between(
@@ -86,14 +88,54 @@ def plot_data(
         sig_sum_list_el,
         color="lightblue",
         alpha=0.5,
-        label="difference",
+        # label="difference",
     )
 
-    #plt.plot(btag_rescale_mu, sig_sum_mu, "o", label="muon channel")
-    #plt.plot(btag_rescale_el, sig_sum_el, "o", label="electron channel")
+    # compute the average of the two channels and plot it
+    sig_sum_list_average = [
+        np.average([x, y]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    ]
+    # compute the standard deviation of the two channels
+    sig_sum_list_std_dev = [
+        np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    ]
+    # plot the average
+    plt.plot(
+        btag_rescale_list_mu,
+        sig_sum_list_average,
+        label="average",
+        color="black",
+        linewidth=2,
+        linestyle="--",
+    )
+    # fill between the average and the two lines
+    plt.fill_between(
+        btag_rescale_list_mu,
+        sig_sum_list_average-sig_sum_list_std_dev,
+        sig_sum_list_average+sig_sum_list_std_dev,
+        color="yellow",
+        alpha=0.5,
+        label="one sigma",
+    )
 
-    plt.plot(btag_rescale_list_mu[0], sig_sum_list_mu[0], "o", label="deepcsv muon", color="blue")
-    plt.plot(btag_rescale_list_el[0], sig_sum_list_el[0], "o", label="deepcsv electron", color="dodgerblue")
+
+    # plt.plot(btag_rescale_mu, sig_sum_mu, "o", label="muon channel")
+    # plt.plot(btag_rescale_el, sig_sum_el, "o", label="electron channel")
+
+    plt.plot(
+        btag_rescale_list_mu[0],
+        sig_sum_list_mu[0],
+        "o",
+        label="DeepCSV muon",
+        color="blue",
+    )
+    plt.plot(
+        btag_rescale_list_el[0],
+        sig_sum_list_el[0],
+        "o",
+        label="DeepCSV electron",
+        color="dodgerblue",
+    )
 
     plt.errorbar(
         df_point[0],
@@ -101,7 +143,7 @@ def plot_data(
         xerr=df_point[2],
         yerr=df_point[3],
         fmt="o",
-        label="deepflav",
+        label="DeepFlav",
         color="red",
     )
 
@@ -111,7 +153,7 @@ def plot_data(
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
-    plt.legend()#loc="upper left", fontsize=20)
+    plt.legend()  # loc="upper left", fontsize=20)
     plt.savefig("btag_rescale_vs_significance_sum.png")
     if args.show:
         plt.show()
