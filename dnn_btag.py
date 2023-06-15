@@ -15,7 +15,7 @@ import matplotlib as mpl
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--dir",
-    default="deepflav_eval_newFlavSplit",
+    default="deepcsv_eval_newFlavSplit",
 )
 parser.add_argument(
     "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
@@ -72,8 +72,8 @@ def load_data(dir, variables_list):
                 [file[input].array(library="np") for input in variables_list]
             )
             print(variables.shape)
-            mask = np.array(variables[2, :]>2.829)
-            variables = variables[:, mask]
+            #mask = np.array(variables[2, :]>2.829)
+            #variables = variables[:, mask]
             var_tot = np.concatenate((var_tot, variables), axis=1)
         except uproot.exceptions.KeyInFileError:
             print(f"File {file} empty")
@@ -116,10 +116,11 @@ def plotting_function(out_dir, variables, type):
     plt.hist2d(
         variables[0],
         variables[1],
-        bins=[100, 30],#bins,
+        bins=[50, 50],#bins,
         cmap=plt.cm.jet,
         density=True,
         range=[[0, 1], [0, 10]],
+        norm=mpl.colors.LogNorm(),
     )
     ax = plt.gca()
     cmap = mpl.cm.jet
