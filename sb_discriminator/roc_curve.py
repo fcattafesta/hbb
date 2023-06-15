@@ -229,18 +229,23 @@ if "__main__" == __name__:
     # save the fpr, tpr and threshold for each network to a file
     with open(f"{args.out_dir}/roc_data.txt", "w") as f:
         for net, rates in rates_dict.items():
-            a=True
-            b=True
-            c=True
+            print_dict = {
+                0.001: True,
+                0.002: True,
+                0.003: True,
+                0.004: True,
+                0.005: True,
+                0.006: True,
+                0.007: True,
+                0.008: True,
+                0.009: True,
+                0.01: True,
+                0.1: True,
+            }
             f.write("network: %s\n" % net)
             for i in range(len(rates[0])):
-                if rates[0][i] >= 0.001 and a:
-                    printer(f, rates, i)
-                    a=False
-                elif rates[0][i] >= 0.01 and b:
-                    printer(f, rates, i)
-                    b=False
-                elif rates[0][i] >= 0.1 and c:
-                    printer(f, rates, i)
-                    c=False
+                for key, value in print_dict.items():
+                    if rates[0][i] >= key and value:
+                        printer(f, rates, i)
+                        print_dict[key] = False
             f.write("\n############################################\n")

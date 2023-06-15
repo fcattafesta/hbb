@@ -76,20 +76,8 @@ def plot_data(
     sig_sum_el,
 ):
     fig_handle = plt.figure(figsize=(13, 10))
-    plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="muon", color="blue")
-    plt.plot(
-        btag_rescale_list_el, sig_sum_list_el, label="electron", color="dodgerblue"
-    )
-
-    # fill between the two lines
-    plt.fill_between(
-        btag_rescale_list_mu,
-        sig_sum_list_mu,
-        sig_sum_list_el,
-        color="lightblue",
-        alpha=0.5,
-        # label="difference",
-    )
+    # plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="DeepCSV muon", color="red")
+    # plt.plot(btag_rescale_list_el, sig_sum_list_el, label="DeepCSV electron", color="orange")
 
     # compute the average of the two channels and plot it
     sig_sum_list_average = [
@@ -99,12 +87,15 @@ def plot_data(
     sig_sum_list_std_dev = [
         np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
+
+    print(sig_sum_list_average)
+    print(sig_sum_list_std_dev)
     # plot the average
     plt.plot(
         btag_rescale_list_mu,
         sig_sum_list_average,
-        label="average",
-        color="black",
+        label="DeepCSV average",
+        color="red",
         linewidth=2,
         linestyle="--",
     )
@@ -113,30 +104,21 @@ def plot_data(
         btag_rescale_list_mu,
         np.subtract(sig_sum_list_average, sig_sum_list_std_dev),
         np.add(sig_sum_list_average, sig_sum_list_std_dev),
-        color="yellow",
+        color="salmon",
         alpha=0.5,
-        label="one sigma",
+        label=r'$1 \sigma$',
     )
-
 
     # plt.plot(btag_rescale_mu, sig_sum_mu, "o", label="muon channel")
     # plt.plot(btag_rescale_el, sig_sum_el, "o", label="electron channel")
 
     plt.plot(
         btag_rescale_list_mu[0],
-        sig_sum_list_mu[0],
+        sig_sum_list_average[0],
         "o",
-        label="DeepCSV muon",
-        color="blue",
+        label="DeepCSV",
+        color="red",
     )
-    plt.plot(
-        btag_rescale_list_el[0],
-        sig_sum_list_el[0],
-        "o",
-        label="DeepCSV electron",
-        color="dodgerblue",
-    )
-
     plt.errorbar(
         df_point[0],
         df_point[1],
@@ -144,7 +126,7 @@ def plot_data(
         yerr=df_point[3],
         fmt="o",
         label="DeepFlav",
-        color="red",
+        color="blue",
     )
 
     plt.xlabel("btag efficiency gain", fontsize=20, loc="right")
