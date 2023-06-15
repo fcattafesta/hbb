@@ -18,7 +18,7 @@ parser.add_argument(
     default="deepcsv_eval_newFlavSplit",
 )
 parser.add_argument(
-    "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
+    "-b", "--btag", default="deepcsv", help="Btagging algorithm (deepflav or deepcsv)"
 )
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 
@@ -91,7 +91,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     :param    fig_handle : figure handle
     """
 
-    plt.xlabel("btag score", fontsize=20, loc="right")
+    plt.xlabel(f"btag score {args.btag}", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
     minorLocator = MultipleLocator(0.05)
@@ -120,13 +120,13 @@ def plotting_function(out_dir, variables, type):
         cmap=plt.cm.jet,
         density=True,
         range=[[0, 1], [0, 10]],
-        norm=mpl.colors.LogNorm(),
+        #norm=mpl.colors.LogNorm(),
     )
     ax = plt.gca()
     cmap = mpl.cm.jet
-    norm = mpl.colors.Normalize(vmin=0, vmax=1.0)
+    norm = mpl.colors.LogNorm(vmin=0, vmax=1.0)
     plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), ax=ax).set_label(
-        "Normalized counts", loc="center", fontsize=20
+        "Log Normalized counts", loc="center", fontsize=20
     )
 
     plt_fts(
