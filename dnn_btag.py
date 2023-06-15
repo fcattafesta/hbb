@@ -37,6 +37,7 @@ var_list = [
 def load_data(dir, variables_list):
     # list of all the files
     files = []
+    print(dir)
 
     for i, file in enumerate(glob.glob("%s/**/*.root" % dir, recursive=True)):
         if i < 10000:
@@ -117,6 +118,6 @@ def plotting_function(out_dir, variables):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    variables = load_data(args.dir, var_list)
+    variables = load_data(main_dir, var_list)
 
     plotting_function(args.out_dir, variables)
