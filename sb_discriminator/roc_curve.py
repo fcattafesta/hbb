@@ -9,7 +9,7 @@ import mplhep as hep
 import glob
 
 
-#plt.rcParams["text.usetex"] = True
+# plt.rcParams["text.usetex"] = True
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -25,6 +25,30 @@ parser.add_argument("--out-dir", default="roc_curve")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
+
+wp_lists = [
+    0.0001,
+    0.0002,
+    0.0003,
+    0.0004,
+    0.0005,
+    0.0006,
+    0.0007,
+    0.0008,
+    0.0009,
+    0.001,
+    0.002,
+    0.003,
+    0.004,
+    0.005,
+    0.006,
+    0.007,
+    0.008,
+    0.009,
+    0.01,
+    0.1,
+]
+print_dict = {x: True for x in wp_lists}
 
 TT_list = ["TTToHadronic"]
 var_list = [
@@ -164,7 +188,9 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.text(
         0.05,
         0.6,
-        r'$t\bar{t} (\mathrm{AK4jets})$' + '\n' + r'$p_T \in (30, 200) \mathrm{GeV} , |\eta| < 1.4$',
+        r"$t\bar{t} (\mathrm{AK4jets})$"
+        + "\n"
+        + r"$p_T \in (30, 200) \mathrm{GeV} , |\eta| < 1.4$",
         fontsize=20,
         horizontalalignment="left",
         verticalalignment="bottom",
@@ -186,6 +212,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     if show:
         plt.show()
     plt.close()
+
 
 def printer(f, rates, i):
     f.write("threshold: %.4f \n" % rates[5][i])
@@ -221,31 +248,28 @@ if "__main__" == __name__:
     for net, data in networks_dict.items():
         for tag_type, labels in tag_dict.items():
             # compute roc curve and auc
-            fpr, tpr, roc_auc, threshold = get_rates(data[1], data[0], labels[0], labels[1])
-            rates_dict[f"{net} {tag_type}"] = [fpr, tpr, roc_auc, data[2], labels[2], threshold]
+            fpr, tpr, roc_auc, threshold = get_rates(
+                data[1], data[0], labels[0], labels[1]
+            )
+            rates_dict[f"{net} {tag_type}"] = [
+                fpr,
+                tpr,
+                roc_auc,
+                data[2],
+                labels[2],
+                threshold,
+            ]
 
     plotting_function(args.out_dir, rates_dict)
 
     # save the fpr, tpr and threshold for each network to a file
     with open(f"{args.out_dir}/roc_data.txt", "w") as f:
         for net, rates in rates_dict.items():
-            print_dict = {
-                0.001: True,
-                0.002: True,
-                0.003: True,
-                0.004: True,
-                0.005: True,
-                0.006: True,
-                0.007: True,
-                0.008: True,
-                0.009: True,
-                0.01: True,
-                0.1: True,
-            }
-            f.write("network: %s\n" % net)
-            for i in range(len(rates[0])):
-                for key, value in print_dict.items():
-                    if rates[0][i] >= key and value:
-                        printer(f, rates, i)
-                        print_dict[key] = False
-            f.write("\n############################################\n")
+            if "udsg" in net:
+                f.write("network: %s\n" % net)
+                for i in range(len(rates[0])):
+                    for key, value in print_dict.items():
+                        if rates[0][i] >= key and value:
+                            printer(f, rates, i)
+                            print_dict[key] = False
+                f.write("\n############################################\n")
