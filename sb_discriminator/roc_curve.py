@@ -48,7 +48,6 @@ wp_lists = [
     0.01,
     0.1,
 ]
-print_dict = {x: True for x in wp_lists}
 
 TT_list = ["TTToHadronic"]
 var_list = [
@@ -267,6 +266,8 @@ if "__main__" == __name__:
         for net, rates in rates_dict.items():
             if "udsg" in net:
                 f.write("network: %s\n" % net)
+                print_dict = {x: True for x in wp_lists}
+
                 for i in range(len(rates[0])):
                     for key, value in print_dict.items():
                         if rates[0][i] >= key and value:
