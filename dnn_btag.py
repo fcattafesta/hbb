@@ -35,6 +35,7 @@ var_list = [
 ]
 
 bins = [
+    np.linspace(0, 1, 50),
     [
         0,
         0.029,
@@ -48,7 +49,6 @@ bins = [
         2.829,
         10.0,
     ],
-    np.linspace(0, 1, 50),
 ]
 
 
@@ -72,8 +72,8 @@ def load_data(dir, variables_list):
                 [file[input].array(library="np") for input in variables_list]
             )
             print(variables.shape)
-            #mask = np.array(variables[2, :]>2.829)
-            #variables = variables[:, mask]
+            # mask = np.array(variables[2, :]>2.829)
+            # variables = variables[:, mask]
             var_tot = np.concatenate((var_tot, variables), axis=1)
         except uproot.exceptions.KeyInFileError:
             print(f"File {file} empty")
@@ -116,7 +116,7 @@ def plotting_function(out_dir, variables, type):
     plt.hist2d(
         variables[0],
         variables[1],
-        bins=bins, #[50, 50],
+        bins=bins,  # [50, 50],
         cmap=plt.cm.jet,
         density=True,
         range=[[0, 1], [0, 10]],
