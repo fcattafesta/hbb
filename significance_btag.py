@@ -124,8 +124,6 @@ def plot_data(
     sig_sum_el,
 ):
     fig_handle = plt.figure(figsize=(13, 10))
-    plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="DeepCSV muon", color="darkred")
-    plt.plot(btag_rescale_list_el, sig_sum_list_el, label="DeepCSV electron", color="orange")
 
     # compute the average of the two channels and plot it
     sig_sum_list_average = [
@@ -139,6 +137,19 @@ def plot_data(
     print(sig_sum_list_average)
     print(sig_sum_list_std_dev)
     csv_sig_av = sig_sum_list_average[0]
+
+    plt.plot(
+        btag_rescale_list_mu,
+        sig_sum_list_mu / csv_sig_av,
+        label="DeepCSV muon",
+        color="darkred",
+    )
+    plt.plot(
+        btag_rescale_list_el,
+        sig_sum_list_el / csv_sig_av,
+        label="DeepCSV electron",
+        color="orange",
+    )
     # plot the average
     plt.plot(
         btag_rescale_list_mu,
