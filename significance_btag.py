@@ -48,8 +48,8 @@ eff_df_list = [
 ]
 
 # wp
-eff_csv_list_wp = [0.6014, 0.7903, 0.9127]
-eff_df_list_wp = [0.6883, 0.8440, 0.9405]
+eff_csv_list_wp = [0.3594, 0.6014, 0.7903, 0.9127]
+eff_df_list_wp = [0.4931, 0.6883, 0.8440, 0.9405]
 btag_df_list_wp = [1 + (x - y) / y for x, y in zip(eff_df_list_wp, eff_csv_list_wp)]
 
 
@@ -75,7 +75,8 @@ btag_df_wp = {
 print("btag_df_wp", btag_df_wp)
 
 wp_color = {
-    "1e-3": "cyan",
+    "1e-4": "cyan",
+    "1e-3": "deepskyblue",
     "1e-2": "cornflowerblue",
     "1e-1": "darkblue",
 }
