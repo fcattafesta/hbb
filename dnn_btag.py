@@ -15,7 +15,7 @@ import matplotlib as mpl
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--dir",
-    default="deepcsv_eval_newFlavSplit",
+    default="deepcsv_eval_newSR",
 )
 parser.add_argument(
     "-b", "--btag", default="deepcsv", help="Btagging algorithm (deepflav or deepcsv)"
