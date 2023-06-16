@@ -156,6 +156,10 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         Significance.SetLineWidth(3)
         Significance.SetLineStyle(1)
         Significance.SetLineColor(ROOT.kRed)
+        Significance.GetYaxis().SetTitle("Significance")
+        Significance.GetXaxis().SetTitle(
+            labelVariable[hn] if hn in list(labelVariable.keys()) else hn
+        )
         Significance.SetMaximum(2 * Significance.GetMaximum())  # zoom out y axis
         Significance.Draw("hist")
         t1 = makeText(0.22, 0.95, "CMS", 61)
