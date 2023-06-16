@@ -60,7 +60,7 @@ btag_df_average = np.average(btag_df_list)
 btag_df_std_dev = np.std(btag_df_list, ddof=0)
 
 # el, mu
-sig_df_list = [1.78, 1.86]
+sig_df_list = [1.78, 1.99]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
@@ -124,8 +124,8 @@ def plot_data(
     sig_sum_el,
 ):
     fig_handle = plt.figure(figsize=(13, 10))
-    # plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="DeepCSV muon", color="red")
-    # plt.plot(btag_rescale_list_el, sig_sum_list_el, label="DeepCSV electron", color="orange")
+    plt.plot(btag_rescale_list_mu, sig_sum_list_mu, label="DeepCSV muon", color="darkred")
+    plt.plot(btag_rescale_list_el, sig_sum_list_el, label="DeepCSV electron", color="orange")
 
     # compute the average of the two channels and plot it
     sig_sum_list_average = [
