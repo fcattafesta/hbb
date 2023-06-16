@@ -113,29 +113,6 @@ def load_data_csv(file):
     return btag_rescale_list, sig_sum_list, btag_rescale, sig_sum
 
 
-# def load_data_txt(file):
-#     # load data from txt file like this:
-#     # network: DeepFlav b vs udsg
-#     # threshold: 0.9473
-#     # fpr: 0.0001
-#     # tpr: 0.4931
-#     # threshold: 0.8989
-#     # fpr: 0.0002
-#     # tpr: 0.5551
-
-#     with open(file, "r") as f:
-#         lines = f.readlines()
-#         for i, line in enumerate(lines):
-#             if "DeepFlav" in line:
-#                 for j in range(i + 1, i + 4):
-#                     if "threshold" in lines[j]:
-#                         threshold = float(lines[j].split(":")[1])
-#                     elif "fpr" in lines[j]:
-#                         fpr = float(lines[j].split(":")[1])
-#                     elif "tpr" in lines[j]:
-#                         tpr = float(lines[j].split(":")[1])
-
-
 def plot_data(
     btag_rescale_list_mu,
     sig_sum_list_mu,
