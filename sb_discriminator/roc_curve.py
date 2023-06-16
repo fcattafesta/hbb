@@ -26,28 +26,10 @@ parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
 
-wp_lists = [
-    0.0001,
-    0.0002,
-    0.0003,
-    0.0004,
-    0.0005,
-    0.0006,
-    0.0007,
-    0.0008,
-    0.0009,
-    0.001,
-    0.002,
-    0.003,
-    0.004,
-    0.005,
-    0.006,
-    0.007,
-    0.008,
-    0.009,
-    0.01,
-    0.1,
-]
+wp_lists = (
+    list(np.linspace(0.0001, 0.0009, 9)) + list(np.linspace(0.001, 0.01, 10)) + [0.1]
+)
+
 
 TT_list = ["TTToHadronic"]
 var_list = [

@@ -59,8 +59,8 @@ btag_df_list = [1 + (x - y) / y for x, y in zip(eff_df_list, eff_csv_list)]
 btag_df_average = np.average(btag_df_list)
 btag_df_std_dev = np.std(btag_df_list, ddof=0)
 
-# el, mu
-sig_df_list = [1.78, 1.99]
+# mu, el
+sig_df_list = [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
@@ -82,7 +82,7 @@ wp_color = {
 }
 
 
-def load_data(file):
+def load_data_csv(file):
     with open(file, newline="") as f:
         reader = csv.reader(f)
         data = list(reader)
@@ -111,6 +111,29 @@ def load_data(file):
     print(sig_sum)
 
     return btag_rescale_list, sig_sum_list, btag_rescale, sig_sum
+
+
+# def load_data_txt(file):
+#     # load data from txt file like this:
+#     # network: DeepFlav b vs udsg
+#     # threshold: 0.9473
+#     # fpr: 0.0001
+#     # tpr: 0.4931
+#     # threshold: 0.8989
+#     # fpr: 0.0002
+#     # tpr: 0.5551
+
+#     with open(file, "r") as f:
+#         lines = f.readlines()
+#         for i, line in enumerate(lines):
+#             if "DeepFlav" in line:
+#                 for j in range(i + 1, i + 4):
+#                     if "threshold" in lines[j]:
+#                         threshold = float(lines[j].split(":")[1])
+#                     elif "fpr" in lines[j]:
+#                         fpr = float(lines[j].split(":")[1])
+#                     elif "tpr" in lines[j]:
+#                         tpr = float(lines[j].split(":")[1])
 
 
 def plot_data(
@@ -188,6 +211,7 @@ def plot_data(
         label="DeepFlav",
         color="blue",
     )
+
     for wp, point in btag_df_wp.items():
         plt.errorbar(
             point[0],
@@ -213,10 +237,10 @@ def plot_data(
 
 if __name__ == "__main__":
     os.makedirs(args.out_dir, exist_ok=True)
-    btag_rescale_list_mu, sig_sum_list_mu, btag_rescale_mu, sig_sum_mu = load_data(
+    btag_rescale_list_mu, sig_sum_list_mu, btag_rescale_mu, sig_sum_mu = load_data_csv(
         args.mu
     )
-    btag_rescale_list_el, sig_sum_list_el, btag_rescale_el, sig_sum_el = load_data(
+    btag_rescale_list_el, sig_sum_list_el, btag_rescale_el, sig_sum_el = load_data_csv(
         args.el
     )
     plot_data(

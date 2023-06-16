@@ -156,11 +156,35 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         Significance.SetLineWidth(3)
         Significance.SetLineStyle(1)
         Significance.SetLineColor(ROOT.kRed)
+        Significance.SetMaximum(2 * Significance.GetMaximum())  # zoom out y axis
         Significance.Draw("hist")
         t1 = makeText(0.22, 0.95, "CMS", 61)
         t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
+
+        t3 = makeText(
+            0.25,
+            0.85,
+            labelRegion[hn.split("___")[1]]
+            if hn.split("___")[1] in list(labelRegion.keys())
+            else hn.split("___")[1],
+            42,
+            size=0.04,
+        )
+
+        t4 = makeText(
+            0.25,
+            0.8,
+            labelLeptons[hn.split("___")[1]] + btag_label
+            if hn.split("___")[1] in list(labelLeptons.keys())
+            else hn.split("___")[1],
+            42,
+            size=0.04,
+        )
         t1.Draw()
         t2.Draw()
+        t3.Draw()
+        t4.Draw()
+
         c_significance.SaveAs(
             outpath
             + "/%s_%s_Significance%s.png"
