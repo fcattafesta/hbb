@@ -48,7 +48,7 @@ bins = [
         2.829,
         10.0,
     ],
-    np.linspace(0, 1, 10),
+    np.linspace(0, 1, 50),
 ]
 
 
@@ -116,7 +116,7 @@ def plotting_function(out_dir, variables, type):
     plt.hist2d(
         variables[0],
         variables[1],
-        bins=[50, 50],#bins,
+        bins=bins, #[50, 50],
         cmap=plt.cm.jet,
         density=True,
         range=[[0, 1], [0, 10]],
