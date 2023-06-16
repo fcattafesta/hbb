@@ -70,7 +70,7 @@ print(df_point)
 
 btag_df_wp = {
     wp: [b, sig_df_average, 0, sig_df_std_dev]
-    for wp, b in zip(["1e-3", "1e-2", "1e-1"], btag_df_list_wp)
+    for wp, b in zip(["1e-4", "1e-3", "1e-2", "1e-1"], btag_df_list_wp)
 }
 print("btag_df_wp", btag_df_wp)
 
