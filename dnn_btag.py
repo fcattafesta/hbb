@@ -84,14 +84,14 @@ def load_data(dir, variables_list):
     return var_tot
 
 
-def plt_fts(out_dir, name, fig_handle, show):
+def plt_fts(out_dir, name, fig_handle, show, type):
     """Plot features
     :param    out_dir : string with the output directory
     :param    name : string with the name of the plot
     :param    fig_handle : figure handle
     """
 
-    plt.xlabel(f"btag score {args.btag}", fontsize=20, loc="right")
+    plt.xlabel(f"btag {type} score {args.btag}", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
     minorLocator = MultipleLocator(0.05)
@@ -130,7 +130,7 @@ def plotting_function(out_dir, variables, type):
     )
 
     plt_fts(
-        out_dir, f"btag_VS_DNN_{args.lep}_{args.btag}_{type}", fig_handle, args.show
+        out_dir, f"btag_VS_DNN_{args.lep}_{args.btag}_{type}", fig_handle, args.show, type
     )
 
 

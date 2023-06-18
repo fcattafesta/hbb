@@ -70,13 +70,13 @@ print(df_point)
 
 btag_df_wp = {
     wp: [b, sig_df_average, 0, sig_df_std_dev]
-    for wp, b in zip(["1e-4", "1e-3", "1e-2", "1e-1"], btag_df_list_wp)
+    for wp, b in zip(["1e-4", "Tight WP", "1e-2", "1e-1"], btag_df_list_wp)
 }
 print("btag_df_wp", btag_df_wp)
 
 wp_color = {
     "1e-4": "cyan",
-    "1e-3": "deepskyblue",
+    "Tight WP": "blue",
     "1e-2": "cornflowerblue",
     "1e-1": "darkblue",
 }
@@ -138,23 +138,24 @@ def plot_data(
     print(sig_sum_list_std_dev)
     csv_sig_av = sig_sum_list_average[0]
 
-    plt.plot(
-        btag_rescale_list_mu,
-        sig_sum_list_mu / csv_sig_av,
-        label="DeepCSV muon",
-        color="darkred",
-    )
-    plt.plot(
-        btag_rescale_list_el,
-        sig_sum_list_el / csv_sig_av,
-        label="DeepCSV electron",
-        color="orange",
-    )
+    # plt.plot(
+    #     btag_rescale_list_mu,
+    #     sig_sum_list_mu / csv_sig_av,
+    #     label="DeepCSV muon",
+    #     color="darkred",
+    # )
+    # plt.plot(
+    #     btag_rescale_list_el,
+    #     sig_sum_list_el / csv_sig_av,
+    #     label="DeepCSV electron",
+    #     color="orange",
+    # )
+
     # plot the average
     plt.plot(
         btag_rescale_list_mu,
         sig_sum_list_average / csv_sig_av,
-        label="DeepCSV average",
+        label="DeepCSV rescaled",
         color="red",
         linewidth=2,
         linestyle="--",
@@ -179,29 +180,30 @@ def plot_data(
         label="DeepCSV",
         color="red",
     )
-    plt.errorbar(
-        df_point[0],
-        df_point[1] / csv_sig_av,
-        xerr=df_point[2],
-        yerr=df_point[3] / csv_sig_av,
-        fmt="o",
-        label="DeepFlav",
-        color="blue",
-    )
+    # plt.errorbar(
+    #     df_point[0],
+    #     df_point[1] / csv_sig_av,
+    #     xerr=df_point[2],
+    #     yerr=df_point[3] / csv_sig_av,
+    #     fmt="o",
+    #     label="DeepFlav",
+    #     color="blue",
+    # )
 
     for wp, point in btag_df_wp.items():
-        plt.errorbar(
-            point[0],
-            point[1] / csv_sig_av,
-            xerr=point[2],
-            yerr=point[3] / csv_sig_av,
-            fmt="o",
-            label=wp,
-            color=wp_color[wp],
-        )
+        if wp == "Tight WP":
+            plt.errorbar(
+                point[0],
+                point[1] / csv_sig_av,
+                xerr=point[2],
+                yerr=point[3] / csv_sig_av,
+                fmt="o",
+                label=f"DeepFlav {wp}",
+                color=wp_color[wp],
+            )
 
     plt.xlabel("btag efficiency gain", fontsize=20, loc="right")
-    plt.ylabel("Sig/SigCSV", fontsize=20, loc="top")
+    plt.ylabel("Sig / SigDeepCSV", fontsize=20, loc="top")
     plt.grid(which="both")
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
