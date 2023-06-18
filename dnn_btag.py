@@ -18,7 +18,7 @@ parser.add_argument(
     default="deepcsv_eval_newSR",
 )
 parser.add_argument(
-    "-b", "--btag", default="deepcsv", help="Btagging algorithm (deepflav or deepcsv)"
+    "-b", "--btag", default="DeepCSV", help="Btagging algorithm (DeepFlav or DeepCSV)"
 )
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 
