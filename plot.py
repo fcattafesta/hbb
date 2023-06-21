@@ -137,6 +137,8 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
 
     SignificanceSum = sqrt(SignificanceSum)
 
+    Significance_list=[Significance.GetBinContent(i) for i in range(1,Significance.GetNbinsX()+1)]
+
     if not btag_rescale:
         SignificanceSum_str = (
             " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
@@ -205,7 +207,7 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
     else:
         SignificanceSum_str = ""
 
-    return SignificanceSum_str, SignificanceSum
+    return SignificanceSum_str, SignificanceSum, Significance_list
 
 
 def setStyle(h, isRatio=False, noData=False):
@@ -1203,30 +1205,34 @@ def makeplot(hn, saveintegrals=True):
         SignificanceSum_str = ""
         SignificanceSum_str_rescaled = ""
         if hn in Significance_variables and hn in histoSigsum.keys():
-            SignificanceSum_str, _ = significanceHandler(histoSigsum, histosum, hn)
-            if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
-                (
-                    SignificanceSum_str_rescaled,
-                    SignificanceSum_rescaled,
-                ) = significanceHandler(
-                    histoSigsumRescaled, histosumRescaled, hn, rescale=True
-                )
-                for btag_rescale, histo_rescale in histoSigsumRescaledDict[hn].items():
-                    _, SignificanceSum = significanceHandler(
-                        histo_rescale,
-                        histosumRescaledDict[hn][btag_rescale],
-                        hn,
-                        rescale=True,
-                        btag_rescale=btag_rescale,
+            with open(
+                outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args.btag),
+                "w",
+            ) as file:
+                # save to file
+                writer = csv.writer(file)
+                SignificanceSum_str, _, Significance_list = significanceHandler(histoSigsum, histosum, hn)
+
+                writer.writerow(["Significance_list", Significance_list])
+                if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
+                    (
+                        SignificanceSum_str_rescaled,
+                        SignificanceSum_rescaled,
+                        _
+                    ) = significanceHandler(
+                        histoSigsumRescaled, histosumRescaled, hn, rescale=True
                     )
-                    SignificanceSum_list[0].append(btag_rescale)
-                    SignificanceSum_list[1].append(SignificanceSum)
-                # save significance_list to file
-                with open(
-                    outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args.btag),
-                    "w",
-                ) as file:
-                    writer = csv.writer(file)
+                    for btag_rescale, histo_rescale in histoSigsumRescaledDict[hn].items():
+                        _, SignificanceSum, _ = significanceHandler(
+                            histo_rescale,
+                            histosumRescaledDict[hn][btag_rescale],
+                            hn,
+                            rescale=True,
+                            btag_rescale=btag_rescale,
+                        )
+                        SignificanceSum_list[0].append(btag_rescale)
+                        SignificanceSum_list[1].append(SignificanceSum)
+
                     for k, v in model.rescaleSample.items():
                         writer.writerow([k, v])
                     writer.writerow(["btag_rescale", SignificanceSum_list[0]])
