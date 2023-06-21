@@ -70,12 +70,12 @@ def load_data(dir, variables_list):
     # open each file and get the Events tree using uproot
     for file in files:
         try:
-            print(f"Loading file {file}")
+            #print(f"Loading file {file}")
             file = uproot.open(f"{file}:Events")
             variables = np.array(
                 [file[input].array(library="np") for input in variables_list]
             )
-            print(variables.shape)
+            #print(variables.shape)
             # mask = np.array(variables[2, :]>2.829)
             # variables = variables[:, mask]
             var_tot = np.concatenate((var_tot, variables), axis=1)
@@ -155,11 +155,13 @@ def fractions(out_dir, variables, type):
         for j in range(len(thresholds_csv)):
             fractions[i].append(
                 np.sum(
-                    variables[0][mask] > thresholds_csv[j]
-                    and (
-                        variables[0][mask] < thresholds_csv[j + 1]
-                        if j + 1 < len(thresholds_csv)
-                        else True
+                    np.logical_and(
+                        variables[0][mask] > thresholds_csv[j],
+                        (
+                            variables[0][mask] < thresholds_csv[j + 1]
+                            if j + 1 < len(thresholds_csv)
+                            else True
+                        ),
                     )
                 )
                 / len(variables[0][mask])
