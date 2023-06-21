@@ -153,20 +153,23 @@ def fractions(out_dir, variables, type):
         print(mask)
         print(variables[0][mask])
         for j in range(len(thresholds_csv)):
-            fractions[i].append(
-                np.sum(
-                    np.logical_and(
-                        variables[0][mask] > thresholds_csv[j],
-                        (
+            if j + 1 < len(thresholds_csv):
+                fractions[i].append(
+                    np.sum(
+                        np.logical_and(
+                            variables[0][mask] > thresholds_csv[j],
                             variables[0][mask] < thresholds_csv[j + 1]
-                            if j + 1 < len(thresholds_csv)
-                            else True
-                        ),
+                        )
                     )
+                    / len(variables[0][mask])
                 )
-                / len(variables[0][mask])
-            )
-
+            else:
+                fractions[i].append(
+                    np.sum(
+                        variables[0][mask] > thresholds_csv[j]
+                    )
+                    / len(variables[0][mask])
+                )
     print(fractions)
 
     return fractions
