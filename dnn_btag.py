@@ -52,12 +52,7 @@ bins = [
     ],
 ]
 
-thresholds_csv = [
-    0.1047
-    0.3787
-    0.7563
-    0.8486
-]
+thresholds_csv = [0.1047, 0.3787, 0.7563, 0.8486]
 
 
 def load_data(dir, variables_list):
@@ -138,7 +133,11 @@ def plotting_function(out_dir, variables, type):
     )
 
     plt_fts(
-        out_dir, f"btag_VS_DNN_{args.lep}_{args.btag}_{type}", fig_handle, args.show, type
+        out_dir,
+        f"btag_VS_DNN_{args.lep}_{args.btag}_{type}",
+        fig_handle,
+        args.show,
+        type,
     )
 
 
@@ -153,10 +152,11 @@ def fractions(out_dir, variables, type):
         print(mask)
         print(variables[0][mask])
         for j in range(len(thresholds_csv)):
-            fractions[i].append(np.sum(variables[0][mask] > thresholds_csv[j]) / len(variables[0][mask]))
+            fractions[i].append(
+                np.sum(variables[0][mask] > thresholds_csv[j]) / len(variables[0][mask])
+            )
 
     print(fractions)
-
 
     return fractions
 
@@ -172,8 +172,8 @@ if "__main__" == __name__:
     plotting_function(args.out_dir, variables_max, "max")
     plotting_function(args.out_dir, variables_min, "min")
 
-    fractions_max=fractions(args.out_dir, variables_max, "max")
-    fractions_min=fractions(args.out_dir, variables_min, "min")
+    fractions_max = fractions(args.out_dir, variables_max, "max")
+    fractions_min = fractions(args.out_dir, variables_min, "min")
 
     # write fractions to file
     with open(f"{args.out_dir}/fractions.csv", "w") as f:
