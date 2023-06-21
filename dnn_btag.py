@@ -23,7 +23,7 @@ parser.add_argument(
 )
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 
-parser.add_argument("--out-dir", default="btag_plots")
+parser.add_argument("--out-dir", default="btag_files")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
@@ -190,7 +190,7 @@ if "__main__" == __name__:
     fractions_min = fractions(args.out_dir, variables_min, "min")
 
     # write fractions to file
-    with open(f"{args.out_dir}/fractions.csv", "w") as f:
+    with open(f"{args.out_dir}/fractions_{args.lep}.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(["fractions_max", fractions_max])
-        writer.writerow(["[fractions_min", fractions_min])
+        writer.writerow(["fractions_min", fractions_min])
