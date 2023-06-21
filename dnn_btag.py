@@ -52,8 +52,8 @@ bins = [
     ],
 ]
 
-# wp UT, T, M, L
-thresholds_csv = [0.8486, 0.7563, 0.3787, 0.1047]
+# wp L, M, T, UT
+thresholds_csv = [0.1047, 0.3787, 0.7563, 0.8486]
 
 
 def load_data(dir, variables_list):

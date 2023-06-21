@@ -47,9 +47,9 @@ eff_df_list = [
     0.8440,
 ]
 
-# wp 5e-4, 1e-3, 1e-2, 1e-1
-eff_csv_list_wp = [0.5309, 0.6014, 0.7903, 0.9127]
-eff_df_list_wp = [0.6295, 0.6883, 0.8440, 0.9405]
+# wp L, M, T, UT
+eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
+eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
 btag_df_list_wp = [1 + (x - y) / y for x, y in zip(eff_df_list_wp, eff_csv_list_wp)]
 
 
@@ -70,15 +70,17 @@ print(df_point)
 
 btag_df_wp = {
     wp: [b, sig_df_average, 0, sig_df_std_dev]
-    for wp, b in zip(["UltraTight WP", "Tight WP", "Medium WP", "Loose WP"], btag_df_list_wp)
+    for wp, b in zip(
+        ["Loose WP", "Medium WP", "Tight WP", "UltraTight WP"], btag_df_list_wp
+    )
 }
 print("btag_df_wp", btag_df_wp)
 
 wp_color = {
-    "UltraTight WP": "cyan",
-    "Tight WP": "blue",
-    "Medium WP": "cornflowerblue",
     "Loose WP": "darkblue",
+    "Medium WP": "cornflowerblue",
+    "Tight WP": "blue",
+    "UltraTight WP": "cyan",
 }
 
 
