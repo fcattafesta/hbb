@@ -8,6 +8,7 @@ from matplotlib.ticker import MultipleLocator
 import mplhep as hep
 import glob
 import matplotlib as mpl
+import csv
 
 
 # plt.rcParams["text.usetex"] = True
@@ -49,6 +50,13 @@ bins = [
         2.829,
         10.0,
     ],
+]
+
+thresholds_csv = [
+    0.1047
+    0.3787
+    0.7563
+    0.8486
 ]
 
 
@@ -134,6 +142,25 @@ def plotting_function(out_dir, variables, type):
     )
 
 
+def fractions(out_dir, variables, type):
+    # find the fraction of events with btag score > threshold for each atanhDNN score bin
+
+    fractions = [[] for _ in range(len(bins[1]) - 1)]
+    for i in range(len(bins[1]) - 1):
+        mask = np.array(
+            (variables[1] > bins[1][i]) & (variables[1] < bins[1][i + 1]), dtype=bool
+        )
+        print(mask)
+        print(variables[0][mask])
+        for j in range(len(thresholds_csv)):
+            fractions[i].append(np.sum(variables[0][mask] > thresholds_csv[j]) / len(variables[0][mask]))
+
+    print(fractions)
+
+
+    return fractions
+
+
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
@@ -144,3 +171,12 @@ if "__main__" == __name__:
 
     plotting_function(args.out_dir, variables_max, "max")
     plotting_function(args.out_dir, variables_min, "min")
+
+    fractions_max=fractions(args.out_dir, variables_max, "max")
+    fractions_min=fractions(args.out_dir, variables_min, "min")
+
+    # write fractions to file
+    with open(f"{args.out_dir}/fractions.csv", "w") as f:
+        writer = csv.writer(f)
+        writer.writerow(["fractions_max", fractions_max])
+        writer.writerow(["[fractions_min", fractions_min])

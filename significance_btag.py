@@ -47,9 +47,9 @@ eff_df_list = [
     0.8440,
 ]
 
-# wp
-eff_csv_list_wp = [0.3594, 0.6014, 0.7903, 0.9127]
-eff_df_list_wp = [0.4931, 0.6883, 0.8440, 0.9405]
+# wp 5e-4, 1e-3, 1e-2, 1e-1
+eff_csv_list_wp = [0.5309, 0.6014, 0.7903, 0.9127]
+eff_df_list_wp = [0.6295, 0.6883, 0.8440, 0.9405]
 btag_df_list_wp = [1 + (x - y) / y for x, y in zip(eff_df_list_wp, eff_csv_list_wp)]
 
 

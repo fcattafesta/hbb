@@ -21,6 +21,7 @@ from logger import setup_logger
 
 
 btag_label = labelBtag[args.btag]
+Significance_variables = ["atanhDNN_Score"]
 
 outdir = args.workspace
 
@@ -111,7 +112,7 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
     else:
         S = sig_histo.Clone()
         B = bkg_histo.Clone()
-    # histogram of significance (S/sqrt(B)) for each bin of the DNN
+    # histogram of significance (S/sqrt(B)) for each bin
     Significance = S.Clone()
     for i in range(1, Significance.GetNbinsX() + 1):
         try:
@@ -1006,7 +1007,7 @@ def fill_datasum(
                                 d,
                                 makeWorkspace,
                             )
-                if gr in model.rescaleSample and "atanhDNN" in hn:
+                if gr in model.rescaleSample and hn in Significance_variables:
                     logger.info(
                         "rescale %s %s %s " % (hn, gr, model.rescaleSample[gr][0])
                     )
@@ -1135,7 +1136,7 @@ def makeplot(hn, saveintegrals=True):
             ftxt.write(
                 "DATA,%s \n" % (datasum[hn].Integral(0, datasum[hn].GetNbinsX() + 1))
             )
-        if "atanhDNN" in hn:
+        if hn in Significance_variables:
             histosumRescaledDict[hn] = {}
             histoSigsumRescaledDict[hn] = {}
 
@@ -1201,7 +1202,7 @@ def makeplot(hn, saveintegrals=True):
 
         SignificanceSum_str = ""
         SignificanceSum_str_rescaled = ""
-        if "atanhDNN" in hn and hn in histoSigsum.keys():
+        if hn in Significance_variables and hn in histoSigsum.keys():
             SignificanceSum_str, _ = significanceHandler(histoSigsum, histosum, hn)
             if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
                 (
