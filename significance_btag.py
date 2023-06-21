@@ -202,8 +202,8 @@ def plot_data(
                 color=wp_color[wp],
             )
 
-    plt.xlabel("btag efficiency gain", fontsize=20, loc="right")
-    plt.ylabel("Sig / SigDeepCSV", fontsize=20, loc="top")
+    plt.xlabel("btag TPR / btag TPR DeepCSV", fontsize=20, loc="right")
+    plt.ylabel("Sig / Sig DeepCSV", fontsize=20, loc="top")
     plt.grid(which="both")
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
