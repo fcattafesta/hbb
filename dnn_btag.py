@@ -52,7 +52,8 @@ bins = [
     ],
 ]
 
-thresholds_csv = [0.1047, 0.3787, 0.7563, 0.8486]
+# wp UT, T, M, L
+thresholds_csv = [0.8486, 0.7563, 0.3787, 0.1047]
 
 
 def load_data(dir, variables_list):
@@ -153,7 +154,15 @@ def fractions(out_dir, variables, type):
         print(variables[0][mask])
         for j in range(len(thresholds_csv)):
             fractions[i].append(
-                np.sum(variables[0][mask] > thresholds_csv[j]) / len(variables[0][mask])
+                np.sum(
+                    variables[0][mask] > thresholds_csv[j]
+                    and (
+                        variables[0][mask] < thresholds_csv[j + 1]
+                        if j + 1 < len(thresholds_csv)
+                        else True
+                    )
+                )
+                / len(variables[0][mask])
             )
 
     print(fractions)

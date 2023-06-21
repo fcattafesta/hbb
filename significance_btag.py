@@ -70,15 +70,15 @@ print(df_point)
 
 btag_df_wp = {
     wp: [b, sig_df_average, 0, sig_df_std_dev]
-    for wp, b in zip(["1e-4", "Tight WP", "1e-2", "1e-1"], btag_df_list_wp)
+    for wp, b in zip(["UltraTight WP", "Tight WP", "Medium WP", "Loose WP"], btag_df_list_wp)
 }
 print("btag_df_wp", btag_df_wp)
 
 wp_color = {
-    "1e-4": "cyan",
+    "UltraTight WP": "cyan",
     "Tight WP": "blue",
-    "1e-2": "cornflowerblue",
-    "1e-1": "darkblue",
+    "Medium WP": "cornflowerblue",
+    "Loose WP": "darkblue",
 }
 
 
