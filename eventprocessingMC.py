@@ -89,16 +89,16 @@ def getFlowMC(flow, btag, sf=False):
         if btag == "deepflav":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");\n')
             flow.AddCppCode(
-                """template <typename str, typename Vec, typename... OtherVecs>
-                    auto sf_btag(const str & name, const Vec & v,  const OtherVecs &... args) {
-                    ROOT::VecOps::RVec<float> res(v.size());
-                    for(size_t i=0;i<v.size(); i++) res[i]=btag_shape_corr->evaluate({name, v[i],args[i]...});
+                """template <typename Vec, typename Vec, typename Vec, typename Vec>
+                    auto sf_btag(const Vec & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
+                    ROOT::VecOps::RVec<float> res(hadronFlavour.size());
+                    for(size_t i=0;i<hadronFlavour.size(); i++) res[i]=btag_shape_corr->evaluate({"central", hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                     return res;
                     }"""
             )
             flow.Define(
                 "SelectedJet_btagWeight",
-                'sf_btag("central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
+                'sf_btag(SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
                 #'sf_btag(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
                 #'vector_map(btag_shape_corr->evaluate, {ROOT::RVec<std::string>(nSelectedJet,"central"), SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
                 #'btag_shape_corr->evaluate({"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
