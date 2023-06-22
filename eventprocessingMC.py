@@ -94,5 +94,5 @@ def getFlowMC(flow, btag, sf=False):
                 'vector_map(btag_shape_corr->evaluate, ROOT::VecOps::RVec<char>(nSelectedJet,"central"), SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, SelectedJet_btagDeepB})',
                 #'btag_shape_corr->evaluate({"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, SelectedJet_btagDeepB})',
             )
-        flow.CentralWeight("SelectedJet_weight", ["twoJets"])
+        flow.CentralWeight("SelectedJet_btagWeight", ["twoJets"])
     return flow
