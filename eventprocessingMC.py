@@ -80,31 +80,38 @@ def getFlowMC(flow, btag, sf=False):
         flow.AddCppCode(
             'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");\n'
         )
-        flow.AddCppCode(
-        #     """template <typename func,typename std::string, typename Vec,typename... OtherVecs>
-        #         auto sf_btag(std::string name, const Vec & v,  const OtherVecs &... args) {
-        #         ROOT::VecOps::RVec<float> res(v.size());
-        #         for(size_t i=0;i<v.size(); i++) res[i]=btag_shape_corr->evaluate({name, v[i],args[i]...});
+        #             """template <typename func, typename str, typename Vec,typename... OtherVecs>
+        #         auto sf_btag(func f, const str & name, const Vec & v,  const OtherVecs &... args) {
+        #         ROOT::VecOps::RVec<decltype(f(std::declval<typename Vec::value_type>(),std::declval<typename OtherVecs::value_type>()...))> res(v.size());
+        #         for(size_t i=0;i<v.size(); i++) res[i]=f({name, v[i],args[i]...});
         #         return res;}"""
         # )
-                    """template <typename func, typename str, typename Vec,typename... OtherVecs>
-                auto sf_btag(func f, const str & name, const Vec & v,  const OtherVecs &... args) {
-                ROOT::VecOps::RVec<decltype(f(std::declval<typename Vec::value_type>(),std::declval<typename OtherVecs::value_type>()...))> res(v.size());
-                for(size_t i=0;i<v.size(); i++) res[i]=f({name, v[i],args[i]...});
-                return res;}"""
-        )
         if btag == "deepflav":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");\n')
+            flow.AddCppCode(
+                """template <typename std::string, typename Vec,typename... OtherVecs>
+                    auto sf_btag(std::string name, const Vec & v,  const OtherVecs &... args) {
+                    ROOT::VecOps::RVec<float> res(v.size());
+                    for(size_t i=0;i<v.size(); i++) res[i]=btag_shape_corr->evaluate({name, v[i],args[i]...});
+                    return res;
+                    }"""
+            )
             flow.Define(
                 "SelectedJet_btagWeight",
-                #'for(size_t i=0;i<SelectedJet_hadronFlavour.size(); i++){}'
-
-                'sf_btag(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
+                'sf_btag("central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
+                #'sf_btag(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
                 #'vector_map(btag_shape_corr->evaluate, {ROOT::RVec<std::string>(nSelectedJet,"central"), SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
                 #'btag_shape_corr->evaluate({"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
             )
         elif btag == "deepcsv":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepCSV_shape");\n')
+            flow.AddCppCode(
+                """template <typename std::string, typename Vec,typename... OtherVecs>
+                    auto sf_btag(std::string name, const Vec & v,  const OtherVecs &... args) {
+                    ROOT::VecOps::RVec<float> res(v.size());
+                    for(size_t i=0;i<v.size(); i++) res[i]=btag_shape_corr->evaluate({name, v[i],args[i]...});
+                    return res;}"""
+            )
             flow.Define(
                 "SelectedJet_btagWeight",
                 'sf_btag(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, SelectedJet_btagDeepB)',
