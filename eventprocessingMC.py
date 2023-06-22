@@ -54,21 +54,22 @@ def getFlowMC(flow, btag, no_sf):
             % ("deepJet_shape" if btag == "deepflav" else "deepCSV_shape")
         )
         flow.AddCppCode(
-            """template <typename VecI, typename Vec>
-                auto sf_btag(const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
-                float weight=1.;
-                for(size_t i=0;i<hadronFlavour.size(); i++) weight=weight*btag_shape_corr->evaluate({"central", hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
-                return weight;
+            """ template <typename str, typename VecI, typename Vec>
+                auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
+                ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
+                for(size_t i=0;i<hadronFlavour.size(); i++) weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+                return weights;
                 }"""
         )
         flow.Define(
             "SelectedJet_btagWeight",
-            "sf_btag(SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)"
+            'sf_btag("central", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
             % (
                 "SelectedJet_btagDeepFlavB"
                 if btag == "deepflav"
                 else "SelectedJet_btagDeepB"
             ),
         )
-        flow.CentralWeight("SelectedJet_btagWeight", ["twoJets"])
+        flow.Define("btagWeight", "ROOT::VecOps::Product(SelectedJet_btagWeight)")
+        flow.CentralWeight("btagWeight", ["twoJets"])
     return flow
