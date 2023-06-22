@@ -98,7 +98,7 @@ def getFlowMC(flow, btag, sf=False):
             )
             flow.Define(
                 "SelectedJet_btagWeight",
-                'sf_btag(SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
+                'sf_btag(SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB)',
                 #'sf_btag(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
                 #'vector_map(btag_shape_corr->evaluate, {ROOT::RVec<std::string>(nSelectedJet,"central"), SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
                 #'btag_shape_corr->evaluate({"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
