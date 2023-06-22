@@ -3,6 +3,7 @@ import correctionlib
 
 correctionlib.register_pyroot_binding()
 
+
 def getFlowMC(flow, btag, sf=False):
     ## MonteCarlo-only definitions ##
 
@@ -43,7 +44,6 @@ def getFlowMC(flow, btag, sf=False):
         "!TwoB && !OneB && !C ",
     )
 
-
     # # Cleaning of GenJet collection from GenLeptons
     # flow.SubCollection(
     #     "GenLepton",
@@ -76,19 +76,20 @@ def getFlowMC(flow, btag, sf=False):
     # )
 
     if sf:
+        flow.AddCppCode('#include "correction.h"\n')
         flow.AddCppCode(
-            'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");'
+            'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");\n'
         )
         if btag == "deepflav":
-            flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");')
+            flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");\n')
             flow.Define(
-                'sf_shape_weight_btag_max',
+                "sf_shape_weight_btag_max",
                 'btag_shape_corr->evaluate({"central", hadronFlavour_btag_max, abs(JetBtagMax_eta), JetBtagMax_pt, JetBtagMax_btagDeepFlavB})',
             )
         elif btag == "deepcsv":
-            flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepCSV_shape");')
+            flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepCSV_shape");\n')
             flow.Define(
-                'sf_shape_weight_btag_max',
+                "sf_shape_weight_btag_max",
                 'btag_shape_corr->evaluate({"central", hadronFlavour_btag_max, abs(JetBtagMax_eta), JetBtagMax_pt, JetBtagMax_btagDeepB})',
             )
         flow.CentralWeight("sf_shape_weight_btag_max", ["twoJets"])
