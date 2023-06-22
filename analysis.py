@@ -19,13 +19,11 @@ from histograms import histosData, histosMC
 
 from samples import *
 
-if args.btag == "deepcsv":
-    from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
-elif args.btag == "deepflav":
-    from eventprocessingCommonDeepFlav import getFlowCommonDeepFlav as getFlowCommon
-else:
+if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
     sys.exit(1)
+
+from eventprocessingCommon import getFlowCommon
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
@@ -60,7 +58,7 @@ flow = SampleProcessing(
     "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
 )
 # Flow for data
-flowData = getFlowCommon(flow)
+flowData = getFlowCommon(flow, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
