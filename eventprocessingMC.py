@@ -84,14 +84,14 @@ def getFlowMC(flow, btag, sf=False):
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");\n')
             flow.Define(
                 "SelectedJet_btagWeight",
-                'vector_map(btag_shape_corr->evaluate, {"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
+                'vector_map(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB)',
                 #'btag_shape_corr->evaluate({"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, JetBtagMax_btagDeepFlavB})',
             )
         elif btag == "deepcsv":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepCSV_shape");\n')
             flow.Define(
                 "SelectedJet_btagWeight",
-                'vector_map(btag_shape_corr->evaluate, {"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, SelectedJet_btagDeepB})',
+                'vector_map(btag_shape_corr->evaluate, "central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, SelectedJet_btagDeepB)',
                 #'btag_shape_corr->evaluate({"central", SelectedJet_hadronFlavour, abs(SelectedJet_eta), SelectedJet_pt, SelectedJet_btagDeepB})',
             )
         flow.CentralWeight("SelectedJet_btagWeight", ["twoJets"])
