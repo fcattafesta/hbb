@@ -91,5 +91,5 @@ def getFlowMC(flow, btag, sf=False):
                 'sf_shape_weight_btag_max',
                 'btag_shape_corr->evaluate({"central", hadronFlavour_btag_max, abs(JetBtagMax_eta), JetBtagMax_pt, JetBtagMax_btagDeepB})',
             )
-        flow.CentralWeight("sf_shape_weight_btag_max")
+        flow.CentralWeight("sf_shape_weight_btag_max", "twoJets")
     return flow
