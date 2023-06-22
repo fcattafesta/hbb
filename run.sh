@@ -34,6 +34,6 @@ $CMD \
     --histfolder ${histodir}/${lep}/${suffix}/ \
     --lep ${lep} \
     --snapshot \
-    --sf \
+    -sf \
     ${btag} \
     "${@:3}"
