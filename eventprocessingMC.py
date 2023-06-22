@@ -89,8 +89,8 @@ def getFlowMC(flow, btag, sf=False):
         if btag == "deepflav":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");\n')
             flow.AddCppCode(
-                """template <typename std::string, typename Vec,typename... OtherVecs>
-                    auto sf_btag(std::string name, const Vec & v,  const OtherVecs &... args) {
+                """template <typename str, typename Vec, typename... OtherVecs>
+                    auto sf_btag(const str & name, const Vec & v,  const OtherVecs &... args) {
                     ROOT::VecOps::RVec<float> res(v.size());
                     for(size_t i=0;i<v.size(); i++) res[i]=btag_shape_corr->evaluate({name, v[i],args[i]...});
                     return res;
