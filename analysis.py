@@ -64,7 +64,7 @@ if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
 # Final flow for MC
 flow = copy.deepcopy(flowData)
-flow = getFlowMC(flow, args.btag, args.sf)
+flow = getFlowMC(flow, args.btag, args.no_sf)
 
 
 # Add binning rules

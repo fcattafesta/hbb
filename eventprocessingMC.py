@@ -4,7 +4,7 @@ import correctionlib
 correctionlib.register_pyroot_binding()
 
 
-def getFlowMC(flow, btag, sf=False):
+def getFlowMC(flow, btag, no_sf):
     ## MonteCarlo-only definitions ##
 
     flow.Define(
@@ -44,7 +44,7 @@ def getFlowMC(flow, btag, sf=False):
         "!TwoB && !OneB && !C ",
     )
 
-    if sf:
+    if not no_sf:
         flow.AddCppCode('#include "correction.h"\n')
         flow.AddCppCode(
             'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");\n'
