@@ -1,7 +1,9 @@
 from nail.nail import *
+import correctionlib
 
+correctionlib.register_pyroot_binding()
 
-def getFlowMC(flow):
+def getFlowMC(flow, btag, sf=False):
     ## MonteCarlo-only definitions ##
 
     flow.Define(
@@ -73,4 +75,21 @@ def getFlowMC(flow):
     #     "!TwoB && !OneB && !C ",
     # )
 
+    if sf:
+        flow.AddCppCode(
+            'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");'
+        )
+        if btag == "deepFlav":
+            flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");')
+            flow.Define(
+                'sf_shape_weight_btag_max',
+                'btag_shape_corr->evaluate({"central", hadronFlavour_btag_max, abs(JetBtagMax_eta), JetBtagMax_pt, JetBtagMax_btagDeepFlavB})',
+            )
+        elif btag == "deepCSV":
+            flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepCSV_shape");')
+            flow.Define(
+                'sf_shape_weight_btag_max',
+                'btag_shape_corr->evaluate({"central", hadronFlavour_btag_max, abs(JetBtagMax_eta), JetBtagMax_pt, JetBtagMax_btagDeepB})',
+            )
+        flow.CentralWeight("sf_shape_weight_btag_max")
     return flow
