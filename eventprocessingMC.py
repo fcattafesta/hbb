@@ -87,8 +87,8 @@ def getFlowMC(flow, btag, sf=False):
         #         for(size_t i=0;i<v.size(); i++) res[i]=btag_shape_corr->evaluate({name, v[i],args[i]...});
         #         return res;}"""
         # )
-                    """template <typename func, typename std::string, typename Vec,typename... OtherVecs>
-                auto sf_btag(func f, std::string name, const Vec & v,  const OtherVecs &... args) {
+                    """template <typename func, typename str, typename Vec,typename... OtherVecs>
+                auto sf_btag(func f, const str & name, const Vec & v,  const OtherVecs &... args) {
                 ROOT::VecOps::RVec<decltype(f(std::declval<typename Vec::value_type>(),std::declval<typename OtherVecs::value_type>()...))> res(v.size());
                 for(size_t i=0;i<v.size(); i++) res[i]=f({name, v[i],args[i]...});
                 return res;}"""
