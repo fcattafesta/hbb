@@ -24,7 +24,7 @@ if args.eval_model:
     histosData.append("DNN_Score")
     histosData.append("atanhDNN_Score")
 
-histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb", "sf_shape_weight_btag_max"]
+histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb", "sf_shape_weight_btag_max", "sf_shape_weight_btag_min"]
 
 ### List of selections for muons and electrons ###
 selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
