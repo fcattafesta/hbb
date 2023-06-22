@@ -79,13 +79,13 @@ def getFlowMC(flow, btag, sf=False):
         flow.AddCppCode(
             'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");'
         )
-        if btag == "deepFlav":
+        if btag == "deepflav":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepJet_shape");')
             flow.Define(
                 'sf_shape_weight_btag_max',
                 'btag_shape_corr->evaluate({"central", hadronFlavour_btag_max, abs(JetBtagMax_eta), JetBtagMax_pt, JetBtagMax_btagDeepFlavB})',
             )
-        elif btag == "deepCSV":
+        elif btag == "deepcsv":
             flow.AddCppCode('auto btag_shape_corr = btag_corr->at("deepCSV_shape");')
             flow.Define(
                 'sf_shape_weight_btag_max',
