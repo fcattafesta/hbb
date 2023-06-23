@@ -218,6 +218,7 @@ for sample in samples:
                 recursive=True,
             )
         ]
+        print(samples[sample]["files"][0])
     elif sample.startswith("DYZpt") and not sample.endswith("Full"):
         samples[sample]["files"] = [
             x
@@ -226,6 +227,8 @@ for sample in samples:
                 recursive=True,
             )
         ]
+        print(samples[sample]["files"][0])
+
     else:
         samples[sample]["files"] = [
             x
