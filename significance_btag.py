@@ -15,12 +15,12 @@ parser.add_argument(
 )
 parser.add_argument(
     "--frac-el",
-    default="btag_files/fractions_el.csv",
+    default="btag_files/fractions_el_flav.csv",
     help="file name with fractions in el channel",
 )
 parser.add_argument(
     "--frac-mu",
-    default="btag_files/fractions_mu.csv",
+    default="btag_files/fractions_mu_flav.csv",
     help="file name with fractions in mu channel",
 )
 parser.add_argument("--out-dir", default="btag_files")

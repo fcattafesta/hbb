@@ -16,10 +16,10 @@ import csv
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--dir",
-    default="deepcsv_eval_newSR",
+    default="deepflav_eval_newSR",
 )
 parser.add_argument(
-    "-b", "--btag", default="DeepCSV", help="Btagging algorithm (DeepFlav or DeepCSV)"
+    "-b", "--btag", default="DeepFlav", help="Btagging algorithm (DeepFlav or DeepCSV)"
 )
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 
@@ -53,7 +53,7 @@ bins = [
 ]
 
 # wp L, M, T, UT
-thresholds_csv = [0.1047, 0.3787, 0.7563, 0.8486]
+thresholds = [0.0490, 0.2783, 0.7100, 0.7988] if args.btag else [0.1047, 0.3787, 0.7563, 0.8486]
 
 
 def load_data(dir, variables_list):
@@ -152,13 +152,13 @@ def fractions(out_dir, variables, type):
         )
         print(mask)
         print(variables[0][mask])
-        for j in range(len(thresholds_csv)):
-            if j + 1 < len(thresholds_csv):
+        for j in range(len(thresholds)):
+            if j + 1 < len(thresholds):
                 fractions[i].append(
                     np.sum(
                         np.logical_and(
-                            variables[0][mask] > thresholds_csv[j],
-                            variables[0][mask] < thresholds_csv[j + 1]
+                            variables[0][mask] > thresholds[j],
+                            variables[0][mask] < thresholds[j + 1]
                         )
                     )
                     / len(variables[0][mask])
@@ -166,7 +166,7 @@ def fractions(out_dir, variables, type):
             else:
                 fractions[i].append(
                     np.sum(
-                        variables[0][mask] > thresholds_csv[j]
+                        variables[0][mask] > thresholds[j]
                     )
                     / len(variables[0][mask])
                 )
@@ -190,7 +190,7 @@ if "__main__" == __name__:
     fractions_min = fractions(args.out_dir, variables_min, "min")
 
     # write fractions to file
-    with open(f"{args.out_dir}/fractions_{args.lep}.csv", "w") as f:
+    with open(f"{args.out_dir}/fractions_{args.btag}_{args.lep}.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(["fractions_max", fractions_max])
         writer.writerow(["fractions_min", fractions_min])
