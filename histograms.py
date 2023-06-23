@@ -25,7 +25,7 @@ if args.eval_model:
     histosData.append("atanhDNN_Score")
 
 histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb"]
-if not args.no_sf:
+if args.sf:
     histosMC += ["btagWeight"]
 
 ### List of selections for muons and electrons ###

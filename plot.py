@@ -182,9 +182,9 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         t4 = makeText(
             0.25,
             0.8,
-            labelLeptons[hn.split("___")[1]] + btag_label
+            labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
             if hn.split("___")[1] in list(labelLeptons.keys())
-            else hn.split("___")[1],
+            else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
             42,
             size=0.04,
         )
@@ -1400,9 +1400,9 @@ def makeplot(hn, saveintegrals=True):
             t4 = makeText(
                 0.25,
                 0.8,
-                labelLeptons[hn.split("___")[1]] + btag_label
+                labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
-                else hn.split("___")[1],
+                else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
                 42,
                 size=0.04,
             )

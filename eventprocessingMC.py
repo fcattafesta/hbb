@@ -4,7 +4,7 @@ import correctionlib
 correctionlib.register_pyroot_binding()
 
 
-def getFlowMC(flow, btag, no_sf):
+def getFlowMC(flow, btag, sf):
     ## MonteCarlo-only definitions ##
 
     flow.Define(
@@ -25,8 +25,6 @@ def getFlowMC(flow, btag, no_sf):
     )
 
     ## Defining subsamples
-
-    # TwoB if there are at least two b jets, not necessarily the first two
     flow.Define(
         "TwoB",
         "Sum(SelectedGenJet_hadronFlavour == 5) >= 2",
@@ -44,7 +42,7 @@ def getFlowMC(flow, btag, no_sf):
         "!TwoB && !OneB && !C ",
     )
 
-    if not no_sf:
+    if sf:
         flow.AddCppCode('#include "correction.h"\n')
         flow.AddCppCode(
             'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");\n'

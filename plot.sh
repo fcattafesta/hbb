@@ -28,6 +28,11 @@ elif [[ $suffix == *deepflav* ]]; then
     btag="--btag deepflav"
 fi
 
+sf=""
+if [[ $suffix == *_sf* ]]; then
+    sf="--sf"
+fi
+
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
@@ -38,4 +43,5 @@ $CMD \
     --outfolder ${plotdir}/${lep}/${suffix}${fs}/ \
     --blind \
     ${btag} \
+    ${sf} \
     "${@:3}"

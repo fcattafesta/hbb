@@ -64,7 +64,7 @@ if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
 # Final flow for MC
 flow = copy.deepcopy(flowData)
-flow = getFlowMC(flow, args.btag, args.no_sf)
+flow = getFlowMC(flow, args.btag, args.sf)
 
 
 # Add binning rules
@@ -138,6 +138,7 @@ def runSample(ar):
         logger.info("sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
+        logger.info("sample %s: nevents %s" % (s, nevents))
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:

@@ -38,10 +38,10 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument(
-    "--no-sf",
+    "--sf",
     default=False,
     action="store_true",
-    help="Do not apply btagging scale factors",
+    help="Apply btagging scale factors",
 )
 parser.print_help()
 args = parser.parse_args()

@@ -26,6 +26,11 @@ elif [[ $suffix == *deepflav* ]]; then
     btag="--btag deepflav"
 fi
 
+sf=""
+if [[ $suffix == *_sf* ]]; then
+    sf="--sf"
+fi
+
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 
@@ -35,4 +40,5 @@ $CMD \
     --lep ${lep} \
     --snapshot \
     ${btag} \
+    ${sf} \
     "${@:3}"
