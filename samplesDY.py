@@ -234,5 +234,4 @@ for sample in samples:
                 recursive=True,
             )
         ]
-        print(samples[sample]["files"][0])
 samples.update(addSubSamples)
