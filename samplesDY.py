@@ -210,7 +210,7 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     if sample.endswith("Full"):
-        print(sample.replace("Full", ""))
+        # print(sample.replace("Full", ""))
         samples[sample]["files"] = [
             x
             for x in glob.glob(
@@ -219,8 +219,9 @@ for sample in samples:
                 recursive=True,
             )
         ]
+        print(samples[sample]["files"][0])
     elif sample.startswith("DYZpt") and not sample.endswith("Full"):
-        print(sample.replace("DYZpt-", "", 1))
+        # print(sample.replace("DYZpt-", "", 1))
         samples[sample]["files"] = [
             x
             for x in glob.glob(
@@ -228,6 +229,7 @@ for sample in samples:
                 recursive=True,
             )
         ]
+        print(samples[sample]["files"][0])
     else:
         samples[sample]["files"] = [
             x
