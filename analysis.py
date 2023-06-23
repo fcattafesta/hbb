@@ -55,7 +55,7 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    [],  # "OneB", "TwoB", "C", "Light"
+    ["OneB", "TwoB", "C", "Light"],
     histosPerSelection,
     [],
     "",
