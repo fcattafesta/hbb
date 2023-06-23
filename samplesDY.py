@@ -210,7 +210,6 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     if sample.endswith("Full"):
-        # print(sample.replace("Full", ""))
         samples[sample]["files"] = [
             x
             for x in glob.glob(
@@ -219,17 +218,14 @@ for sample in samples:
                 recursive=True,
             )
         ]
-        # print(samples[sample]["files"][0])
     elif sample.startswith("DYZpt") and not sample.endswith("Full"):
-        # print(sample.replace("DYZpt-", "", 1))
         samples[sample]["files"] = [
             x
             for x in glob.glob(
-                f"/scratchnvme/cattafe/FlashSim/DYJetsToLL_LHEFilterPtZ-{sample.replace('DYZpt-', '', 1)}_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
+                f"/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-{sample.replace('DYZpt-', '', 1)}_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
                 recursive=True,
             )
         ]
-        # print(samples[sample]["files"][0])
     else:
         samples[sample]["files"] = [
             x
