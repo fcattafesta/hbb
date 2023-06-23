@@ -8,14 +8,10 @@ import math
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--sig-mu",
-    default="btag_files/atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list.csv",
-    help="file name for CSV in mu channel",
-)
-parser.add_argument(
-    "--sig-el",
-    default="btag_files/atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list.csv",
-    help="file name for CSV in el channel",
+    "--sf",
+    default=False,
+    action="store_true",
+    help="use scale factors",
 )
 parser.add_argument(
     "--frac-el",
@@ -31,6 +27,13 @@ parser.add_argument("--out-dir", default="btag_files")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
+if args.sf:
+    sf="_sf"
+else:
+    sf=""
+
+sig_el_file = f"btag_files/atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list{sf}.csv"
+sig_mu_file = f"btag_files/atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list{sf}.csv"
 
 def load_data_csv(file):
     sig_list = []
@@ -133,9 +136,9 @@ eff_df_list = [
 ]
 
 _, _, _, _, fractions_max_el, fractions_min_el, _ = load_data_csv(args.frac_el)
-_, _, _, _, _, _, sig_list_el = load_data_csv(args.sig_el)
+_, _, _, _, _, _, sig_list_el = load_data_csv(sig_el_file)
 _, _, _, _, fractions_max_mu, fractions_min_mu, _ = load_data_csv(args.frac_mu)
-_, _, _, _, _, _, sig_list_mu = load_data_csv(args.sig_mu)
+_, _, _, _, _, _, sig_list_mu = load_data_csv(sig_mu_file)
 
 fractions_max=[]
 fractions_min=[]
@@ -215,7 +218,7 @@ btag_df_std_dev = np.std(btag_df_list, ddof=0)
 
 
 # mu, el
-sig_df_list = [1.99, 1.78]
+sig_df_list = [1.85, 1.63] if args.sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
@@ -357,14 +360,14 @@ if __name__ == "__main__":
         btag_rescale_mu,
         sig_sum_mu,
         *_,
-    ) = load_data_csv(args.sig_mu)
+    ) = load_data_csv(sig_mu_file)
     (
         btag_rescale_list_el,
         sig_sum_list_el,
         btag_rescale_el,
         sig_sum_el,
         *_,
-    ) = load_data_csv(args.sig_el)
+    ) = load_data_csv(sig_el_file)
     plot_data(
         btag_rescale_list_mu,
         sig_sum_list_mu,

@@ -164,8 +164,8 @@ def plt_fts(out_dir, name, fig_handle, show):
 
     plt.xlabel("True positive rate", fontsize=20, loc="right")
     plt.ylabel("False positive rate ", fontsize=20, loc="top")
-    plt.xlim([0.23, 1.0005])
-    plt.ylim([0.0008, 1.005])
+    plt.xlim([0.45, 1.0005])
+    plt.ylim([0.0005, 1.005])
     plt.text(
         0.05,
         0.6,
@@ -227,19 +227,20 @@ if "__main__" == __name__:
 
     rates_dict = {}
     for net, data in networks_dict.items():
-        for tag_type, labels in tag_dict.items():
-            # compute roc curve and auc
-            fpr, tpr, roc_auc, threshold = get_rates(
-                data[1], data[0], labels[0], labels[1]
-            )
-            rates_dict[f"{net} {tag_type}"] = [
-                fpr,
-                tpr,
-                roc_auc,
-                data[2],
-                labels[2],
-                threshold,
-            ]
+        if "udsg" in net:
+            for tag_type, labels in tag_dict.items():
+                # compute roc curve and auc
+                fpr, tpr, roc_auc, threshold = get_rates(
+                    data[1], data[0], labels[0], labels[1]
+                )
+                rates_dict[f"{net} {tag_type}"] = [
+                    fpr,
+                    tpr,
+                    roc_auc,
+                    data[2],
+                    labels[2],
+                    threshold,
+                ]
 
     plotting_function(args.out_dir, rates_dict)
 
