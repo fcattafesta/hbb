@@ -14,47 +14,82 @@ flavourVVSplitting = {
 }
 
 samples = {
-    "DYM50": {
-        "xsec": 5765.40,
+    # "DYM50": {
+    #     "xsec": 5765.40,
+    #     "subsamples": flavourSplitting,
+    #     "training": True,
+    # },
+    "DYZpt-0To50": {
+        "xsec": 1341.42,
         "subsamples": flavourSplitting,
         "training": True,
     },
-    "DYM50_full": {
-        "xsec": 5765.40,
+    "DYZpt-50To100": {
+        "xsec": 359.52,
         "subsamples": flavourSplitting,
         "training": True,
     },
-    # "DYZpt-0To50": {
-    #     "xsec": 1341.42,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
-    # "DYZpt-50To100": {
-    #     "xsec": 359.52,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
-    # "DYZpt-100To250": {
-    #     "xsec": 88.36,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
-    # "DYZpt-250To400": {
-    #     "xsec": 3.52,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
-    # "DYZpt-400To650": {
-    #     "xsec": 0.49,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
-    # "DYZpt-650ToInf": {
-    #     "xsec": 0.05,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
+    "DYZpt-100To250": {
+        "xsec": 88.36,
+        "subsamples": flavourSplitting,
+        "training": True,
+    },
+    "DYZpt-250To400": {
+        "xsec": 3.52,
+        "subsamples": flavourSplitting,
+        "training": True,
+    },
+    "DYZpt-400To650": {
+        "xsec": 0.49,
+        "subsamples": flavourSplitting,
+        "training": True,
+    },
+    "DYZpt-650ToInf": {
+        "xsec": 0.05,
+        "subsamples": flavourSplitting,
+        "training": True,
+    },
 }
+
+samples.update(
+    {
+        # "DYM50_full": {
+        #     "xsec": 5765.40,
+        #     "subsamples": flavourSplitting,
+        #     "training": True,
+        # },
+        "DYZpt-0To50Full": {
+            "xsec": 1341.42,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
+        "DYZpt-50To100Full": {
+            "xsec": 359.52,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
+        "DYZpt-100To250Full": {
+            "xsec": 88.36,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
+        "DYZpt-250To400Full": {
+            "xsec": 3.52,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
+        "DYZpt-400To650Full": {
+            "xsec": 0.49,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
+        "DYZpt-650ToInfFull": {
+            "xsec": 0.05,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
+    }
+)
 
 samples.update(
     {
@@ -174,19 +209,21 @@ for sample in samples:
     if "subsamples" in samples[sample].keys():
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
-    if sample == "DYM50":
+    if sample.endswith("Full"):
         samples[sample]["files"] = [
             x
             for x in glob.glob(
-                "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v2/**/*.root",
+                "/scratchnvme/malucchi/hbb_samples/%s/**/*.root"
+                % sample.replace("Full", ""),
                 recursive=True,
             )
         ]
-    elif sample == "DYM50_full":
+    elif sample.startswith("DYZpt") and not sample.endswith("Full"):
         samples[sample]["files"] = [
             x
             for x in glob.glob(
-                "/scratchnvme/malucchi/hbb_samples/DYM50/**/*.root", recursive=True
+                f"/scratchnvme/cattafe/FlashSim/DYJetsToLL_LHEFilterPtZ-{sample.replace('DYZpt-', '', 1)}_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
+                recursive=True,
             )
         ]
     else:

@@ -11,10 +11,20 @@ name = "HBB"
 
 background = {
     "FlashSim": [
-        "DYM50",
+        "DYZpt-0To50",
+        "DYZpt-50To100",
+        "DYZpt-100To250",
+        "DYZpt-250To400",
+        "DYZpt-400To650",
+        "DYZpt-650ToInf",
     ],
     "FullSim": [
-        "DYM50_full",
+        "DYZpt-0To50Full",
+        "DYZpt-50To100Full",
+        "DYZpt-100To250Full",
+        "DYZpt-250To400Full",
+        "DYZpt-400To650Full",
+        "DYZpt-650ToInfFull",
     ],
 }
 
@@ -69,7 +79,7 @@ linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
 markercolor = fillcolor
 
 histosOverlayed_list = ["FullSim", "FlashSim"]
-linecolorOverlayed = {"FullSim": ROOT.kBlack, "FlashSim": ROOT.kOrange}
+linecolorOverlayed = {"FullSim": ROOT.kBlack, "FlashSim": ROOT.kOrange + 8}
 linestyleOverlayed = {"FullSim": 2, "FlashSim": 1}
 
 # legend sorting
