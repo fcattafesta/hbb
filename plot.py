@@ -143,7 +143,7 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         SignificanceSum_str = (
             " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
             + str("%.2f" % SignificanceSum)
-            + ("  (rescaled)" if rescale else "")
+            + (f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})" if rescale else "")
         )
         # write the significance histogram to a file
         fR = ROOT.TFile.Open(
