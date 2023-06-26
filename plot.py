@@ -1467,7 +1467,7 @@ def makeplot(hn, saveintegrals=True):
                     ratiosy[-1].Draw("same hist")
                     # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
                 c.cd()
-                # myLegend_sy.Draw()
+                myLegend_sy.Draw()
 
                 tchi2 = makeText(
                     0.19,
