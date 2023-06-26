@@ -755,7 +755,6 @@ def fill_datasum(
     integral[gr]["nom"] = 0
     error[gr] = 0
     lumi = 59000
-    # for d in samplesToPlot[gr]:
     for n in range(len(samplesToPlot[gr])):
         d = samplesToPlot[gr][n]
         if lumis:
