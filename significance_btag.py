@@ -29,7 +29,6 @@ parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
 
-
 def load_data(file):
     sig_list = []
     btag_rescale_list = []
@@ -95,6 +94,7 @@ def load_data(file):
         sig_list,
     )
 
+
 def rescale(btag_list):
     rescale_list = []
     for frac in [fractions_max, fractions_min]:
@@ -115,6 +115,7 @@ def rescale(btag_list):
     print("rescale_err", rescale_err)
 
     return rescale_fin, rescale_err
+
 
 if args.sf:
     sf = "_sf"
@@ -182,7 +183,6 @@ print("btag_pn_list_wp", btag_pn_list_wp)
 print("btag_pe_list_wp", btag_pe_list_wp)
 
 
-
 rescale_fin_df, rescale_err_df = rescale(btag_df_list_wp)
 rescale_fin_pn, rescale_err_pn = rescale(btag_pn_list_wp)
 rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
@@ -200,7 +200,6 @@ sig_df_sum = np.sqrt(sig_df_sum)
 # x, y, xerr, yerr
 df_point = [rescale_fin_df, sig_df_average, rescale_err_df, sig_df_std_dev]
 print("df_point", df_point)
-
 
 
 def plot_data(
@@ -223,8 +222,6 @@ def plot_data(
 
     csv_spline = splrep(btag_rescale_list, sig_sum_list_average, s=0)
 
-
-
     # plot the average
     plt.plot(
         btag_rescale_list,
@@ -243,7 +240,6 @@ def plot_data(
         alpha=0.5,
         # label=r"$1 \sigma$",
     )
-
 
     plt.plot(
         btag_rescale_list[0],
@@ -280,7 +276,6 @@ def plot_data(
         label="ParticleEdge",
         color="green",
     )
-
 
     plt.xlabel("btag TPR / btag TPR DeepCSV", fontsize=20, loc="right")
     plt.ylabel("Sig / Sig DeepCSV", fontsize=20, loc="top")

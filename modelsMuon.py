@@ -104,3 +104,6 @@ systematicDetail = {}
 systematicsForDC = []
 
 rescaleSample = {}
+
+from systematicGrouping import *
+systematicDetail = systematicGrouping(background, signal,[],"2018")
