@@ -1520,6 +1520,7 @@ postfit = args.postfit
 
 logger.info("makeWorkspace %s" % makeWorkspace)
 logger.info("variablesToFit %s" % variablesToFit)
+logger.info("systematicsSetToUse %s" % systematicsSetToUse)
 
 
 his = [x for x in histoNames if "__syst__" not in x and "sumWeight" not in x]
