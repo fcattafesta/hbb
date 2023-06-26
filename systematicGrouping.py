@@ -12,14 +12,39 @@ def systematicGrouping(background, signal, jesList, year):
     legendGrouping.update(background)
     legendGrouping.update(signal)
 
-    DY = [
-        "DYZpt-0To50",
-        "DYZpt-50To100",
-        "DYZpt-100To250",
-        "DYZpt-250To400",
-        "DYZpt-400To650",
-        "DYZpt-650ToInf",
+    DY_bb = [
+        "DYZpt-0To50_bb",
+        "DYZpt-50To100_bb",
+        "DYZpt-100To250_bb",
+        "DYZpt-250To400_bb",
+        "DYZpt-400To650_bb",
+        "DYZpt-650ToInf_bb",
     ]
+    DY_b = [
+        "DYZpt-0To50_b",
+        "DYZpt-50To100_b",
+        "DYZpt-100To250_b",
+        "DYZpt-250To400_b",
+        "DYZpt-400To650_b",
+        "DYZpt-650ToInf_b",
+    ]
+    DY_c = [
+        "DYZpt-0To50_c",
+        "DYZpt-50To100_c",
+        "DYZpt-100To250_c",
+        "DYZpt-250To400_c",
+        "DYZpt-400To650_c",
+        "DYZpt-650ToInf_c",
+    ]
+    DY_udsg = [
+        "DYZpt-0To50_udsg",
+        "DYZpt-50To100_udsg",
+        "DYZpt-100To250_udsg",
+        "DYZpt-250To400_udsg",
+        "DYZpt-400To650_udsg",
+        "DYZpt-650ToInf_udsg",
+    ]
+
     TT = ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"]
     ST = [
         "ST_tW_antitop_5f_NFHD",
@@ -31,20 +56,38 @@ def systematicGrouping(background, signal, jesList, year):
         "ST_t-channel_antitop_5f_ID",
         "ST_s-channel_4f_LD",
     ]
-    WW = ["WWTo2L2Nu"]
-    WZ = ["WZTo2Q2L", "WZTo3LNu"]
-    ZZ = ["ZZTo2L2Nu", "ZZTo2Q2L", "ZZTo4L"]
+    WW_HF = ["WWTo2L2Nu_HF"]
+    WW_LF = ["WWTo2L2Nu_LF"]
+    WZ_HF = ["WZTo2Q2L_HF", "WZTo3LNu_HF"]
+    WZ_LF = ["WZTo2Q2L_LF", "WZTo3LNu_LF"]
+    ZZ_HF = ["ZZTo2L2Nu_HF", "ZZTo2Q2L_HF", "ZZTo4L_HF"]
+    ZZ_LF = ["ZZTo2L2Nu_LF", "ZZTo2Q2L_LF", "ZZTo4L_LF"]
     Hbb = ["ZH", "ggZH"]
-
 
     systematicDetail = {
         "XSecAndNorm"
         + year: {
             "type": "lnN",
             #               "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY":DY, "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
-            # "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY01J":DY01J,"DY2J":DY2J , "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
+            "decorrelate": {
+                "ZZ": ZZ_HF + ZZ_LF,
+                "WZ": WZ_HF + WZ_LF,
+                "WW": WW_HF + WW_LF,
+                "TT": TT,
+                "ST": ST,
+                "Hbb": Hbb,
+                "DY": DY_bb + DY_b + DY_c + DY_udsg,
+            },
             #                "groupValues":  {"Hmm":1.01, "EWK":1.01, "DY":1.010 ,"ZZ":1.01,"WZ":1.01,"WW":1.01,"WJets":1.01,"TT":1.005,"ST":1.005},
-            "groupValues": {"ZZ": 1.01, "WZ": 1.01, "WW": 1.01, "TT":1.005,"ST":1.005, "Hbb":1.},
+            "groupValues": {
+                "ZZ": 1.01,
+                "WZ": 1.01,
+                "WW": 1.01,
+                "TT": 1.005,
+                "ST": 1.005,
+                "Hbb": 1.0,
+                "DY": 1.010,
+            },
         },
     }
 
