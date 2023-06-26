@@ -65,8 +65,7 @@ def systematicGrouping(background, signal, jesList, year):
     Hbb = ["ZH", "ggZH"]
 
     systematicDetail = {
-        "XSecAndNorm"
-        + year: {
+        "XSecAndNorm": {
             "type": "lnN",
             #               "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY":DY, "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
             "additionalNormalizations": [],

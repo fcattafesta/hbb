@@ -99,8 +99,7 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
-systematicsToPlot = []
-systematicDetail = {}
+systematicsToPlot = ["XSecAndNorm"]
 systematicsForDC = []
 
 rescaleSample = {}
