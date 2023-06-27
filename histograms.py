@@ -27,16 +27,23 @@ selsEle = ["SR_ee", "CR_Zee_bjets", "CR_Zee_lightjets", "CR_ee_ttbar"]
 histosPerSelectionMuon = {sel: histos for sel in selsMu}
 histosPerSelectionElectron = {sel: histos for sel in selsEle}
 
-preSelsEle = ["", "twoElectrons", "twoOppositeSignElectrons", "PtSelEl", "CommonSelEle"]
-
-histosPerSelectionElectron.update({sel: ["nSelectedElectron"] for sel in preSelsEle})
-
-preSelJet = [
+preSelsEle = [
     "",
+    "twoElectrons",
+    "twoOppositeSignElectrons",
+    "PtSelEl",
+    "CommonSelEle",
     "twoJets",
     "JetBtagMaxMedium",
     "JetBtagMinLoose",
     "JetBtagMaxTight",
 ]
 
-histosPerSelectionElectron.update({sel: ["nSelectedJet"] for sel in preSelJet})
+preHistosEle = [
+    "nElectron",
+    "nJet",
+    "nSelectedElectron",
+    "nSelectedJet",
+]
+
+histosPerSelectionElectron.update({sel: preHistosEle for sel in preSelsEle})
