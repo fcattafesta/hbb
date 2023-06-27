@@ -1221,11 +1221,11 @@ def makeplot(hn, saveintegrals=True):
                             (histosum[hn].GetMaximum()) ** 2,
                         )
                     )  # zoom out y axis
-                datasum[hn].Draw("E P")
+                # datasum[hn].Draw("E P")
                 # datastack[hn].GetXaxis().SetTitle(hn)
                 setStyle(datasum[hn])
-                datasum[hn].Draw("E P")
-                histos[hn].Draw("hist same")
+                # datasum[hn].Draw("E P")
+                # histos[hn].Draw("hist same")
 
             else:
                 histos[hn].SetMinimum(
@@ -1237,7 +1237,7 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
-                histos[hn].Draw("hist")
+                # histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
             #  histos[hn].Draw("hist")
@@ -1246,14 +1246,14 @@ def makeplot(hn, saveintegrals=True):
             histosum[hn].SetFillStyle(3004)
             setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
             c.Update()
-            if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
-                histosum[hn].Draw("same E2")
+            # if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
+            #     histosum[hn].Draw("same E2")
 
-            if hn in datasum.keys():
-                datasum[hn].Draw("E P sameaxis")
-                datasum[hn].Draw("E P same")
-            for gr in model.signal:
-                histosSignal[hn][gr].Draw("hist same")
+            # if hn in datasum.keys():
+            #     datasum[hn].Draw("E P sameaxis")
+            #     datasum[hn].Draw("E P same")
+            # for gr in model.signal:
+            #     histosSignal[hn][gr].Draw("hist same")
             for gr in model.histosOverlayed_list:
                 histosOverlayed[hn][gr].DrawNormalized("hist same")
                 histosOverlayed[hn][gr].SetMaximum(1.5)
