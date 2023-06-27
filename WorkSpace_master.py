@@ -391,7 +391,6 @@ def createWorkSpace(model, all_histo_all_syst, year,outdir="workspace/") :
         nBins[x] = all_histo_all_syst[x]["data"+year]["nom"].GetNbinsX()-1
         varName[x] = all_histo_all_syst[x]["data"+year]["nom"].GetName().split("___")[0]
         plotName[x] = x
-        #region[x] = x.split("___")[-1]  # keys are plot names, values are region names
         region[x] = x  # keys are plot names, values are region names
         regionName[x] = x
 
@@ -438,8 +437,8 @@ def createWorkSpace(model, all_histo_all_syst, year,outdir="workspace/") :
         emptySamples[x] = []
         for s in listAllSample :
             if not all(all_histo_all_syst[x][s][sy].Integral(1, nBins[x]+1) > 0. for sy in list(all_histo_all_syst[x][s].keys())) :
-		 print("WARNING",s," IS EMPTY", [(sy,all_histo_all_syst[x][s][sy].Integral(1, nBins[x]+1) ) for sy in list(all_histo_all_syst[x][s].keys())])
-		 emptySamples[x].append(s)
+                print("WARNING",s," IS EMPTY", [(sy,all_histo_all_syst[x][s][sy].Integral(1, nBins[x]+1) ) for sy in list(all_histo_all_syst[x][s].keys())])
+                emptySamples[x].append(s)
         availableSamples[x] = [ s for s in listAllSample if s not in emptySamples[x]]
 
     listAllSample_noYear = [s.split("_")[0] for s in listAllSample]
