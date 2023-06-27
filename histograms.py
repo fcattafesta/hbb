@@ -26,3 +26,18 @@ selsEle = ["SR_ee", "CR_Zee_bjets", "CR_Zee_lightjets", "CR_ee_ttbar"]
 ### Dictionary of histograms per selection ###
 histosPerSelectionMuon = {sel: histos for sel in selsMu}
 histosPerSelectionElectron = {sel: histos for sel in selsEle}
+
+preSelsEle = ["", "twoElectrons", "twoOppositeSignElectrons", "PtSelEl", "CommonSelEle"]
+
+histosPerSelectionElectron.update({sel: "nSelectedElectrons" for sel in preSelsEle})
+
+preSelJet = [
+    "",
+    "twoJets",
+    "twoBjets",
+    "JetBtagMaxMedium",
+    "JetBtagMinLoose",
+    "JetBtagMaxTight",
+]
+
+histosPerSelectionElectron.update({sel: "nSelectedJets" for sel in preSelJet})
