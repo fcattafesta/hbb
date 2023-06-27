@@ -256,8 +256,8 @@ def powerHisto(histo1, power):
 
 def makeAlternativeShape(hn,sy,f, nominalSample, alternativeSamples, alphaUp = +1, alphaDown = -1):
     (altSampleUp, altSampleDown) = alternativeSamples
-    if not altSampleUp   in f: f[altSampleUp]   = ROOT.TFile.Open(folder+"/%sHistos.root"%altSampleUp)
-    if not altSampleDown in f: f[altSampleDown] = ROOT.TFile.Open(folder+"/%sHistos.root"%altSampleDown)
+    if not altSampleUp   in f: f[altSampleUp]   = ROOT.TFile.Open(folder+"/%s_Histos.root"%altSampleUp)
+    if not altSampleDown in f: f[altSampleDown] = ROOT.TFile.Open(folder+"/%s_Histos.root"%altSampleDown)
     histoNameNom  = hn+"rebin"
     histoNameUp   = hn+"rebinAltSampleUp"
     histoNameDown = hn+"rebinAltSampleDown"
@@ -495,16 +495,16 @@ f={}
 folder=args.folder
 for group in model.signal :
     for s in model.signal[group] :
-        f[s]=ROOT.TFile.Open(folder+"%sHistos.root"%s)
-#        f[s]=ROOT.TFile.Open("out/%sHistos.root"%s)
+        f[s]=ROOT.TFile.Open(folder+"%s_Histos.root"%s)
+#        f[s]=ROOT.TFile.Open("out/%s_Histos.root"%s)
 for group in model.background :
     for b in model.background[group] :
-#        f[b]=ROOT.TFile.Open("out/%sHistos.root"%b)
-        f[b]=ROOT.TFile.Open(folder+"/%sHistos.root"%b)
+#        f[b]=ROOT.TFile.Open("out/%s_Histos.root"%b)
+        f[b]=ROOT.TFile.Open(folder+"/%s_Histos.root"%b)
 for group in model.data :
     for d in model.data[group] :
- #       f[d]=ROOT.TFile.Open("out/%sHistos.root"%d)
-        f[d]=ROOT.TFile.Open(folder+"/%sHistos.root"%d)
+ #       f[d]=ROOT.TFile.Open("out/%s_Histos.root"%d)
+        f[d]=ROOT.TFile.Open(folder+"/%s_Histos.root"%d)
 
 histoNames=list(set([x.GetName() for y in list(f.keys()) for x in f[y].GetListOfKeys() ]))
 
