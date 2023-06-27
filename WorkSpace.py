@@ -523,38 +523,48 @@ def createWorkSpace(model, all_histo_all_syst, year,outdir="workspace/") :
     #print "availableSamples ", availableSamples
     #print "\n ---------------------------- \n"
 
+    print("model.systematicDetail 0", model.systematicDetail)
 
     createNewSystematicForMergeWithOption (model.systematicDetail)
     printSystematicGrouping (model.systematicDetail, "grouping0.py")
+    print("model.systematicDetail 1", model.systematicDetail)
 
     divideShapeAndNormalization (model.systematicDetail)
     #decorrelateNormOnly (model.systematicDetail, availableSamples)
-    #printSystematicGrouping (model.systematicDetail, "grouping1.py")
+    printSystematicGrouping (model.systematicDetail, "grouping1.py")
+    print("model.systematicDetail 2", model.systematicDetail)
 
     modifySystematicDetail(model.systematicDetail, listAllSample_noYear, all_histo_all_syst)
-    #printSystematicGrouping (model.systematicDetail, "grouping2.py")
+    printSystematicGrouping (model.systematicDetail, "grouping2.py")
+    print("model.systematicDetail 3", model.systematicDetail)
 
 
     removeUnusedSystematics(model.systematicDetail, all_histo_all_syst)
-    #printSystematicGrouping (model.systematicDetail, "grouping3.py")
+    printSystematicGrouping (model.systematicDetail, "grouping3.py")
+    print("model.systematicDetail 4", model.systematicDetail)
 
 
     valuesFromPlots(model.systematicDetail, all_histo_all_syst, region)
-    #printSystematicGrouping (model.systematicDetail, "grouping4.py")
+    printSystematicGrouping (model.systematicDetail, "grouping4.py")
+    print("model.systematicDetail 5", model.systematicDetail)
 
 
     ScaleShapeOnlyPlot(model.systematicDetail, all_histo_all_syst)
-    #printSystematicGrouping (model.systematicDetail, "grouping5.py")
+    printSystematicGrouping (model.systematicDetail, "grouping5.py")
+    print("model.systematicDetail 6", model.systematicDetail)
 
 
     divideNormalizationByRegion(model.systematicDetail, all_histo_all_syst, region)
-    #printSystematicGrouping (model.systematicDetail, "grouping51.py")
+    printSystematicGrouping (model.systematicDetail, "grouping51.py")
+    print("model.systematicDetail 61", model.systematicDetail)
 
     mergeToSys(model.systematicDetail, listAllSample_noYear)
-    #printSystematicGrouping (model.systematicDetail, "grouping6.py")
+    printSystematicGrouping (model.systematicDetail, "grouping6.py")
+    print("model.systematicDetail 7", model.systematicDetail)
 
     mergeNormalizationsFromAllRegions (model.systematicDetail, all_histo_all_syst, region)
-    #printSystematicGrouping (model.systematicDetail, "grouping7.py")
+    printSystematicGrouping (model.systematicDetail, "grouping7.py")
+    print("model.systematicDetail 8", model.systematicDetail)
 
 
     writeSystematic (outdir+"/fileCombine"+year+model.name+".root", region, varName, model.systematicDetail, all_histo_all_syst, availableSamples, datacard, year)
