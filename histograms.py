@@ -34,7 +34,6 @@ histosPerSelectionElectron.update({sel: ["nSelectedElectron"] for sel in preSels
 preSelJet = [
     "",
     "twoJets",
-    "twoBjets",
     "JetBtagMaxMedium",
     "JetBtagMinLoose",
     "JetBtagMaxTight",
