@@ -1225,8 +1225,7 @@ def makeplot(hn, saveintegrals=True):
                 # datastack[hn].GetXaxis().SetTitle(hn)
                 setStyle(datasum[hn])
                 datasum[hn].Draw("E P")
-                # histos[hn].Draw("hist same")
-                histos[hn].DrawNormalized("hist same")
+                histos[hn].Draw("hist same")
 
             else:
                 histos[hn].SetMinimum(
@@ -1238,8 +1237,7 @@ def makeplot(hn, saveintegrals=True):
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
                     )
-                # histos[hn].Draw("hist")
-                histos[hn].DrawNormalized("hist")
+                histos[hn].Draw("hist")
                 setStyle(histos[hn], noData=True)
 
             #  histos[hn].Draw("hist")
