@@ -593,7 +593,7 @@ def fill_datasum(f, gr, samplesToPlot, SumTH1, stack, stackSys, hn, myLegend, ft
                 h.Scale(samples[d]["xsec"]*lumi)
                 error_b = ctypes.c_double(0)
                 integral[gr]["nom"]+=h.IntegralAndError(0,h.GetNbinsX()+1,error_b)
-                error[gr] = sqrt(error[gr]*error[gr] + error_b*error_b)
+                error[gr] = sqrt(error[gr]*error[gr] + error_b.value*error_b.value)
                 setHistoStyle (h, gr) #non funziona: d==samplesToPlot[gr][-1])
             if hn not in SumTH1 :
                 SumTH1[hn]=h.Clone()
