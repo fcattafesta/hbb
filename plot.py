@@ -1223,7 +1223,7 @@ def makeplot(hn, saveintegrals=True):
                     )  # zoom out y axis
                 # datasum[hn].Draw("E P")
                 # datastack[hn].GetXaxis().SetTitle(hn)
-                setStyle(datasum[hn])
+                # setStyle(datasum[hn])
                 # datasum[hn].Draw("E P")
                 # histos[hn].Draw("hist same")
 
@@ -1238,7 +1238,7 @@ def makeplot(hn, saveintegrals=True):
                         (histosum[hn].GetMaximum()) ** 2,
                     )
                 # histos[hn].Draw("hist")
-                setStyle(histos[hn], noData=True)
+                # setStyle(histos[hn], noData=True)
 
             #  histos[hn].Draw("hist")
             histosum[hn].SetLineWidth(0)
@@ -1316,7 +1316,7 @@ def makeplot(hn, saveintegrals=True):
                 ratio.SetLineColor(ROOT.kBlack)
 
                 c.cd(2)
-                setStyle(ratio, isRatio=True)
+                # setStyle(ratio, isRatio=True)
 
                 ratio.Draw("E1 P")
                 ratioError = makeRatioMCplot(histosum[hn])
