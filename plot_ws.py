@@ -5,6 +5,7 @@ import importlib
 #import postfitPlot
 import argparse
 import copy
+import ctypes
 
 parser = argparse.ArgumentParser()
 parser.add_argument("model", help="model to plot")
@@ -590,7 +591,7 @@ def fill_datasum(f, gr, samplesToPlot, SumTH1, stack, stackSys, hn, myLegend, ft
                 #if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
                 print(h.GetSumOfWeights(),h.GetEntries(),lumi*samples[d]["xsec"],d)
                 h.Scale(samples[d]["xsec"]*lumi)
-                error_b = ROOT.Double(0)
+                error_b = ctypes.c_double(0)
                 integral[gr]["nom"]+=h.IntegralAndError(0,h.GetNbinsX()+1,error_b)
                 error[gr] = sqrt(error[gr]*error[gr] + error_b*error_b)
                 setHistoStyle (h, gr) #non funziona: d==samplesToPlot[gr][-1])
