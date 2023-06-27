@@ -29,7 +29,7 @@ histosPerSelectionElectron = {sel: histos for sel in selsEle}
 
 preSelsEle = ["", "twoElectrons", "twoOppositeSignElectrons", "PtSelEl", "CommonSelEle"]
 
-histosPerSelectionElectron.update({sel: "nSelectedElectrons" for sel in preSelsEle})
+histosPerSelectionElectron.update({sel: "nElectrons" for sel in preSelsEle})
 
 preSelJet = [
     "",
@@ -40,4 +40,4 @@ preSelJet = [
     "JetBtagMaxTight",
 ]
 
-histosPerSelectionElectron.update({sel: "nSelectedJets" for sel in preSelJet})
+histosPerSelectionElectron.update({sel: "nJets" for sel in preSelJet})
