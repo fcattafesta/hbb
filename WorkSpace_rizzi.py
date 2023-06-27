@@ -67,11 +67,12 @@ def writeLine (uncName, systematicDetailElement, allSamples, region) :
         sampleWithSystematic = list(set(sampleWithSystematic))
     value = 1. if "value" not in list(systematicDetailElement.keys())  else systematicDetailElement["value"]
 
-    #print "uncName  ", uncName
-    #print "uncType  ", uncType
-    #print "value  ", value
-    #print "allSamples  ", allSamples
-    #print "sampleWithSystematic  ", sampleWithSystematic
+
+    print("uncName  ", uncName)
+    print("uncType  ", uncType)
+    print("value  ", value)
+    print("allSamples  ", allSamples)
+    print("sampleWithSystematic  ", sampleWithSystematic)
 
 
     line = ""
@@ -81,6 +82,7 @@ def writeLine (uncName, systematicDetailElement, allSamples, region) :
     n = 0
     for x in list(allSamples.keys()) :
         notThisRegion = [y for y in list(allSamples.keys()) if y!=x]
+        print("notThisRegion  ", notThisRegion)
         for sl in allSamples[x] :
             orderedUncertainties.append(0)
             for s in sampleWithSystematic :
@@ -92,7 +94,7 @@ def writeLine (uncName, systematicDetailElement, allSamples, region) :
                         else : orderedUncertainties[-1] =  value
             n+=1
 
-
+    print("position", position)
     if len(position)==0 : return ""
 
     line += uncName + "\t"*(4 - len(uncName)/8)
