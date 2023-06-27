@@ -746,13 +746,13 @@ def makeplot(hn,saveintegrals=True):
      h = fill_datasum (f, gr, model.signal, SumTH1=histoSigsum, stack=histosSig, stackSys=histoSigsumSyst, hn=hn, myLegend=myLegend, ftxt=ftxt, lumis=lumis)
      dictLegendSignal[gr] = h
 
-   myLegend.AddEntry(None,"","")
+   #myLegend.AddEntry(None,"","")
    for gr in model.backgroundSortedForLegend :
        myLegend.AddEntry(dictLegendBackground[gr],gr,"f")
-   myLegend.AddEntry(None,"","")
+   #myLegend.AddEntry(None,"","")
    for gr in model.signalSortedForLegend :
        myLegend.AddEntry(dictLegendSignal[gr],gr,"f")
-   myLegend.AddEntry(None,"","")
+   #myLegend.AddEntry(None,"","")
    #superImposedPlot (histos[hn], histosSig[hn], outpath)
    #if makeWorkspace : return
 
