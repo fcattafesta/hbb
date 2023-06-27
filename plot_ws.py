@@ -2,7 +2,7 @@ import ROOT
 import sys,os
 #from samples2016 import samples
 import importlib
-import postfitPlot
+#import postfitPlot
 import argparse
 import copy
 
@@ -531,7 +531,7 @@ histoSingleSyst={}
 ROOT.gStyle.SetOptStat(0)
 
 
-postFit = postfitPlot.PostFit()
+#postFit = postfitPlot.PostFit()
 
 
 #def superImposedPlot (stackB, stackS, outpath)  :
@@ -689,7 +689,7 @@ def makeplot(hn,saveintegrals=True):
    os.system("git diff HEAD > "+outpath+"/git_diff.txt")
    os.system("git status HEAD > "+outpath+"/git_status.txt")
    YieldFileName = outpath+"/"+hn+".csv"
-   if postfit : YieldFileName = outpath+"/"+hn+"_postFit.txt"
+   #if postfit : YieldFileName = outpath+"/"+hn+"_postFit.txt"
    ftxt=open(YieldFileName,"w")
    #print "Making histo",hn
    histos[hn]=ROOT.THStack(hn,"")
@@ -855,16 +855,16 @@ def makeplot(hn,saveintegrals=True):
    tKS.Draw()
 
    canvas[hn].GetPad(2).SetGridy()
-   if postfit : canvas[hn].SaveAs(outpath+"/%s_postFit.png"%hn)
-   else :
-    canvas[hn].SaveAs(outpath+"/%s.png"%hn)
-    canvas[hn].SaveAs(outpath+"/%s.root"%hn)
+#    if postfit : canvas[hn].SaveAs(outpath+"/%s_postFit.png"%hn)
+#    else :
+   canvas[hn].SaveAs(outpath+"/%s.png"%hn)
+   canvas[hn].SaveAs(outpath+"/%s.root"%hn)
    #canvas[hn].SaveAs("%s.root"%hn)
    canvas[hn].GetPad(1).SetLogy(True)
-   if postfit : canvas[hn].SaveAs(outpath+"/%s_log_postFit.png"%hn)
-   else :
-    canvas[hn].SaveAs(outpath+"/%s_log.png"%hn)
-    canvas[hn].SaveAs(outpath+"/%s_log.root"%hn)
+#    if postfit : canvas[hn].SaveAs(outpath+"/%s_log_postFit.png"%hn)
+#    else :
+   canvas[hn].SaveAs(outpath+"/%s_log.png"%hn)
+   canvas[hn].SaveAs(outpath+"/%s_log.root"%hn)
 
 
 variablesToFit = []
@@ -875,8 +875,8 @@ if args.variablesToFit != None :
     makeWorkspace = True
     systematicsSetToUse=model.systematicsForDC
 systematicsSetToUse.sort()
-postfit = False
-postfit = args.postfit
+#postfit = False
+#postfit = args.postfit
 
 print("makeWorkspace", makeWorkspace)
 print("variablesToFit", variablesToFit)
