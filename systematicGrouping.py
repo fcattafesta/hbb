@@ -72,6 +72,8 @@ def systematicGrouping(background, signal, jesList, year):
             #               "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY":DY, "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
             "additionalNormalizations": [],
             "decorrelate": {
+                "ZH": ["ZH"],
+                "ggZH": ["ggZH"],
                 "VVHF": ["VVHF"],
                 "VVLF": ["VVLF"],
                 "TT": ["TT"],
@@ -80,11 +82,11 @@ def systematicGrouping(background, signal, jesList, year):
                 "Z+b": ["Z+b"],
                 "Z+c": ["Z+c"],
                 "Z+udsg": ["Z+udsg"],
-                "ZH": ["ZH"],
-                "ggZH": ["ggZH"],
             },
             #                "groupValues":  {"Hmm":1.01, "EWK":1.01, "DY":1.010 ,"ZZ":1.01,"WZ":1.01,"WW":1.01,"WJets":1.01,"TT":1.005,"ST":1.005},
             "groupValues": {
+                "ZH": 1.010,
+                "ggZH": 1.010,
                 "VVHF": 1.01,
                 "VVLF": 1.01,
                 "TT": 1.005,
@@ -93,8 +95,6 @@ def systematicGrouping(background, signal, jesList, year):
                 "Z+b": 1.010,
                 "Z+c": 1.010,
                 "Z+udsg": 1.010,
-                "ZH": 1.010,
-                "ggZH": 1.010,
             },
         },
     }
