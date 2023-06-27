@@ -24,7 +24,7 @@ def getFlowSys(flow, btag):
             }"""
     )
 
-    for name in ["Central"]:#, "Up", "Down"]:
+    for name in ["Central", "Up", "Down"]:
         flow.Define(
             'SelectedJet_btagWeight%s' % name,
             'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
@@ -42,7 +42,7 @@ def getFlowSys(flow, btag):
 
 
     flow.CentralWeight("btagWeightCentral", ["twoJets"])
-    #flow.VariationWeight("btagWeightUp", "btagWeightCentral")
-    #flow.VariationWeight("btagWeightDown", "btagWeightCentral")
+    flow.VariationWeight("btagWeightUp")#, "btagWeightCentral")
+    flow.VariationWeight("btagWeightDown")#, "btagWeightCentral")
 
     return flow
