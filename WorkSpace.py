@@ -116,7 +116,8 @@ def writeLine(uncName, systematicDetailElement, allSamples, region):
             n += 1
 
     if len(position) == 0:
-        return ""
+        #return ""
+        pass
 
     line += uncName + "\t" * (4 - len(uncName) / 8)
     line += uncType + "\t" * (3 - len(uncType) / 8)
