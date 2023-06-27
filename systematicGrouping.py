@@ -71,7 +71,7 @@ def systematicGrouping(background, signal, jesList, year):
             "type": "lnN",
             #               "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY":DY, "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
             "additionalNormalizations": [],
-            # "decorrelate": {
+            "decorrelate": {},
             #     "VV": ["VVHF", "VVLF"],
             #     "TT": ["TT"],
             #     "ST": ["ST"],
