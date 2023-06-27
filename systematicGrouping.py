@@ -55,6 +55,7 @@ def systematicGrouping(background, signal, jesList, year):
     ]
 
     DY = [x + y for x in DY_ for y in ["_bb", "_b", "_c", "_udsg"]]
+    print(DY)
 
     VV_ = [
         "WWTo2L2Nu",
@@ -65,6 +66,7 @@ def systematicGrouping(background, signal, jesList, year):
         "ZZTo4L",
     ]
     VV= [x + y for x in VV_ for y in ["_bb", "_b", "_c", "_udsg"]]
+    print(VV)
 
     TT = ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"]
     ST = [
@@ -87,21 +89,21 @@ def systematicGrouping(background, signal, jesList, year):
             "additionalNormalizations": [],
             "decorrelate": {
                 "ZH": ["ZH"],
-                # "ggZH": ["ggZH"],
-                # "VV": VV,
-                # "TT": TT,
-                # "ST": ST,
-                # "DY": DY,
+                "ggZH": ["ggZH"],
+                "VV": VV,
+                "TT": TT,
+                "ST": ST,
+                "DY": DY,
 
             },
             #                "groupValues":  {"Hmm":1.01, "EWK":1.01, "DY":1.010 ,"ZZ":1.01,"WZ":1.01,"WW":1.01,"WJets":1.01,"TT":1.005,"ST":1.005},
             "groupValues": {
                 "ZH": 1.010,
-                # "ggZH": 1.010,
-                # "VV": 1.01,
-                # "TT": 1.005,
-                # "ST": 1.005,
-                # "DY": 1.010,
+                "ggZH": 1.010,
+                "VV": 1.01,
+                "TT": 1.005,
+                "ST": 1.005,
+                "DY": 1.010,
             },
         },
     }
