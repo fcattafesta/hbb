@@ -473,36 +473,41 @@ def createWorkSpace(model, all_histo_all_syst, year,outdir="workspace/") :
     #print "availableSamples ", availableSamples
     #print "\n ---------------------------- \n"
 
-
+    print ("systematicDetail 0", model.systematicDetail)
     # it creates new systematics for each sample group in "additionalNormalizations" (syst -> syst + "__" + systToAdd). It creates new systematics for each sample group in "groupValues" (syst -> syst + "__Norm" + groupName) and it assignes the defined value.
     createNewSystematicForMergeWithOption (model.systematicDetail)
     #printSystematicGrouping (model.systematicDetail, "grouping0.py")
+
+
+    print("systematicDetail 1", model.systematicDetail)
 
     # systematics with "shapeAndNorm" split in two different systematics with "normalizationOnly" (syst -> syst) and "shapeOnly" (syst -> syst+"Shape")
     divideShapeAndNormalization (model.systematicDetail)
     #printSystematicGrouping (model.systematicDetail, "grouping1.py")
 
+    print("systematicDetail 2", model.systematicDetail)
     # pop all samples in "decorrelates" that are not in listAllSample_noYear.
     # Split systematics if "decorrelates" has more than one keys and name them with sysName+sampName (the only exception is "__Norm"+groupName). Modify all_histo_all_syst histograms names from sysName+"Up/Down" to sysName+"_"+sampName+"Up/Down"
     modifySystematicDetail(model.systematicDetail, listAllSample_noYear, all_histo_all_syst)
     #printSystematicGrouping (model.systematicDetail, "grouping2.py")
-
+    print("systematicDetail 3", model.systematicDetail)
 
     removeUnusedSystematics(model.systematicDetail, all_histo_all_syst)
     #printSystematicGrouping (model.systematicDetail, "grouping3.py")
 
+    print("systematicDetail 4", model.systematicDetail)
     # set the values as ( UP/NOM + NOM/DOWN ) / 2. Add postfix for region
     valuesFromPlots(model.systematicDetail, all_histo_all_syst, region)
     #printSystematicGrouping (model.systematicDetail, "grouping4.py")
-
+    print("systematicDetail 5", model.systematicDetail)
 
     ScaleShapeOnlyPlot(model.systematicDetail, all_histo_all_syst)
     #printSystematicGrouping (model.systematicDetail, "grouping5.py")
-
+    print("systematicDetail 6", model.systematicDetail)
 
     mergeToSys(model.systematicDetail, listAllSample_noYear)
     #printSystematicGrouping (model.systematicDetail, "grouping6.py")
-
+    print("systematicDetail 7", model.systematicDetail)
 
 
 
