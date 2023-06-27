@@ -45,7 +45,7 @@ def systematicGrouping(background, signal, jesList, year):
         "DYZpt-650ToInf_udsg",
     ]
 
-    DY = ["DY_bb", "DY_b", "DY_c", "DY_udsg"]
+    DY = ["Z+bb", "Z+b", "Z+c", "Z+udsg"]
 
     TT = ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"]
     ST = [
@@ -72,19 +72,19 @@ def systematicGrouping(background, signal, jesList, year):
             #               "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY":DY, "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
             "additionalNormalizations": [],
             "decorrelate": {
-                "VV": ["VV_HF", "VV_LF"],
+                "VV": ["VVHF", "VVLF"],
                 "TT": ["TT"],
                 "ST": ["ST"],
-                "Hbb": Hbb,
-                "DY": DY,
+                "DY": ["Z+bb", "Z+b", "Z+c", "Z+udsg"],
+                "Hbb": ["ZH", "ggZH"],
             },
             #                "groupValues":  {"Hmm":1.01, "EWK":1.01, "DY":1.010 ,"ZZ":1.01,"WZ":1.01,"WW":1.01,"WJets":1.01,"TT":1.005,"ST":1.005},
             "groupValues": {
                 "VV": 1.01,
                 "TT": 1.005,
                 "ST": 1.005,
-                "Hbb": 1.0,
                 "DY": 1.010,
+                "Hbb": 1.0,
             },
         },
     }
