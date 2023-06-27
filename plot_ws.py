@@ -574,7 +574,7 @@ def fill_datasum(f, gr, samplesToPlot, SumTH1, stack, stackSys, hn, myLegend, ft
     for n in range(len(samplesToPlot[gr])) :
       d = samplesToPlot[gr][n]
       if lumis:
-          yr = getYear(d)
+          yr = 2018 #getYear(d)
           lumi = lumis[yr]
       if makeWorkspace : all_histo_all_syst[hn][d]={}
       if f[d] :
@@ -716,7 +716,7 @@ def makeplot(hn,saveintegrals=True):
      for d in model.data[gr]:
        lumitot+=samples[d]["lumi"]
        print("lumitot=%f"%lumitot)
-       yr = getYear(d)
+       yr = 2018 #getYear(d)
        if yr in lumis: lumis[yr] += samples[d]["lumi"]
        else: lumis[yr] = samples[d]["lumi"]
 
