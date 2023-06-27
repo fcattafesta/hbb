@@ -67,11 +67,11 @@ def writeLine (uncName, systematicDetailElement, allSamples, region) :
         sampleWithSystematic = list(set(sampleWithSystematic))
     value = 1. if "value" not in list(systematicDetailElement.keys())  else systematicDetailElement["value"]
 
-    #print "uncName  ", uncName
-    #print "uncType  ", uncType
-    #print "value  ", value
-    #print "allSamples  ", allSamples
-    #print "sampleWithSystematic  ", sampleWithSystematic
+    print ("uncName  ", uncName)
+    print ("uncType  ", uncType)
+    print ("value  ", value)
+    print ("allSamples  ", allSamples)
+    print ("sampleWithSystematic  ", sampleWithSystematic)
 
 
     line = ""
