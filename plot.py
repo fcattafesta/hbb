@@ -1256,6 +1256,7 @@ def makeplot(hn, saveintegrals=True):
                 histosSignal[hn][gr].Draw("hist same")
             for gr in model.histosOverlayed_list:
                 histosOverlayed[hn][gr].DrawNormalized("hist same")
+                histosOverlayed[hn][gr].SetMaximum("1.5")
 
             t0 = makeText(
                 0.25,
