@@ -1554,7 +1554,7 @@ if makeWorkspace:
                                 all_histo_all_syst[hn][d][syst]
                             )
     #    print("DEBUG", model, all_histo_all_syst, year)
-    import WorkSpace as WorkSpace
+    import WorkSpace_rizzi as WorkSpace
 
     WorkSpace.createWorkSpace(model, all_histo_all_syst, year, outdir)
 else:
