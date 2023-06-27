@@ -1255,7 +1255,7 @@ def makeplot(hn, saveintegrals=True):
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
             for gr in model.histosOverlayed_list:
-                histosOverlayed[hn][gr].DrawNormalzied("hist same")
+                histosOverlayed[hn][gr].DrawNormalized("hist same")
 
             t0 = makeText(
                 0.25,
