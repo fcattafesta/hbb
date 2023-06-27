@@ -64,7 +64,10 @@ if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
 # Final flow for MC
 flow = copy.deepcopy(flowData)
-flow = getFlowMC(flow, args.btag, args.sf)
+flow = getFlowMC(flow)
+if args.sf:
+    from eventprocessingSys import getFlowSys
+    flow = getFlowSys(flow, args.btag)
 
 
 # Add binning rules
