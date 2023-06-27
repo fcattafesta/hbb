@@ -26,8 +26,8 @@ def getFlowSys(flow, btag):
 
     for name in ["Central", "Up", "Down"]:
         flow.Define(
-            "SelectedJet_btagWeight%s" % name,
-            "sf_btag(%s, SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)"
+            'SelectedJet_btagWeight%s' % name,
+            'sf_btag(%s, SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
             % (
                 name.lower(),
                 "SelectedJet_btagDeepFlavB"
@@ -36,8 +36,8 @@ def getFlowSys(flow, btag):
             ),
         )
         flow.Define(
-            "btagWeight%s" % name,
-            "ROOT::VecOps::Product(SelectedJet_btagWeight%s)" % name,
+            'btagWeight%s' % name,
+            'ROOT::VecOps::Product(SelectedJet_btagWeight%s)' % name,
         )
 
 
