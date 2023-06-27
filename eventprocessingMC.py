@@ -4,7 +4,7 @@ import correctionlib
 correctionlib.register_pyroot_binding()
 
 
-def getFlowMC(flow, btag, sf):
+def getFlowMC(flow):
     ## MonteCarlo-only definitions ##
 
     flow.Define(
