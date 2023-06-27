@@ -41,7 +41,7 @@ if [[ $suffix == *_eval* ]]; then
     eval="--eval model_"${btag}".onnx"
 fi
 
-btag="--btag"${btag}
+btag="--btag "${btag}
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
 
