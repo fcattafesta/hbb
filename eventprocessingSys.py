@@ -34,8 +34,8 @@ def getFlowSys(flow, btag):
     flow.AddCppCode(
         """
         // Calculate b-tagging scale factors for a given set of inputs
-        template <typename str, typename VecI, typename Vec>
-        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag, const VecI & flav) {
+        template <typename str, typename VecI, typename Vec, typename T>
+        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag, std::vector<T> flav) {
             // Create a vector to store the scale factors
             ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
 
@@ -43,8 +43,8 @@ def getFlowSys(flow, btag):
             for(size_t i=0;i<hadronFlavour.size(); i++) {
                 bool correct_flav = false;
                 // Loop over each flavor and check if it matches the input flavor
-                for  (const auto f : flav) {
-                    if (hadronFlavour[i] == f) {
+                for (int i = 0; i < flav.size(); i++) {
+                    if (hadronFlavour[i] == flav[i]) {
                         // Calculate the scale factor using the btag_shape_corr object
                         weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                         correct_flav = true;
@@ -60,7 +60,7 @@ def getFlowSys(flow, btag):
         }
     """
     )
-    flow.AddCppCode("ROOT::VecOps::RVec<int> flav;\n")
+    flow.AddCppCode("std::vector<int> flav;\n")
     for suffix, names in sf.items():
         for i, name in enumerate(names):
             if "lf" or "hf" in name:
