@@ -6,44 +6,13 @@
 # default is correlated among all samples
 # and correlated nuisance for norm+shape
 
+from btagging_sys import btag_sys
+
 
 def systematicGrouping(background, signal, jesList, year):
     legendGrouping = {}
     legendGrouping.update(background)
     legendGrouping.update(signal)
-
-    # DY_bb = [
-    #     "DYZpt-0To50_bb",
-    #     "DYZpt-50To100_bb",
-    #     "DYZpt-100To250_bb",
-    #     "DYZpt-250To400_bb",
-    #     "DYZpt-400To650_bb",
-    #     "DYZpt-650ToInf_bb",
-    # ]
-    # DY_b = [
-    #     "DYZpt-0To50_b",
-    #     "DYZpt-50To100_b",
-    #     "DYZpt-100To250_b",
-    #     "DYZpt-250To400_b",
-    #     "DYZpt-400To650_b",
-    #     "DYZpt-650ToInf_b",
-    # ]
-    # DY_c = [
-    #     "DYZpt-0To50_c",
-    #     "DYZpt-50To100_c",
-    #     "DYZpt-100To250_c",
-    #     "DYZpt-250To400_c",
-    #     "DYZpt-400To650_c",
-    #     "DYZpt-650ToInf_c",
-    # ]
-    # DY_udsg = [
-    #     "DYZpt-0To50_udsg",
-    #     "DYZpt-50To100_udsg",
-    #     "DYZpt-100To250_udsg",
-    #     "DYZpt-250To400_udsg",
-    #     "DYZpt-400To650_udsg",
-    #     "DYZpt-650ToInf_udsg",
-    # ]
 
     DY_ = [
         "DYZpt-0To50",
@@ -65,7 +34,7 @@ def systematicGrouping(background, signal, jesList, year):
         "ZZTo2Q2L",
         "ZZTo4L",
     ]
-    VV= [x + y for x in VV_ for y in ["_bb", "_b", "_c", "_udsg"]]
+    VV = [x + y for x in VV_ for y in ["_bb", "_b", "_c", "_udsg"]]
     print(VV)
 
     TT = ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"]
@@ -80,32 +49,38 @@ def systematicGrouping(background, signal, jesList, year):
         "ST_s-channel_4f_LD",
     ]
 
-    #H = ["ZH", "ggZH"]
+    Hbb = ["ZH", "ggZH"]
 
     systematicDetail = {
         "XSecAndNorm": {
             "type": "lnN",
-            #               "decorrelate": { "Hmm": HmmNoVBF, "EWK":EWK,"DY":DY, "TT":TT ,"ST":ST, "WJets":WJets, "ZZ":ZZ, "WZ":WZ, "WW":WW},
             "additionalNormalizations": [],
             "decorrelate": {
-                "ZH": ["ZH"],
-                "ggZH": ["ggZH"],
+                "Hbb": Hbb,
+                "DY": DY,
                 "VV": VV,
                 "TT": TT,
                 "ST": ST,
-                "DY": DY,
-
             },
-            #                "groupValues":  {"Hmm":1.01, "EWK":1.01, "DY":1.010 ,"ZZ":1.01,"WZ":1.01,"WW":1.01,"WJets":1.01,"TT":1.005,"ST":1.005},
             "groupValues": {
-                "ZH": 1.010,
-                "ggZH": 1.010,
-                "VV": 1.01,
+                "Hbb": 1.010,
+                "DY": 1.010,
+                "VV": 1.010,
                 "TT": 1.005,
                 "ST": 1.005,
-                "DY": 1.010,
             },
         },
     }
+
+    btag = {
+        x[0:-4]: {
+            "type": "shape",
+            "value": 1.0,
+            "decorrelate": {"": Hbb + DY + VV + TT + ST}, #?
+        }
+        for x in btag_sys
+        if "Down" in x #?
+    }
+    systematicDetail.update(btag)
 
     return systematicDetail

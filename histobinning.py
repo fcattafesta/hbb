@@ -1,4 +1,4 @@
-from eventprocessingSys import unc_list
+from btagging_sys import btag_sys
 
 binningRules = [
     (".*_pt", "30 , 0, 300"),
@@ -17,9 +17,6 @@ binningRules = [
     ("btagWeightCentral", "100, 0, 10"),
 ]
 binningRules += [
-    ("btagWeightUp_" + unc, "100, 0, 10") for unc in unc_list
-]
-binningRules += [
-    ("btagWeightDown_" + unc, "100, 0, 10") for unc in unc_list
+    (weight, "100, 0, 10") for weight in btag_sys
 ]
 

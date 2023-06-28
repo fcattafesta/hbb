@@ -193,13 +193,14 @@ sig_df_list = [1.85, 1.63] if args.sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
-sig_df_sum = np.sum(np.array(sig_df_list) ** 2, axis=None)
-sig_df_sum = np.sqrt(sig_df_sum)
+# sig_df_sum = np.sum(np.array(sig_df_list) ** 2, axis=None)
+# sig_df_sum = np.sqrt(sig_df_sum)
 
 
 # x, y, xerr, yerr
 df_point = [rescale_fin_df, sig_df_average, rescale_err_df, sig_df_std_dev]
 print("df_point", df_point)
+
 
 
 def plot_data(
@@ -209,59 +210,126 @@ def plot_data(
 ):
     fig_handle = plt.figure(figsize=(13, 10))
 
-    # compute the average of the two channels and plot it
-    sig_sum_list_average = [
-        np.average([x, y]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    # # compute the average of the two channels and plot it
+    # sig_sum_list_average = [
+    #     np.average([x, y]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    # ]
+    # # compute the standard deviation of the two channels
+    # sig_sum_list_std_dev = [
+    #     np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    # ]
+
+
+    # csv_sig_average = sig_sum_list_average[0]
+
+    csv_sig_mu = sig_sum_list_mu[0]
+    csv_sig_el = sig_sum_list_el[0]
+
+    sig_sum_list_av = [
+        np.average([x/sig_sum_list_mu[0], y/sig_sum_list_el[0]]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
-    # compute the standard deviation of the two channels
-    sig_sum_list_std_dev = [
-        np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+
+    sig_sum_list_std = [
+        np.std([x/sig_sum_list_mu[0], y/sig_sum_list_el[0]], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
 
-    csv_sig_av = sig_sum_list_average[0]
+    #csv_spline = splrep(btag_rescale_list, sig_sum_list_average, s=0)
+    csv_spline_av = splrep(btag_rescale_list, sig_sum_list_av, s=0)
+    csv_spline_std = splrep(btag_rescale_list, sig_sum_list_std, s=0)
 
-    csv_spline = splrep(btag_rescale_list, sig_sum_list_average, s=0)
+    # # plot the average
+    # plt.plot(
+    #     btag_rescale_list,
+    #     sig_sum_list_average / csv_sig_average,
+    #     label="DeepCSV rescaled",
+    #     color="red",
+    #     linewidth=2,
+    #     linestyle="--",
+    # )
+    # # fill between the average and the two lines
+    # plt.fill_between(
+    #     btag_rescale_list,
+    #     np.subtract(sig_sum_list_average, sig_sum_list_std_dev) / csv_sig_average,
+    #     np.add(sig_sum_list_average, sig_sum_list_std_dev) / csv_sig_average,
+    #     color="salmon",
+    #     alpha=0.5,
+    #     # label=r"$1 \sigma$",
+    # )
 
-    # plot the average
+    # plt.plot(
+    #     btag_rescale_list,
+    #     np.array(sig_sum_list_mu) / csv_sig_mu,
+    #     #color="lime",
+    #     alpha=0.5,
+    #     label=r"$\mu$",
+    # )
+
+    # plt.plot(
+    #     btag_rescale_list,
+    #     np.array(sig_sum_list_el) / csv_sig_el,
+    #     #color="lime",
+    #     alpha=0.5,
+    #     label=r"$el$",
+    # )
+
     plt.plot(
         btag_rescale_list,
-        sig_sum_list_average / csv_sig_av,
-        label="DeepCSV rescaled",
+        np.array(sig_sum_list_av) ,
         color="red",
-        linewidth=2,
+        label=r"DeepCSV rescaled",
+        linewidth=1,
         linestyle="--",
     )
-    # fill between the average and the two lines
     plt.fill_between(
         btag_rescale_list,
-        np.subtract(sig_sum_list_average, sig_sum_list_std_dev) / csv_sig_av,
-        np.add(sig_sum_list_average, sig_sum_list_std_dev) / csv_sig_av,
+        np.subtract(sig_sum_list_av, sig_sum_list_std),
+        np.add(sig_sum_list_av, sig_sum_list_std),
         color="salmon",
         alpha=0.5,
         # label=r"$1 \sigma$",
     )
 
+
     plt.plot(
-        btag_rescale_list[0],
-        sig_sum_list_average[0] / csv_sig_av,
+        1, #btag_rescale_list[0],
+        1, #sig_sum_list_average[0] / csv_sig_average,
         "o",
         label="DeepCSV",
         color="red",
     )
+
+    # plt.errorbar(
+    #     df_point[0],
+    #     df_point[1] / csv_sig_average,
+    #     xerr=df_point[2],
+    #     yerr=df_point[3] / csv_sig_average,
+    #     fmt="o",
+    #     label="DeepFlav",
+    #     color="blue",
+    # )
+
+    sig_ratio=[sig_df_list[0] / csv_sig_mu, sig_df_list[1] / csv_sig_el]
+    sig_ratio_av=np.average(sig_ratio)
+    sig_ratio_std_dev=np.std(sig_ratio, ddof=0)
+
+
     plt.errorbar(
         df_point[0],
-        df_point[1] / csv_sig_av,
+        sig_ratio_av,
         xerr=df_point[2],
-        yerr=df_point[3] / csv_sig_av,
+        yerr=sig_ratio_std_dev,
         fmt="o",
         label="DeepFlav",
         color="blue",
     )
+
+
+
     plt.errorbar(
         rescale_fin_pn,
-        BSpline(*csv_spline)(rescale_fin_pn) / csv_sig_av,
+        BSpline(*csv_spline_av)(rescale_fin_pn),
         xerr=rescale_err_pn,
-        yerr=0,
+        yerr=BSpline(*csv_spline_std)(rescale_fin_pn),
         fmt="o",
         label="ParticleNet",
         color="black",
@@ -269,9 +337,9 @@ def plot_data(
 
     plt.errorbar(
         rescale_fin_pe,
-        BSpline(*csv_spline)(rescale_fin_pe) / csv_sig_av,
+        BSpline(*csv_spline_av)(rescale_fin_pe),
         xerr=rescale_err_pe,
-        yerr=0,
+        yerr=BSpline(*csv_spline_std)(rescale_fin_pe),
         fmt="o",
         label="ParticleEdge",
         color="green",

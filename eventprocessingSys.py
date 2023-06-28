@@ -1,22 +1,14 @@
 from nail.nail import *
 import correctionlib
 
+from btagging_sys import unc_btag
 correctionlib.register_pyroot_binding()
 
-unc_list = [
-    "hf",
-    "lf",
-    "hfstats1",
-    "hfstats2",
-    "lfstats1",
-    "lfstats2",
-    "cferr1",
-    "cferr2",
-]
-sf = {
+
+sf_btag = {
     "Central": ["central"],
-    "Up": ["up_" + x for x in unc_list],
-    "Down": ["down_" + x for x in unc_list],
+    "Up": ["up_" + x for x in unc_btag],
+    "Down": ["down_" + x for x in unc_btag],
 }
 
 
@@ -72,26 +64,26 @@ def getFlowSys(flow, btag):
         }
     """
     )
-    for suffix, names in sf.items():
+    for suffix, names in sf_btag.items():
         for i, name in enumerate(names):
             flow.Define(
-                "SelectedJet_btagWeight%s_%s" % (suffix, i),
+                "SelectedJet_btagWeight_%s%s" % (suffix, i),
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB)'
                 % (name),
             )
             if suffix == "Central":
                 flow.Define(
                     "btagWeight%s" % (suffix),
-                    "ROOT::VecOps::Product(SelectedJet_btagWeight%s_%s)" % (suffix, i),
+                    "ROOT::VecOps::Product(SelectedJet_btagWeight_%s%s)" % (suffix, i),
                 )
                 flow.CentralWeight("btagWeightCentral", ["twoJets"])
             else:
                 flow.Define(
-                    "btagWeight%s_%s" % (suffix, unc_list[i]),
-                    "ROOT::VecOps::Product(SelectedJet_btagWeight%s_%s)" % (suffix, i),
+                    "btagWeight_%s%s" % (unc_btag[i], suffix),
+                    "ROOT::VecOps::Product(SelectedJet_btagWeight_%s%s)" % (suffix, i),
                 )
                 flow.VariationWeight(
-                    "btagWeight%s_%s" % (suffix, unc_list[i]), "btagWeightCentral"
+                    "btagWeight_%s%s" % (unc_btag[i], suffix), "btagWeightCentral"
                 )
 
     return flow

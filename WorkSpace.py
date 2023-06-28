@@ -89,35 +89,41 @@ def writeLine(uncName, systematicDetailElement, allSamples, region):
     n = 0
     for x in list(allSamples.keys()):
         notThisRegion = [y for y in list(allSamples.keys()) if y != x]
+        print("notThisRegion  ", notThisRegion)
         for sl in allSamples[x]:
+            print("sl  ", sl)
             orderedUncertainties.append(0)
             for s in sampleWithSystematic:
-                if re.search(s + "_", sl):
+                print("s  ", s)
+                # if re.search(s + "_", sl):
+                #if re.search(s, sl):
+                if re.search("^" + s + ".*", sl):
+                    print("ok1")
+                    print(
+                        "if",
+                        [
+                            re.search(regionName[region[y]] + "$", uncName)
+                            for y in notThisRegion
+                        ],
+                    )
                     if all(
                         not re.search(regionName[region[y]] + "$", uncName)
                         for y in notThisRegion
                     ):
+                        print("ok2")
                         position.append(n)
                         if "valueFromPlots" in list(systematicDetailElement.keys()):
-                            if isinstance(
-                                systematicDetailElement["valueFromPlots"][s], float
-                            ):
-                                orderedUncertainties[-1] = str(
-                                    systematicDetailElement["valueFromPlots"][s]
-                                )[:7]
-                            else:
-                                orderedUncertainties[-1] = str(
-                                    systematicDetailElement["valueFromPlots"][s][
-                                        regionName[region[x]]
-                                    ]
-                                )[:7]
+                            orderedUncertainties[-1] = str(
+                                systematicDetailElement["valueFromPlots"][s]
+                            )[:7]
+                            print("ok3")
                         else:
                             orderedUncertainties[-1] = value
             n += 1
 
+    print("position", position)
     if len(position) == 0:
-        #return ""
-        pass
+        return ""
 
     line += uncName + "\t" * (4 - len(uncName) // 8)
     line += uncType + "\t" * (3 - len(uncType) // 8)
@@ -216,33 +222,44 @@ def modifySystematicDetail(systematicDetail, listAllSample_noYear, all_histo_all
     for syst in systKeys:
         if "decorrelate" not in list(systematicDetail[syst].keys()):
             systematicDetail[syst]["decorrelate"] = {"all": listAllSample_noYear}
+        print('systematicDetail[syst]["decorrelate"] 0', systematicDetail[syst]["decorrelate"])
 
+        prima = [
+            len(systematicDetail[syst]["decorrelate"][g])
+            for g in systematicDetail[syst]["decorrelate"]
+        ]
+        print("prima", prima)
         for g in list(systematicDetail[syst]["decorrelate"].keys()):
             systematicDetail[syst]["decorrelate"][g] = [
                 s
                 for s in systematicDetail[syst]["decorrelate"][g]
                 if s in listAllSample_noYear
             ]
+        print("systematicDetail[syst][decorrelate] 1", systematicDetail[syst]["decorrelate"])
 
         keys = list(systematicDetail[syst]["decorrelate"].keys())
         for g in keys:
             if len(systematicDetail[syst]["decorrelate"][g]) == 0:
                 systematicDetail[syst]["decorrelate"].pop(g, None)
+                print("g ", g, " systematicDetail[syst][decorrelate] 2", systematicDetail[syst]["decorrelate"])
 
         if len(systematicDetail[syst]["decorrelate"]) == 0:
             systematicDetail.pop(syst, None)
         elif len(list(systematicDetail[syst]["decorrelate"].keys())) > 1:
             for g in systematicDetail[syst]["decorrelate"]:
                 systematicDetail[syst + g] = copy.deepcopy(systematicDetail[syst])
+                print("here0\n\n")
                 if (
                     systematicDetail[syst]["type"] != "lnN"
                     and systematicDetail[syst]["type"] != "normalizationOnly"
                 ):
                     for x in list(all_histo_all_syst.keys()):
                         for sampName in systematicDetail[syst]["decorrelate"][g]:
-                            # print "qui"
+                            print("here1\n\n")
                             for samp in list(all_histo_all_syst[x].keys()):
+                                print("sampName ", sampName, " samp ", samp)
                                 if re.search(sampName, samp):
+                                    print("here2\n\n")
                                     if set([syst + "Up", syst + "Down"]).issubset(
                                         set(all_histo_all_syst[x][samp].keys())
                                     ):
@@ -261,11 +278,14 @@ def modifySystematicDetail(systematicDetail, listAllSample_noYear, all_histo_all
                                         # all_histo_all_syst[x][samp].pop(syst+"Down", None)
 
                             # all_histo_all_syst[x][""]
-
+                print("systematicDetail[syst + g] 0 ", systematicDetail[syst + g])
                 systematicDetail[syst + g].pop("decorrelate", None)
+                print("systematicDetail[syst + g] 1 ", systematicDetail[syst + g])
                 systematicDetail[syst + g]["decorrelate"] = {
                     g: systematicDetail[syst]["decorrelate"][g]
                 }
+                print("systematicDetail[syst + g] 2 ", systematicDetail[syst + g])
+            print("systematicDetail[syst] 0 ", systematicDetail[syst])
             systematicDetail.pop(syst, None)
 
 
@@ -288,7 +308,7 @@ def removeUnusedSystematics(systematicDetail, all_histo_all_syst):
                 for s in list(all_histo_all_syst[x][samp].keys())
             ):
                 systematicDetail.pop(syst, None)
-                print(("removed ", syst))
+                print("removed ", syst)
 
 
 def ScaleShapeOnlyPlot(systematicDetail, all_histo_all_syst):
@@ -368,7 +388,7 @@ def valuesFromPlots(systematicDetail, all_histo_all_syst, region):
 
 
 def SumErrors(v1, v2):
-    print(("valori", v1, v2))
+    print("valori", v1, v2)
     return math.exp(((math.log(v1)) ** 2.0 + (math.log(v2)) ** 2.0) ** 0.5)
 
 
@@ -396,24 +416,18 @@ def mergeTwoSystematics(systematicDetail, syst1, syst2, listAllSample_noYear):
                 else systematicDetail[syst1]["value"]
             )
 
-    print((syst1, "    \t ", systematicDetail[syst1]["decorrelate"]))
-    print(("valueFromPlots \t ", systematicDetail[syst1]["valueFromPlots"]))
-    print((syst2, "    \t ", systematicDetail[syst2]["decorrelate"]))
-    print(("valueFromPlots \t ", systematicDetail[syst2]["valueFromPlots"]))
+    print(syst1, "    \t ", systematicDetail[syst1]["decorrelate"])
+    print("valueFromPlots \t ", systematicDetail[syst1]["valueFromPlots"])
+    print(syst2, "    \t ", systematicDetail[syst2]["decorrelate"])
+    print("valueFromPlots \t ", systematicDetail[syst2]["valueFromPlots"])
 
     newValues = {}
     for s in samples1:
         print(
-            (
-                "check   ",
-                s,
-                1
-                if s not in samples1
-                else systematicDetail[syst1]["valueFromPlots"][s],
-                1
-                if s not in samples2
-                else systematicDetail[syst2]["valueFromPlots"][s],
-            )
+            "check   ",
+            s,
+            1 if s not in samples1 else systematicDetail[syst1]["valueFromPlots"][s],
+            1 if s not in samples2 else systematicDetail[syst2]["valueFromPlots"][s],
         )
         newValues[s] = SumErrors(
             1 if s not in samples1 else systematicDetail[syst1]["valueFromPlots"][s],
@@ -422,7 +436,7 @@ def mergeTwoSystematics(systematicDetail, syst1, syst2, listAllSample_noYear):
     # systematicDetail[syst1]["decorrelate"]       = {"merged" : samples1}
     systematicDetail[syst1]["valueFromPlots"] = newValues
 
-    print(("merging ", syst1, " \t ", syst2))
+    print("merging ", syst1, " \t ", syst2)
     # systematicDetail.pop(syst2, None)
 
 
@@ -436,13 +450,11 @@ def mergeToSys(systematicDetail, listAllSample_noYear):
             sysTomergeList = systematicDetail[syst]["additionalNormalizations"]
             for s in sysTomergeList:
                 for sysTomerge in systKeys:
-                    if (
-                        re.search(
-                            s + list(systematicDetail[syst]["decorrelate"].keys())[0],
-                            sysTomerge,
-                        )
-                        or s == sysTomerge
+                    if re.search(
+                        s + list(systematicDetail[syst]["decorrelate"].keys())[0],
+                        sysTomerge,
                     ):
+                        # if sysTomerge in systKeys :
                         if (
                             systematicDetail[syst]["type"] == "lnN"
                             and systematicDetail[sysTomerge]["type"] == "lnN"
@@ -456,76 +468,13 @@ def mergeToSys(systematicDetail, listAllSample_noYear):
         systematicDetail.pop(s, None)
 
 
-def divideNormalizationByRegion(systematicDetail, all_histo_all_syst, region):
-    band = [regionName[region[x]] for x in region]
-    systKeys = list(systematicDetail.keys())
-    mergedSystematic = (
-        []
-    )  # the pop() cannot be done on the fly because several systematics can have identical "mergeToSys"
-    for syst in systKeys:
-        if "additionalNormalizations" in list(systematicDetail[syst].keys()):
-            toRemove = False
-            for b in band:
-                systematicDetail[syst + "_" + b] = copy.deepcopy(systematicDetail[syst])
-                sysTomergeList = systematicDetail[syst + "_" + b][
-                    "additionalNormalizations"
-                ]
-                for s in sysTomergeList:
-                    for sysTomerge in systKeys:
-                        if re.search(
-                            s
-                            + list(
-                                systematicDetail[syst + "_" + b]["decorrelate"].keys()
-                            )[0]
-                            + ".*"
-                            + b
-                            + "$",
-                            sysTomerge,
-                        ):
-                            systematicDetail[syst + "_" + b][
-                                "additionalNormalizations"
-                            ].remove(s)
-                            systematicDetail[syst + "_" + b][
-                                "additionalNormalizations"
-                            ].append(sysTomerge)
-                            toRemove = True
-            if toRemove:
-                systematicDetail.pop(syst, None)
-
-
-def mergeNormalizationsFromAllRegions(systematicDetail, all_histo_all_syst, region):
-    band = [regionName[region[x]] for x in region]
-    systematicSplittedByRegionToMerge = set()
-    systKeys = list(systematicDetail.keys())
-    for syst in systKeys:
-        if "additionalNormalizations" in list(systematicDetail[syst].keys()):
-            if any(re.search(b + "$", syst) for b in band):
-                systNameNoRegion = syst
-                for b in band:
-                    systNameNoRegion = systNameNoRegion.replace("_" + b, "")
-                systematicSplittedByRegionToMerge.add(systNameNoRegion)
-
-    for name in systematicSplittedByRegionToMerge:
-        systematicDetail[name] = copy.deepcopy(systematicDetail[name + "_" + band[0]])
-
-        for samp in systematicDetail[name]["valueFromPlots"]:
-            systematicDetail[name]["valueFromPlots"][samp] = {}
-            for b in band:
-                systematicDetail[name]["valueFromPlots"][samp][b] = systematicDetail[
-                    name + "_" + b
-                ]["valueFromPlots"][samp]
-
-        for b in band:
-            systematicDetail.pop(name + "_" + b, None)
-
-
 def modifyRegionName(region):
     k = list(regionName.keys())
     for r in k:
         fitOneRegion2Times = False
         count = 0
         for x in region:
-            print(("AAAA", r, x, re.search(r + "$", x)))
+            print("AAAA", r, x, re.search(r + "$", x))
             if re.search(r + "$", x):
                 count += 1
         if count > 1:
@@ -549,14 +498,13 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     )  # it will be equal to varName because of how plot.py write all_histo_all_syst
     region = {}
 
-    print((list(all_histo_all_syst.keys())))
+    print(list(all_histo_all_syst.keys()))
     for x in list(all_histo_all_syst.keys()):
         nBins[x] = all_histo_all_syst[x]["data" + year]["nom"].GetNbinsX() - 1
         varName[x] = (
             all_histo_all_syst[x]["data" + year]["nom"].GetName().split("___")[0]
         )
         plotName[x] = x
-        # # region[x] = x.split("___")[-1]  # keys are plot names, values are region names
         region[x] = x  # keys are plot names, values are region names
 
     modifyRegionName(region)
@@ -626,20 +574,20 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
                 for sy in list(all_histo_all_syst[x][s].keys())
             ):
                 print(
-                    (
-                        "WARNING",
-                        s,
-                        " IS EMPTY",
-                        [
-                            (sy, all_histo_all_syst[x][s][sy].Integral(1, nBins[x] + 1))
-                            for sy in list(all_histo_all_syst[x][s].keys())
-                        ],
-                    )
+                    "WARNING",
+                    s,
+                    " IS EMPTY",
+                    [
+                        (sy, all_histo_all_syst[x][s][sy].Integral(1, nBins[x] + 1))
+                        for sy in list(all_histo_all_syst[x][s].keys())
+                    ],
                 )
                 emptySamples[x].append(s)
         availableSamples[x] = [s for s in listAllSample if s not in emptySamples[x]]
 
-    listAllSample_noYear = [s.split("_")[0] for s in listAllSample]
+    listAllSample_noYear = [s.split("_")[0] if "201" in s else s for s in listAllSample]
+    print("listAllSample_noYear", listAllSample_noYear)
+    print("listAllSample", listAllSample)
     availableSamples = collections.OrderedDict(sorted(availableSamples.items()))
 
     datacard.write("bin \t \t \t \t \t")
@@ -665,10 +613,10 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
             )
     datacard.write("\n------------\n")
 
-    print( "region ", region)
-    print( "varName ", varName)
-    print ("availableSamples ", availableSamples)
-    print( "\n ---------------------------- \n")
+    print("region ", region)
+    print("varName ", varName)
+    print("availableSamples ", availableSamples)
+    print("\n ---------------------------- \n")
 
     print("model.systematicDetail 0", model.systematicDetail)
 
@@ -699,19 +647,9 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     printSystematicGrouping(model.systematicDetail, "grouping5.py")
     print("model.systematicDetail 6", model.systematicDetail)
 
-    divideNormalizationByRegion(model.systematicDetail, all_histo_all_syst, region)
-    printSystematicGrouping(model.systematicDetail, "grouping51.py")
-    print("model.systematicDetail 61", model.systematicDetail)
-
     mergeToSys(model.systematicDetail, listAllSample_noYear)
     printSystematicGrouping(model.systematicDetail, "grouping6.py")
     print("model.systematicDetail 7", model.systematicDetail)
-
-    mergeNormalizationsFromAllRegions(
-        model.systematicDetail, all_histo_all_syst, region
-    )
-    printSystematicGrouping(model.systematicDetail, "grouping7.py")
-    print("model.systematicDetail 8", model.systematicDetail)
 
     writeSystematic(
         outdir + "/fileCombine" + year + model.name + ".root",
