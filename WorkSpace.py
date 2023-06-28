@@ -104,13 +104,13 @@ def writeLine(uncName, systematicDetailElement, allSamples, region):
                         not re.search(regionName[region[y]] + "$", uncName)
                         for y in notThisRegion
                     ):
-                        print("ok2")
+                        #print("ok2")
                         position.append(n)
                         if "valueFromPlots" in list(systematicDetailElement.keys()):
                             orderedUncertainties[-1] = str(
                                 systematicDetailElement["valueFromPlots"][s]
                             )[:7]
-                            print("ok3")
+                            #print("ok3")
                         else:
                             orderedUncertainties[-1] = value
             n += 1
