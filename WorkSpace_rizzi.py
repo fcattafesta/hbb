@@ -222,22 +222,26 @@ def modifySystematicDetail(systematicDetail, listAllSample_noYear, all_histo_all
     for syst in systKeys:
         if "decorrelate" not in list(systematicDetail[syst].keys()):
             systematicDetail[syst]["decorrelate"] = {"all": listAllSample_noYear}
+        print('systematicDetail[syst]["decorrelate"] 0', systematicDetail[syst]["decorrelate"])
 
         prima = [
             len(systematicDetail[syst]["decorrelate"][g])
             for g in systematicDetail[syst]["decorrelate"]
         ]
+        print("prima", prima)
         for g in list(systematicDetail[syst]["decorrelate"].keys()):
             systematicDetail[syst]["decorrelate"][g] = [
                 s
                 for s in systematicDetail[syst]["decorrelate"][g]
                 if s in listAllSample_noYear
             ]
+        print("systematicDetail[syst][decorrelate] 1", systematicDetail[syst]["decorrelate"])
 
         keys = list(systematicDetail[syst]["decorrelate"].keys())
         for g in keys:
             if len(systematicDetail[syst]["decorrelate"][g]) == 0:
                 systematicDetail[syst]["decorrelate"].pop(g, None)
+                print("g ", g, " systematicDetail[syst][decorrelate] 2", systematicDetail[syst]["decorrelate"])
 
         if len(systematicDetail[syst]["decorrelate"]) == 0:
             systematicDetail.pop(syst, None)
