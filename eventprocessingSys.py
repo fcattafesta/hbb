@@ -54,8 +54,8 @@ def getFlowSys(flow, btag):
             for(size_t i=0;i<hadronFlavour.size(); i++) {
                 bool correct_flav = false;
                 // Loop over each flavor and check if it matches the input flavor
-                for (int i = 0; i < sizeof(flav) / sizeof(flav[0]); i++) {
-                    if (hadronFlavour[i] == flav[i]) {
+                for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
+                    if (hadronFlavour[i] == flav[j]) {
                         // Calculate the scale factor using the btag_shape_corr object
                         weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                         correct_flav = true;
