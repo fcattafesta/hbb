@@ -269,7 +269,7 @@ if args.model == "fix":
 elif args.model[:5] == "model":
     import importlib
 
-    model = importlib.import_module(args.model)
+    model = importlib.import_module(args.model.replace(".py", ""))
     # 	samples=model.samples
 
     allmc = []

@@ -1,3 +1,5 @@
+from eventprocessingSys import unc_list
+
 binningRules = [
     (".*_pt", "30 , 0, 300"),
     ("Dijets_mass", "30, 50, 200"),
@@ -13,6 +15,11 @@ binningRules = [
     ("hadronFlavour_btag.*", "6, -0.5, 5.5"),
     ("LHE_Nb", "6, -0.5, 5.5"),
     ("btagWeightCentral", "100, 0, 10"),
-    ("btagWeightUp", "100, 0, 10"),
-    ("btagWeightDown", "100, 0, 10"),
 ]
+binningRules += [
+    ("btagWeightUp_" + unc, "100, 0, 10") for unc in unc_list
+]
+binningRules += [
+    ("btagWeightDown_" + unc, "100, 0, 10") for unc in unc_list
+]
+

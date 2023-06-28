@@ -3,6 +3,22 @@ import correctionlib
 
 correctionlib.register_pyroot_binding()
 
+unc_list = [
+    "hf",
+    "lf",
+    "hfstats1",
+    "hfstats2",
+    "lfstats1",
+    "lfstats2",
+    "cferr1",
+    "cferr2",
+]
+sf = {
+    "Central": ["central"],
+    "Up": ["up_" + x for x in unc_list],
+    "Down": ["down_" + x for x in unc_list],
+}
+
 
 def getFlowSys(flow, btag):
     ## Systematics definitions ##
@@ -16,34 +32,71 @@ def getFlowSys(flow, btag):
         % ("deepJet_shape" if btag == "deepflav" else "deepCSV_shape")
     )
     flow.AddCppCode(
-        """ template <typename str, typename VecI, typename Vec>
-            auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
+        """
+        // Calculate b-tagging scale factors for a given set of inputs
+        template <typename str, typename VecI, typename Vec>
+        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag, const VecI & flav) {
+            // Create a vector to store the scale factors
             ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
-            for(size_t i=0;i<hadronFlavour.size(); i++) weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+
+            // Loop over each input and calculate the scale factor
+            for(size_t i=0;i<hadronFlavour.size(); i++) {
+                bool correct_flav = false;
+                // Loop over each flavor and check if it matches the input flavor
+                for  (const auto f : flav) {
+                    if (hadronFlavour[i] == f) {
+                        // Calculate the scale factor using the btag_shape_corr object
+                        weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+                        correct_flav = true;
+                    }
+                }
+                // If no matching flavor is found, set the scale factor to 1
+                if (!correct_flav) {
+                    weights[i]=1.;
+                }
+            }
+            // Return the vector of scale factors
             return weights;
-            }"""
+        }
+    """
     )
 
-    for suffix, name in zip(
-        ["central", "up_hfstats2", "down_hfstats2"], ["Central", "Up", "Down"]
-    ):
-        flow.Define(
-            "SelectedJet_btagWeight%s" % name,
-            'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
-            % (
-                suffix,
-                "SelectedJet_btagDeepFlavB"
-                if btag == "deepflav"
-                else "SelectedJet_btagDeepB",
-            ),
-        )
-        flow.Define(
-            "btagWeight%s" % name,
-            "ROOT::VecOps::Product(SelectedJet_btagWeight%s)" % name,
-        )
+    for suffix, names in sf.items():
+        for i, name in enumerate(names):
+            if "lf" or "hf" in name:
+                flow.AddCppCode("ROOT::VecOps::RVec<int> flav{0,5};")
+            elif "central" in name:
+                flow.AddCppCode("ROOT::VecOps::RVec<int> flav{0,4,5};")
+            else:
+                flow.AddCppCode("ROOT::VecOps::RVec<int> flav{4};")
+            flow.Define(
+                "SelectedJet_btagWeight%s_%s" % (suffix, i),
+                'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB, flav)'
+                % (name),
+            )
+            if suffix == "Central":
+                flow.Define(
+                    "btagWeight%s" % (suffix),
+                    "ROOT::VecOps::Product(SelectedJet_btagWeight%s_%s)" % (suffix, i),
+                )
+                flow.CentralWeight("btagWeightCentral", ["twoJets"])
+            else:
+                flow.Define(
+                    "btagWeight%s_%s" % (suffix, unc_list[i]),
+                    "ROOT::VecOps::Product(SelectedJet_btagWeight%s_%s)" % (suffix, i),
+                )
+                flow.VariationWeight(
+                    "btagWeight%s_%s" % (suffix, unc_list[i]), "btagWeightCentral"
+                )
 
-    flow.CentralWeight("btagWeightCentral", ["twoJets"])
-    flow.VariationWeight("btagWeightUp", "btagWeightCentral")
-    flow.VariationWeight("btagWeightDown", "btagWeightCentral")
+        # # multiply all the weights together
+        # multiply_string = ""
+        # for i in range(len(names)):
+        #     multiply_string += "btagWeight%s%s*" % (suffix, i)
+        # multiply_string = multiply_string[:-1]
+        # flow.Define(
+        #     "btagWeight%s" % suffix,
+        #     multiply_string,
+        # )
 
     return flow
