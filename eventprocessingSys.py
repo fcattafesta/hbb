@@ -33,6 +33,8 @@ def getFlowSys(flow, btag):
     )
     flow.AddCppCode(
         """
+        #include <cstring>
+
         // Calculate b-tagging scale factors for a given set of inputs
         template <typename str, typename VecI, typename Vec>
         auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
@@ -42,7 +44,7 @@ def getFlowSys(flow, btag):
             int flav[3];
             if (name == "central") {
                 flav[0] = 0; flav[1] = 5; flav[2] = 4;
-            } else if (name.find("hf") != std::string::npos || name.find("lf") != std::string::npos) {
+            } else if (strstr(name, "hf") != nullptr || strstr(name, "lf") != nullptr) {
                 flav[0] = 0; flav[1] = 5; flav[2] = -1;
             } else {
                 flav[0] = 4; flav[1] = -1; flav[2] = -1;
