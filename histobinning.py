@@ -13,4 +13,6 @@ binningRules = [
     ("hadronFlavour_btag.*", "6, -0.5, 5.5"),
     ("LHE_Nb", "6, -0.5, 5.5"),
     ("btagWeightCentral", "100, 0, 10"),
+    ("btagWeightUp", "100, 0, 10"),
+    ("btagWeightDown", "100, 0, 10"),
 ]

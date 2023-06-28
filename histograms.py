@@ -26,7 +26,7 @@ if args.eval_model:
 
 histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb"]
 if args.sf:
-    histosMC += ["btagWeightCentral"]
+    histosMC += ["btagWeightCentral", "btagWeightUp", "btagWeightDown"]
 
 ### List of selections for muons and electrons ###
 selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]

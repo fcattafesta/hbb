@@ -42,7 +42,7 @@ def getFlowSys(flow, btag):
 
 
     flow.CentralWeight("btagWeightCentral", ["twoJets"])
-    flow.VariationWeight("btagWeightUp")#, "btagWeightCentral")
-    flow.VariationWeight("btagWeightDown")#, "btagWeightCentral")
+    #flow.VariationWeight("btagWeightUp", "btagWeightCentral")
+    #flow.VariationWeight("btagWeightDown", "btagWeightCentral")
 
     return flow
