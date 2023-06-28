@@ -42,7 +42,7 @@ def getFlowSys(flow, btag):
             ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
 
             int flav[3];
-            if (name == "central") {
+            if (strstr(name, "central") != nullptr) {
                 flav[0] = 0; flav[1] = 5; flav[2] = 4;
             } else if (strstr(name, "hf") != nullptr || strstr(name, "lf") != nullptr) {
                 flav[0] = 0; flav[1] = 5; flav[2] = -1;
@@ -72,15 +72,8 @@ def getFlowSys(flow, btag):
         }
     """
     )
-    #flow.AddCppCode("int flav[3];\n")
     for suffix, names in sf.items():
         for i, name in enumerate(names):
-            # if "lf" or "hf" in name:
-            #     flow.AddCppCode("flav[0] = 0;\n flav[1] = 5 ;\n flav[2] = -1;\n")
-            # elif "central" in name:
-            #     flow.AddCppCode("flav[0] = 0;\n flav[1] = 4 ;\n flav[2] = 5;\n")
-            # else:
-            #     flow.AddCppCode("flav[0] = 4;\n flav[1] = -1 ;\n flav[2] = -1;\n")
             flow.Define(
                 "SelectedJet_btagWeight%s_%s" % (suffix, i),
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB)'
@@ -100,15 +93,5 @@ def getFlowSys(flow, btag):
                 flow.VariationWeight(
                     "btagWeight%s_%s" % (suffix, unc_list[i]), "btagWeightCentral"
                 )
-
-        # # multiply all the weights together
-        # multiply_string = ""
-        # for i in range(len(names)):
-        #     multiply_string += "btagWeight%s%s*" % (suffix, i)
-        # multiply_string = multiply_string[:-1]
-        # flow.Define(
-        #     "btagWeight%s" % suffix,
-        #     multiply_string,
-        # )
 
     return flow
