@@ -283,7 +283,6 @@ def modifySystematicDetail(systematicDetail, listAllSample_noYear, all_histo_all
                 print("systematicDetail[syst + g] 2 ", systematicDetail[syst + g])
             print("systematicDetail[syst] 0 ", systematicDetail[syst])
             systematicDetail.pop(syst, None)
-            print("systematicDetail[syst] 1 ", systematicDetail[syst])
 
 
 def removeUnusedSystematics(systematicDetail, all_histo_all_syst):
