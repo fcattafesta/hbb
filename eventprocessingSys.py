@@ -34,10 +34,19 @@ def getFlowSys(flow, btag):
     flow.AddCppCode(
         """
         // Calculate b-tagging scale factors for a given set of inputs
-        template <typename str, typename VecI, typename Vec, typename T>
-        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag, T* flav) {
+        template <typename str, typename VecI, typename Vec>
+        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
             // Create a vector to store the scale factors
             ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
+            
+            int flav[3];
+            if (name == "central") {
+                flav = {0, 4, 5};
+            } else if (name.find("hf") != std::string::npos || name.find("lf") != std::string::npos) {
+                flav = {0, 5, -1};
+            } else {
+                flav = {4, -1, -1};
+            }
 
             // Loop over each input and calculate the scale factor
             for(size_t i=0;i<hadronFlavour.size(); i++) {
@@ -60,15 +69,15 @@ def getFlowSys(flow, btag):
         }
     """
     )
-    flow.AddCppCode("int flav[3];\n")
+    #flow.AddCppCode("int flav[3];\n")
     for suffix, names in sf.items():
         for i, name in enumerate(names):
-            if "lf" or "hf" in name:
-                flow.AddCppCode("flav[0] = 0;\n flav[1] = 5 ;\n flav[2] = -1;\n")
-            elif "central" in name:
-                flow.AddCppCode("flav[0] = 0;\n flav[1] = 4 ;\n flav[2] = 5;\n")
-            else:
-                flow.AddCppCode("flav[0] = 4;\n flav[1] = -1 ;\n flav[2] = -1;\n")
+            # if "lf" or "hf" in name:
+            #     flow.AddCppCode("flav[0] = 0;\n flav[1] = 5 ;\n flav[2] = -1;\n")
+            # elif "central" in name:
+            #     flow.AddCppCode("flav[0] = 0;\n flav[1] = 4 ;\n flav[2] = 5;\n")
+            # else:
+            #     flow.AddCppCode("flav[0] = 4;\n flav[1] = -1 ;\n flav[2] = -1;\n")
             flow.Define(
                 "SelectedJet_btagWeight%s_%s" % (suffix, i),
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB, flav)'
