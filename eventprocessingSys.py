@@ -38,7 +38,7 @@ def getFlowSys(flow, btag):
         auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag) {
             // Create a vector to store the scale factors
             ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
-            
+
             int flav[3];
             if (name == "central") {
                 flav = {0, 4, 5};
@@ -80,7 +80,7 @@ def getFlowSys(flow, btag):
             #     flow.AddCppCode("flav[0] = 4;\n flav[1] = -1 ;\n flav[2] = -1;\n")
             flow.Define(
                 "SelectedJet_btagWeight%s_%s" % (suffix, i),
-                'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB, flav)'
+                'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB)'
                 % (name),
             )
             if suffix == "Central":
