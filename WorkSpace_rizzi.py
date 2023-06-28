@@ -91,18 +91,30 @@ def writeLine(uncName, systematicDetailElement, allSamples, region):
         notThisRegion = [y for y in list(allSamples.keys()) if y != x]
         print("notThisRegion  ", notThisRegion)
         for sl in allSamples[x]:
+            print("sl  ", sl)
             orderedUncertainties.append(0)
             for s in sampleWithSystematic:
+                print("s  ", s)
                 if re.search(s + "_", sl):
+                    print("ok1")
+                    print(
+                        "if",
+                        [
+                            re.search(regionName[region[y]] + "$", uncName)
+                            for y in notThisRegion
+                        ],
+                    )
                     if all(
                         not re.search(regionName[region[y]] + "$", uncName)
                         for y in notThisRegion
                     ):
+                        print("ok2")
                         position.append(n)
                         if "valueFromPlots" in list(systematicDetailElement.keys()):
                             orderedUncertainties[-1] = str(
                                 systematicDetailElement["valueFromPlots"][s]
                             )[:7]
+                            print("ok3")
                         else:
                             orderedUncertainties[-1] = value
             n += 1
