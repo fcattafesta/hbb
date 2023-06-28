@@ -41,11 +41,11 @@ def getFlowSys(flow, btag):
 
             int flav[3];
             if (name == "central") {
-                flav = {0, 4, 5};
+                flav[0] = 0; flav[1] = 5; flav[2] = 4;
             } else if (name.find("hf") != std::string::npos || name.find("lf") != std::string::npos) {
-                flav = {0, 5, -1};
+                flav[0] = 0; flav[1] = 5; flav[2] = -1;
             } else {
-                flav = {4, -1, -1};
+                flav[0] = 4; flav[1] = -1; flav[2] = -1;
             }
 
             // Loop over each input and calculate the scale factor
@@ -57,6 +57,7 @@ def getFlowSys(flow, btag):
                         // Calculate the scale factor using the btag_shape_corr object
                         weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                         correct_flav = true;
+                        break;
                     }
                 }
                 // If no matching flavor is found, set the scale factor to 1
