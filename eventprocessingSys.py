@@ -24,25 +24,26 @@ def getFlowSys(flow, btag):
             }"""
     )
 
-    for name in ["Central", "Up", "Down"]:
+    for suffix, name in zip(
+        ["central", "up_hfstats2", "down_hfstats2"], ["Central", "Up", "Down"]
+    ):
         flow.Define(
-            'SelectedJet_btagWeight%s' % name,
+            "SelectedJet_btagWeight%s" % name,
             'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
             % (
-                name.lower(),
+                suffix,
                 "SelectedJet_btagDeepFlavB"
                 if btag == "deepflav"
                 else "SelectedJet_btagDeepB",
             ),
         )
         flow.Define(
-            'btagWeight%s' % name,
-            'ROOT::VecOps::Product(SelectedJet_btagWeight%s)' % name,
+            "btagWeight%s" % name,
+            "ROOT::VecOps::Product(SelectedJet_btagWeight%s)" % name,
         )
 
-
     flow.CentralWeight("btagWeightCentral", ["twoJets"])
-    #flow.VariationWeight("btagWeightUp", "btagWeightCentral")
-    #flow.VariationWeight("btagWeightDown", "btagWeightCentral")
+    flow.VariationWeight("btagWeightUp", "btagWeightCentral")
+    flow.VariationWeight("btagWeightDown", "btagWeightCentral")
 
     return flow
