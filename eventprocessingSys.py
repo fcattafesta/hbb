@@ -60,6 +60,7 @@ def getFlowSys(flow, btag):
         }
     """
     )
+    flow.AddCppCode("#include <vector>\n")
     flow.AddCppCode("std::vector<int> flav;\n")
     for suffix, names in sf.items():
         for i, name in enumerate(names):
