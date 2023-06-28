@@ -35,7 +35,7 @@ def getFlowSys(flow, btag):
         """
         // Calculate b-tagging scale factors for a given set of inputs
         template <typename str, typename VecI, typename Vec, typename T>
-        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag, std::vector<T> flav) {
+        auto sf_btag(const str & name, const VecI & hadronFlavour, const Vec & eta, const Vec & pt, const Vec & btag, T* flav) {
             // Create a vector to store the scale factors
             ROOT::VecOps::RVec<float> weights(hadronFlavour.size());
 
@@ -43,7 +43,7 @@ def getFlowSys(flow, btag):
             for(size_t i=0;i<hadronFlavour.size(); i++) {
                 bool correct_flav = false;
                 // Loop over each flavor and check if it matches the input flavor
-                for (int i = 0; i < flav.size(); i++) {
+                for (int i = 0; i < sizeof(flav) / sizeof(flav[0]); i++) {
                     if (hadronFlavour[i] == flav[i]) {
                         // Calculate the scale factor using the btag_shape_corr object
                         weights[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
@@ -60,16 +60,15 @@ def getFlowSys(flow, btag):
         }
     """
     )
-    flow.AddCppCode("#include <vector>\n")
-    flow.AddCppCode("std::vector<int> flav;\n")
+    flow.AddCppCode("int flav[3];\n")
     for suffix, names in sf.items():
         for i, name in enumerate(names):
             if "lf" or "hf" in name:
-                flow.AddCppCode("flav = {0,5};\n")
+                flow.AddCppCode("flav[0] = 0;\n flav[1] = 5 ;\n flav[2] = -1;\n")
             elif "central" in name:
-                flow.AddCppCode("flav = {0,4,5};\n")
+                flow.AddCppCode("flav[0] = 0;\n flav[1] = 4 ;\n flav[2] = 5;\n")
             else:
-                flow.AddCppCode("flav = {4};\n")
+                flow.AddCppCode("flav[0] = 4;\n flav[1] = -1 ;\n flav[2] = -1;\n")
             flow.Define(
                 "SelectedJet_btagWeight%s_%s" % (suffix, i),
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB, flav)'
