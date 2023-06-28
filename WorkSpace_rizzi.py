@@ -585,7 +585,7 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
                 emptySamples[x].append(s)
         availableSamples[x] = [s for s in listAllSample if s not in emptySamples[x]]
 
-    listAllSample_noYear = [s.split("_")[0] for s in listAllSample]
+    listAllSample_noYear = [s.split("_")[0] if "201" in s.split("_")[1] else s for s in listAllSample]
     print("listAllSample_noYear", listAllSample_noYear)
     print("listAllSample", listAllSample)
     availableSamples = collections.OrderedDict(sorted(availableSamples.items()))
