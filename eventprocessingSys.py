@@ -60,15 +60,15 @@ def getFlowSys(flow, btag):
         }
     """
     )
-    flow.AddCppCode("ROOT::VecOps::RVec<int> flav;")
+    flow.AddCppCode("ROOT::VecOps::RVec<int> flav;\n")
     for suffix, names in sf.items():
         for i, name in enumerate(names):
             if "lf" or "hf" in name:
-                flow.AddCppCode("flav = {0,5}")
+                flow.AddCppCode("flav = {0,5};\n")
             elif "central" in name:
-                flow.AddCppCode("flav = {0,4,5};")
+                flow.AddCppCode("flav = {0,4,5};\n")
             else:
-                flow.AddCppCode("flav = {4};")
+                flow.AddCppCode("flav = {4};\n")
             flow.Define(
                 "SelectedJet_btagWeight%s_%s" % (suffix, i),
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB, flav)'
