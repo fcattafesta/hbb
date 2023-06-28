@@ -96,7 +96,8 @@ def writeLine(uncName, systematicDetailElement, allSamples, region):
             for s in sampleWithSystematic:
                 print("s  ", s)
                 # if re.search(s + "_", sl):
-                if re.search(s, sl):
+                #if re.search(s, sl):
+                if re.search("^" + s + ".*", sl):
                     print("ok1")
                     print(
                         "if",
