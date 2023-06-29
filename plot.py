@@ -1530,6 +1530,12 @@ def makeplot(hn, saveintegrals=True):
             ROOT.kRed,
             ROOT.kBlue,
         ]
+
+        histosum[hn].SetFillStyle(0)
+        histosum[hn].SetLineWidth(3)
+        histosum[hn].SetLineStyle(1)
+        histosum[hn].SetLineColor(ROOT.kBlack)
+
         if systematics:
             for sy_base, sys in systematics.items():
                 # draw the histo for each systematic
@@ -1543,13 +1549,13 @@ def makeplot(hn, saveintegrals=True):
                 canvas_sys_log = ROOT.TCanvas(
                     "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
                 )
-                histosum[hn].SetLineColor(ROOT.kBlack)
                 histosum[hn].SetMaximum(
                     max(
                         histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
                     )
-                    * 1.2
+                    #* 1.2
                 )
+
 
                 canvas_sys.cd()
                 histosum[hn].Draw("hist")
