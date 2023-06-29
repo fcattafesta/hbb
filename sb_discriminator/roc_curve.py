@@ -227,8 +227,8 @@ if "__main__" == __name__:
 
     rates_dict = {}
     for net, data in networks_dict.items():
-        if "udsg" in net:
-            for tag_type, labels in tag_dict.items():
+        for tag_type, labels in tag_dict.items():
+            if "udsg" in tag_type:
                 # compute roc curve and auc
                 fpr, tpr, roc_auc, threshold = get_rates(
                     data[1], data[0], labels[0], labels[1]
