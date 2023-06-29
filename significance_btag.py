@@ -109,7 +109,7 @@ def rescale(btag_list):
         rescale_list.append(rescale)
 
     print("rescale_list", rescale_list)
-    rescale_fin = np.average(rescale_list)
+    rescale_fin = np.average(rescale_list, weights=[1,1])
     rescale_err = np.std(rescale_list, ddof=0)
     print("rescale_fin", rescale_fin)
     print("rescale_err", rescale_err)
@@ -210,27 +210,29 @@ def plot_data(
 ):
     fig_handle = plt.figure(figsize=(13, 10))
 
-    # # compute the average of the two channels and plot it
-    # sig_sum_list_average = [
-    #     np.average([x, y]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
-    # ]
-    # # compute the standard deviation of the two channels
-    # sig_sum_list_std_dev = [
-    #     np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
-    # ]
+    # compute the average of the two channels and plot it
+    sig_sum_list_average = [
+        np.average([x, y]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    ]
+    # compute the standard deviation of the two channels
+    sig_sum_list_std_dev = [
+        np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+    ]
 
 
-    # csv_sig_average = sig_sum_list_average[0]
+    csv_sig_average = sig_sum_list_average[0]
 
     csv_sig_mu = sig_sum_list_mu[0]
     csv_sig_el = sig_sum_list_el[0]
+    print("csv_sig_mu", csv_sig_mu)
+    print("csv_sig_el", csv_sig_el)
 
     sig_sum_list_av = [
-        np.average([x/sig_sum_list_mu[0], y/sig_sum_list_el[0]]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+        np.average([x/csv_sig_mu, y/csv_sig_el]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
 
     sig_sum_list_std = [
-        np.std([x/sig_sum_list_mu[0], y/sig_sum_list_el[0]], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+        np.std([x/csv_sig_mu, y/csv_sig_el], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
 
     #csv_spline = splrep(btag_rescale_list, sig_sum_list_average, s=0)
@@ -305,7 +307,7 @@ def plot_data(
     #     yerr=df_point[3] / csv_sig_average,
     #     fmt="o",
     #     label="DeepFlav",
-    #     color="blue",
+    #     color="purple",
     # )
 
     sig_ratio=[sig_df_list[0] / csv_sig_mu, sig_df_list[1] / csv_sig_el]
@@ -345,6 +347,22 @@ def plot_data(
         color="green",
     )
 
+    # plt.plot(
+    #     1.17,
+    #     BSpline(*csv_spline_av)(1.17)+BSpline(*csv_spline_std)(1.17),
+    #     marker=".",
+    #     label="el",
+    #     color="cyan",
+    # )
+
+    # plt.plot(
+    #     1.17,
+    #     BSpline(*csv_spline_av)(1.17)-BSpline(*csv_spline_std)(1.17),
+    #     marker=".",
+    #     label="$\mu$",
+    #     color="gold",
+    # )
+
     plt.xlabel("btag TPR / btag TPR DeepCSV", fontsize=20, loc="right")
     plt.ylabel("Sig / Sig DeepCSV", fontsize=20, loc="top")
     plt.grid(which="both")
@@ -352,7 +370,7 @@ def plot_data(
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
     plt.legend()  # loc="upper left", fontsize=20)
-    plt.savefig(f"{args.out_dir}/plot_btag_vs_significance.png")
+    plt.savefig(f"{args.out_dir}/plot_btag_vs_significance.png", bbox_inches="tight", dpi=300)
     if args.show:
         plt.show()
 

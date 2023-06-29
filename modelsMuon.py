@@ -1,6 +1,8 @@
 from samples import *
 from collections import defaultdict
 
+from btagging_sys import btag_sys
+
 name = "HBB_mm"
 
 
@@ -99,7 +101,8 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
-systematicsToPlot = []#"XSecAndNorm"]
+systematicsToPlot = btag_sys
+systematicsToPlot += ["XSecAndNorm"]
 systematicsForDC = []
 
 rescaleSample = {}
