@@ -47,7 +47,7 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
-systematicsToPlot = []#btag_sys
+systematicsToPlot = btag_sys
 systematicDetail = {}
 systematicsForDC = []
 
