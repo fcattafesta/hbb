@@ -1192,55 +1192,6 @@ def makeplot(hn, saveintegrals=True):
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
         # if makeWorkspace : return
 
-        # sum histosumSyst and histoSigsumSyst
-        systematics = defaultdict(list)
-        if any([x in hn for x in Significance_variables]):
-            for sy in histosumSyst[hn]:
-                sy_base = sy.replace("Up", "").replace("Down", "")
-                systematics[sy_base].append(sy)
-
-        if systematics:
-            for sy_base, sys in systematics.items():
-                # draw the histo for each systematic
-                canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + sy_base, "", 1200, 1000)
-                # canvas_sys.SetLeftMargin(0.2)
-                # canvas_sys.SetRightMargin(0.2)
-                # canvas_sys.SetBottomMargin(0.2)
-                # canvas_sys.SetTopMargin(0.2)
-
-                # log scale
-                canvas_sys_log = ROOT.TCanvas(
-                    "canvas_sys_log_" + hn + sy, "", 1200, 1000
-                )
-                for i, sy in enumerate(sys):
-                    histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
-
-                    canvas_sys.cd()
-                    if i == 0:
-                        histosumSyst[hn][sy].Draw("hist")
-                    else:
-                        histosumSyst[hn][sy].Draw("hist same")
-
-                    canvas_sys_log.cd()
-                    canvas_sys_log.SetLogy(True)
-                    if i == 0:
-                        histosumSyst[hn][sy].Draw("hist")
-                    else:
-                        histosumSyst[hn][sy].Draw("hist same")
-
-                canvas_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, sy_base, args.btag))
-                canvas_sys.SaveAs(outpath + "/%s_%s_%s.pdf" % (hn, sy_base, args.btag))
-                canvas_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, sy_base, args.btag))
-                canvas_sys_log.SaveAs(
-                    outpath + "/%s_%s_%s_log.png" % (hn, sy_base, args.btag)
-                )
-                canvas_sys_log.SaveAs(
-                    outpath + "/%s_%s_%s_log.pdf" % (hn, sy_base, args.btag)
-                )
-                canvas_sys_log.SaveAs(
-                    outpath + "/%s_%s_%s_log.root" % (hn, sy_base, args.btag)
-                )
-
         # histosum[hn].Add(histoSigsum[hn]) #NOTE: should this be uncommented and moved below?
         # ftxt.write("d_value = "+d_value(histosum[hn], histoSigsum[hn]))
 
@@ -1301,6 +1252,7 @@ def makeplot(hn, saveintegrals=True):
                             SignificanceSum_rescaled,
                         ]
                     )
+        histosum[hn].Add(histoSigsum[hn])
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
@@ -1574,13 +1526,10 @@ def makeplot(hn, saveintegrals=True):
                 sy_base = sy.replace("Up", "").replace("Down", "")
                 systematics[sy_base].append(sy)
 
-        histosum[hn].Add(histoSigsum[hn])
-
         colors = [
             ROOT.kRed,
             ROOT.kBlue,
         ]
-
         if systematics:
             for sy_base, sys in systematics.items():
                 # draw the histo for each systematic
@@ -1595,13 +1544,19 @@ def makeplot(hn, saveintegrals=True):
                     "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
                 )
                 histosum[hn].SetLineColor(ROOT.kBlack)
+                histosum[hn].SetMaximum(
+                    max(
+                        histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
+                    )
+                    * 1.2
+                )
 
                 canvas_sys.cd()
                 histosum[hn].Draw("hist")
                 canvas_sys_log.cd()
                 canvas_sys_log.SetLogy(True)
                 histosum[hn].Draw("hist")
-                
+
                 for i, sy in enumerate(
                     sys,
                 ):
@@ -1615,13 +1570,9 @@ def makeplot(hn, saveintegrals=True):
                     histosumSyst[hn][sy].Draw("hist same")
 
                 canvas_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, sy_base, args.btag))
-                canvas_sys.SaveAs(outpath + "/%s_%s_%s.pdf" % (hn, sy_base, args.btag))
                 canvas_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, sy_base, args.btag))
                 canvas_sys_log.SaveAs(
                     outpath + "/%s_%s_%s_log.png" % (hn, sy_base, args.btag)
-                )
-                canvas_sys_log.SaveAs(
-                    outpath + "/%s_%s_%s_log.pdf" % (hn, sy_base, args.btag)
                 )
                 canvas_sys_log.SaveAs(
                     outpath + "/%s_%s_%s_log.root" % (hn, sy_base, args.btag)
