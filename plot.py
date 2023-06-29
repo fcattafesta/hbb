@@ -1192,7 +1192,7 @@ def makeplot(hn, saveintegrals=True):
         # if makeWorkspace : return
 
         # sum histosumSyst and histoSigsumSyst
-        if Significance_variables in hn:
+        if any([x in hn for x in Significance_variables]):
             for sy in histosumSyst[hn]:
                 histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
 
