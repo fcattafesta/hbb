@@ -1576,6 +1576,12 @@ def makeplot(hn, saveintegrals=True):
 
         histosum[hn].Add(histoSigsum[hn])
 
+        colors = (
+            [
+                "ROOT.kRed",
+                "ROOT.kBlue",
+            ],
+        )
         if systematics:
             for sy_base, sys in systematics.items():
                 # draw the histo for each systematic
@@ -1587,14 +1593,17 @@ def makeplot(hn, saveintegrals=True):
 
                 # log scale
                 canvas_sys_log = ROOT.TCanvas(
-                    "canvas_sys_log_" + hn + sy, "", 1200, 1000
+                    "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
                 )
+                histosum[hn].SetLineColor(ROOT.kBlack)
                 histosum[hn].Draw("hist")
-                for sy in sys:
+                for i, sy in enumerate(
+                    sys,
+                ):
                     histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+                    histosumSyst[hn][sy].SetLineColor(colors[i])
 
                     canvas_sys.cd()
-
                     histosumSyst[hn][sy].Draw("hist same")
 
                     canvas_sys_log.cd()
@@ -1615,6 +1624,7 @@ def makeplot(hn, saveintegrals=True):
                 )
 
         # histosum[hn].Add(histoSigsum[hn]) #NOTE: should this be uncommented and moved below?
+
 
 variablesToFit = []
 makeWorkspace = False
