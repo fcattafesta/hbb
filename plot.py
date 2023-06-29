@@ -1545,7 +1545,7 @@ def makeplot(hn, saveintegrals=True):
                 # canvas_sys.SetRightMargin(0.2)
                 # canvas_sys.SetBottomMargin(0.2)
                 # canvas_sys.SetTopMargin(0.2)
-
+                myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
                 # log scale
                 canvas_sys_log = ROOT.TCanvas(
                     "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
@@ -1563,6 +1563,7 @@ def makeplot(hn, saveintegrals=True):
                 canvas_sys_log.cd()
                 canvas_sys_log.SetLogy(True)
                 histosum[hn].Draw("hist")
+                myLegend_sys.AddEntry(histosum[hn], "nominal", "LE")
 
                 for i, sy in enumerate(
                     sys,
@@ -1570,12 +1571,15 @@ def makeplot(hn, saveintegrals=True):
                     histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
                     histosumSyst[hn][sy].SetLineColor(colors[i])
 
+                    myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "LE")
+
                     canvas_sys.cd()
                     histosumSyst[hn][sy].Draw("hist same")
 
                     canvas_sys_log.cd()
                     histosumSyst[hn][sy].Draw("hist same")
 
+                myLegend_sys.Draw()
                 canvas_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, sy_base, args.btag))
                 canvas_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, sy_base, args.btag))
                 canvas_sys_log.SaveAs(
