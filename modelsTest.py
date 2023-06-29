@@ -1,24 +1,29 @@
 from samples import *
 
+from btagging_sys import btag_sys
+
 name = "Test"
 
-# TODO: add the inclusive DY sample
 background = {
     f"Z+bb": [
-        f"DYZpt-50To100_bb",
+        f"DYZpt-0To50_bb",
     ]
 }
+signal = {"ZH": ["ZH"]}
 
 data = {}
 
-signal = {}
 
 import ROOT
 
 # Color palette
 
-fillcolor = {f"Z+{flavour}": ROOT.kWhite for flavour in flavourSplitting}
-
+fillcolor = {f"Z+{flavour}": ROOT.kGreen for flavour in flavourSplitting}
+fillcolor.update(
+    {
+        "ZH": ROOT.kRed,
+    }
+)
 linecolor = fillcolor
 linecolorOverlayed = {
     f"Z+{flavour}": ROOT.kGreen + i
@@ -34,7 +39,7 @@ backgroundSortedForLegend += [
 ]
 backgroundSorted = backgroundSortedForLegend
 
-histosOverlayed_list = [f"Z+bb"]
+histosOverlayed_list = []#f"Z+bb"]
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
@@ -42,7 +47,7 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
-systematicsToPlot = []
+systematicsToPlot = btag_sys
 systematicDetail = {}
 systematicsForDC = []
 
