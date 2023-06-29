@@ -1595,7 +1595,13 @@ def makeplot(hn, saveintegrals=True):
                     "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
                 )
                 histosum[hn].SetLineColor(ROOT.kBlack)
+
+                canvas_sys.cd()
                 histosum[hn].Draw("hist")
+                canvas_sys_log.cd()
+                canvas_sys_log.SetLogy(True)
+                histosum[hn].Draw("hist")
+                
                 for i, sy in enumerate(
                     sys,
                 ):
@@ -1606,7 +1612,6 @@ def makeplot(hn, saveintegrals=True):
                     histosumSyst[hn][sy].Draw("hist same")
 
                     canvas_sys_log.cd()
-                    canvas_sys_log.SetLogy(True)
                     histosumSyst[hn][sy].Draw("hist same")
 
                 canvas_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, sy_base, args.btag))
