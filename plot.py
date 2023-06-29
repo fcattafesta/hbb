@@ -1578,8 +1578,8 @@ def makeplot(hn, saveintegrals=True):
 
         colors = (
             [
-                "ROOT.kRed",
-                "ROOT.kBlue",
+                ROOT.kRed,
+                ROOT.kBlue,
             ],
         )
         if systematics:
