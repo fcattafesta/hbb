@@ -1531,10 +1531,11 @@ def makeplot(hn, saveintegrals=True):
             ROOT.kBlue,
         ]
 
-        histosum[hn].SetFillStyle(0)
-        histosum[hn].SetLineWidth(3)
-        histosum[hn].SetLineStyle(1)
-        histosum[hn].SetLineColor(ROOT.kBlack)
+        histosum[hn].SetFillStyle(3003)
+        # histosum[hn].SetLineWidth(1)
+        # histosum[hn].SetLineStyle(1)
+        # histosum[hn].SetLineColor(ROOT.kBlack)
+        histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
 
         if systematics:
             for sy_base, sys in systematics.items():
@@ -1553,7 +1554,7 @@ def makeplot(hn, saveintegrals=True):
                     max(
                         histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
                     )
-                    #* 1.2
+                    * 1.1
                 )
 
 
