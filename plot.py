@@ -1576,12 +1576,11 @@ def makeplot(hn, saveintegrals=True):
 
         histosum[hn].Add(histoSigsum[hn])
 
-        colors = (
-            [
-                ROOT.kRed,
-                ROOT.kBlue,
-            ],
-        )
+        colors = [
+            ROOT.kRed,
+            ROOT.kBlue,
+        ]
+
         if systematics:
             for sy_base, sys in systematics.items():
                 # draw the histo for each systematic
