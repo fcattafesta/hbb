@@ -49,7 +49,7 @@ def systematicGrouping(background, signal, jesList, year):
         "ST_s-channel_4f_LD",
     ]
 
-    Hbb = ["ZH", "ggZH"]
+    Hbb = ["ZH"]#, "ggZH"]
 
     systematicDetail = {
         "XSecAndNorm": {

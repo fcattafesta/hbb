@@ -9,7 +9,7 @@ background = {
     #     f"DYZpt-0To50_bb",
     # ]
 }
-signal = {"Hbb": ["ZH"]}
+signal = {"ZH": ["ZH"]}
 
 data = {}
 
@@ -21,7 +21,7 @@ import ROOT
 fillcolor = {f"Z+{flavour}": ROOT.kGreen for flavour in flavourSplitting}
 fillcolor.update(
     {
-        "Hbb": ROOT.kRed,
+        "ZH": ROOT.kRed,
     }
 )
 linecolor = fillcolor
