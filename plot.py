@@ -1252,7 +1252,7 @@ def makeplot(hn, saveintegrals=True):
                             SignificanceSum_rescaled,
                         ]
                     )
-        histosum[hn].Add(histoSigsum[hn]) #NOTE: is this the right place for this?
+        histosum[hn].Add(histoSigsum[hn])  # NOTE: is this the right place for this?
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
@@ -1535,7 +1535,7 @@ def makeplot(hn, saveintegrals=True):
         # histosum[hn].SetLineWidth(1)
         # histosum[hn].SetLineStyle(1)
         # histosum[hn].SetLineColor(ROOT.kBlack)
-        #histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
+        # histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
         histosum[hn].SetFillColor(ROOT.kBlack)
 
         if systematics:
@@ -1549,25 +1549,16 @@ def makeplot(hn, saveintegrals=True):
                 myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
                 ROOT.gStyle.SetPadLeftMargin(0.2)
 
-
                 canvas_tuple_sys = (canvas_sys, canvas_sys_log)
 
                 for i, c_sys in enumerate(canvas_tuple_sys):
+                    max_value = max(
+                        histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
+                    )
                     if i == 0:
-                        histosum[hn].SetMaximum(
-                            max(
-                                histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
-                            )
-                            * 2
-                        )
+                        histosum[hn].SetMaximum(max_value * 2)
                     else:
-                        histosum[hn].SetMaximum(
-                            max(
-                                histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
-                            )
-                            **2
-                        )
-
+                        histosum[hn].SetMaximum(max_value**2)
 
                     c_sys.cd()
                     histosum[hn].Draw("hist")
@@ -1591,13 +1582,23 @@ def makeplot(hn, saveintegrals=True):
 
                     myLegend_sys.Draw()
                     if i == 0:
-                        c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
-                        c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
+                        c_sys.SaveAs(
+                            outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base)
+                        )
+                        c_sys.SaveAs(
+                            outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base)
+                        )
                     else:
                         c_sys.SetLogy(True)
-                        c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base))
-                        c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base))
+                        c_sys.SaveAs(
+                            outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base)
+                        )
+                        c_sys.SaveAs(
+                            outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base)
+                        )
                     del c_sys
+                    histosum[hn].SetMaximum(max_value)
+
 
 variablesToFit = []
 makeWorkspace = False
