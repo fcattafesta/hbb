@@ -21,7 +21,7 @@ import ROOT
 fillcolor = {f"Z+{flavour}": ROOT.kGreen for flavour in flavourSplitting}
 fillcolor.update(
     {
-        "ZH": ROOT.kRed,
+        "Hbb": ROOT.kRed,
     }
 )
 linecolor = fillcolor
