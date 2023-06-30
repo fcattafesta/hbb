@@ -5,11 +5,11 @@ from btagging_sys import btag_sys
 name = "Test"
 
 background = {
-    f"Z+bb": [
-        f"DYZpt-0To50_bb",
-    ]
+    # f"Z+bb": [
+    #     f"DYZpt-0To50_bb",
+    # ]
 }
-signal = {}#"ZH": ["ZH"]}
+signal = {"ZH": ["ZH"]}
 
 data = {}
 
