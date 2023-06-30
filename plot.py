@@ -1102,8 +1102,8 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
         for i, sy in enumerate(
             systematic,
         ):
-            if model.signal:
-                histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+            # if model.signal:
+            #     histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
             histosumSyst[hn][sy].SetLineColor(colors[i])
 
             myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
@@ -1539,6 +1539,8 @@ def makeplot(hn, saveintegrals=True):
                 ratio.GetYaxis().SetNdivisions(5)
                 ratiosy = []
                 for j, sy in enumerate(systematicsSetToUse):
+                    if model.signal:
+                        histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
                     ratiosy.append(histosumSyst[hn][sy].Clone())
                     ratiosy[-1].Add(histosum[hn], -1.0)
                     ratiosy[-1].Divide(histosum[hn])
