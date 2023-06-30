@@ -9,7 +9,7 @@ background = {
     #     f"DYZpt-0To50_bb",
     # ]
 }
-signal = {"ZH": ["ZH"]}
+signal = {"Hbb": ["ZH"]}
 
 data = {}
 
