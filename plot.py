@@ -1068,6 +1068,68 @@ def fill_datasum(
     return h
 
 
+def plot_sys(hn, sy_base, t0, t1, t2, t3, t4):
+    # draw the histo for each systematic
+    canvas_sys = ROOT.TCanvas("canvas_sys_" + hn , "", 1200, 1000)
+    canvas_sys_log = ROOT.TCanvas(
+        "canvas_sys_log_" + hn , "", 1200, 1000
+    )
+
+    ROOT.gStyle.SetPadLeftMargin(0.18)
+
+    canvas_tuple_sys = (canvas_sys, canvas_sys_log)
+
+    for i, c_sys in enumerate(canvas_tuple_sys):
+        myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
+        max_value = max(
+            histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
+        )
+        if i == 0:
+            histosum[hn].SetMaximum(max_value * 2)
+        else:
+            histosum[hn].SetMaximum(max_value**2)
+
+        c_sys.cd()
+        histosum[hn].Draw("hist")
+        myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
+
+        for i, sy in enumerate(
+            sys,
+        ):
+            histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+            histosumSyst[hn][sy].SetLineColor(colors[i])
+
+            myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
+
+            histosumSyst[hn][sy].Draw("hist same")
+
+            t0.Draw()
+            t1.Draw()
+            t2.Draw()
+            t3.Draw()
+            t4.Draw()
+
+        myLegend_sys.Draw()
+        c_sys.Update()
+        if i == 0:
+            c_sys.SaveAs(
+                outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base)
+            )
+            c_sys.SaveAs(
+                outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base)
+            )
+        else:
+            c_sys.SetLogy(True)
+            c_sys.SaveAs(
+                outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base)
+            )
+            c_sys.SaveAs(
+                outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base)
+            )
+        histosum[hn].SetMaximum(max_value)
+        del c_sys
+
+
 def makeplot(hn, saveintegrals=True):
     if "__syst__" not in hn:
         dictLegendBackground = dict()
@@ -1310,6 +1372,34 @@ def makeplot(hn, saveintegrals=True):
         # canvas[hn].SetRightMargin(.0);
         canvas_tuple = (canvas[hn], canvas_log)
 
+        t0 = makeText(
+            0.25,
+            0.85,
+            labelRegion[hn.split("___")[1]]
+            if hn.split("___")[1] in list(labelRegion.keys())
+            else hn.split("___")[1],
+            42,
+            size=0.04,
+        )
+
+        t1 = makeText(0.28 if i == 0 else 0.22, 0.95, "CMS", 61)
+        t2 = makeText(0.38 if i == 0 else 0.32, 0.95, str(year), 42)
+        t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+        t4 = makeText(
+            0.25,
+            0.8,
+            labelLeptons[hn.split("___")[1]]
+            + btag_label
+            + (" SF" if args.sf else "")
+            if hn.split("___")[1] in list(labelLeptons.keys())
+            else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
+            42,
+            size=0.04,
+        )
+        # td = makeText(
+        #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
+        # )
+
         for i, c in enumerate(canvas_tuple):
             if hn in datasum.keys():
                 c.Divide(1, 2)
@@ -1393,33 +1483,6 @@ def makeplot(hn, saveintegrals=True):
             for gr in model.histosOverlayed_list:
                 histosOverlayed[hn][gr].Draw("hist same")
 
-            t0 = makeText(
-                0.25,
-                0.85,
-                labelRegion[hn.split("___")[1]]
-                if hn.split("___")[1] in list(labelRegion.keys())
-                else hn.split("___")[1],
-                42,
-                size=0.04,
-            )
-
-            t1 = makeText(0.28 if i == 0 else 0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.38 if i == 0 else 0.32, 0.95, str(year), 42)
-            t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
-            t4 = makeText(
-                0.25,
-                0.8,
-                labelLeptons[hn.split("___")[1]]
-                + btag_label
-                + (" SF" if args.sf else "")
-                if hn.split("___")[1] in list(labelLeptons.keys())
-                else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
-                42,
-                size=0.04,
-            )
-            # td = makeText(
-            #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
-            # )
             t0.Draw()
             t1.Draw()
             t2.Draw()
@@ -1539,68 +1602,8 @@ def makeplot(hn, saveintegrals=True):
         histosum[hn].SetFillColor(ROOT.kBlack)
 
         if systematics:
-            # draw the histo for each systematic
-            canvas_sys = ROOT.TCanvas("canvas_sys_" + hn , "", 1200, 1000)
-            canvas_sys_log = ROOT.TCanvas(
-                "canvas_sys_log_" + hn , "", 1200, 1000
-            )
             for sy_base, sys in systematics.items():
-
-                myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
-                ROOT.gStyle.SetPadLeftMargin(0.2)
-
-                canvas_tuple_sys = (canvas_sys, canvas_sys_log)
-
-                for i, c_sys in enumerate(canvas_tuple_sys):
-                    max_value = max(
-                        histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
-                    )
-                    if i == 0:
-                        histosum[hn].SetMaximum(max_value * 2)
-                    else:
-                        histosum[hn].SetMaximum(max_value**2)
-
-                    c_sys.cd()
-                    histosum[hn].Draw("hist")
-                    myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
-
-                    for i, sy in enumerate(
-                        sys,
-                    ):
-                        histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
-                        histosumSyst[hn][sy].SetLineColor(colors[i])
-
-                        myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
-
-                        histosumSyst[hn][sy].Draw("hist same")
-
-                        t0.Draw()
-                        t1.Draw()
-                        t2.Draw()
-                        t3.Draw()
-                        t4.Draw()
-
-                    myLegend_sys.Draw()
-                    if i == 0:
-                        c_sys.SaveAs(
-                            outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base)
-                        )
-                        c_sys.SaveAs(
-                            outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base)
-                        )
-                    else:
-                        c_sys.SetLogy(True)
-                        c_sys.SaveAs(
-                            outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base)
-                        )
-                        c_sys.SaveAs(
-                            outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base)
-                        )
-                    del c_sys
-                    histosum[hn].SetMaximum(max_value)
-
-                # del canvas_sys
-                # del canvas_sys_log
+                plot_sys(hn, sy_base, t0, t1, t2, t3, t4)
 
 
 variablesToFit = []
