@@ -1539,12 +1539,12 @@ def makeplot(hn, saveintegrals=True):
         histosum[hn].SetFillColor(ROOT.kBlack)
 
         if systematics:
+            # draw the histo for each systematic
+            canvas_sys = ROOT.TCanvas("canvas_sys_" + hn , "", 1200, 1000)
+            canvas_sys_log = ROOT.TCanvas(
+                "canvas_sys_log_" + hn , "", 1200, 1000
+            )
             for sy_base, sys in systematics.items():
-                # draw the histo for each systematic
-                canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + sy_base, "", 1200, 1000)
-                canvas_sys_log = ROOT.TCanvas(
-                    "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
-                )
 
                 myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
                 ROOT.gStyle.SetPadLeftMargin(0.2)
@@ -1599,8 +1599,8 @@ def makeplot(hn, saveintegrals=True):
                     del c_sys
                     histosum[hn].SetMaximum(max_value)
 
-                del canvas_sys
-                del canvas_sys_log
+                # del canvas_sys
+                # del canvas_sys_log
 
 
 variablesToFit = []
