@@ -1461,7 +1461,7 @@ def makeplot(hn, saveintegrals=True):
                     max(0.1 * histos[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
                 if i == 0:
-                    histos[hn].SetMaximum(2 * histosum[hn].GetMaximum())
+                    histos[hn].SetMaximum(histosum[hn].GetMaximum() * 2)
                 else:
                     histos[hn].SetMaximum(
                         (histosum[hn].GetMaximum()) ** 2,
@@ -1584,6 +1584,7 @@ def makeplot(hn, saveintegrals=True):
                     c.SaveAs(outpath + "/%s_%s_log.png" % (hn, args.btag))
                     c.SaveAs(outpath + "/%s_%s_log.root" % (hn, args.btag))
             del c
+            myLegend_sy.Clear()
             if hn in datasum.keys():
                 datasum[hn].SetMinimum(minimum)
                 datasum[hn].SetMaximum(maximum)
