@@ -1102,7 +1102,8 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
         for i, sy in enumerate(
             systematic,
         ):
-            histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+            if model.signal:
+                histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
             histosumSyst[hn][sy].SetLineColor(colors[i])
 
             myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
