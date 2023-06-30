@@ -55,7 +55,7 @@ def makeLegend(xDown, xUp, yDown, yUp, name="", size=1):
     myLegend.SetFillColor(0)
     myLegend.SetBorderSize(0)
     myLegend.SetTextFont(42)
-    myLegend.SetTextSize(0.02*size)
+    myLegend.SetTextSize(0.02 * size)
     return myLegend
 
 
@@ -1068,12 +1068,10 @@ def fill_datasum(
     return h
 
 
-def plot_sys(hn, sy_base, t0, t1, t2, t3, t4):
+def plot_sys(hn, sy_base, sys, t0, t1, t2, t3, t4):
     # draw the histo for each systematic
-    canvas_sys = ROOT.TCanvas("canvas_sys_" + hn , "", 1200, 1000)
-    canvas_sys_log = ROOT.TCanvas(
-        "canvas_sys_log_" + hn , "", 1200, 1000
-    )
+    canvas_sys = ROOT.TCanvas("canvas_sys_" + hn, "", 1200, 1000)
+    canvas_sys_log = ROOT.TCanvas("canvas_sys_log_" + hn, "", 1200, 1000)
 
     ROOT.gStyle.SetPadLeftMargin(0.18)
 
@@ -1112,20 +1110,12 @@ def plot_sys(hn, sy_base, t0, t1, t2, t3, t4):
         myLegend_sys.Draw()
         c_sys.Update()
         if i == 0:
-            c_sys.SaveAs(
-                outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base)
-            )
-            c_sys.SaveAs(
-                outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base)
-            )
+            c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
+            c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
         else:
             c_sys.SetLogy(True)
-            c_sys.SaveAs(
-                outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base)
-            )
-            c_sys.SaveAs(
-                outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base)
-            )
+            c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base))
+            c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base))
         histosum[hn].SetMaximum(max_value)
         del c_sys
 
@@ -1138,7 +1128,9 @@ def makeplot(hn, saveintegrals=True):
         myLegend_1 = makeLegend(0.58, 0.68, 0.75, 0.92)
         myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
-        myLegend_sy = makeLegend(0.86, 0.98, 0.1, 0.15 + 0.03 * len(systematicsSetToUse), size=0.3)
+        myLegend_sy = makeLegend(
+            0.86, 0.98, 0.1, 0.15 + 0.03 * len(systematicsSetToUse), size=0.3
+        )
 
         # os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
@@ -1388,9 +1380,7 @@ def makeplot(hn, saveintegrals=True):
         t4 = makeText(
             0.25,
             0.8,
-            labelLeptons[hn.split("___")[1]]
-            + btag_label
-            + (" SF" if args.sf else "")
+            labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
             if hn.split("___")[1] in list(labelLeptons.keys())
             else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
             42,
@@ -1603,7 +1593,7 @@ def makeplot(hn, saveintegrals=True):
 
         if systematics:
             for sy_base, sys in systematics.items():
-                plot_sys(hn, sy_base, t0, t1, t2, t3, t4)
+                plot_sys(hn, sy_base, sys, t0, t1, t2, t3, t4)
 
 
 variablesToFit = []
