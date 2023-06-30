@@ -1076,7 +1076,7 @@ def makeplot(hn, saveintegrals=True):
         myLegend_1 = makeLegend(0.58, 0.68, 0.75, 0.92)
         myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
-        myLegend_sy = makeLegend(0.9, 1, 0.1, 0.15 + 0.015 * len(systematicsSetToUse))
+        myLegend_sy = makeLegend(0.85, 1, 0.1, 0.15 + 0.05 * len(systematicsSetToUse))
 
         # os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
@@ -1252,7 +1252,7 @@ def makeplot(hn, saveintegrals=True):
                             SignificanceSum_rescaled,
                         ]
                     )
-        histosum[hn].Add(histoSigsum[hn])
+        histosum[hn].Add(histoSigsum[hn]) #NOTE: is this the right place for this?
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
@@ -1308,7 +1308,7 @@ def makeplot(hn, saveintegrals=True):
         # canvas[hn].SetRightMargin(.0);
         canvas_log = ROOT.TCanvas("canvas_log_" + hn, "", 1200, 1000)
         # canvas[hn].SetRightMargin(.0);
-        canvas_tuple = (canvas_log, canvas[hn])
+        canvas_tuple = (canvas[hn], canvas_log)
 
         for i, c in enumerate(canvas_tuple):
             if hn in datasum.keys():
@@ -1542,58 +1542,62 @@ def makeplot(hn, saveintegrals=True):
             for sy_base, sys in systematics.items():
                 # draw the histo for each systematic
                 canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + sy_base, "", 1200, 1000)
-                # canvas_sys.SetLeftMargin(0.2)
-                # canvas_sys.SetRightMargin(0.2)
-                # canvas_sys.SetBottomMargin(0.2)
-                # canvas_sys.SetTopMargin(0.2)
-                myLegend_sys = ROOT.TLegend(0.75, 0.75, 0.9, 0.9)
-                # log scale
                 canvas_sys_log = ROOT.TCanvas(
                     "canvas_sys_log_" + hn + sy_base, "", 1200, 1000
                 )
-                histosum[hn].SetMaximum(
-                    max(
-                        histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
-                    )
-                    * 1.1
-                )
+
+                myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
+                ROOT.gStyle.SetPadLeftMargin(0.2)
 
 
-                canvas_sys.cd()
-                histosum[hn].Draw("hist")
-                canvas_sys_log.cd()
-                canvas_sys_log.SetLogy(True)
-                histosum[hn].Draw("hist")
-                myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
+                canvas_tuple_sys = (canvas_sys, canvas_sys_log)
 
-                for i, sy in enumerate(
-                    sys,
-                ):
-                    histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
-                    histosumSyst[hn][sy].SetLineColor(colors[i])
+                for i, c_sys in enumerate(canvas_tuple_sys):
+                    if i == 0:
+                        histosum[hn].SetMaximum(
+                            max(
+                                histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
+                            )
+                            * 2
+                        )
+                    else:
+                        histosum[hn].SetMaximum(
+                            max(
+                                histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
+                            )
+                            **2
+                        )
 
-                    myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
 
-                    canvas_sys.cd()
-                    histosumSyst[hn][sy].Draw("hist same")
+                    c_sys.cd()
+                    histosum[hn].Draw("hist")
+                    myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
 
-                    canvas_sys_log.cd()
-                    histosumSyst[hn][sy].Draw("hist same")
-                canvas_sys.cd()
-                myLegend_sys.Draw()
-                canvas_sys_log.cd()
-                myLegend_sys.Draw()
-                canvas_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, sy_base, args.btag))
-                canvas_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, sy_base, args.btag))
-                canvas_sys_log.SaveAs(
-                    outpath + "/%s_%s_%s_log.png" % (hn, sy_base, args.btag)
-                )
-                canvas_sys_log.SaveAs(
-                    outpath + "/%s_%s_%s_log.root" % (hn, sy_base, args.btag)
-                )
+                    for i, sy in enumerate(
+                        sys,
+                    ):
+                        histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+                        histosumSyst[hn][sy].SetLineColor(colors[i])
 
-        # histosum[hn].Add(histoSigsum[hn]) #NOTE: should this be uncommented and moved below?
+                        myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
 
+                        histosumSyst[hn][sy].Draw("hist same")
+
+                        t0.Draw()
+                        t1.Draw()
+                        t2.Draw()
+                        t3.Draw()
+                        t4.Draw()
+
+                    myLegend_sys.Draw()
+                    if i == 0:
+                        c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
+                        c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
+                    else:
+                        c_sys.SetLogy(True)
+                        c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base))
+                        c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base))
+                    del c_sys
 
 variablesToFit = []
 makeWorkspace = False
