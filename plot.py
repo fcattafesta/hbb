@@ -1076,7 +1076,7 @@ def makeplot(hn, saveintegrals=True):
         myLegend_1 = makeLegend(0.58, 0.68, 0.75, 0.92)
         myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
-        myLegend_sy = makeLegend(0.86, 0.98, 0.1, 0.15 + 0.03 * len(systematicsSetToUse))
+        myLegend_sy = makeLegend(0.86, 0.98, 0.1, 0.15 + 0.03 * len(systematicsSetToUse), size=0.3)
 
         # os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
@@ -1475,7 +1475,7 @@ def makeplot(hn, saveintegrals=True):
                     ratiosy[-1].SetLineColor(1 + j)
                     # ratiosy[-1].SetLineStyle(j)
                     ratiosy[-1].SetFillStyle(0)
-                    myLegend_sy.AddEntry(ratiosy[-1], sy, "LE", size=0.3)
+                    myLegend_sy.AddEntry(ratiosy[-1], sy, "LE")
                     ratiosy[-1].Draw("same hist")
                     # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
                 c.cd()
