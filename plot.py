@@ -900,7 +900,7 @@ def fill_datasum(
                                     makeWorkspace,
                                 )
                             else:
-                                logger.info("missing %s for %s %s %s " % (s, hn, gr, d))
+                                logger.info("missing %s for %s %s %s " % (s, hn, gr, d)) #NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
                                 addHistoInTStack(
                                     h,
                                     stackSys,
@@ -1004,7 +1004,7 @@ def fill_datasum(
                                 makeWorkspace,
                             )
                         else:
-                            logger.info("missing %s for %s %s %s " % (s, hn, gr, d))
+                            logger.info("missing %s for %s %s %s " % (s, hn, gr, d))#NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
                             addHistoInTStack(
                                 h,
                                 stackSys,
@@ -1078,15 +1078,15 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
     canvas_sys_log = ROOT.TCanvas("canvas_sys_log_" + hn, "", 1200, 1000)
 
     ROOT.gStyle.SetPadLeftMargin(0.18)
+    setStyle(histosum[hn], noData=True)
 
     canvas_tuple_sys = (canvas_sys, canvas_sys_log)
-
-    for i, c_sys in enumerate(canvas_tuple_sys):
+    for j, c_sys in enumerate(canvas_tuple_sys):
         myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
         max_value = max(
             histosum[hn].GetMaximum(), histosumSyst[hn][systematic[0]].GetMaximum()
         )
-        if i == 0:
+        if j == 0:
             histosum[hn].SetMaximum(max_value * 2)
         else:
             histosum[hn].SetMaximum(max_value**2)
@@ -1102,7 +1102,6 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
             histosumSyst[hn][sy].SetLineColor(colors[i])
 
             myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
-
             histosumSyst[hn][sy].Draw("hist same")
 
             t0.Draw()
@@ -1113,7 +1112,8 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
 
         myLegend_sys.Draw()
         c_sys.Update()
-        if i == 0:
+
+        if j == 0:
             c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
             c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
         else:
