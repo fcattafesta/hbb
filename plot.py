@@ -1127,6 +1127,8 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
         histosum[hn].SetMaximum(max_value)
         del c_sys
 
+    del canvas_sys, canvas_sys_log
+
 
 def makeplot(hn, saveintegrals=True):
     if "__syst__" not in hn:
