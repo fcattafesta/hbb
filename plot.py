@@ -1333,7 +1333,7 @@ def makeplot(hn, saveintegrals=True):
             h.SetLineWidth(3)
             h.SetLineStyle(2)
             # h.Scale(5000.0)
-            myLegend_1.AddEntry(h, gr, "l")
+            myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
         for gr in model.histosOverlayed_list:
             h = histosOverlayed[hn][gr]
@@ -1510,6 +1510,10 @@ def makeplot(hn, saveintegrals=True):
                 )
                 t_sig_rescaled.Draw()
 
+            if model.signal:
+                for j, sy in enumerate(systematicsSetToUse):
+                    histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+                    
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
                 datasum[hn].SetMarkerColor(ROOT.kBlack)
@@ -1544,8 +1548,6 @@ def makeplot(hn, saveintegrals=True):
                 ratio.GetYaxis().SetNdivisions(5)
                 ratiosy = []
                 for j, sy in enumerate(systematicsSetToUse):
-                    if model.signal:
-                        histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
                     ratiosy.append(histosumSyst[hn][sy].Clone())
                     ratiosy[-1].Add(histosum[hn], -1.0)
                     ratiosy[-1].Divide(histosum[hn])
