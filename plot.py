@@ -49,13 +49,13 @@ logger = setup_logger(outpath + "/logger.log")
 logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 
-def makeLegend(xDown, xUp, yDown, yUp, name=""):
+def makeLegend(xDown, xUp, yDown, yUp, name="", size=1):
     myLegend = ROOT.TLegend(xDown, yDown, xUp, yUp, name)
     myLegend.SetFillStyle(0)
     myLegend.SetFillColor(0)
     myLegend.SetBorderSize(0)
     myLegend.SetTextFont(42)
-    myLegend.SetTextSize(0.02)
+    myLegend.SetTextSize(0.02*size)
     return myLegend
 
 
@@ -1076,7 +1076,7 @@ def makeplot(hn, saveintegrals=True):
         myLegend_1 = makeLegend(0.58, 0.68, 0.75, 0.92)
         myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
-        myLegend_sy = makeLegend(0.85, 1, 0.1, 0.15 + 0.05 * len(systematicsSetToUse))
+        myLegend_sy = makeLegend(0.86, 0.98, 0.1, 0.15 + 0.03 * len(systematicsSetToUse))
 
         # os.system("cp " + args.histfolder + "/description.txt " + outpath)
         #        os.system("git rev-parse HEAD > "+outpath+"/git_commit.txt")
@@ -1316,7 +1316,7 @@ def makeplot(hn, saveintegrals=True):
                 c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
                 c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
 
-                ROOT.gStyle.SetPadLeftMargin(0.2)
+                ROOT.gStyle.SetPadLeftMargin(0.18)
                 c.GetPad(2).SetBottomMargin(0.35)
                 c.GetPad(2).SetTopMargin(0.0)
 
@@ -1475,7 +1475,7 @@ def makeplot(hn, saveintegrals=True):
                     ratiosy[-1].SetLineColor(1 + j)
                     # ratiosy[-1].SetLineStyle(j)
                     ratiosy[-1].SetFillStyle(0)
-                    myLegend_sy.AddEntry(ratiosy[-1], sy, "LE")
+                    myLegend_sy.AddEntry(ratiosy[-1], sy, "LE", size=0.3)
                     ratiosy[-1].Draw("same hist")
                     # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
                 c.cd()
@@ -1598,6 +1598,9 @@ def makeplot(hn, saveintegrals=True):
                         )
                     del c_sys
                     histosum[hn].SetMaximum(max_value)
+
+                del canvas_sys
+                del canvas_sys_log
 
 
 variablesToFit = []
