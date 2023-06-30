@@ -1105,8 +1105,7 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
         for i, sy in enumerate(
             systematic,
         ):
-            # if model.signal:
-            #     histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+
             histosumSyst[hn][sy].SetLineColor(colors[i])
 
             myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
@@ -1262,7 +1261,6 @@ def makeplot(hn, saveintegrals=True):
         # superImposedPlot (histos[hn], histosSig[hn], outpath)
         # if makeWorkspace : return
 
-        # histosum[hn].Add(histoSigsum[hn]) #NOTE: should this be uncommented and moved below?
         # ftxt.write("d_value = "+d_value(histosum[hn], histoSigsum[hn]))
 
         if model.signal:
@@ -1407,6 +1405,10 @@ def makeplot(hn, saveintegrals=True):
         #     0.85, 0.78, "d = " + d_value(histosum[hn], histoSigsum[hn]), 42, 0.04
         # )
 
+        if model.signal:
+            for sy in systematicsSetToUse:
+                histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
+
         for i, c in enumerate(canvas_tuple):
             if hn in datasum.keys():
                 c.Divide(1, 2)
@@ -1510,10 +1512,6 @@ def makeplot(hn, saveintegrals=True):
                 )
                 t_sig_rescaled.Draw()
 
-            if model.signal:
-                for j, sy in enumerate(systematicsSetToUse):
-                    histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
-                    
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
                 datasum[hn].SetMarkerColor(ROOT.kBlack)
