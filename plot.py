@@ -26,6 +26,10 @@ Significance_variables = ["atanhDNN_Score"]
 
 outdir = args.workspace
 
+colors = [
+    ROOT.kRed,
+    ROOT.kBlue,
+]
 model = importlib.import_module(args.model.replace(".py", ""))
 samples = model.samples
 year = "+".join(list(model.data.keys()))
@@ -1068,7 +1072,7 @@ def fill_datasum(
     return h
 
 
-def plot_sys(hn, sy_base, sys, t0, t1, t2, t3, t4):
+def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
     # draw the histo for each systematic
     canvas_sys = ROOT.TCanvas("canvas_sys_" + hn, "", 1200, 1000)
     canvas_sys_log = ROOT.TCanvas("canvas_sys_log_" + hn, "", 1200, 1000)
@@ -1080,7 +1084,7 @@ def plot_sys(hn, sy_base, sys, t0, t1, t2, t3, t4):
     for i, c_sys in enumerate(canvas_tuple_sys):
         myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
         max_value = max(
-            histosum[hn].GetMaximum(), histosumSyst[hn][sys[0]].GetMaximum()
+            histosum[hn].GetMaximum(), histosumSyst[hn][systematic[0]].GetMaximum()
         )
         if i == 0:
             histosum[hn].SetMaximum(max_value * 2)
@@ -1092,7 +1096,7 @@ def plot_sys(hn, sy_base, sys, t0, t1, t2, t3, t4):
         myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
 
         for i, sy in enumerate(
-            sys,
+            systematic,
         ):
             histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
             histosumSyst[hn][sy].SetLineColor(colors[i])
@@ -1579,11 +1583,6 @@ def makeplot(hn, saveintegrals=True):
                 sy_base = sy.replace("Up", "").replace("Down", "")
                 systematics[sy_base].append(sy)
 
-        colors = [
-            ROOT.kRed,
-            ROOT.kBlue,
-        ]
-
         histosum[hn].SetFillStyle(3003)
         # histosum[hn].SetLineWidth(1)
         # histosum[hn].SetLineStyle(1)
@@ -1592,8 +1591,8 @@ def makeplot(hn, saveintegrals=True):
         histosum[hn].SetFillColor(ROOT.kBlack)
 
         if systematics:
-            for sy_base, sys in systematics.items():
-                plot_sys(hn, sy_base, sys, t0, t1, t2, t3, t4)
+            for sy_base, systematic in systematics.items():
+                plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4)
 
 
 variablesToFit = []
