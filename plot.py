@@ -1316,7 +1316,8 @@ def makeplot(hn, saveintegrals=True):
                             SignificanceSum_rescaled,
                         ]
                     )
-        histosum[hn].Add(histoSigsum[hn])  # NOTE: is this the right place for this?
+        if model.signal:
+            histosum[hn].Add(histoSigsum[hn])  # NOTE: is this the right place for this?
 
         for gr in model.signalSortedForLegend:
             h = histosSignal[hn][gr]
