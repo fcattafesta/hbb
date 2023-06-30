@@ -1090,6 +1090,9 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
         max_value = max(
             histosum[hn].GetMaximum(), histosumSyst[hn][systematic[0]].GetMaximum()
         )
+        min_value = histosum[hn].GetMinimum()
+
+        histosum[hn].SetMinimum(max(0.1, 0.1 * histosum[hn].GetMinimum()))
         if j == 0:
             histosum[hn].SetMaximum(max_value * 2)
         else:
@@ -1125,9 +1128,11 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
             c_sys.SetLogy(True)
             c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base))
             c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base))
-        histosum[hn].SetMaximum(max_value)
-        del c_sys
 
+        histosum[hn].SetMaximum(max_value)
+        histosum[hn].SetMinimum(min_value)
+
+        del c_sys
     del canvas_sys, canvas_sys_log
 
 
@@ -1436,8 +1441,8 @@ def makeplot(hn, saveintegrals=True):
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
-                minimum = datasum[hn].GetMinimum()
-                maximum = datasum[hn].GetMaximum()
+                min_value = datasum[hn].GetMinimum()
+                max_value = datasum[hn].GetMaximum()
                 datasum[hn].SetMinimum(
                     max(0.1 * datasum[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
@@ -1459,8 +1464,8 @@ def makeplot(hn, saveintegrals=True):
                 datasum[hn].Draw("E P")
                 histos[hn].Draw("hist same")
             else:
-                minimum = histos[hn].GetMinimum()
-                maximum = histos[hn].GetMaximum()
+                min_value = histos[hn].GetMinimum()
+                max_value = histos[hn].GetMaximum()
                 histos[hn].SetMinimum(
                     max(0.1 * histos[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
@@ -1592,11 +1597,11 @@ def makeplot(hn, saveintegrals=True):
             del c
             myLegend_sy.Clear()
             if hn in datasum.keys():
-                datasum[hn].SetMinimum(minimum)
-                datasum[hn].SetMaximum(maximum)
+                datasum[hn].SetMinimum(min_value)
+                datasum[hn].SetMaximum(max_value)
             else:
-                histos[hn].SetMinimum(minimum)
-                histos[hn].SetMaximum(maximum)
+                histos[hn].SetMinimum(min_value)
+                histos[hn].SetMaximum(max_value)
 
         # sum histosumSyst and histoSigsumSyst
         systematics = defaultdict(list)

@@ -9,7 +9,7 @@ background = {
         f"DYZpt-50To100_bb",
     ]
 }
-signal = {}#"ZH": ["ZH"]}
+signal = {"ZH": ["ZH"]}
 
 data = {}
 
@@ -48,7 +48,7 @@ signalSorted = signalSortedForLegend
 from rebinning import *
 
 systematicsToPlot = btag_sys
-#systematicsToPlot += ["XSecAndNorm"]
+systematicsToPlot += ["XSecAndNorm"]
 
 from systematicGrouping import *
 systematicDetail = systematicGrouping(background, signal,[],"2018")
