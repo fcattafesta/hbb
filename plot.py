@@ -900,7 +900,9 @@ def fill_datasum(
                                     makeWorkspace,
                                 )
                             else:
-                                logger.info("missing %s for %s %s %s " % (s, hn, gr, d)) #NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
+                                logger.info(
+                                    "missing %s for %s %s %s " % (s, hn, gr, d)
+                                )  # NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
                                 addHistoInTStack(
                                     h,
                                     stackSys,
@@ -1004,7 +1006,9 @@ def fill_datasum(
                                 makeWorkspace,
                             )
                         else:
-                            logger.info("missing %s for %s %s %s " % (s, hn, gr, d))#NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
+                            logger.info(
+                                "missing %s for %s %s %s " % (s, hn, gr, d)
+                            )  # NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
                             addHistoInTStack(
                                 h,
                                 stackSys,
@@ -1133,7 +1137,7 @@ def makeplot(hn, saveintegrals=True):
         myLegend_2 = makeLegend(0.68, 0.78, 0.75, 0.92)
 
         myLegend_sy = makeLegend(
-            0.86, 0.98, 0.1, 0.15 + 0.03 * len(systematicsSetToUse), size=0.3
+            0.86, 0.99, 0.1, 0.15 + 0.04 * len(systematicsSetToUse), size=0.5
         )
 
         # os.system("cp " + args.histfolder + "/description.txt " + outpath)
@@ -1378,8 +1382,8 @@ def makeplot(hn, saveintegrals=True):
             size=0.04,
         )
 
-        t1 = makeText(0.28 , 0.95, "CMS", 61)
-        t2 = makeText(0.38 , 0.95, str(year), 42)
+        t1 = makeText(0.28, 0.95, "CMS", 61)
+        t2 = makeText(0.38, 0.95, str(year), 42)
         t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
         t4 = makeText(
             0.25,
@@ -1428,19 +1432,22 @@ def makeplot(hn, saveintegrals=True):
 
             histos[hn].SetTitle("")
             if hn in datasum.keys():
+                minimum = datasum[hn].GetMinimum()
+                maximum = datasum[hn].GetMaximum()
                 datasum[hn].SetMinimum(
                     max(0.1 * datasum[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
                 if i == 0:
                     datasum[hn].SetMaximum(
-                        max(2 * datasum[hn].GetMaximum(), 2 * histosum[hn].GetMaximum())
+                        max(datasum[hn].GetMaximum(), histosum[hn].GetMaximum()) * 2
                     )  # zoom out y axis
                 else:
                     datasum[hn].SetMaximum(
                         max(
-                            (datasum[hn].GetMaximum()) ** 2,
-                            (histosum[hn].GetMaximum()) ** 2,
+                            (datasum[hn].GetMaximum()),
+                            (histosum[hn].GetMaximum()),
                         )
+                        ** 2
                     )  # zoom out y axis
                 datasum[hn].Draw("E P")
                 # datastack[hn].GetXaxis().SetTitle(hn)
@@ -1448,6 +1455,8 @@ def makeplot(hn, saveintegrals=True):
                 datasum[hn].Draw("E P")
                 histos[hn].Draw("hist same")
             else:
+                minimum = histos[hn].GetMinimum()
+                maximum = histos[hn].GetMaximum()
                 histos[hn].SetMinimum(
                     max(0.1 * histos[hn].GetMinimum(), 0.1)
                 )  # zoom out y axis
@@ -1575,6 +1584,12 @@ def makeplot(hn, saveintegrals=True):
                     c.SaveAs(outpath + "/%s_%s_log.png" % (hn, args.btag))
                     c.SaveAs(outpath + "/%s_%s_log.root" % (hn, args.btag))
             del c
+            if hn in datasum.keys():
+                datasum[hn].SetMinimum(minimum)
+                datasum[hn].SetMaximum(maximum)
+            else:
+                histos[hn].SetMinimum(minimum)
+                histos[hn].SetMaximum(maximum)
 
         # sum histosumSyst and histoSigsumSyst
         systematics = defaultdict(list)
