@@ -27,6 +27,10 @@ parser.add_argument("--out-dir", default="btag_files")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
+minorLocator = MultipleLocator(0.05)
+ax = plt.gca()
+ax.xaxis.set_minor_locator(minorLocator)
+
 main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Snapshots/"
 
 var_list = [
@@ -98,9 +102,6 @@ def plt_fts(out_dir, name, fig_handle, show, type):
     plt.xlabel(f"btag {type} score {args.btag}", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
-    # minorLocator = MultipleLocator(0.05)
-    # ax = plt.gca()
-    # ax.xaxis.set_minor_locator(minorLocator)
 
     plt.grid(which="both")
     hep.style.use("CMS")
