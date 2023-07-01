@@ -27,9 +27,6 @@ parser.add_argument("--out-dir", default="btag_files")
 parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
-minorLocator = MultipleLocator(0.05)
-ax = plt.gca()
-ax.xaxis.set_minor_locator(minorLocator)
 
 main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Snapshots/"
 
@@ -102,8 +99,12 @@ def plt_fts(out_dir, name, fig_handle, show, type):
     plt.xlabel(f"btag {type} score {args.btag}", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
-    plt.tick_params(axis="x", labelsize=16)
-    plt.tick_params(axis="y", labelsize=16)
+    minorLocator = MultipleLocator(0.05)
+    ax = plt.gca()
+    ax.xaxis.set_minor_locator(minorLocator)
+
+    # plt.tick_params(axis="x", labelsize=16)
+    # plt.tick_params(axis="y", labelsize=16)
 
     plt.grid(which="both")
     hep.style.use("CMS")
@@ -186,8 +187,8 @@ if "__main__" == __name__:
     variables_max = np.array([variables[0], variables[2]])
     variables_min = np.array([variables[1], variables[2]])
 
-    plotting_function(args.out_dir, variables_max, "max")
-    plotting_function(args.out_dir, variables_min, "min")
+    for v, s in zip([variables_min, variables_max], ["min", "max"]):
+        plotting_function(args.out_dir, v, s)
 
     fractions_max = fractions(args.out_dir, variables_max, "max")
     fractions_min = fractions(args.out_dir, variables_min, "min")
