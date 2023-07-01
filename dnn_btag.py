@@ -102,6 +102,8 @@ def plt_fts(out_dir, name, fig_handle, show, type):
     plt.xlabel(f"btag {type} score {args.btag}", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
+    plt.tick_params(axis="x", labelsize=16)
+    plt.tick_params(axis="y", labelsize=16)
 
     plt.grid(which="both")
     hep.style.use("CMS")
