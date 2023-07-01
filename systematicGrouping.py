@@ -81,6 +81,7 @@ def systematicGrouping(background, signal, jesList, year):
         for x in btag_sys
         #if "Down" in x #NOTE: ?
     }
-    systematicDetail.update(btag)
+    #systematicDetail.update(btag)
+
 
     return systematicDetail

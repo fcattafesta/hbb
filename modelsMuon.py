@@ -58,7 +58,6 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
-print(background)
 import ROOT
 
 # Color palette
@@ -101,11 +100,10 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
-systematicsToPlot = btag_sys
-systematicsToPlot += ["XSecAndNorm"]
+systematicsToPlot = btag_sys + ["XSecAndNorm"]
 systematicsForDC = systematicsToPlot
-
-rescaleSample = {}
 
 from systematicGrouping import *
 systematicDetail = systematicGrouping(background, signal,[],"2018")
+
+rescaleSample = {}

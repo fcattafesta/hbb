@@ -48,7 +48,6 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
-print(background)
 import ROOT
 
 # Color palette
