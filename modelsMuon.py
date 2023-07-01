@@ -103,7 +103,7 @@ from rebinning import *
 
 systematicsToPlot = btag_sys
 systematicsToPlot += ["XSecAndNorm"]
-systematicsForDC = []
+systematicsForDC = systematicsToPlot
 
 rescaleSample = {}
 
