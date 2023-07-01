@@ -4,6 +4,9 @@ import collections
 import math
 import copy
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 ##############################################################################################################
 #########################  region[x] : keys are plot names, values are region names  #########################
@@ -89,33 +92,33 @@ def writeLine(uncName, systematicDetailElement, allSamples, region):
     n = 0
     for x in list(allSamples.keys()):
         notThisRegion = [y for y in list(allSamples.keys()) if y != x]
-        #print("notThisRegion  ", notThisRegion)
+        # print("notThisRegion  ", notThisRegion)
         for sl in allSamples[x]:
-            #print("sl  ", sl)
+            # print("sl  ", sl)
             orderedUncertainties.append(0)
             for s in sampleWithSystematic:
-                #print("s  ", s)
+                # print("s  ", s)
                 # if re.search(s + "_", sl):
-                #if re.search(s, sl):
+                # if re.search(s, sl):
                 if re.search("^" + s + ".*", sl):
-                    #print("ok1")
+                    # print("ok1")
 
                     if all(
                         not re.search(regionName[region[y]] + "$", uncName)
                         for y in notThisRegion
                     ):
-                        #print("ok2")
+                        # print("ok2")
                         position.append(n)
                         if "valueFromPlots" in list(systematicDetailElement.keys()):
                             orderedUncertainties[-1] = str(
                                 systematicDetailElement["valueFromPlots"][s]
                             )[:7]
-                            #print("ok3")
+                            # print("ok3")
                         else:
                             orderedUncertainties[-1] = value
             n += 1
 
-    #print("position", position)
+    # print("position", position)
     if len(position) == 0:
         return ""
 
@@ -140,7 +143,7 @@ def writeUncertainities(orderedUncertainties, lenght, position):
     return uncLine
 
 
-def printSystematicGrouping(systematicDetail, outputFile="groupingCheck.py"):
+def printSystematicGrouping(systematicDetail, outputFile=outdir + "/groupingCheck.py"):
     outputName = open(outputFile, "w")
     print("{", file=outputName)
 
@@ -216,44 +219,44 @@ def modifySystematicDetail(systematicDetail, listAllSample_noYear, all_histo_all
     for syst in systKeys:
         if "decorrelate" not in list(systematicDetail[syst].keys()):
             systematicDetail[syst]["decorrelate"] = {"all": listAllSample_noYear}
-        #print('systematicDetail[syst]["decorrelate"] 0', systematicDetail[syst]["decorrelate"])
+        # print('systematicDetail[syst]["decorrelate"] 0', systematicDetail[syst]["decorrelate"])
 
         prima = [
             len(systematicDetail[syst]["decorrelate"][g])
             for g in systematicDetail[syst]["decorrelate"]
         ]
-        #print("prima", prima)
+        # print("prima", prima)
         for g in list(systematicDetail[syst]["decorrelate"].keys()):
             systematicDetail[syst]["decorrelate"][g] = [
                 s
                 for s in systematicDetail[syst]["decorrelate"][g]
                 if s in listAllSample_noYear
             ]
-        #print("systematicDetail[syst][decorrelate] 1", systematicDetail[syst]["decorrelate"])
+        # print("systematicDetail[syst][decorrelate] 1", systematicDetail[syst]["decorrelate"])
 
         keys = list(systematicDetail[syst]["decorrelate"].keys())
         for g in keys:
             if len(systematicDetail[syst]["decorrelate"][g]) == 0:
                 systematicDetail[syst]["decorrelate"].pop(g, None)
-                #print("g ", g, " systematicDetail[syst][decorrelate] 2", systematicDetail[syst]["decorrelate"])
+                # print("g ", g, " systematicDetail[syst][decorrelate] 2", systematicDetail[syst]["decorrelate"])
 
         if len(systematicDetail[syst]["decorrelate"]) == 0:
             systematicDetail.pop(syst, None)
         elif len(list(systematicDetail[syst]["decorrelate"].keys())) > 1:
             for g in systematicDetail[syst]["decorrelate"]:
                 systematicDetail[syst + g] = copy.deepcopy(systematicDetail[syst])
-                #print("here0\n\n")
+                # print("here0\n\n")
                 if (
                     systematicDetail[syst]["type"] != "lnN"
                     and systematicDetail[syst]["type"] != "normalizationOnly"
                 ):
                     for x in list(all_histo_all_syst.keys()):
                         for sampName in systematicDetail[syst]["decorrelate"][g]:
-                            #print("here1\n\n")
+                            # print("here1\n\n")
                             for samp in list(all_histo_all_syst[x].keys()):
-                                #print("sampName ", sampName, " samp ", samp)
+                                # print("sampName ", sampName, " samp ", samp)
                                 if re.search(sampName, samp):
-                                    #print("here2\n\n")
+                                    # print("here2\n\n")
                                     if set([syst + "Up", syst + "Down"]).issubset(
                                         set(all_histo_all_syst[x][samp].keys())
                                     ):
@@ -272,14 +275,14 @@ def modifySystematicDetail(systematicDetail, listAllSample_noYear, all_histo_all
                                         # all_histo_all_syst[x][samp].pop(syst+"Down", None)
 
                             # all_histo_all_syst[x][""]
-                #print("systematicDetail[syst + g] 0 ", systematicDetail[syst + g])
+                # print("systematicDetail[syst + g] 0 ", systematicDetail[syst + g])
                 systematicDetail[syst + g].pop("decorrelate", None)
-                #print("systematicDetail[syst + g] 1 ", systematicDetail[syst + g])
+                # print("systematicDetail[syst + g] 1 ", systematicDetail[syst + g])
                 systematicDetail[syst + g]["decorrelate"] = {
                     g: systematicDetail[syst]["decorrelate"][g]
                 }
-                #print("systematicDetail[syst + g] 2 ", systematicDetail[syst + g])
-            #print("systematicDetail[syst] 0 ", systematicDetail[syst])
+                # print("systematicDetail[syst + g] 2 ", systematicDetail[syst + g])
+            # print("systematicDetail[syst] 0 ", systematicDetail[syst])
             systematicDetail.pop(syst, None)
 
 
@@ -484,7 +487,7 @@ def modifyRegionName(region):
 
 
 def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
-    print("WorkSpace creation")
+    logger.info("WorkSpace creation")
     nBins = {}
     varName = {}
     plotName = (
@@ -492,7 +495,7 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     )  # it will be equal to varName because of how plot.py write all_histo_all_syst
     region = {}
 
-    print(list(all_histo_all_syst.keys()))
+    logger.info(list(all_histo_all_syst.keys()))
     for x in list(all_histo_all_syst.keys()):
         nBins[x] = all_histo_all_syst[x]["data" + year]["nom"].GetNbinsX() - 1
         varName[x] = (
@@ -580,8 +583,8 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
         availableSamples[x] = [s for s in listAllSample if s not in emptySamples[x]]
 
     listAllSample_noYear = [s.split("_")[0] if "201" in s else s for s in listAllSample]
-    #print("listAllSample_noYear", listAllSample_noYear)
-    #print("listAllSample", listAllSample)
+    # print("listAllSample_noYear", listAllSample_noYear)
+    # print("listAllSample", listAllSample)
     availableSamples = collections.OrderedDict(sorted(availableSamples.items()))
 
     datacard.write("bin \t \t \t \t \t")
@@ -607,43 +610,44 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
             )
     datacard.write("\n------------\n")
 
-    print("region ", region)
-    print("varName ", varName)
-    print("availableSamples ", availableSamples)
-    print("\n ---------------------------- \n")
+    logger.info("region ", region)
+    logger.info("varName ", varName)
+    logger.info("availableSamples ", availableSamples)
+    logger.info("\n ---------------------------- \n")
 
-    print("model.systematicDetail 0", model.systematicDetail)
+    # print("model.systematicDetail 0", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping0.py")
 
     createNewSystematicForMergeWithOption(model.systematicDetail)
-    printSystematicGrouping(model.systematicDetail, "grouping0.py")
-    print("model.systematicDetail 1", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping1.py")
+    # print("model.systematicDetail 1", model.systematicDetail)
 
     divideShapeAndNormalization(model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping2.py")
     # decorrelateNormOnly (model.systematicDetail, availableSamples)
-    printSystematicGrouping(model.systematicDetail, "grouping1.py")
-    print("model.systematicDetail 2", model.systematicDetail)
+    # print("model.systematicDetail 2", model.systematicDetail)
 
     modifySystematicDetail(
         model.systematicDetail, listAllSample_noYear, all_histo_all_syst
     )
-    printSystematicGrouping(model.systematicDetail, "grouping2.py")
-    print("model.systematicDetail 3", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping3.py")
+    # print("model.systematicDetail 3", model.systematicDetail)
 
     removeUnusedSystematics(model.systematicDetail, all_histo_all_syst)
-    printSystematicGrouping(model.systematicDetail, "grouping3.py")
-    print("model.systematicDetail 4", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping4.py")
+    # print("model.systematicDetail 4", model.systematicDetail)
 
     valuesFromPlots(model.systematicDetail, all_histo_all_syst, region)
-    printSystematicGrouping(model.systematicDetail, "grouping4.py")
-    print("model.systematicDetail 5", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping5.py")
+    # print("model.systematicDetail 5", model.systematicDetail)
 
     ScaleShapeOnlyPlot(model.systematicDetail, all_histo_all_syst)
-    printSystematicGrouping(model.systematicDetail, "grouping5.py")
-    print("model.systematicDetail 6", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping6.py")
+    # print("model.systematicDetail 6", model.systematicDetail)
 
     mergeToSys(model.systematicDetail, listAllSample_noYear)
-    printSystematicGrouping(model.systematicDetail, "grouping6.py")
-    print("model.systematicDetail 7", model.systematicDetail)
+    logger.info("model.systematicDetail 7", model.systematicDetail)
+    printSystematicGrouping(model.systematicDetail, outdir + "/grouping7.py")
 
     writeSystematic(
         outdir + "/fileCombine" + year + model.name + ".root",
@@ -659,4 +663,4 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     for x in list(region.keys()):
         datacard.write(region[x] + " autoMCStats 0 1\n\n")
 
-    print("WorkSpace end")
+    logger.info("WorkSpace end")
