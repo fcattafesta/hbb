@@ -88,8 +88,8 @@ systematicDetail = systematicGrouping(background, signal,[],"2018")
 rescaleArray = np.linspace(1.0, 1.4, 10)
 rescaleSample = {
     "bkg_0b": [1.0, np.ones(10)],
-    "bkg_1b": [1.17, rescaleArray],
-    "bkg_2b": [1.17**2, rescaleArray**2],
-    "ZH": [1.17**2, rescaleArray**2],
-    "ggZH": [1.17**2, rescaleArray**2],
+    "bkg_1b": [1.16, rescaleArray],
+    "bkg_2b": [1.16**2, rescaleArray**2],
+    "ZH": [1.16**2, rescaleArray**2],
+    "ggZH": [1.16**2, rescaleArray**2],
 }

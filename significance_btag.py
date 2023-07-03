@@ -348,16 +348,16 @@ def plot_data(
     )
 
     # plt.plot(
-    #     1.17,
-    #     BSpline(*csv_spline_av)(1.17)+BSpline(*csv_spline_std)(1.17),
+    #     1.16,
+    #     BSpline(*csv_spline_av)(1.16)+BSpline(*csv_spline_std)(1.16),
     #     marker=".",
     #     label="el",
     #     color="cyan",
     # )
 
     # plt.plot(
-    #     1.17,
-    #     BSpline(*csv_spline_av)(1.17)-BSpline(*csv_spline_std)(1.17),
+    #     1.16,
+    #     BSpline(*csv_spline_av)(1.16)-BSpline(*csv_spline_std)(1.16),
     #     marker=".",
     #     label="$\mu$",
     #     color="gold",
