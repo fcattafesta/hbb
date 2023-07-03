@@ -143,7 +143,7 @@ def writeUncertainities(orderedUncertainties, lenght, position):
     return uncLine
 
 
-def printSystematicGrouping(systematicDetail, outputFile=outdir + "/groupingCheck.py"):
+def printSystematicGrouping(systematicDetail, outputFile="/groupingCheck.py"):
     outputName = open(outputFile, "w")
     print("{", file=outputName)
 
