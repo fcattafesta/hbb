@@ -475,7 +475,7 @@ def modifyRegionName(region):
         fitOneRegion2Times = False
         count = 0
         for x in region:
-            print("AAAA", r, x, re.search(r + "$", x))
+            logger.info("AAAA %s %s %s"%( r, x, re.search(r + "$", x)))
             if re.search(r + "$", x):
                 count += 1
         if count > 1:
