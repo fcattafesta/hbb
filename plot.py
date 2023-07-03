@@ -40,6 +40,8 @@ ROOT.gROOT.SetBatch(True)
 
 if not args_p.sf:
     model.systematicDetail = {}
+    model.systematicsToPlot = []
+    model.systematicsForDC = []
 
 totev = {}
 totevCount = {}
