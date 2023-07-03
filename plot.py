@@ -1076,7 +1076,7 @@ def fill_datasum(
     return h
 
 
-def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
+def plot_sys(hn, sy_base, systematic, text):
     # draw the histo for each systematic
     canvas_sys = ROOT.TCanvas("canvas_sys_" + hn, "", 1200, 1000)
     canvas_sys_log = ROOT.TCanvas("canvas_sys_log_" + hn, "", 1200, 1000)
@@ -1105,17 +1105,15 @@ def plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4):
         for i, sy in enumerate(
             systematic,
         ):
-
+            histosumSyst[hn][sy].SetFillStyle(0)
             histosumSyst[hn][sy].SetLineColor(colors[i])
+
 
             myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
             histosumSyst[hn][sy].Draw("hist same")
 
-            t0.Draw()
-            t1.Draw()
-            t2.Draw()
-            t3.Draw()
-            t4.Draw()
+            for t in text:
+                t.Draw()
 
         myLegend_sys.Draw()
         c_sys.Update()
@@ -1619,7 +1617,7 @@ def makeplot(hn, saveintegrals=True):
 
         if systematics:
             for sy_base, systematic in systematics.items():
-                plot_sys(hn, sy_base, systematic, t0, t1, t2, t3, t4)
+                plot_sys(hn, sy_base, systematic, [t0, t1, t2, t3, t4])
 
 
 variablesToFit = []
