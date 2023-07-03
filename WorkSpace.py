@@ -6,16 +6,15 @@ import copy
 import re
 import logging
 
+from histograms import selsMu, selsEle
+
 logger = logging.getLogger(__name__)
 
 ##############################################################################################################
 #########################  region[x] : keys are plot names, values are region names  #########################
 ##############################################################################################################
 regionName = {
-    "SR_mm": "SR_mm",
-    "CR_Zmm_bjets": "CR_Zmm_bjets",
-    "CR_Zmm_lightjets": "CR_Zmm_lightjets",
-    "CR_mm_ttbar": "CR_mm_ttbar",
+    x: x for x in list(selsMu.keys())+list(selsEle.keys())
 }
 
 
