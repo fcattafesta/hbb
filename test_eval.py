@@ -5,7 +5,7 @@ import sys
 
 sys.path.append("../")
 from sb_discriminator.DNN_input_lists import DNN_input_variables
-from args_analysis import args
+from args_analysis import args_a
 
 if "DNN_weight" in DNN_input_variables:
     DNN_input_variables.remove("DNN_weight")
@@ -40,6 +40,6 @@ def getFlowDNN(model, flow=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model", help="Path to the model", type=str)
-    args = parser.parse_args()
+    args_a = parser.parse_args()
 
-    _ = getFlowDNN(args.model)
+    _ = getFlowDNN(args_a.model)

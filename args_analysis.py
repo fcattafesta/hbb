@@ -44,5 +44,5 @@ parser.add_argument(
     help="Apply btagging scale factors",
 )
 parser.print_help()
-args = parser.parse_args()
-print(args)
+args_a = parser.parse_args()
+print(args_a)

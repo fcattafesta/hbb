@@ -1,4 +1,4 @@
-from args_analysis import args
+from args_analysis import args_a
 from btagging_sys import btag_sys
 
 ### List of histograms to be plotted ###
@@ -21,15 +21,15 @@ histosData = [
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
 ]
-if args.eval_model:
+if args_a.eval_model:
     histosData.append("DNN_Score")
     histosData.append("atanhDNN_Score")
 
 histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb"]
-if args.sf:
+if args_a.sf:
     histosMC += ["btagWeightCentral"]
     histosMC += btag_sys
-    
+
 ### List of selections for muons and electrons ###
 selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
 selsEle = ["SR_ee", "CR_Zee_bjets", "CR_Zee_lightjets", "CR_ee_ttbar"]
