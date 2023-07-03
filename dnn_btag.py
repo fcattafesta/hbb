@@ -44,7 +44,7 @@ thresholds = (
 )
 
 bins = [
-    thresholds, # np.linspace(0, 1, 50),
+    [0.]+thresholds,  # np.linspace(0, 1, 50),
     [
         0,
         0.029,
@@ -59,7 +59,6 @@ bins = [
         10.0,
     ],
 ]
-
 
 
 def load_data(dir, variables_list):
