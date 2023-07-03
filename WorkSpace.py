@@ -506,7 +506,7 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
             all_histo_all_syst[x]["data" + year]["nom"].GetName().split("___")[0]
         )
         plotName[x] = x
-        region[x] = x  # keys are plot names, values are region names
+        region[x] = x.split("___")[1]  # keys are plot names, values are region names
 
     modifyRegionName(region)
 
