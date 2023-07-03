@@ -38,6 +38,9 @@ ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
 
 ROOT.gROOT.SetBatch(True)
 
+if not args_p.sf:
+    model.systematicDetail = {}
+
 totev = {}
 totevCount = {}
 totevSkim = {}
