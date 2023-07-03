@@ -28,7 +28,7 @@ parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
 
-main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/" + args.dir + "/Snapshots/"
+main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/{args.dir}/Snapshots/"
 
 var_list = [
     "btag_max",
