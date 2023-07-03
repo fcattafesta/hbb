@@ -11,7 +11,12 @@ logger = logging.getLogger(__name__)
 ##############################################################################################################
 #########################  region[x] : keys are plot names, values are region names  #########################
 ##############################################################################################################
-regionName = {"SR_mm": "SR_mm", "CR_Zmm_bjets":"CR_Zmm_bjets"}
+regionName = {
+    "SR_mm": "SR_mm",
+    "CR_Zmm_bjets": "CR_Zmm_bjets",
+    "CR_Zmm_lightjets": "CR_Zmm_lightjets",
+    "CR_mm_ttbar": "CR_mm_ttbar",
+}
 
 
 def writeSystematic(
@@ -610,9 +615,9 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
             )
     datacard.write("\n------------\n")
 
-    logger.info("region ", region)
-    logger.info("varName ", varName)
-    logger.info("availableSamples ", availableSamples)
+    logger.info("region %s" % region)
+    logger.info("varName %s" % varName)
+    logger.info("availableSamples %s" % availableSamples)
     logger.info("\n ---------------------------- \n")
 
     # print("model.systematicDetail 0", model.systematicDetail)
@@ -646,7 +651,7 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     # print("model.systematicDetail 6", model.systematicDetail)
 
     mergeToSys(model.systematicDetail, listAllSample_noYear)
-    logger.info("model.systematicDetail 7", model.systematicDetail)
+    logger.info("model.systematicDetail 7 %s" % model.systematicDetail)
     printSystematicGrouping(model.systematicDetail, outdir + "/grouping7.py")
 
     writeSystematic(
