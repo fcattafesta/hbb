@@ -95,27 +95,6 @@ def load_data(file):
     )
 
 
-def rescale(btag_list):
-    rescale_list = []
-    for frac in [fractions_max, fractions_min]:
-        rescale = 0
-        for bin in range(len(frac)):
-            eff_sum = 0
-            for wp in range(len(frac[bin])):
-                eff_sum += frac[bin][wp] * btag_list[wp]
-            rescale += eff_sum * sig_list[bin]
-
-        rescale /= sum(sig_list)
-        rescale_list.append(rescale)
-
-    print("rescale_list", rescale_list)
-    rescale_fin = np.average(rescale_list, weights=[1,1])
-    rescale_err = np.std(rescale_list, ddof=0)
-    print("rescale_fin", rescale_fin)
-    print("rescale_err", rescale_err)
-
-    return rescale_fin, rescale_err
-
 
 if args.sf:
     sf = "_sf"
@@ -149,7 +128,7 @@ for i in range(len(fractions_max_el)):
     fractions_min.append(frac_min)
 
 
-sig_list = [(x + y) / 2 for x, y in zip(sig_list_el, sig_list_mu)]
+sig_list = [(x**2 + y**2) / 1 for x, y in zip(sig_list_el, sig_list_mu)]
 
 print("sig_list", sig_list)
 
@@ -183,6 +162,27 @@ print("btag_pn_list_wp", btag_pn_list_wp)
 print("btag_pe_list_wp", btag_pe_list_wp)
 
 
+def rescale(btag_list):
+    rescale_list = []
+    for frac in [fractions_max, fractions_min]:
+        rescale = 0
+        for bin in range(len(frac)):
+            eff_sum = 0
+            for wp in range(len(frac[bin])):
+                eff_sum += frac[bin][wp] * btag_list[wp]
+            rescale += eff_sum * sig_list[bin]
+
+        rescale /= sum(sig_list)
+        rescale_list.append(rescale)
+
+    print("rescale_list", rescale_list)
+    rescale_fin = np.average(rescale_list, weights=[1, 1])
+    rescale_err = np.std(rescale_list, ddof=0)
+    print("rescale_fin", rescale_fin)
+    print("rescale_err", rescale_err)
+
+    return rescale_fin, rescale_err
+
 rescale_fin_df, rescale_err_df = rescale(btag_df_list_wp)
 rescale_fin_pn, rescale_err_pn = rescale(btag_pn_list_wp)
 rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
@@ -202,7 +202,6 @@ df_point = [rescale_fin_df, sig_df_average, rescale_err_df, sig_df_std_dev]
 print("df_point", df_point)
 
 
-
 def plot_data(
     btag_rescale_list,
     sig_sum_list_mu,
@@ -219,7 +218,6 @@ def plot_data(
         np.std([x, y], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
 
-
     csv_sig_average = sig_sum_list_average[0]
 
     csv_sig_mu = sig_sum_list_mu[0]
@@ -228,14 +226,16 @@ def plot_data(
     print("csv_sig_el", csv_sig_el)
 
     sig_sum_list_av = [
-        np.average([x/csv_sig_mu, y/csv_sig_el]) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+        np.average([x / csv_sig_mu, y / csv_sig_el])
+        for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
 
     sig_sum_list_std = [
-        np.std([x/csv_sig_mu, y/csv_sig_el], ddof=0) for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
+        np.std([x / csv_sig_mu, y / csv_sig_el], ddof=0)
+        for x, y in zip(sig_sum_list_mu, sig_sum_list_el)
     ]
 
-    #csv_spline = splrep(btag_rescale_list, sig_sum_list_average, s=0)
+    # csv_spline = splrep(btag_rescale_list, sig_sum_list_average, s=0)
     csv_spline_av = splrep(btag_rescale_list, sig_sum_list_av, s=0)
     csv_spline_std = splrep(btag_rescale_list, sig_sum_list_std, s=0)
 
@@ -276,10 +276,10 @@ def plot_data(
 
     plt.plot(
         btag_rescale_list,
-        np.array(sig_sum_list_av) ,
+        np.array(sig_sum_list_av),
         color="red",
         label=r"DeepCSV rescaled",
-        linewidth=1,
+        linewidth=2,
         linestyle="--",
     )
     plt.fill_between(
@@ -291,10 +291,9 @@ def plot_data(
         # label=r"$1 \sigma$",
     )
 
-
     plt.plot(
-        1, #btag_rescale_list[0],
-        1, #sig_sum_list_average[0] / csv_sig_average,
+        1,  # btag_rescale_list[0],
+        1,  # sig_sum_list_average[0] / csv_sig_average,
         "o",
         label="DeepCSV",
         color="red",
@@ -310,10 +309,9 @@ def plot_data(
     #     color="purple",
     # )
 
-    sig_ratio=[sig_df_list[0] / csv_sig_mu, sig_df_list[1] / csv_sig_el]
-    sig_ratio_av=np.average(sig_ratio)
-    sig_ratio_std_dev=np.std(sig_ratio, ddof=0)
-
+    sig_ratio = [sig_df_list[0] / csv_sig_mu, sig_df_list[1] / csv_sig_el]
+    sig_ratio_av = np.average(sig_ratio)
+    sig_ratio_std_dev = np.std(sig_ratio, ddof=0)
 
     plt.errorbar(
         df_point[0],
@@ -325,27 +323,64 @@ def plot_data(
         color="blue",
     )
 
-
-
-    plt.errorbar(
-        rescale_fin_pn,
-        BSpline(*csv_spline_av)(rescale_fin_pn),
-        xerr=rescale_err_pn,
-        yerr=BSpline(*csv_spline_std)(rescale_fin_pn),
-        fmt="o",
-        label="ParticleNet",
+    plt.vlines(
+        x=rescale_fin_pn,
+        ymin=1,
+        ymax=1.3,#BSpline(*csv_spline_av)(rescale_fin_pn),
+        #label="ParticleNet",
         color="black",
+        linestyle="--",
     )
 
-    plt.errorbar(
+    plt.vlines(
+        x=rescale_fin_pe,
+        ymin=1,
+        ymax=1.3, #BSpline(*csv_spline_av)(rescale_fin_pe),
+        #label="ParticleEdge",
+        color="green",
+        linestyle="--",
+    )
+
+
+    plt.plot(
+        rescale_fin_pn,
+        BSpline(*csv_spline_av)(rescale_fin_pn),
+        "o",
+        label="ParticleNet",
+        color="black",
+
+    )
+
+    plt.plot(
         rescale_fin_pe,
         BSpline(*csv_spline_av)(rescale_fin_pe),
-        xerr=rescale_err_pe,
-        yerr=BSpline(*csv_spline_std)(rescale_fin_pe),
-        fmt="o",
+        "o",
         label="ParticleEdge",
         color="green",
     )
+
+
+
+    # plt.errorbar(
+    #     rescale_fin_pn,
+    #     BSpline(*csv_spline_av)(rescale_fin_pn),
+    #     xerr=rescale_err_pn,
+    #     yerr=BSpline(*csv_spline_std)(rescale_fin_pn),
+    #     fmt="o",
+    #     label="ParticleNet",
+    #     color="black",
+
+    # )
+
+    # plt.errorbar(
+    #     rescale_fin_pe,
+    #     BSpline(*csv_spline_av)(rescale_fin_pe),
+    #     xerr=rescale_err_pe,
+    #     yerr=BSpline(*csv_spline_std)(rescale_fin_pe),
+    #     fmt="o",
+    #     label="ParticleEdge",
+    #     color="green",
+    # )
 
     # plt.plot(
     #     1.16,
@@ -370,7 +405,9 @@ def plot_data(
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
     plt.legend()  # loc="upper left", fontsize=20)
-    plt.savefig(f"{args.out_dir}/plot_btag_vs_significance.png", bbox_inches="tight", dpi=300)
+    plt.savefig(
+        f"{args.out_dir}/plot_btag_vs_significance.png", bbox_inches="tight", dpi=300
+    )
     if args.show:
         plt.show()
 

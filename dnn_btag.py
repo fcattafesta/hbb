@@ -36,8 +36,15 @@ var_list = [
     "atanhDNN_Score",
 ]
 
+# wp L, M, T, UT
+thresholds = (
+    [0.0490, 0.2783, 0.7100, 0.7988]
+    if args.btag == "DeepFlav"
+    else [0.1047, 0.3787, 0.7563, 0.8486]
+)
+
 bins = [
-    np.linspace(0, 1, 50),
+    thresholds, # np.linspace(0, 1, 50),
     [
         0,
         0.029,
@@ -53,8 +60,6 @@ bins = [
     ],
 ]
 
-# wp L, M, T, UT
-thresholds = [0.0490, 0.2783, 0.7100, 0.7988] if args.btag else [0.1047, 0.3787, 0.7563, 0.8486]
 
 
 def load_data(dir, variables_list):
@@ -71,12 +76,12 @@ def load_data(dir, variables_list):
     # open each file and get the Events tree using uproot
     for file in files:
         try:
-            #print(f"Loading file {file}")
+            # print(f"Loading file {file}")
             file = uproot.open(f"{file}:Events")
             variables = np.array(
                 [file[input].array(library="np") for input in variables_list]
             )
-            #print(variables.shape)
+            # print(variables.shape)
             # mask = np.array(variables[2, :]>2.829)
             # variables = variables[:, mask]
             var_tot = np.concatenate((var_tot, variables), axis=1)
@@ -162,17 +167,14 @@ def fractions(out_dir, variables, type):
                     np.sum(
                         np.logical_and(
                             variables[0][mask] > thresholds[j],
-                            variables[0][mask] < thresholds[j + 1]
+                            variables[0][mask] < thresholds[j + 1],
                         )
                     )
                     / len(variables[0][mask])
                 )
             else:
                 fractions[i].append(
-                    np.sum(
-                        variables[0][mask] > thresholds[j]
-                    )
-                    / len(variables[0][mask])
+                    np.sum(variables[0][mask] > thresholds[j]) / len(variables[0][mask])
                 )
     print(fractions)
 
