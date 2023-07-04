@@ -39,6 +39,7 @@ def read_txt_file(filename, name):
                 threshold_value = float(line.split(":")[1])
                 if name in current_network:
                     threshold_list.append(threshold_value)
+    threshold_list.reverse()
     return threshold_list
 
 
@@ -57,7 +58,7 @@ var_list = [
 #     else [0.1047, 0.3787, 0.7563, 0.8486]
 # )
 
-thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag).reverse()
+thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag)
 print(thresholds)
 
 bins = [

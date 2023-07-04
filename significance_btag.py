@@ -16,12 +16,12 @@ parser.add_argument(
 )
 parser.add_argument(
     "--frac-el",
-    default="btag_files/fractions_el_flav.csv",
+    default="btag_files/old_fractions/fractions_el_flav.csv",
     help="file name with fractions in el channel",
 )
 parser.add_argument(
     "--frac-mu",
-    default="btag_files/fractions_mu_flav.csv",
+    default="btag_files/old_fractions/fractions_mu_flav.csv",
     help="file name with fractions in mu channel",
 )
 parser.add_argument("--out-dir", default="btag_files")
@@ -146,7 +146,8 @@ def read_txt_file(filename, name):
                 tpr_value = float(line.split(":")[1])
                 if name in current_network:
                     tpr_list.append(tpr_value)
-    return tpr_list
+    tpr_list.reverse()
+    return  tpr_list
 
 roc_file = "sb_discriminator/roc_curve/roc_data.txt"
 roc_m100_file= "sb_discriminator/roc_curve/roc_data_m100.txt"
