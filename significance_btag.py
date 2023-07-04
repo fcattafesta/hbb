@@ -95,7 +95,6 @@ def load_data(file):
     )
 
 
-
 if args.sf:
     sf = "_sf"
 else:
@@ -136,9 +135,37 @@ print("fractions_max", fractions_max)
 print("fractions_min", fractions_min)
 
 
+def read_txt_file(filename, name):
+    tpr_list = []
+    with open(filename, "r") as f:
+        current_network = None
+        for line in f:
+            if line.startswith("network:"):
+                current_network = line.split(":")[1].strip()
+            elif line.startswith("tpr:"):
+                tpr_value = float(line.split(":")[1])
+                if name in current_network:
+                    tpr_list.append(tpr_value)
+    return tpr_list
+
+roc_file = "sb_discriminator/roc_curve/roc_data.txt"
+roc_m100_file= "sb_discriminator/roc_curve/roc_data_m100.txt"
+
+eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")
+eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")
+# eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "DeepFlavCMSSW")
+# pn_list_wp = read_txt_file(roc_m100_file, "PN")
+# pe_list_wp = read_txt_file(roc_m100_file, "PE")
+
+print("eff_df_list_wp", eff_df_list_wp)
+print("eff_csv_list_wp", eff_csv_list_wp)
+
+#NOTE create correct fractions for all btag bins
+
 # wp L, M, T, UT
-eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
-eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
+
+# eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
+# eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
 
 eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
 pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
@@ -183,9 +210,16 @@ def rescale(btag_list):
 
     return rescale_fin, rescale_err
 
+
+print("deepFlav")
 rescale_fin_df, rescale_err_df = rescale(btag_df_list_wp)
+print("particleNet")
 rescale_fin_pn, rescale_err_pn = rescale(btag_pn_list_wp)
+print("particleEdge")
 rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
+
+# rescale_fin_pn = (btag_pn_list_wp[-1] + btag_pn_list_wp[-2]) / 2
+# rescale_fin_pe = (btag_pe_list_wp[-1] + btag_pe_list_wp[-2]) / 2
 
 
 # mu, el
@@ -326,8 +360,8 @@ def plot_data(
     plt.vlines(
         x=rescale_fin_pn,
         ymin=1,
-        ymax=1.3,#BSpline(*csv_spline_av)(rescale_fin_pn),
-        #label="ParticleNet",
+        ymax=1.3,  # BSpline(*csv_spline_av)(rescale_fin_pn),
+        # label="ParticleNet",
         color="black",
         linestyle="--",
     )
@@ -335,12 +369,11 @@ def plot_data(
     plt.vlines(
         x=rescale_fin_pe,
         ymin=1,
-        ymax=1.3, #BSpline(*csv_spline_av)(rescale_fin_pe),
-        #label="ParticleEdge",
+        ymax=1.3,  # BSpline(*csv_spline_av)(rescale_fin_pe),
+        # label="ParticleEdge",
         color="green",
         linestyle="--",
     )
-
 
     plt.plot(
         rescale_fin_pn,
@@ -348,7 +381,6 @@ def plot_data(
         "o",
         label="ParticleNet",
         color="black",
-
     )
 
     plt.plot(
@@ -358,8 +390,7 @@ def plot_data(
         label="ParticleEdge",
         color="green",
     )
-
-
+    print(BSpline(*csv_spline_av)(rescale_fin_pe))
 
     # plt.errorbar(
     #     rescale_fin_pn,
@@ -398,7 +429,7 @@ def plot_data(
     #     color="gold",
     # )
 
-    plt.xlabel("btag TPR / btag TPR DeepCSV", fontsize=20, loc="right")
+    plt.xlabel(r"$\varepsilon$", fontsize=20, loc="right")
     plt.ylabel("Sig / Sig DeepCSV", fontsize=20, loc="top")
     plt.grid(which="both")
     hep.style.use("CMS")
