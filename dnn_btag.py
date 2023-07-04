@@ -28,6 +28,20 @@ parser.add_argument("--show", action="store_true")
 args = parser.parse_args()
 
 
+def read_txt_file(filename, name):
+    threshold_list = []
+    with open(filename, "r") as f:
+        current_network = None
+        for line in f:
+            if line.startswith("network:"):
+                current_network = line.split(":")[1].strip()
+            elif line.startswith("threshold:"):
+                threshold_value = float(line.split(":")[1])
+                if name in current_network:
+                    threshold_list.append(threshold_value)
+    return threshold_list
+
+
 main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/{args.dir}/Snapshots/"
 
 var_list = [
@@ -37,11 +51,14 @@ var_list = [
 ]
 
 # wp L, M, T, UT
-thresholds = (
-    [0.0490, 0.2783, 0.7100, 0.7988]
-    if args.btag == "DeepFlav"
-    else [0.1047, 0.3787, 0.7563, 0.8486]
-)
+# thresholds = (
+#     [0.0490, 0.2783, 0.7100, 0.7988]
+#     if args.btag == "DeepFlav"
+#     else [0.1047, 0.3787, 0.7563, 0.8486]
+# )
+
+thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag)
+print(thresholds)
 
 bins = [
     [0.]+thresholds+[1.],  # np.linspace(0, 1, 50),
