@@ -57,7 +57,7 @@ var_list = [
 #     else [0.1047, 0.3787, 0.7563, 0.8486]
 # )
 
-thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag)
+thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag).reverse()
 print(thresholds)
 
 bins = [
