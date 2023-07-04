@@ -29,6 +29,8 @@ args = parser.parse_args()
 wp_lists = (
     list(np.linspace(0.0001, 0.0009, 9)) + list(np.linspace(0.001, 0.009, 9)) + list(np.linspace(0.01, 0.1, 10))
 )
+print(len(wp_lists))
+print(wp_lists)
 
 
 TT_list = ["TTToHadronic"]
@@ -164,8 +166,8 @@ def plt_fts(out_dir, name, fig_handle, show):
 
     plt.xlabel("True positive rate", fontsize=20, loc="right")
     plt.ylabel("False positive rate ", fontsize=20, loc="top")
-    plt.xlim([0.45, 1.0005])
-    plt.ylim([0.0005, 1.005])
+    plt.xlim([0.1, 1.0005])
+    plt.ylim([0.0001, 1.005])
     plt.text(
         0.05,
         0.6,
