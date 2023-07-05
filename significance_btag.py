@@ -16,12 +16,12 @@ parser.add_argument(
 )
 parser.add_argument(
     "--frac-el",
-    default="btag_files/old_fractions/fractions_el_flav.csv",
+    default="btag_files/fractions_DeepFlav_el.csv",
     help="file name with fractions in el channel",
 )
 parser.add_argument(
     "--frac-mu",
-    default="btag_files/old_fractions/fractions_mu_flav.csv",
+    default="btag_files/fractions_DeepFlav_mu.csv",
     help="file name with fractions in mu channel",
 )
 parser.add_argument("--out-dir", default="btag_files")
@@ -94,6 +94,7 @@ def load_data(file):
         sig_list,
     )
 
+discard=-4
 
 if args.sf:
     sf = "_sf"
@@ -126,12 +127,34 @@ for i in range(len(fractions_max_el)):
     frac_min = [(x + y) / 2 for x, y in zip(fractions_min_el[i], fractions_min_mu[i])]
     fractions_min.append(frac_min)
 
+# sum the last n elements of each list and put them in the n-1 position
+# (so that the last element is the sum of all elements)
+
+
+def sum_last_n_elements(data, n):
+    result = []
+    for lst in data:
+        print("sum_lst", sum(lst))
+        print("lst", lst)
+        print("lst[n:]", lst[n:])
+        last_n_sum = sum(lst[n:])
+        print("last_n_sum", last_n_sum)
+        new_lst = lst[:n] + [last_n_sum] #+ lst[-n+1:]
+        print("new_lst", new_lst)
+        result.append(new_lst)
+    return result
+
+# fractions_max = [lst[:discard] for lst in fractions_max]
+# fractions_min = [lst[:discard] for lst in fractions_min]
+
+fractions_max = sum_last_n_elements(fractions_max, discard-1)
+fractions_min = sum_last_n_elements(fractions_min, discard-1)
 
 sig_list = [(x**2 + y**2) / 1 for x, y in zip(sig_list_el, sig_list_mu)]
 
-print("sig_list", sig_list)
+# print("sig_list", sig_list)
 
-print("fractions_max", fractions_max)
+print("fractions_max", fractions_max, len(fractions_max[0]))
 print("fractions_min", fractions_min)
 
 
@@ -147,30 +170,30 @@ def read_txt_file(filename, name):
                 if name in current_network:
                     tpr_list.append(tpr_value)
     tpr_list.reverse()
-    return  tpr_list
+    return tpr_list
+
 
 roc_file = "sb_discriminator/roc_curve/roc_data.txt"
-roc_m100_file= "sb_discriminator/roc_curve/roc_data_m100.txt"
+roc_m100_file = "sb_discriminator/roc_curve/roc_data_m100.txt"
 
-eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")
-eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")
-# eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "DeepFlavCMSSW")
-# pn_list_wp = read_txt_file(roc_m100_file, "PN")
-# pe_list_wp = read_txt_file(roc_m100_file, "PE")
+eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")[:discard]
+eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")[:discard]
+eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "CMSSWDeepFlavour")[:discard]
+pn_list_wp = read_txt_file(roc_m100_file, "ParticleNet")[:discard]
+pe_list_wp = read_txt_file(roc_m100_file, "ParticleEdgeOk Full")[:discard]
 
 print("eff_df_list_wp", eff_df_list_wp)
 print("eff_csv_list_wp", eff_csv_list_wp)
 
-#NOTE create correct fractions for all btag bins
 
 # wp L, M, T, UT
 
 # eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
 # eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
 
-eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
-pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
-pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
+# eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
+# pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
+# pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
 
 eff_pn_list_wp = [
     y * z / x for x, y, z in zip(eff_dfCMSSW_list_wp, pn_list_wp, eff_df_list_wp)
@@ -185,7 +208,7 @@ btag_df_list_wp = [x / y for x, y in zip(eff_df_list_wp, eff_csv_list_wp)]
 btag_pn_list_wp = [x / y for x, y in zip(eff_pn_list_wp, eff_csv_list_wp)]
 btag_pe_list_wp = [x / y for x, y in zip(eff_pe_list_wp, eff_csv_list_wp)]
 
-print("btag_df_list_wp", btag_df_list_wp)
+print("btag_df_list_wp", btag_df_list_wp, len(btag_df_list_wp))
 print("btag_pn_list_wp", btag_pn_list_wp)
 print("btag_pe_list_wp", btag_pe_list_wp)
 
