@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 #########################  region[x] : keys are plot names, values are region names  #########################
 ##############################################################################################################
 regionName = {
-    x: x for x in list(selsMu.keys())+list(selsEle.keys())
+    x: x for x in selsMu+selsEle
 }
 
 
