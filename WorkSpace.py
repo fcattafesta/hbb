@@ -6,18 +6,14 @@ import copy
 import re
 import logging
 
-#from histograms import selsMu, selsEle
-selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
-selsEle = ["SR_ee", "CR_Zee_bjets", "CR_Zee_lightjets", "CR_ee_ttbar"]
+from selections import selsMu, selsEle
 
 logger = logging.getLogger(__name__)
 
 ##############################################################################################################
 #########################  region[x] : keys are plot names, values are region names  #########################
 ##############################################################################################################
-regionName = {
-    x: x for x in selsMu+selsEle
-}
+regionName = {x: x for x in selsMu + selsEle}
 
 
 def writeSystematic(
@@ -477,7 +473,7 @@ def modifyRegionName(region):
         fitOneRegion2Times = False
         count = 0
         for x in region:
-            logger.info("AAAA %s %s %s"%( r, x, re.search(r + "$", x)))
+            logger.info("AAAA %s %s %s" % (r, x, re.search(r + "$", x)))
             if re.search(r + "$", x):
                 count += 1
         if count > 1:

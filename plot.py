@@ -14,23 +14,23 @@ from collections import defaultdict
 import copy
 import ctypes
 
-from args_plot import args_p
+from args_plot import args
 from labelDict import *
 from logger import setup_logger
 
 # NOTE: gr is the sample name and hn is the variable name
 
 
-btag_label = labelBtag[args_p.btag]
+btag_label = labelBtag[args.btag]
 Significance_variables = ["atanhDNN_Score"]
 
-outdir = args_p.workspace
+outdir = args.workspace
 
 colors = [
     ROOT.kRed,
     ROOT.kBlue,
 ]
-model = importlib.import_module(args_p.model.replace(".py", ""))
+model = importlib.import_module(args.model.replace(".py", ""))
 samples = model.samples
 year = "+".join(list(model.data.keys()))
 lumi = "%2.1f fb^{-1}"
@@ -38,7 +38,7 @@ ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
 
 ROOT.gROOT.SetBatch(True)
 
-if not args_p.sf:
+if not args.sf:
     model.systematicDetail = {}
     model.systematicsToPlot = []
     model.systematicsForDC = []
@@ -51,11 +51,11 @@ systematicsSetToUse = []
 
 date_time = time.strftime("%m%d-%H%M%S")
 
-outpath = f"{args_p.outfolder}/{year}/{model.name}_{args_p.foldersuffix}_{date_time}"
+outpath = f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
 os.system("mkdir -p " + outpath)
 
 logger = setup_logger(outpath + "/logger.log")
-logger.info("args:\n - %s", "\n - ".join(str(it) for it in args_p.__dict__.items()))
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 
 def makeLegend(xDown, xUp, yDown, yUp, name="", size=1):
@@ -161,7 +161,7 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         fR = ROOT.TFile.Open(
             outpath
             + "/%s_%s_Significance%s.root"
-            % (hn, args_p.btag, "Rescaled" if rescale else ""),
+            % (hn, args.btag, "Rescaled" if rescale else ""),
             "recreate",
         )
         Significance.Write()
@@ -194,9 +194,9 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         t4 = makeText(
             0.25,
             0.8,
-            labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args_p.sf else "")
+            labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
             if hn.split("___")[1] in list(labelLeptons.keys())
-            else hn.split("___")[1] + btag_label + (" SF" if args_p.sf else ""),
+            else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
             42,
             size=0.04,
         )
@@ -208,7 +208,7 @@ def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=No
         c_significance.SaveAs(
             outpath
             + "/%s_%s_Significance%s.png"
-            % (hn, args_p.btag, "Rescaled" if rescale else "")
+            % (hn, args.btag, "Rescaled" if rescale else "")
         )
         SignificanceSum_param = getattr(ROOT, "TParameter<double>")(
             "SignificanceSum", SignificanceSum
@@ -679,7 +679,7 @@ def makeEnvelopeShapeOld(hn, sy, f, d, model):
 
 
 f = {}
-folder = args_p.histfolder
+folder = args.histfolder
 for group in model.signal:
     for s in model.signal[group]:
         f[s] = ROOT.TFile.Open(folder + "/%s_Histos.root" % s)
@@ -1124,12 +1124,12 @@ def plot_sys(hn, sy_base, systematic, text):
         c_sys.Update()
 
         if j == 0:
-            c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args_p.btag, sy_base))
-            c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args_p.btag, sy_base))
+            c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
+            c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
         else:
             c_sys.SetLogy(True)
-            c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args_p.btag, sy_base))
-            c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args_p.btag, sy_base))
+            c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base))
+            c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base))
 
         histosum[hn].SetMaximum(max_value)
         histosum[hn].SetMinimum(min_value)
@@ -1272,7 +1272,7 @@ def makeplot(hn, saveintegrals=True):
             B.Add(S)
             R = S.Divide(B)
             fR = ROOT.TFile.Open(
-                outpath + "/%s_%s_SBratio.root" % (hn, args_p.btag), "recreate"
+                outpath + "/%s_%s_SBratio.root" % (hn, args.btag), "recreate"
             )
             S.Write()
             fR.Close()
@@ -1281,7 +1281,7 @@ def makeplot(hn, saveintegrals=True):
         SignificanceSum_str_rescaled = ""
         if any([x in hn for x in Significance_variables]) and hn in histoSigsum.keys():
             with open(
-                outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args_p.btag),
+                outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args.btag),
                 "w",
             ) as file:
                 # save to file
@@ -1291,7 +1291,7 @@ def makeplot(hn, saveintegrals=True):
                 )
 
                 writer.writerow(["Significance_list", Significance_list])
-                if args_p.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
+                if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
                     (
                         SignificanceSum_str_rescaled,
                         SignificanceSum_rescaled,
@@ -1367,7 +1367,7 @@ def makeplot(hn, saveintegrals=True):
                     if i < firstBlind:
                         firstBlind = i
                     lastBlind = i
-            if args_p.blind and hn in datasum.keys():
+            if args.blind and hn in datasum.keys():
                 for i in range(firstBlind, lastBlind + 1):
                     datastack[hn].GetStack().Last().SetBinContent(i, 0)
                     datasum[hn].SetBinContent(i, 0)
@@ -1398,9 +1398,9 @@ def makeplot(hn, saveintegrals=True):
         t4 = makeText(
             0.25,
             0.8,
-            labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args_p.sf else "")
+            labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
             if hn.split("___")[1] in list(labelLeptons.keys())
-            else hn.split("___")[1] + btag_label + (" SF" if args_p.sf else ""),
+            else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
             42,
             size=0.04,
         )
@@ -1584,19 +1584,19 @@ def makeplot(hn, saveintegrals=True):
 
             if i == 0:
                 if postfit:
-                    c.SaveAs(outpath + "/%s_%s_postFit.png" % (hn, args_p.btag))
+                    c.SaveAs(outpath + "/%s_%s_postFit.png" % (hn, args.btag))
                 else:
-                    c.SaveAs(outpath + "/%s_%s.png" % (hn, args_p.btag))
-                    c.SaveAs(outpath + "/%s_%s.root" % (hn, args_p.btag))
+                    c.SaveAs(outpath + "/%s_%s.png" % (hn, args.btag))
+                    c.SaveAs(outpath + "/%s_%s.root" % (hn, args.btag))
             else:
                 c.GetPad(1).SetLogy(
                     True
                 )  # if hn in datasum.keys() else c.SetLogy(True)
                 if postfit:
-                    c.SaveAs(outpath + "/%s_%s_log_postFit.png" % (hn, args_p.btag))
+                    c.SaveAs(outpath + "/%s_%s_log_postFit.png" % (hn, args.btag))
                 else:
-                    c.SaveAs(outpath + "/%s_%s_log.png" % (hn, args_p.btag))
-                    c.SaveAs(outpath + "/%s_%s_log.root" % (hn, args_p.btag))
+                    c.SaveAs(outpath + "/%s_%s_log.png" % (hn, args.btag))
+                    c.SaveAs(outpath + "/%s_%s_log.root" % (hn, args.btag))
             del c
             myLegend_sy.Clear()
             if hn in datasum.keys():
@@ -1628,13 +1628,13 @@ def makeplot(hn, saveintegrals=True):
 variablesToFit = []
 makeWorkspace = False
 systematicsSetToUse = model.systematicsToPlot
-if args_p.variablesToFit != None:
-    variablesToFit = args_p.variablesToFit
+if args.variablesToFit != None:
+    variablesToFit = args.variablesToFit
     makeWorkspace = True
     systematicsSetToUse = model.systematicsForDC
 systematicsSetToUse.sort()
 postfit = False
-postfit = args_p.postfit
+postfit = args.postfit
 
 logger.info("makeWorkspace %s" % makeWorkspace)
 logger.info("variablesToFit %s" % variablesToFit)

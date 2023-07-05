@@ -11,15 +11,15 @@ from torch.utils.tensorboard import SummaryWriter
 from dataset import load_data
 from tools import get_model_parameters_number, train_val_one_epoch, eval_model, export_onnx
 from DNN_model import get_model
-from args_train import args_t
+from args_train import args
 
 sys.path.append('../')
 from logger import setup_logger
 
 
-if args_t.histos:
+if args.histos:
     from sig_bkg_histos import plot_sig_bkg_distributions
-if args_t.history:
+if args.history:
     from plot_history import read_from_txt, plot_history
 
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    main_dir = f"out/{timestamp}_{args_t.name}_batchsize{args_t.batch_size}_weights{args_t.weights[0]}-{args_t.weights[1]}"
+    main_dir = f"out/{timestamp}_{args.name}_batchsize{args.batch_size}_weights{args.weights[0]}-{args.weights[1]}"
 
     best_vloss = 1_000_000.0
     best_vaccuracy = 0.0
@@ -36,9 +36,9 @@ if __name__ == "__main__":
 
     loaded_epoch = -1
 
-    if args_t.load_model or args_t.eval_model:
+    if args.load_model or args.eval_model:
         main_dir = os.path.dirname(
-            args_t.load_model if args_t.load_model else args_t.eval_model
+            args.load_model if args.load_model else args.eval_model
         ).replace("models", "")
 
     os.makedirs(main_dir, exist_ok=True)
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # Create the logger
     logger = setup_logger(f"{main_dir}/logger.log")
 
-    logger.info('args:\n - %s', '\n - '.join(str(it) for it in args_t.__dict__.items()))
+    logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))
 
 
     # Load data
@@ -60,10 +60,10 @@ if __name__ == "__main__":
         X_fts,
         X_lbl,
         batch_size,
-    ) = load_data(args_t)
+    ) = load_data(args)
 
-    if args_t.gpus:
-        gpus = [int(i) for i in args_t.gpus.split(',')]
+    if args.gpus:
+        gpus = [int(i) for i in args.gpus.split(',')]
         device = torch.device(gpus[0])
     else:
         gpus=None
@@ -82,12 +82,12 @@ if __name__ == "__main__":
         # model becomes `torch.nn.DataParallel` w/ model.module being the original `torch.nn.Module`
         model = torch.nn.DataParallel(model, device_ids=gpus)
 
-    if args_t.load_model or args_t.eval_model:
-        checkpoint = torch.load(args_t.load_model if args_t.load_model else args_t.eval_model)
+    if args.load_model or args.eval_model:
+        checkpoint = torch.load(args.load_model if args.load_model else args.eval_model)
         model.load_state_dict(checkpoint["state_dict"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
-        best_model_name = args_t.load_model if args_t.load_model else args_t.eval_model
+        best_model_name = args.load_model if args.load_model else args.eval_model
         with open(f"{main_dir}/logger.log", "r") as f:
             for line in reversed(f.readlines()):
                 if "Best epoch" in line:
@@ -102,8 +102,8 @@ if __name__ == "__main__":
             % (best_model_name, loaded_epoch, best_vloss, best_vaccuracy)
         )
 
-    if not args_t.eval_model:
-        for epoch in range(args_t.epochs):
+    if not args.eval_model:
+        for epoch in range(args.epochs):
             if epoch <= loaded_epoch:
                 continue
             time_epoch = time.time()
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                 training_loader,
                 loss_fn,
                 optimizer,
-                args_t.num_prints,
+                args.num_prints,
                 device,
                 time_epoch,
             )
@@ -140,7 +140,7 @@ if __name__ == "__main__":
                 val_loader,
                 loss_fn,
                 optimizer,
-                args_t.num_prints,
+                args.num_prints,
                 device,
                 time_epoch,
                 main_dir,
@@ -179,7 +179,7 @@ if __name__ == "__main__":
             epoch += 1
             logger.info("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
-        if args_t.history:
+        if args.history:
             # plot the training and validation loss and accuracy
             print("\n\n\n")
             logger.info("Plotting training and validation loss and accuracy")
@@ -195,7 +195,7 @@ if __name__ == "__main__":
                 main_dir,
                 False,
             )
-    if args_t.onnx:
+    if args.onnx:
         # export the model to ONNX
         print("\n\n\n")
         logger.info("Exporting model to ONNX")
@@ -204,13 +204,13 @@ if __name__ == "__main__":
         model.to("cpu")
         export_onnx(
             model,
-            best_model_name if not args_t.eval_model else args_t.eval_model,
+            best_model_name if not args.eval_model else args.eval_model,
             batch_size,
             input_size,
             "cpu",
         )
 
-    if args_t.eval or args_t.eval_model:
+    if args.eval or args.eval_model:
         # evaluate model on test_dataset loadining the best model
         print("\n\n\n")
         logger.info("Evaluating best model on test and train dataset")
@@ -218,20 +218,20 @@ if __name__ == "__main__":
 
         # load best model
         model.load_state_dict(
-            torch.load(best_model_name if not args_t.eval_model else args_t.eval_model)[
+            torch.load(best_model_name if not args.eval_model else args.eval_model)[
                 "state_dict"
             ]
         )
         model.train(False)
         model.to(device)
 
-        eval_epoch = loaded_epoch if args_t.eval_model else best_epoch
+        eval_epoch = loaded_epoch if args.eval_model else best_epoch
         logger.info("Training dataset\n")
         score_lbl_array_train, loss_eval_train, accuracy_eval_train = eval_model(
             model,
             training_loader,
             loss_fn,
-            args_t.num_prints,
+            args.num_prints,
             "training",
             device,
             eval_epoch,
@@ -242,7 +242,7 @@ if __name__ == "__main__":
             model,
             test_loader,
             loss_fn,
-            args_t.num_prints,
+            args.num_prints,
             "test",
             device,
             eval_epoch,
@@ -262,7 +262,7 @@ if __name__ == "__main__":
         )
 
         # plot the signal and background distributions
-        if args_t.histos:
+        if args.histos:
             print("\n\n\n")
             logger.info("Plotting signal and background distributions")
             plot_sig_bkg_distributions(

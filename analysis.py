@@ -11,7 +11,7 @@ import os
 from logger import setup_logger
 
 from histobinning import binningRules
-from args_analysis import args_a
+from args_analysis import args
 
 from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
@@ -19,18 +19,18 @@ from histograms import histosData, histosMC
 
 from samples import *
 
-if args_a.btag not in ["deepcsv", "deepflav"]:
+if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
     sys.exit(1)
 
 from eventprocessingCommon import getFlowCommon
 
-if args_a.lep == "mu":
+if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
     from histograms import histosPerSelectionMuonMC as histosPerSelectionMC
     from histograms import histosPerSelectionMuonData as histosPerSelectionData
     from histograms import selsMu as sels
-elif args_a.lep == "el":
+elif args.lep == "el":
     from eventprocessingElectrons import getFlowElectrons as getFlow
     from histograms import histosPerSelectionElectronMC as histosPerSelectionMC
     from histograms import histosPerSelectionElectronData as histosPerSelectionData
@@ -39,35 +39,35 @@ else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
 
-nthreads = args_a.nthreads if args_a.range == -1 else 0
-nprocesses = args_a.num_processes
+nthreads = args.nthreads if args.range == -1 else 0
+nprocesses = args.num_processes
 start = time.time()
 
-os.makedirs(args_a.histfolder, exist_ok=True)
+os.makedirs(args.histfolder, exist_ok=True)
 # remove the log file if already exists
-if os.path.exists(f"{args_a.histfolder}/logger.log"):
-    os.remove(f"{args_a.histfolder}/logger.log")
+if os.path.exists(f"{args.histfolder}/logger.log"):
+    os.remove(f"{args.histfolder}/logger.log")
 
-logger = setup_logger(f"{args_a.histfolder}/logger.log")
+logger = setup_logger(f"{args.histfolder}/logger.log")
 
 
-logger.info("args:\n - %s", "\n - ".join(str(it) for it in args_a.__dict__.items()))
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 # Create the flow
 flow = SampleProcessing(
     "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
 )
 # Flow for data
-flowData = getFlowCommon(flow, args_a.btag)
+flowData = getFlowCommon(flow, args.btag)
 flowData = getFlow(flowData)
-if args_a.eval_model:
-    flowData = getFlowDNN(args_a.eval_model, flowData)
+if args.eval_model:
+    flowData = getFlowDNN(args.eval_model, flowData)
 # Final flow for MC
 flow = copy.deepcopy(flowData)
 flow = getFlowMC(flow)
-if args_a.sf:
+if args.sf:
     from eventprocessingSys import getFlowSys
-    flow = getFlowSys(flow, args_a.btag)
+    flow = getFlowSys(flow, args.btag)
 
 
 # Add binning rules
@@ -144,8 +144,8 @@ def runSample(ar):
         logger.info("sample %s: nevents %s" % (s, nevents))
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
-    if args_a.range != -1:
-        rdf = rdf.Range(args_a.range)
+    if args.range != -1:
+        rdf = rdf.Range(args.range)
     subs = {}
     if rdf:
         try:
@@ -166,13 +166,13 @@ def runSample(ar):
                 snaplist += histosMC + ["DNN_weight"]
 
             if (
-                args_a.snapshot
+                args.snapshot
                 and "snapshot" in samples[s].keys()
                 and samples[s]["snapshot"]
             ):
                 for region in sels:
                     # create snapshot directory
-                    os.makedirs(f"{args_a.histfolder}/Snapshots", exist_ok=True)
+                    os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
                     processed_rdf = out.rdf.find(region).second
                     if "xsec" in samples[s].keys():  # is MC
                         processed_rdf = processed_rdf.Define(
@@ -181,11 +181,11 @@ def runSample(ar):
                         )
                     processed_rdf.Snapshot(
                         "Events",
-                        f"{args_a.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
+                        f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
                         snaplist,
                     )
 
-            outFile = ROOT.TFile.Open(f"{args_a.histfolder}/{s}_Histos.root", "recreate")
+            outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
             if nthreads != 0:
                 ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
@@ -203,7 +203,7 @@ def runSample(ar):
 
             for subname in subs:
                 outFile = ROOT.TFile.Open(
-                    f"{args_a.histfolder}/{s}_{subname}_Histos.root", "recreate"
+                    f"{args.histfolder}/{s}_{subname}_Histos.root", "recreate"
                 )
                 for h in out.histosOutSplit[subname]:
                     hname = h.GetName()
@@ -249,7 +249,7 @@ toproc = sorted(
 )
 logger.info("To process %s" % [x[0] for x in toproc])
 
-if args_a.model == "fix":
+if args.model == "fix":
     toproc = []
     sss = sams
     if len(sys.argv[3:]):
@@ -258,7 +258,7 @@ if args_a.model == "fix":
     for s in sss:
         if os.path.exists(samples[s]["files"][0]):
             try:
-                ff = ROOT.TFile.Open(f"{args_a.histfolder}/{s}_Histos.root")
+                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root")
                 if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
                     logger.info("zombie or zero keys %s" % s)
                     toproc.append((s, samples[s]["files"]))
@@ -266,10 +266,10 @@ if args_a.model == "fix":
             except:
                 logger.error("failed", s)
                 toproc.append((s, samples[s]["files"]))
-elif args_a.model[:5] == "model":
+elif args.model[:5] == "model":
     import importlib
 
-    model = importlib.import_module(args_a.model.replace(".py", ""))
+    model = importlib.import_module(args.model.replace(".py", ""))
     # 	samples=model.samples
 
     allmc = []
@@ -292,8 +292,8 @@ elif args_a.model[:5] == "model":
     toproc = [
         (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
     ]
-elif args_a.model != "":
-    toproc = [(s, samples[s]["files"]) for s in sams if s in args_a.model.split(",")]
+elif args.model != "":
+    toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
 logger.info("Will process %s" % [x[0] for x in toproc])
 
