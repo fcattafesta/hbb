@@ -73,15 +73,14 @@ def systematicGrouping(background, signal, jesList, year):
     }
 
     btag = {
-        x: {
+        x.replace("Down", ""): {
             "type": "shape",
             "value": 1.0,
-            "decorrelate": {"": Hbb + DY + VV + TT + ST}, #NOTE: ok?
+            "decorrelate": {"": Hbb + DY + VV + TT + ST},  # NOTE: ok?
         }
         for x in btag_sys
-        #if "Down" in x #NOTE: ?
+        if "Down" in x  # NOTE: ?
     }
     systematicDetail.update(btag)
-
 
     return systematicDetail
