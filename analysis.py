@@ -57,27 +57,31 @@ logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()
 flow = SampleProcessing(
     "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
 )
+
+# Add binning rules
+flow.binningRules = binningRules
+
 # Flow for data
 flowData = getFlowCommon(flow, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
+    
 # Final flow for MC
-flow = copy.deepcopy(flowData)
-flow = getFlowMC(flow)
+flowMC = copy.deepcopy(flowData)
+flowMC = getFlowMC(flowMC)
 if args.sf:
     from eventprocessingSys import getFlowSys
-    flow = getFlowSys(flow, args.btag)
+    flowMC = getFlowSys(flowMC, args.btag)
 
+systematics=flowMC.variations #take all systematic variations
+logger.info("Systematics for all plots: %s"% systematics)
+histosWithSystematics=flowMC.createSystematicBranches(systematics,histosPerSelectionMC)
 
-# Add binning rules
-flow.binningRules = binningRules
-flowData.binningRules = binningRules
-
-proc = flow.CreateProcessor(
+proc = flowMC.CreateProcessor(
     "eventProcessor",
     [flavourSplitting[x] for x in flavourSplitting],
-    histosPerSelectionMC,
+    histosWithSystematics,
     [],
     "",
     nthreads,
