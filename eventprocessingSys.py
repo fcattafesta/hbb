@@ -123,7 +123,7 @@ def getFlowSys(flow, btag):
     for name in ["Nom", "Up", "Down"]:
         flow.Define(
             "Jet_jer%sSF" % (name),
-            'jer_sf_corr->evaluate({Jet_eta, "%s"})' % (name.lower()),
+            'sf_jer(Jet_eta, "%s")' % (name.lower()),
         )
     flow.Define("Jet_pt_jerNom", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerNomSF")
     flow.Define("Jet_pt_jerDown", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerDownSF")
