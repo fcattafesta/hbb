@@ -16,7 +16,7 @@ sf_btag = {
 def getFlowSys(flow, btag):
     ## Systematics definitions ##
     flow.AddCppCode('#include "correction.h"\n')
-    flow.AddCppCode('#include <TRandom.h>\n')
+    flow.AddCppCode('#include <TRandom3.h>\n')
     flow.AddCppCode('#include <cstring>\n')
     #flow.AddCppCode('#include "correctionlib_sys.h"\n')
 
@@ -129,8 +129,8 @@ def getFlowSys(flow, btag):
     flow.Define("Jet_pt_jerDown", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerDownSF")
     flow.Define(
         "Jet_pt_jerUp",
-        "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF+(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {return float(TRandom3::Gaus(0,0.15*sigma));} )",
-    )
+            "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF+(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
+        )
     flow.Systematic("JERDown","Jet_pt_jerNom","Jet_pt_jerDown")
     flow.Systematic("JERUp","Jet_pt_jerNom","Jet_pt_jerUp")
 
