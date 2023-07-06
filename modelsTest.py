@@ -11,7 +11,7 @@ background = {
 }
 signal = {"ZH": ["ZH"]}
 
-data = {}
+data = {"2018": ["SingleMuon_2018"]}
 
 
 import ROOT

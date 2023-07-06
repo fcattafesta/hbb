@@ -24,7 +24,6 @@ def systematicGrouping(background, signal, jesList, year):
     ]
 
     DY = [x + y for x in DY_ for y in ["_bb", "_b", "_c", "_udsg"]]
-    print(DY)
 
     VV_ = [
         "WWTo2L2Nu",
@@ -35,7 +34,6 @@ def systematicGrouping(background, signal, jesList, year):
         "ZZTo4L",
     ]
     VV = [x + y for x in VV_ for y in ["_bb", "_b", "_c", "_udsg"]]
-    print(VV)
 
     TT = ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"]
     ST = [
