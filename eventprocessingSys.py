@@ -18,7 +18,6 @@ def getFlowSys(flow, btag):
     flow.AddCppCode('#include "correction.h"\n')
     flow.AddCppCode('#include <TRandom3.h>\n')
     flow.AddCppCode('#include <cstring>\n')
-    #flow.AddCppCode('#include "correctionlib_sys.h"\n')
 
     # btag systematics
     flow.AddCppCode(
@@ -28,7 +27,6 @@ def getFlowSys(flow, btag):
         'auto btag_shape_corr = btag_corr->at("%s");\n'
         % ("deepJet_shape" if btag == "deepflav" else "deepCSV_shape")
     )
-
     flow.AddCppCode(
         """
         // Calculate b-tagging scale factors for a given set of inputs
@@ -99,7 +97,6 @@ def getFlowSys(flow, btag):
         'auto jer_sf_corr = jer_corr->at("%s");\n'
         % "Summer19UL18_JRV2_MC_ScaleFactor_AK4PFchs"
     )
-
     flow.AddCppCode(
         """
         // Calculate jer scale factors for a given set of inputs
