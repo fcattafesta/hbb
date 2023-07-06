@@ -67,24 +67,24 @@ def getFlowSys(flow, btag, MC):
             }
         """
         )
-
+        # NOTE: btag weights to all jets or to only selected jets?
         for suffix, names in sf_btag.items():
             for i, name in enumerate(names):
                 flow.Define(
-                    "SelectedJet_btagWeight_%s%s" % (suffix, i),
-                    'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, SelectedJet_btagDeepFlavB)'
+                    "Jet_btagWeight_%s%s" % (suffix, i),
+                    'sf_btag("%s", Jet_hadronFlavour, Jet_eta, Jet_pt, Jet_btagDeepFlavB)'
                     % (name),
                 )
                 if suffix == "Central":
                     flow.Define(
                         "btagWeight%s" % (suffix),
-                        "ROOT::VecOps::Product(SelectedJet_btagWeight_%s%s)" % (suffix, i),
+                        "ROOT::VecOps::Product(Jet_btagWeight_%s%s)" % (suffix, i),
                     )
                     flow.CentralWeight("btagWeightCentral", ["twoJets"])
                 else:
                     flow.Define(
                         "btagWeight_%s%s" % (unc_btag[i], suffix),
-                        "ROOT::VecOps::Product(SelectedJet_btagWeight_%s%s)" % (suffix, i),
+                        "ROOT::VecOps::Product(Jet_btagWeight_%s%s)" % (suffix, i),
                     )
                     flow.VariationWeight(
                         "btagWeight_%s%s" % (unc_btag[i], suffix), "btagWeightCentral"
