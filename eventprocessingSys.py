@@ -104,7 +104,7 @@ def getFlowSys(flow, btag):
         """
         // Calculate jer scale factors for a given set of inputs
         template <typename Vec, typename str>
-        auto sf_jer(const str & name, const Vec & eta) {
+        auto sf_jer(const Vec & eta, const str & name) {
             // Create a vector to store the scale factors
             ROOT::VecOps::RVec<float> sf(eta.size());
 
