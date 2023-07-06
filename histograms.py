@@ -31,7 +31,7 @@ if args.sf:
     histosMC += ["btagWeightCentral"]
     histosMC += btag_sys
     histosMC += [
-        "Jet_pt_jerNom",
+        "Jet_pt_Nom",
         "Jet_pt_jerUp",
         "Jet_pt_jerDown",
         "Jet_jerNomSF",

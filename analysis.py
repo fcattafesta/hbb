@@ -24,6 +24,7 @@ if args.btag not in ["deepcsv", "deepflav"]:
     sys.exit(1)
 
 from eventprocessingCommon import getFlowCommon
+from eventprocessingSys import getFlowSys
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
@@ -54,34 +55,43 @@ logger = setup_logger(f"{args.histfolder}/logger.log")
 logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 # Create the flow
-flow = SampleProcessing(
+flowMC = SampleProcessing(
     "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
 )
 
 # Add binning rules
-flow.binningRules = binningRules
+flowMC.binningRules = binningRules
+
+flowData = copy.deepcopy(flowMC)
 
 # Flow for data
-flowData = getFlowCommon(flow, args.btag)
+flowData = getFlowSys(flowData, args.btag, MC=False)
+flowData = getFlowCommon(flowData, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
-    
-# Final flow for MC
-flowMC = copy.deepcopy(flowData)
-flowMC = getFlowMC(flowMC)
-if args.sf:
-    from eventprocessingSys import getFlowSys
-    flowMC = getFlowSys(flowMC, args.btag)
 
-systematics=flowMC.variations #take all systematic variations
+# Flow for MC
+if args.sf:
+    flowMC = getFlowSys(flowMC, args.btag, MC=True)
+else:
+    flowMC = getFlowSys(flowMC, args.btag, MC=False)
+flowMC = getFlowCommon(flowMC, args.btag)
+flowMC = getFlow(flowMC)
+if args.eval_model:
+    flowMC = getFlowDNN(args.eval_model, flowMC)
+flowMC = getFlowMC(flowMC)
+
+# systematics
+systematics=flowMC.variations
 logger.info("Systematics for all plots: %s"% systematics)
-histosWithSystematics=flowMC.createSystematicBranches(systematics,histosPerSelectionMC)
+histosWithSystematicsMC=flowMC.createSystematicBranches(systematics,histosPerSelectionMC)
+logger.info("Histograms with systematics: %s"% histosWithSystematicsMC)
 
 proc = flowMC.CreateProcessor(
     "eventProcessor",
     [flavourSplitting[x] for x in flavourSplitting],
-    histosWithSystematics,
+    histosWithSystematicsMC,
     [],
     "",
     nthreads,
