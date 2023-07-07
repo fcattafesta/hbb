@@ -162,3 +162,5 @@ models/
 *.json*
 btag_files/
 workspace/
+figure/
+*.out

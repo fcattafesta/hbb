@@ -204,9 +204,8 @@ def runSample(ar):
                 ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
 
-            logger.info("histos: %s" % out.histos)
             for h in out.histos:
-                logger.info("histo: %s" % h.GetName())
+                logger.info("histo: %s  sample %s" % (h.GetName(), s))
                 hname = h.GetName()
                 h.GetValue()
                 outFile.cd()
