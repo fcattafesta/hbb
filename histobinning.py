@@ -14,10 +14,9 @@ binningRules = [
     ("atanhDNN_Score", "10000, 0, 15"),
     ("hadronFlavour_btag.*", "6, -0.5, 5.5"),
     ("LHE_Nb", "6, -0.5, 5.5"),
-    ("btagWeightCentral", "100, 0, 10"),
+    ("btagWeight.*", "100, 0, 10"),
 ]
-binningRules += [(weight, "100, 0, 10") for weight in btag_sys]
-#binningRules += [(".*_pt_.*", "30, 0, 300")]
+binningRules += [(".*_pt_.*", "30, 0, 300")]
 binningRules += [
     (jer, "100, 0, 5")
     for jer in [

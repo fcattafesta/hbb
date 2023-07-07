@@ -205,10 +205,6 @@ def runSample(ar):
             normalization = 1.0
 
             for h in out.histos:
-                logger.info("sample %s" % s)
-                logger.info("histo: %s" % (h))
-                logger.info("integral: %s" % (h.Integral()))
-                logger.info("histoname: %s" % (h.GetName()))
                 hname = h.GetName()
                 h.GetValue()
                 outFile.cd()
@@ -323,4 +319,5 @@ else:
 logger.info("Results %s" % results)
 logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 
+logger.info("histo folder %s" % args.histfolder)
 logger.info("time:   %s" % (time.time() - start))

@@ -22,7 +22,7 @@ from logger import setup_logger
 
 
 btag_label = labelBtag[args.btag]
-Significance_variables = ["atanhDNN_Score"]
+Significance_variables = ["atanhDNN_Score", "Jet_pt_Nom", "Jet_pt"]
 
 outdir = args.workspace
 

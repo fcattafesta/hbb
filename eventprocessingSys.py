@@ -28,6 +28,8 @@ def getFlowSys(flow, btag, MC):
             'auto btag_shape_corr = btag_corr->at("%s");\n'
             % ("deepJet_shape" if btag == "deepflav" else "deepCSV_shape")
         )
+
+        #NOTE: cut on eta for the jet
         flow.AddCppCode(
             """
             // Calculate b-tagging scale factors for a given set of inputs
@@ -50,7 +52,7 @@ def getFlowSys(flow, btag, MC):
                     bool correct_flav = false;
                     // Loop over each flavor and check if it matches the input flavor
                     for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
-                        if (hadronFlavour[i] == flav[j]) {
+                        if (hadronFlavour[i] == flav[j] && abs(eta[i]) < 2.5) {
                             // Calculate the scale factor using the btag_shape_corr object
                             sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                             correct_flav = true;
@@ -72,8 +74,8 @@ def getFlowSys(flow, btag, MC):
             for i, name in enumerate(names):
                 flow.Define(
                     "Jet_btagWeight_%s%s" % (suffix, i),
-                    'sf_btag("%s", Jet_hadronFlavour, Jet_eta, Jet_pt, Jet_btagDeepFlavB)'
-                    % (name),
+                    'sf_btag("%s", Jet_hadronFlavour, Jet_eta, Jet_pt, %s)'
+                    % (name, "Jet_btagDeepFlavB" if btag == "deepflav" else "Jet_btagDeepB"),
                 )
                 if suffix == "Central":
                     flow.Define(
