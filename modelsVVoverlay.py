@@ -52,7 +52,7 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
-systematicsToPlot = btag_sys + ["XSecAndNorm"]
+systematicsToPlot = btag_sys + ["XSecAndNorm", "JERDown", "JERUp"]
 systematicsForDC = systematicsToPlot
 
 from systematicGrouping import *
