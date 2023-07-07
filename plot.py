@@ -22,7 +22,7 @@ from logger import setup_logger
 
 
 btag_label = labelBtag[args.btag]
-Significance_variables = ["atanhDNN_Score", "Jet_pt_Nom", "Jet_pt"]
+Significance_variables = ["atanhDNN_Score", "Jet_pt"]
 
 outdir = args.workspace
 
@@ -1394,7 +1394,7 @@ def makeplot(hn, saveintegrals=True):
 
         t1 = makeText(0.28, 0.95, "CMS", 61)
         t2 = makeText(0.38, 0.95, str(year), 42)
-        t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+        t3 = makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
         t4 = makeText(
             0.25,
             0.8,
