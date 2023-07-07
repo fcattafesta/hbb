@@ -205,7 +205,10 @@ def runSample(ar):
             normalization = 1.0
 
             for h in out.histos:
-                logger.info("histo: %s  sample %s" % (h.GetName(), s))
+                logger.info("sample %s" % s)
+                logger.info("histo: %s" % (h))
+                logger.info("integral: %s" % (h.Integral()))
+                logger.info("histoname: %s" % (h.GetName()))
                 hname = h.GetName()
                 h.GetValue()
                 outFile.cd()
