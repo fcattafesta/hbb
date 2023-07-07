@@ -206,7 +206,7 @@ def runSample(ar):
 
             logger.info("histos: %s" % out.histos)
             for h in out.histos:
-                logger.info("histo: %s" % h)
+                logger.info("histo: %s" % h.GetName())
                 hname = h.GetName()
                 h.GetValue()
                 outFile.cd()
