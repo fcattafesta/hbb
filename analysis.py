@@ -88,8 +88,8 @@ logger.info("Systematics for all plots: %s"% systematics)
 histosWithSystematicsMC=flowMC.createSystematicBranches(systematics,histosPerSelectionMC)
 logger.info("Histograms with systematics: %s"% histosWithSystematicsMC)
 
-proc = flowMC.CreateProcessor(
-    "eventProcessor",
+procMC = flowMC.CreateProcessor(
+    "eventProcessorMC",
     [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
@@ -176,7 +176,7 @@ def runSample(ar):
                 if "subsamples" in samples[s].keys():
                     subs = samples[s]["subsamples"]
                 rdf = rdf.Define("isMC", "true")
-                out = proc(rdf, subs)
+                out = procMC(rdf, subs)
                 snaplist += histosMC + ["DNN_weight"]
 
             if (

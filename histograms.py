@@ -21,6 +21,8 @@ histosData = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
+    "Jet_pt",
+    "Jet_pt_Nom",
 ]
 if args.eval_model:
     histosData.append("DNN_Score")
@@ -31,7 +33,6 @@ if args.sf:
     histosMC += ["btagWeightCentral"]
     histosMC += btag_sys
     histosMC += [
-        "Jet_pt_Nom",
         "Jet_pt_jerUp",
         "Jet_pt_jerDown",
         "Jet_jerNomSF",
