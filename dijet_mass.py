@@ -12,7 +12,7 @@ root_files = {
 
 histos={}
 
-rebinning=list(np.linspace(90, 150, 60))
+rebinning=list(np.linspace(50, 200, 100))
 files={}
 # Loop over the file names and add them to the dictionary
 for type, names in root_files.items():
