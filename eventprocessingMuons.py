@@ -43,7 +43,7 @@ def getFlowMuons(flow):
     ### Signal regions ###
     flow.Selection(
         "SR_mm",
-        "Z_mass >= 75 && Z_mass <= 105 && Dijets_mass >= 90 && Dijets_mass <= 150 && JetBtagMaxMedium && JetBtagMinLoose",
+        "Z_mass >= 75 && Z_mass <= 105  && JetBtagMaxMedium && JetBtagMinLoose", #&& Dijets_mass >= 90 && Dijets_mass <= 150
         requires=["CommonSelMu"],
     )
 
