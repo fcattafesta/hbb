@@ -28,7 +28,7 @@ if args.eval_model:
     histosData.append("DNN_Score")
     histosData.append("atanhDNN_Score")
 
-histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb"]
+histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb", "genWeight"]
 if args.sf:
     histosMC += ["btagWeightCentral"]
     histosMC += btag_sys

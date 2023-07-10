@@ -152,10 +152,10 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
+        logger.info("Start sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
-        logger.info("sample %s: nevents %s" % (s, nevents))
+        logger.info("Start sample %s: nevents %s" % (s, nevents))
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
@@ -198,6 +198,16 @@ def runSample(ar):
                         f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
                         snaplist,
                     )
+                    if "xsec" in samples[s].keys():
+                        output_file = ROOT.TFile(f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root", "UPDATE")
+                        tree = ROOT.TTree("Runs", "Runs")
+                        x = ROOT.std.vector('double')()
+                        tree.Branch("genEventSumw", x)
+                        x.push_back(sumws)
+                        tree.Fill()
+                        output_file.Write()
+                        output_file.Close()
+
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
             if nthreads != 0:
@@ -238,6 +248,9 @@ def runSample(ar):
             return 1
     else:
         logger.info("Null file %s" % s)
+
+    logger.info("Finish sample %s: nevents %s" % (s, nevents))
+
 
 
 # from multiprocessing.pool import ThreadPool as Pool
@@ -280,7 +293,7 @@ if args.model == "fix":
             except:
                 logger.error("failed", s)
                 toproc.append((s, samples[s]["files"]))
-elif args.model[:5] == "model":
+elif "model" in args.model[:5]:
     import importlib
 
     model = importlib.import_module(args.model.replace(".py", ""))

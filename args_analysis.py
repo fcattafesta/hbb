@@ -41,7 +41,7 @@ parser.add_argument(
     "--sf",
     default=False,
     action="store_true",
-    help="Apply btagging scale factors",
+    help="Apply scale factors and systematics",
 )
 parser.print_help()
 args = parser.parse_args()

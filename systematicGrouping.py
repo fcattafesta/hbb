@@ -61,7 +61,7 @@ def systematicGrouping(background, signal, jesList, year):
                 "ST": ST,
             },
             "groupValues": {
-                "Hbb": 1.010,
+                "Hbb": 1.010, #?
                 "DY": 1.010,
                 "VV": 1.010,
                 "TT": 1.005,
