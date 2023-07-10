@@ -36,3 +36,4 @@ for i, type in enumerate(histos):
 legend.Draw()
 c.Draw()
 c.SaveAs("dijet_mass.png")
+c.SaveAs("dijet_mass.root")
