@@ -4,10 +4,10 @@ from array import array
 
 # Define a dictionary to store the ROOT files
 root_files = {
-    "Jet_pt":["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_NOsnap/ZH_Histos.root", "Dijets_mass___SR_mm"],
-    "Jet_ptNom":["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf_NOsnap/ZH_Histos.root", "Dijets_mass___SR_mm"],
-    "Jet_pt_jerUp"  :["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf_NOsnap/ZH_Histos.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
-    "Jet_pt_jerDown":["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf_NOsnap/ZH_Histos.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
+    "Jet_pt":["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH/ZH_Histos.root", "Dijets_mass___SR_mm"],
+    "Jet_ptNom":["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf/ZH_Histos.root", "Dijets_mass___SR_mm"],
+    "Jet_pt_jerUp"  :["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf/ZH_Histos.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
+    "Jet_pt_jerDown":["/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf/ZH_Histos.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
 }
 
 histos={}
