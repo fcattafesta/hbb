@@ -1,4 +1,6 @@
 import ROOT
+import numpy as np
+from array import array
 
 # Define a dictionary to store the ROOT files
 root_files = {
@@ -10,12 +12,12 @@ root_files = {
 
 histos={}
 
-
+rebinning=list(np.linspace(90, 150, 100))
 files={}
 # Loop over the file names and add them to the dictionary
 for type, names in root_files.items():
     files[type] = ROOT.TFile.Open(names[0])
-    histos[type] = files[type].Get(names[1])#.Clone()
+    histos[type] = files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
     #f.Close()
 
 print(histos)
