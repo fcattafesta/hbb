@@ -20,11 +20,11 @@ files={}
 for type, names in root_files.items():
     files[type] = ROOT.TFile.Open(names[0])
     histos[type] = files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
-    for pt in pts:
-        histos_pt[pt] = files[type].Get(pt)#.Rebin(len(rebinning)-1, "hnew"+pt, array("d", rebinning))
-    #f.Close()
+    if type=="Jet_ptNom":
+        for pt in pts:
+            histos_pt[pt] = files[type].Get(pt)#.Rebin(len(rebinning)-1, "hnew"+pt, array("d", rebinning))
 
-print(histos)
+print(histos_pt)
 
 c=ROOT.TCanvas()
 legend=ROOT.TLegend()
