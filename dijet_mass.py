@@ -20,7 +20,12 @@ files={}
 for type, names in root_files.items():
     files[type] = ROOT.TFile.Open(names[0])
     h=files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
+    sumws=files[type].Get("sumWeights")
+    print(type, h.GetEntries())
     h.Scale(1/h.Integral())
+    print(type, h.GetEntries())
+    print(type, "sumws", sumws )
+    print(type, "GetSumOfWeights", h.GetSumOfWeights() )
     histos[type] = h
     if type=="Jet_pt_Nom":
         for pt in pts:
@@ -36,7 +41,6 @@ for i, type in enumerate(histos):
     h.SetLineColor(colors[i])
     legend.AddEntry(h, type, "l")
     # print number of entries
-    print(type, h.GetEntries())
     if i==0:
         h.Draw("hist")
     else:
