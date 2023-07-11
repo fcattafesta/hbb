@@ -19,7 +19,9 @@ files={}
 # Loop over the file names and add them to the dictionary
 for type, names in root_files.items():
     files[type] = ROOT.TFile.Open(names[0])
-    histos[type] = files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
+    h=files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
+
+    histos[type] = h.Scale(1/h.Integral())
     if type=="Jet_pt_Nom":
         for pt in pts:
             histos_pt[pt] = files[type].Get(pt)#.Rebin(len(rebinning)-1, "hnew"+pt, array("d", rebinning))
