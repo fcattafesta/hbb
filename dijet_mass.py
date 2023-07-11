@@ -13,7 +13,7 @@ root_files = {
 histos={}
 histos_pt={}
 
-pts=["GenJet_pt", "Jet_pt", "Jet_ptNom", "Jet_pt_jerUp", "Jet_pt_jerDown"]
+pts=["GenJet_pt___SR_mm", "Jet_pt___SR_mm", "Jet_ptNom___SR_mm", "Jet_pt_jerUp___SR_mm", "Jet_pt_jerDown___SR_mm"]
 rebinning=list(np.linspace(50, 200, 100))
 files={}
 # Loop over the file names and add them to the dictionary
