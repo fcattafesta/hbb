@@ -14,7 +14,7 @@ histos={}
 histos_pt={}
 
 pts=["GenJet_pt___SR_mm", "Jet_pt___SR_mm", "Jet_pt_Nom___SR_mm", "Jet_pt_jerUp___SR_mm", "Jet_pt_jerDown___SR_mm"]
-rebinning=list(np.linspace(50, 200, 100))
+rebinning=list(np.linspace(40, 200, 80))
 files={}
 # Loop over the file names and add them to the dictionary
 for type, names in root_files.items():
@@ -33,6 +33,8 @@ for i, type in enumerate(histos):
     h=histos[type]
     h.SetLineColor(colors[i])
     legend.AddEntry(h, type, "l")
+    # print number of entries
+    print(type, h.GetEntries())
     if i==0:
         h.Draw("hist")
     else:
@@ -47,6 +49,7 @@ legend1=ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
 for i, pt in enumerate(histos_pt):
     h=histos_pt[pt]
     h.SetLineColor(colors[i])
+    print(type, h.GetEntries())
     legend1.AddEntry(h, pt, "l")
     if i==0:
         h.SetMaximum(max([h.GetMaximum() for h in histos_pt.values()])*1.1)
