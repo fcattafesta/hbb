@@ -43,12 +43,13 @@ c.SaveAs("dijet_mass.png")
 c.SaveAs("dijet_mass.root")
 
 c1=ROOT.TCanvas()
-legend1=ROOT.TLegend()
+legend1=ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
 for i, pt in enumerate(histos_pt):
     h=histos_pt[pt]
     h.SetLineColor(colors[i])
     legend1.AddEntry(h, pt, "l")
     if i==0:
+        h.SetMaximum(max([h.GetMaximum() for h in histos_pt.values()])*1.1)
         h.Draw("hist")
     else:
         h.Draw("hist same")
