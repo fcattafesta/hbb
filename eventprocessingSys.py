@@ -129,7 +129,7 @@ def getFlowSys(flow, btag, MC):
         flow.Define("Jet_pt_jerDown", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerDownSF")
         flow.Define(
             "Jet_pt_jerUp",
-                "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF+(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
+                "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF",#+(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
             )
         flow.Systematic("JERDown","Jet_pt_Nom","Jet_pt_jerDown")
         flow.Systematic("JERUp","Jet_pt_Nom","Jet_pt_jerUp")
