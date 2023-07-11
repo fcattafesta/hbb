@@ -11,20 +11,24 @@ root_files = {
 }
 
 histos={}
+histos_pt={}
 
+pts=["GenJet_pt", "Jet_pt", "Jet_ptNom", "Jet_pt_jerUp", "Jet_pt_jerDown"]
 rebinning=list(np.linspace(50, 200, 100))
 files={}
 # Loop over the file names and add them to the dictionary
 for type, names in root_files.items():
     files[type] = ROOT.TFile.Open(names[0])
     histos[type] = files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
+    for pt in pts:
+        histos_pt[pt] = files[type].Get(pt)#.Rebin(len(rebinning)-1, "hnew"+pt, array("d", rebinning))
     #f.Close()
 
 print(histos)
 
 c=ROOT.TCanvas()
 legend=ROOT.TLegend()
-colors=[ROOT.kBlack, ROOT.kBlue, ROOT.kRed, ROOT.kGreen]
+colors=[ROOT.kBlack, ROOT.kBlue, ROOT.kRed, ROOT.kGreen, ROOT.kOrange]
 for i, type in enumerate(histos):
     h=histos[type]
     h.SetLineColor(colors[i])
@@ -37,3 +41,18 @@ legend.Draw()
 c.Draw()
 c.SaveAs("dijet_mass.png")
 c.SaveAs("dijet_mass.root")
+
+c1=ROOT.TCanvas()
+legend1=ROOT.TLegend()
+for i, pt in enumerate(histos_pt):
+    h=histos_pt[pt]
+    h.SetLineColor(colors[i])
+    legend1.AddEntry(h, pt, "l")
+    if i==0:
+        h.Draw("hist")
+    else:
+        h.Draw("hist same")
+legend1.Draw()
+c1.Draw()
+c1.SaveAs("jet_pt.png")
+c1.SaveAs("jet_pt.root")
