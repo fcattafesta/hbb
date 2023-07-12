@@ -50,10 +50,10 @@ signalSorted = signalSortedForLegend
 
 from rebinning import *
 
+systematicsToPlot = btag_sys + ["lumi", "BR_Hbb", "XSecAndNorm", "JERDown", "JERUp"]
+systematicsForDC = systematicsToPlot
+
 from systematicGrouping import *
 systematicDetail = systematicGrouping(background, signal,[],"2018")
-
-systematicsToPlot = list(systematicDetail.keys())
-systematicsForDC = systematicsToPlot
 
 rescaleSample = {}

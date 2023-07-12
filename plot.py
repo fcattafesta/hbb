@@ -902,9 +902,9 @@ if __name__ == "__main__":
                                         makeWorkspace,
                                     )
                                 else:
-                                    logger.info(
-                                        "missing %s for %s %s %s " % (s, hn, gr, d)
-                                    )  # NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
+                                    # logger.info(
+                                    #     "missing %s for %s %s %s " % (s, hn, gr, d)
+                                    # )  # NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
                                     addHistoInTStack(
                                         h,
                                         stackSys,
@@ -1008,9 +1008,9 @@ if __name__ == "__main__":
                                     makeWorkspace,
                                 )
                             else:
-                                logger.info(
-                                    "missing %s for %s %s %s " % (s, hn, gr, d)
-                                )  # NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
+                                # logger.info(
+                                #     "missing %s for %s %s %s " % (s, hn, gr, d)
+                                # )  # NOTE: is this a problem? missing ggZH for DNN_Score___CR_Zmm_lightjets ST ST_s-channel_4f_LD
                                 addHistoInTStack(
                                     h,
                                     stackSys,
