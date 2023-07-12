@@ -50,29 +50,38 @@ def systematicGrouping(background, signal, jesList, year):
     Hbb = ["ZH", "ggZH"]
 
     systematicDetail = {
+        "lumi": {"type": "lnN", "value": 1.025},
+        "BR_Hbb": {
+            "type": "lnN",
+            "decorrelate": {"Hbb": Hbb},
+            "additionalNormalizations": [],
+            "groupValues": {"Hbb": 1.005},
+        },
         "XSecAndNorm": {
             "type": "lnN",
             "additionalNormalizations": [],
             "decorrelate": {
-                "Hbb": Hbb,
+                "ZH": ["ZH"],
+                "ggZH": ["ggZH"],
                 "DY": DY,
                 "VV": VV,
                 "TT": TT,
                 "ST": ST,
             },
             "groupValues": {
-                "Hbb": 1.010, #?
-                "DY": 1.010,
-                "VV": 1.010,
-                "TT": 1.005,
-                "ST": 1.005,
+                "ZH": 1.006, #1.010,
+                "ggZH": 1.25, #1.010,
+                "DY": 1.15, #1.010, #NOTE?
+                "VV": 1.15,  # 1.010,
+                "TT": 1.15, #1.005, #NOTE?
+                "ST": 1.15,  # 1.005,
             },
         },
     }
 
     btag = {
         x.replace("Down", ""): {
-        #x: {
+            # x: {
             "type": "shape",
             "value": 1.0,
             "decorrelate": {"": Hbb + DY + VV + TT + ST},  # NOTE: ok?
@@ -84,11 +93,12 @@ def systematicGrouping(background, signal, jesList, year):
 
     jer = {
         f"JER": {
+        # f"JER{type}": {
             "type": "shape",
             "value": 1.0,
             "decorrelate": {"": Hbb + DY + VV + TT + ST},  # NOTE: ok?
         }
-        #for type in ["Up", "Down"]
+        # for type in ["Up", "Down"]
     }
     systematicDetail.update(jer)
 

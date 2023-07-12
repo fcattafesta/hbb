@@ -10,9 +10,9 @@ ROOT.gStyle.SetOptStat(0)
 #/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf/
 root_files = {
     "Jet_pt":["ZH_Histos.root", "Dijets_mass___SR_mm"],
-    "Jet_pt_Nom":["ZH_Histos_sf.root", "Dijets_mass___SR_mm"],
-    "Jet_pt_jerUp"  :["ZH_Histos_sf.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
-    "Jet_pt_jerDown":["ZH_Histos_sf.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
+    "Jet_pt_Nom":["ZH_Histos_sf_2.root", "Dijets_mass___SR_mm"],
+    "Jet_pt_jerUp"  :["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
+    "Jet_pt_jerDown":["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
 }
 
 t0 = makeText(0.2, 0.95, "CMS", 61)
@@ -39,7 +39,6 @@ print(histos_pt)
 colors=[ROOT.kBlack, ROOT.kBlue, ROOT.kRed, ROOT.kGreen, ROOT.kOrange]
 
 gen_weight=histos["Jet_pt"].GetSumOfWeights()/histos["Jet_pt"].GetEntries()
-acceptance_std=gen_weight*histos["Jet_pt"].GetEntries()/sumws["Jet_pt"].GetVal()
 
 c=ROOT.TCanvas()
 legend= makeLegend(0.75, 0.85, 0.7, 0.92, size=1.5)
@@ -55,8 +54,6 @@ for i, type in enumerate(histos):
     h.Scale(1/h.Integral())
     print(type, "sumws", sumws[type].GetVal() )
     acceptance=gen_weight*h.GetEntries()/sumws[type].GetVal()
-    print(type, "acceptance", acceptance)
-    print(type, "acceptance_ratio", acceptance/acceptance_std)
     print("\n\n")
     if i==0:
         h.SetMaximum(max([h.GetMaximum() for h in histos.values()])*1.1)
@@ -95,5 +92,3 @@ c.SaveAs("dijet_mass.root")
 # c1.Draw()
 # c1.SaveAs("jet_pt.png")
 # c1.SaveAs("jet_pt.root")
-
-
