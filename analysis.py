@@ -24,7 +24,8 @@ if args.btag not in ["deepcsv", "deepflav"]:
     sys.exit(1)
 
 from eventprocessingCommon import getFlowCommon
-from eventprocessingSys import getFlowSys
+from eventprocessingSysBtag import getFlowSysBtag
+from eventprocessingSysJER import getFlowSysJER
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
@@ -65,7 +66,7 @@ flowMC.binningRules = binningRules
 flowData = copy.deepcopy(flowMC)
 
 # Flow for data
-flowData = getFlowSys(flowData, args.btag, MC=False)
+flowData= getFlowSysJER(flowData, sys=False)
 flowData = getFlowCommon(flowData, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
@@ -73,9 +74,9 @@ if args.eval_model:
 
 # Flow for MC
 if args.sf:
-    flowMC = getFlowSys(flowMC, args.btag, MC=True)
+    flowMC = getFlowSysJER(flowMC, sys=True)
 else:
-    flowMC = getFlowSys(flowMC, args.btag, MC=False)
+    flowMC = getFlowSysJER(flowMC, sys=False)
 flowMC = getFlowCommon(flowMC, args.btag)
 flowMC = getFlow(flowMC)
 if args.eval_model:
