@@ -43,7 +43,7 @@ fi
 
 btag="--btag "${btag}
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
+histodir="/gpfs/ddn/cms/user/cattafe/hbb_out"
 
 $CMD \
     --model ${model} \
