@@ -60,6 +60,7 @@ def getFlowSysBtag(flow, btag):
         }
     """
     )
+
     # FIXME: btag weights to all jets or to only selected jets? i think to only selected jets
     for suffix, names in sf_btag.items():
         for name in names:
@@ -80,7 +81,7 @@ def getFlowSysBtag(flow, btag):
                     "btagWeight%s" % (suffix),
                     "ROOT::VecOps::Product(SelectedJet_btagWeight_%s)" % name,
                 )
-                flow.CentralWeight("btagWeightCentral", ["twoJets"])
+                flow.CentralWeight("btagWeightCentral", ["twoJets"]) #HERE
             else:
                 flow.Define(
                     "btagWeight_%s%s" % (unc, suffix),

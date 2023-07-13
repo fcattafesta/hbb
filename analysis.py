@@ -78,6 +78,8 @@ if args.sf:
 else:
     flowMC = getFlowSysJER(flowMC, sys=False)
 flowMC = getFlowCommon(flowMC, args.btag)
+if args.sf:
+    flowMC = getFlowSysBtag(flowMC)
 flowMC = getFlow(flowMC)
 if args.eval_model:
     flowMC = getFlowDNN(args.eval_model, flowMC)
