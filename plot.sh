@@ -33,9 +33,8 @@ if [[ $suffix == *_sf* ]]; then
     sf="--sf"
 fi
 
-
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
-plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
+histodir="/gpfs/ddn/cms/user/cattafe/hbb_out"
+plotdir="/gpfs/ddn/cms/user/cattafe/hbb_plots"
 
 $CMD \
     --model ${model} \
