@@ -36,7 +36,7 @@ histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LH
 if args.sf:
     histosMC += ["btagWeightCentral"]
     histosMC += btag_sys
-    histosMC += jet_btag_sys
+    histosMC += jet_btag_sys + ["Jet_btagWeight_central"]
     histosMC += [
         "Jet_pt_jerUp",
         "Jet_pt_jerDown",
