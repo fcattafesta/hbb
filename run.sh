@@ -19,7 +19,7 @@ if [[ $flavsplit == true ]]; then
     model="${model}FlavSplit"
 fi
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
+histodir="/gpfs/ddn/cms/user/cattafe/hbb_out"
 
 $CMD \
     --model ${model} \
