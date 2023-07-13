@@ -48,6 +48,7 @@ labelVariable = {
     "JetBtagMax_pt": "p_{T}^{max}",
     "JetBtagMin_pt": "p_{T}^{min}",
     "SoftActivityJetNjets5": "N_{jets}^{soft} (p_{T} > 5 GeV)",
+    "atanhDNN_Score": "atanh(DNN Score)",
 }
 
 labelLegend = {

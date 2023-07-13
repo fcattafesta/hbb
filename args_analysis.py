@@ -37,6 +37,12 @@ parser.add_argument(
     help="Evaluate model",
     type=str,
 )
+parser.add_argument(
+    "--sf",
+    default=False,
+    action="store_true",
+    help="Apply scale factors and systematics",
+)
 parser.print_help()
 args = parser.parse_args()
 print(args)

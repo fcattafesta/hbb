@@ -156,5 +156,11 @@ libNailExternals.so
 # Matteo personal stuff
 to_do.txt
 runs/
-model_*
 roc_curve/
+model_*
+models/
+*.json*
+btag_files/
+workspace/
+figure/
+*.out

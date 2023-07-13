@@ -17,15 +17,15 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-from samples import samples, flavourSplitting
+from samples import *
 
-if args.btag == "deepcsv":
-    from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
-elif args.btag == "deepflav":
-    from eventprocessingCommonDeepFlav import getFlowCommonDeepFlav as getFlowCommon
-else:
+if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
     sys.exit(1)
+
+from eventprocessingCommon import getFlowCommon
+from eventprocessingSysBtag import getFlowSysBtag
+from eventprocessingSysJER import getFlowSysJER
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
@@ -56,28 +56,47 @@ logger = setup_logger(f"{args.histfolder}/logger.log")
 logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 # Create the flow
-flow = SampleProcessing(
-    "Analysis",
-    "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root",
+flowMC = SampleProcessing(
+    "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
 )
+
+# Add binning rules
+flowMC.binningRules = binningRules
+
+flowData = copy.deepcopy(flowMC)
+
 # Flow for data
-flowData = getFlowCommon(flow)
+flowData = getFlowSysJER(flowData, sys=False)
+flowData = getFlowCommon(flowData, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
     flowData = getFlowDNN(args.eval_model, flowData)
-# Final flow for MC
-flow = copy.deepcopy(flowData)
-flow = getFlowMC(flow)
 
+# Flow for MC
+if args.sf:
+    flowMC = getFlowSysJER(flowMC, sys=True)
+else:
+    flowMC = getFlowSysJER(flowMC, sys=False)
+flowMC = getFlowCommon(flowMC, args.btag)
+if args.sf:
+    flowMC = getFlowSysBtag(flowMC, args.btag)
+flowMC = getFlow(flowMC)
+if args.eval_model:
+    flowMC = getFlowDNN(args.eval_model, flowMC)
+flowMC = getFlowMC(flowMC)
 
-# Add binning rules
-flow.binningRules = binningRules
-flowData.binningRules = binningRules
+# systematics
+systematics = flowMC.variations
+logger.info("Systematics for all plots: %s" % systematics)
+histosWithSystematicsMC = flowMC.createSystematicBranches(
+    systematics, histosPerSelectionMC
+)
+logger.info("Histograms with systematics: %s" % histosWithSystematicsMC)
 
-proc = flow.CreateProcessor(
-    "eventProcessor",
+procMC = flowMC.CreateProcessor(
+    "eventProcessorMC",
     [flavourSplitting[x] for x in flavourSplitting],
-    histosPerSelectionMC,
+    histosWithSystematicsMC,
     [],
     "",
     nthreads,
@@ -138,9 +157,10 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
+        logger.info("Start sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
+        logger.info("Start sample %s: nevents %s" % (s, nevents))
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
@@ -161,7 +181,7 @@ def runSample(ar):
                 if "subsamples" in samples[s].keys():
                     subs = samples[s]["subsamples"]
                 rdf = rdf.Define("isMC", "true")
-                out = proc(rdf, subs)
+                out = procMC(rdf, subs)
                 snaplist += histosMC + ["DNN_weight"]
 
             if (
@@ -183,6 +203,18 @@ def runSample(ar):
                         f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
                         snaplist,
                     )
+                    if "xsec" in samples[s].keys():
+                        output_file = ROOT.TFile(
+                            f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
+                            "UPDATE",
+                        )
+                        tree = ROOT.TTree("Runs", "Runs")
+                        x = ROOT.std.vector("double")()
+                        tree.Branch("genEventSumw", x)
+                        x.push_back(sumws)
+                        tree.Fill()
+                        output_file.Write()
+                        output_file.Close()
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
             if nthreads != 0:
@@ -223,6 +255,8 @@ def runSample(ar):
             return 1
     else:
         logger.info("Null file %s" % s)
+
+    logger.info("Finish sample %s: nevents %s" % (s, nevents))
 
 
 # from multiprocessing.pool import ThreadPool as Pool
@@ -265,19 +299,25 @@ if args.model == "fix":
             except:
                 logger.error("failed", s)
                 toproc.append((s, samples[s]["files"]))
-elif args.model[:5] == "model":
+elif "model" in args.model[:5]:
     import importlib
 
-    model = importlib.import_module(args.model)
+    model = importlib.import_module(args.model.replace(".py", ""))
     # 	samples=model.samples
 
     allmc = []
     for x in model.background:
         for y in model.background[x]:
-            if x.endswith(tuple(flavourSplitting.keys())):
-                allmc.append(y.rsplit("_", 1)[0])
+            if x.endswith(
+                tuple(flavourSplitting.keys())
+                + tuple(flavourVVSplitting.keys())
+                + tuple(number_of_b.keys())
+            ):
+                if y.rsplit("_", 1)[0] not in allmc:
+                    allmc.append(y.rsplit("_", 1)[0])
             else:
-                allmc.append(y)
+                if y not in allmc:
+                    allmc.append(y)
 
     allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
@@ -302,4 +342,5 @@ else:
 logger.info("Results %s" % results)
 logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 
+logger.info("histo folder %s" % args.histfolder)
 logger.info("time:   %s" % (time.time() - start))

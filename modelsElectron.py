@@ -1,12 +1,9 @@
-from samples import *
 from collections import defaultdict
 
-name = "HBB_ee"
+from samples import *
+from plot_common_style import *
 
-flavourVVSplitting = {
-    "HF": ["bb", "b", "c"],
-    "LF": ["udsg"],
-}
+name = "HBB_ee"
 
 VV_background_list = [
     "WWTo2L2Nu",
@@ -56,54 +53,24 @@ data = {
     "2018": ["EGamma_2018"],
 }
 
-
 signal = {
     "ZH": ["ZH"],
     "ggZH": ["ggZH"],
 }
 
-import ROOT
+(
+    fillcolor,
+    linecolor,
+    linecolorOverlayed,
+    markercolor,
+    backgroundSortedForLegend,
+    backgroundSorted,
+    histosOverlayed_list,
+    signalSortedForLegend,
+    signalSorted,
+    systematicsToPlot,
+    systematicsForDC,
+    systematicDetail,
+) = plot_common_style(signal, background)
 
-# Color palette
-
-fillcolor = {
-    f"Z+{flavour}": ROOT.kGreen + i
-    for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
-}
-fillcolor.update(
-    {
-        f"VV{flavour}": ROOT.kOrange + i
-        for i, flavour in zip([-1, 0], flavourVVSplitting)
-    }
-)
-fillcolor.update(
-    {
-        "TT": ROOT.kBlue - 4,
-        "ST": ROOT.kBlue + 2,
-        "ZH": ROOT.kRed + 2,
-        "ggZH": ROOT.kRed - 3,
-    }
-)
-linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
-linecolorNotStacked = {}
-markercolor = fillcolor
-
-
-# legend sorting
-backgroundSortedForLegend = []
-backgroundSortedForLegend += [
-    x for x in background if x not in backgroundSortedForLegend
-]
-backgroundSorted = backgroundSortedForLegend
-
-histosNotStacked_list = []
-
-signalSortedForLegend = []
-signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
-signalSorted = signalSortedForLegend
-
-from rebinning import *
-
-systematicsToPlot = []
-systematicDetail = {}
-systematicsForDC = []
+rescaleSample = {}

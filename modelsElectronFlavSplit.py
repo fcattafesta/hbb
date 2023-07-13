@@ -1,13 +1,11 @@
-from samples import *
 from collections import defaultdict
+import numpy as np
+
+from samples import *
+from plot_common_style import *
 
 name = "HBB_ee_flavSplit"
 
-number_of_b = {
-    2: ["bb"],
-    1: ["b"],
-    0: ["udsg", "c"],
-}
 
 # TODO: add the inclusive DY sample
 background_list = [
@@ -40,7 +38,7 @@ background_list = [
 background = defaultdict(list)
 for num_b, flavours in number_of_b.items():
     for flav in flavours:
-        background[f"bkg_{num_b}b"] += [f"{bkg}_{flav}" for bkg in background_list]
+        background[f"bkg_{num_b}"] += [f"{bkg}_{flav}" for bkg in background_list]
 
 data = {
     "2018": ["EGamma_2018"],
@@ -52,37 +50,26 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
-import ROOT
+(
+    fillcolor,
+    linecolor,
+    linecolorOverlayed,
+    markercolor,
+    backgroundSortedForLegend,
+    backgroundSorted,
+    histosOverlayed_list,
+    signalSortedForLegend,
+    signalSorted,
+    systematicsToPlot,
+    systematicsForDC,
+    systematicDetail,
+) = plot_common_style(signal, background)
 
-# Color palette
-
-fillcolor = {bkg: ROOT.kAzure + i for i, bkg in zip([3, 0, 7], background)}
-fillcolor.update(
-    {
-        "ZH": ROOT.kRed + 2,
-        "ggZH": ROOT.kRed - 3,
-    }
-)
-linecolor = fillcolor
-linecolorNotStacked = {}
-markercolor = fillcolor
-
-
-# legend sorting
-backgroundSortedForLegend = []
-backgroundSortedForLegend += [
-    x for x in background if x not in backgroundSortedForLegend
-]
-backgroundSorted = backgroundSortedForLegend
-
-histosNotStacked_list = []
-
-signalSortedForLegend = []
-signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
-signalSorted = signalSortedForLegend
-
-from rebinning import *
-
-systematicsToPlot = []
-systematicDetail = {}
-systematicsForDC = []
+rescaleArray = np.linspace(1.0, 1.4, 10)
+rescaleSample = {
+    "bkg_0b": [1.0, np.ones(10)],
+    "bkg_1b": [1.16, rescaleArray],
+    "bkg_2b": [1.16**2, rescaleArray**2],
+    "ZH": [1.16**2, rescaleArray**2],
+    "ggZH": [1.16**2, rescaleArray**2],
+}

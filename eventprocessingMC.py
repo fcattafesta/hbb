@@ -1,4 +1,7 @@
 from nail.nail import *
+import correctionlib
+
+correctionlib.register_pyroot_binding()
 
 
 def getFlowMC(flow):
@@ -21,18 +24,18 @@ def getFlowMC(flow):
         sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
     )
 
-    # Defining subsamples based on flavour of the leading and subleading GenJets
+    ## Defining subsamples
     flow.Define(
         "TwoB",
         "Sum(SelectedGenJet_hadronFlavour == 5) >= 2",
     )
     flow.Define(
         "OneB",
-        "(nCleanGenJet >= 1  && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
+        "Sum(SelectedGenJet_hadronFlavour == 5) == 1",
     )
     flow.Define(
         "C",
-        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
+        "Sum(SelectedGenJet_hadronFlavour == 4) >= 1 && Sum(SelectedGenJet_hadronFlavour == 5) == 0",
     )
     flow.Define(
         "Light",
