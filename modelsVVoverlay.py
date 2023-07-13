@@ -1,5 +1,7 @@
-from samples import *
 from collections import defaultdict
+
+from samples import *
+from plot_common_style import *
 
 name = "VV_overlay"
 
@@ -24,39 +26,20 @@ data = {}
 
 signal = {}
 
-import ROOT
+(
+    fillcolor,
+    linecolor,
+    linecolorOverlayed,
+    markercolor,
+    backgroundSortedForLegend,
+    backgroundSorted,
+    histosOverlayed_list,
+    signalSortedForLegend,
+    signalSorted,
+    systematicsToPlot,
+    systematicsForDC,
+    systematicDetail,
+) = plot_common_style(signal, background)
 
-# Color palette
-
-fillcolor = {f"VV{flavour}": ROOT.kWhite for flavour in flavourVVSplitting}
-
-linecolor = fillcolor
-linecolorOverlayed = {
-    f"VV{flavour}": ROOT.kOrange + i for i, flavour in zip([-1, 0], flavourVVSplitting)
-}
-markercolor = fillcolor
-
-
-# legend sorting
-backgroundSortedForLegend = []
-backgroundSortedForLegend += [
-    x for x in background if x not in backgroundSortedForLegend
-]
-backgroundSorted = backgroundSortedForLegend
-
-histosOverlayed_list = [f"VV{flavour}" for flavour in flavourVVSplitting.keys()]
-
-signalSortedForLegend = []
-signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
-signalSorted = signalSortedForLegend
-
-from rebinning import *
-
-systematicsToPlot = btag_sys
-systematicsToPlot += ["lumi", "BR_Hbb", "XSecAndNorm", "JERDown", "JERUp"]
-systematicsForDC = systematicsToPlot
-
-from systematicGrouping import *
-systematicDetail = systematicGrouping(background, signal,[],"2018")
 
 rescaleSample = {}

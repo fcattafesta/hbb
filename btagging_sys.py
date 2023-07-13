@@ -10,3 +10,4 @@ unc_btag = [
 ]
 
 btag_sys = ["btagWeight_" + x + y for x in unc_btag for y in ["Up", "Down"]]
+jet_btag_sys = ["Jet_btagWeight_" + y + x for x in unc_btag for y in ["up_", "down_"]]

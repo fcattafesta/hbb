@@ -2,7 +2,7 @@ from collections import defaultdict
 import numpy as np
 
 from samples import *
-from btagging_sys import btag_sys
+from plot_common_style import *
 
 name = "HBB_ee_flavSplit"
 
@@ -50,43 +50,20 @@ signal = {
     "ggZH": ["ggZH"],
 }
 
-import ROOT
-
-# Color palette
-
-fillcolor = {bkg: ROOT.kAzure + i for i, bkg in zip([7, 0, 3], background)}
-fillcolor.update(
-    {
-        "ZH": ROOT.kRed + 2,
-        "ggZH": ROOT.kRed - 3,
-    }
-)
-linecolor = fillcolor
-linecolorOverlayed = {}
-markercolor = fillcolor
-
-
-# legend sorting
-backgroundSortedForLegend = []
-backgroundSortedForLegend += [
-    x for x in background if x not in backgroundSortedForLegend
-]
-backgroundSorted = backgroundSortedForLegend
-
-histosOverlayed_list = []
-
-signalSortedForLegend = []
-signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
-signalSorted = signalSortedForLegend
-
-from rebinning import *
-
-systematicsToPlot = btag_sys
-systematicsToPlot += ["lumi", "BR_Hbb", "XSecAndNorm", "JERDown", "JERUp"]
-systematicsForDC = systematicsToPlot
-
-from systematicGrouping import *
-systematicDetail = systematicGrouping(background, signal,[],"2018")
+(
+    fillcolor,
+    linecolor,
+    linecolorOverlayed,
+    markercolor,
+    backgroundSortedForLegend,
+    backgroundSorted,
+    histosOverlayed_list,
+    signalSortedForLegend,
+    signalSorted,
+    systematicsToPlot,
+    systematicsForDC,
+    systematicDetail,
+) = plot_common_style(signal, background)
 
 rescaleArray = np.linspace(1.0, 1.4, 10)
 rescaleSample = {

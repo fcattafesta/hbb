@@ -17,8 +17,8 @@ def getFlowSys(flow, btag, MC):
     if MC:
         ## Systematics definitions ##
         flow.AddCppCode('#include "correction.h"\n')
-        flow.AddCppCode('#include <TRandom3.h>\n')
-        flow.AddCppCode('#include <cstring>\n')
+        flow.AddCppCode("#include <TRandom3.h>\n")
+        flow.AddCppCode("#include <cstring>\n")
 
         # btag systematics
         flow.AddCppCode(
@@ -29,7 +29,7 @@ def getFlowSys(flow, btag, MC):
             % ("deepJet_shape" if btag == "deepflav" else "deepCSV_shape")
         )
 
-        #NOTE: cut on eta for the jet
+        # NOTE: cut on eta for the jet
         flow.AddCppCode(
             """
             // Calculate b-tagging scale factors for a given set of inputs
@@ -49,19 +49,16 @@ def getFlowSys(flow, btag, MC):
 
                 // Loop over each input and calculate the scale factor
                 for(size_t i=0;i<hadronFlavour.size(); i++) {
-                    bool correct_flav = false;
-                    // Loop over each flavor and check if it matches the input flavor
-                    for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
-                        if (hadronFlavour[i] == flav[j] && abs(eta[i]) < 2.5) {
-                            // Calculate the scale factor using the btag_shape_corr object
-                            sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
-                            correct_flav = true;
-                            break;
+                    sf[i]=1.;
+                    if (abs(eta[i]) < 2.5) {
+                        // Loop over each flavor and check if it matches the input flavor
+                        for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
+                            if (hadronFlavour[i] == flav[j]) {
+                                // Calculate the scale factor using the btag_shape_corr object
+                                sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+                                break;
+                            }
                         }
-                    }
-                    // If no matching flavor is found, set the scale factor to 1
-                    if (!correct_flav) {
-                        sf[i]=1.;
                     }
                 }
                 // Return the vector of scale factors
@@ -72,21 +69,22 @@ def getFlowSys(flow, btag, MC):
         # NOTE: btag weights to all jets or to only selected jets?
         for suffix, names in sf_btag.items():
             for name in names:
-                unc=name.replace("up_", "").replace("down_", "")
-                
+                unc = name.replace("up_", "").replace("down_", "")
+
+                # NOTE: which score? C or B?
                 if btag == "deepflav":
-                    btag_score="Jet_btagDeepFlav"
-                else :
-                    btag_score= "Jet_btagDeep"
-                if "cf" in name:
-                    btag_score += "C"
+                    btag_score = "Jet_btagDeepFlav"
                 else:
-                    btag_score += "B"
+                    btag_score = "Jet_btagDeep"
+                # if "cf" in name:
+                #     btag_score += "C"
+                # else:
+                btag_score += "B"
 
                 flow.Define(
                     "Jet_btagWeight_%s" % name,
                     'sf_btag("%s", Jet_hadronFlavour, Jet_eta, Jet_pt, %s)'
-                    % (name, btag_score), #FIXME: use score for c jet
+                    % (name, btag_score),
                 )
                 if suffix == "Central":
                     flow.Define(
@@ -140,10 +138,10 @@ def getFlowSys(flow, btag, MC):
         flow.Define("Jet_pt_jerDown", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerDownSF")
         flow.Define(
             "Jet_pt_jerUp",
-                "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF",#+(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
-            )
-        flow.Systematic("JERDown","Jet_pt_Nom","Jet_pt_jerDown")
-        flow.Systematic("JERUp","Jet_pt_Nom","Jet_pt_jerUp")
+            "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF",  # +(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
+        )
+        flow.Systematic("JERDown", "Jet_pt_Nom", "Jet_pt_jerDown")
+        flow.Systematic("JERUp", "Jet_pt_Nom", "Jet_pt_jerUp")
     else:
         flow.Define("Jet_pt_Nom", "Jet_pt")
 
