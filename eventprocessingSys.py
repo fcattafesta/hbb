@@ -66,7 +66,7 @@ def getFlowSys(flow, btag, MC):
             }
         """
         )
-        # NOTE: btag weights to all jets or to only selected jets?
+        # FIXME: btag weights to all jets or to only selected jets? i think to only selected jets
         for suffix, names in sf_btag.items():
             for name in names:
                 unc = name.replace("up_", "").replace("down_", "")
