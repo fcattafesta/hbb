@@ -11,8 +11,9 @@ if "DNN_weight" in DNN_input_variables:
     DNN_input_variables.remove("DNN_weight")
 
 
-
 def getFlowDNN(model, flow=None):
+    nthreads = args.nthreads if args.range == -1 else 0
+
     if model.endswith(".onnx"):
         if flow:
             flow.AddCppCode('\n#include "TMVA_SOFIE_ONNX.h"\n')
@@ -31,7 +32,7 @@ def getFlowDNN(model, flow=None):
         flow.AddCppCode(
             f"{nl}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
-            + f"::Session>({args.nthreads});{nl}"
+            + f"::Session>({nthreads});{nl}"
         )
     else:
         ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')

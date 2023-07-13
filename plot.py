@@ -39,7 +39,7 @@ if __name__ == "__main__":
     from logger import setup_logger
 
     btag_label = labelBtag[args.btag]
-    Significance_variables = ["atanhDNN_Score", "Jet_pt"]
+    Special_variables = ["atanhDNN_Score", "Jet_pt"]
 
     outdir = args.workspace
 
@@ -1022,7 +1022,7 @@ if __name__ == "__main__":
                                     makeWorkspace,
                                 )
                     if gr in model.rescaleSample and any(
-                        [x in hn for x in Significance_variables]
+                        [x in hn for x in Special_variables]
                     ):
                         logger.info(
                             "rescale %s %s %s " % (hn, gr, model.rescaleSample[gr][0])
@@ -1211,7 +1211,7 @@ if __name__ == "__main__":
                 ftxt.write(
                     "DATA,%s \n" % (datasum[hn].Integral(0, datasum[hn].GetNbinsX() + 1))
                 )
-            if any([x in hn for x in Significance_variables]):
+            if any([x in hn for x in Special_variables]):
                 histosumRescaledDict[hn] = {}
                 histoSigsumRescaledDict[hn] = {}
 
@@ -1276,7 +1276,7 @@ if __name__ == "__main__":
 
             SignificanceSum_str = ""
             SignificanceSum_str_rescaled = ""
-            if any([x in hn for x in Significance_variables]) and hn in histoSigsum.keys():
+            if any([x in hn for x in Special_variables]) and hn in histoSigsum.keys():
                 with open(
                     outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args.btag),
                     "w",
@@ -1605,7 +1605,7 @@ if __name__ == "__main__":
 
             # sum histosumSyst and histoSigsumSyst
             systematics = defaultdict(list)
-            if any([x in hn for x in Significance_variables]):
+            if any([x in hn for x in Special_variables]):
                 for sy in histosumSyst[hn]:
                     sy_base = sy.replace("Up", "").replace("Down", "")
                     systematics[sy_base].append(sy)
