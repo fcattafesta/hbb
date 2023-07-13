@@ -1,10 +1,5 @@
 from multiprocessing import Pool
 import psutil
-
-# Samples for whole analysis
-# from samples import samples, flavourSplitting, flavourVVSplitting
-# Samples for DY analysis
-from samplesDY import samples, flavourSplitting, flavourVVSplitting
 import copy
 import sys
 from nail.nail import *
@@ -13,29 +8,52 @@ import traceback
 import time
 import os
 
+from logger import setup_logger
+
 from histobinning import binningRules
 from args_analysis import args
 
-from eventprocessingCommon import getFlowCommon
 from eventprocessingMC import getFlowMC
-from histograms import histos
+from eventprocessingDNN import getFlowDNN
+from histograms import histosData, histosMC
+
+from samples import samples, flavourSplitting
+
+if args.btag == "deepcsv":
+    from eventprocessingCommonDeepCSV import getFlowCommonDeepCSV as getFlowCommon
+elif args.btag == "deepflav":
+    from eventprocessingCommonDeepFlav import getFlowCommonDeepFlav as getFlowCommon
+else:
+    print("Btagging algo must be 'deepflav' or 'deepcsv'")
+    sys.exit(1)
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
-    from histograms import histosPerSelectionMuon as histosPerSelection
+    from histograms import histosPerSelectionMuonMC as histosPerSelectionMC
+    from histograms import histosPerSelectionMuonData as histosPerSelectionData
+    from histograms import selsMu as sels
 elif args.lep == "el":
     from eventprocessingElectrons import getFlowElectrons as getFlow
-    from histograms import histosPerSelectionElectron as histosPerSelection
+    from histograms import histosPerSelectionElectronMC as histosPerSelectionMC
+    from histograms import histosPerSelectionElectronData as histosPerSelectionData
+    from histograms import selsEle as sels
 else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)
 
 nthreads = args.nthreads if args.range == -1 else 0
-nprocesses = 7
+nprocesses = args.num_processes
 start = time.time()
 
-if not os.path.exists(args.histfolder):
-    os.makedirs(args.histfolder)
+os.makedirs(args.histfolder, exist_ok=True)
+# remove the log file if already exists
+if os.path.exists(f"{args.histfolder}/logger.log"):
+    os.remove(f"{args.histfolder}/logger.log")
+
+logger = setup_logger(f"{args.histfolder}/logger.log")
+
+
+logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
 # Create the flow
 flow = SampleProcessing(
@@ -45,9 +63,12 @@ flow = SampleProcessing(
 # Flow for data
 flowData = getFlowCommon(flow)
 flowData = getFlow(flowData)
+if args.eval_model:
+    flowData = getFlowDNN(args.eval_model, flowData)
 # Final flow for MC
 flow = copy.deepcopy(flowData)
 flow = getFlowMC(flow)
+
 
 # Add binning rules
 flow.binningRules = binningRules
@@ -55,8 +76,8 @@ flowData.binningRules = binningRules
 
 proc = flow.CreateProcessor(
     "eventProcessor",
-    ["OneB", "TwoB", "C", "Light"],
-    histosPerSelection,
+    [flavourSplitting[x] for x in flavourSplitting],
+    histosPerSelectionMC,
     [],
     "",
     nthreads,
@@ -64,7 +85,7 @@ proc = flow.CreateProcessor(
 procData = flowData.CreateProcessor(
     "eventProcessorData",
     [],
-    histosPerSelection,
+    histosPerSelectionData,
     [],
     "",
     nthreads,
@@ -73,6 +94,7 @@ procData = flowData.CreateProcessor(
 
 def sumwsents(files):
     sumws = 1e-9
+    nevents = 0
     LHEPdfSumw = []
     for fn in files:
         f = ROOT.TFile.Open(fn)
@@ -87,12 +109,17 @@ def sumwsents(files):
             else:
                 run.Project("hw", "1", "genEventSumw")
                 sumws += hw.GetSumOfWeights()
+
+            hn = ROOT.TH1I("hn", "", 5, 0, 5)
+            run.Project("hn", "1", "genEventCount")
+            nevents += int(hn.GetSumOfWeights())
+
     if sumws < 1:
         sumws = 1
-    return sumws, LHEPdfSumw
+    if nevents < 1:
+        nevents = 1
 
-
-# import samples
+    return sumws, LHEPdfSumw, nevents
 
 
 def runSample(ar):
@@ -100,7 +127,7 @@ def runSample(ar):
     p = psutil.Process()
     #    print("Affinity", p.cpu_affinity())
     p.cpu_affinity(list(range(psutil.cpu_count())))
-    if args.range == -1:
+    if nthreads != 0:
         ROOT.gROOT.ProcessLine(
             """
         ROOT::EnableImplicitMT(%s);
@@ -110,45 +137,55 @@ def runSample(ar):
     s, files = ar
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
-        sumws, LHEPdfSumw = sumwsents(files)
+        sumws, LHEPdfSumw, nevents = sumwsents(files)
+        logger.info("sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
     else:  # is data
-        sumws, LHEPdfSumw = 1.0, []
+        sumws, LHEPdfSumw, nevents = 1.0, [], 0
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
-        rdf = rdf.Range(int(args.range))
+        rdf = rdf.Range(args.range)
     subs = {}
     if rdf:
         try:
             # add customizations here
             # rdf = rdf.Define("year", year)
             # rdf = rdf.Define("TriggerSel", trigger)
+            snaplist = ["run", "event"]
+
             if "lumi" in samples[s].keys():
                 rdf = rdf.Define("isMC", "false")
                 out = procData(rdf)
+                snaplist += histosData
             else:
                 if "subsamples" in samples[s].keys():
                     subs = samples[s]["subsamples"]
                 rdf = rdf.Define("isMC", "true")
                 out = proc(rdf, subs)
+                snaplist += histosMC + ["DNN_weight"]
 
-            snaplist = ["run", "event"] + histos
             if (
                 args.snapshot
-                and "training" in samples[s].keys()
-                and samples[s]["training"]
+                and "snapshot" in samples[s].keys()
+                and samples[s]["snapshot"]
             ):
-                sig_region = "SR_ee" if args.lep == "el" else "SR_mm"
-                # create snapshot directory
-                if not os.path.exists(f"{args.histfolder}/Snapshots"):
-                    os.makedirs(f"{args.histfolder}/Snapshots")
-                processed_rdf = out.rdf.find(sig_region).second
-                processed_rdf.Snapshot(
-                    "Events", f"{args.histfolder}/Snapshots/{s}_Snapshot.root", snaplist
-                )
+                for region in sels:
+                    # create snapshot directory
+                    os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
+                    processed_rdf = out.rdf.find(region).second
+                    if "xsec" in samples[s].keys():  # is MC
+                        processed_rdf = processed_rdf.Define(
+                            "DNN_weight",
+                            f"genWeight/{sumws}*{samples[s]['xsec']}*{nevents}",
+                        )
+                    processed_rdf.Snapshot(
+                        "Events",
+                        f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
+                        snaplist,
+                    )
 
-            outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root", "recreate")
-            if args.range == -1:
+            outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
+            if nthreads != 0:
                 ROOT.gROOT.ProcessLine("ROOT::EnableImplicitMT(%s);" % nthreads)
             normalization = 1.0
 
@@ -165,7 +202,7 @@ def runSample(ar):
 
             for subname in subs:
                 outFile = ROOT.TFile.Open(
-                    f"{args.histfolder}/{s}_{subname}Histos.root", "recreate"
+                    f"{args.histfolder}/{s}_{subname}_Histos.root", "recreate"
                 )
                 for h in out.histosOutSplit[subname]:
                     hname = h.GetName()
@@ -180,18 +217,18 @@ def runSample(ar):
 
             return 0
         except Exception as e:
-            print(e)
+            logger.error(e)
             traceback.print_exc()
-            print("FAIL", s)
+            logger.error("FAIL", s)
             return 1
     else:
-        print("Null file", s)
+        logger.info("Null file %s" % s)
 
 
 # from multiprocessing.pool import ThreadPool as Pool
 runpool = Pool(nprocesses)
 
-print(samples.keys())
+logger.info(samples.keys())
 sams = samples.keys()
 
 # check that at least the first file exists
@@ -209,24 +246,24 @@ toproc = sorted(
     ),
     reverse=True,
 )
-print("To process", [x[0] for x in toproc])
+logger.info("To process %s" % [x[0] for x in toproc])
 
 if args.model == "fix":
     toproc = []
     sss = sams
     if len(sys.argv[3:]):
         sss = [s for s in sams if s in sys.argv[3:]]
-        print("fixing", sss)
+        logger.info("fixing %s" % sss)
     for s in sss:
         if os.path.exists(samples[s]["files"][0]):
             try:
-                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}Histos.root")
+                ff = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root")
                 if ff.IsZombie() or len(ff.GetListOfKeys()) == 0:
-                    print("zombie or zero keys", s)
+                    logger.info("zombie or zero keys %s" % s)
                     toproc.append((s, samples[s]["files"]))
 
             except:
-                print("failed", s)
+                logger.error("failed", s)
                 toproc.append((s, samples[s]["files"]))
 elif args.model[:5] == "model":
     import importlib
@@ -237,9 +274,7 @@ elif args.model[:5] == "model":
     allmc = []
     for x in model.background:
         for y in model.background[x]:
-            if x.endswith(
-                tuple(flavourSplitting.keys()) + tuple(flavourVVSplitting.keys())
-            ):
+            if x.endswith(tuple(flavourSplitting.keys())):
                 allmc.append(y.rsplit("_", 1)[0])
             else:
                 allmc.append(y)
@@ -247,9 +282,9 @@ elif args.model[:5] == "model":
     allmc += [y for x in model.signal for y in model.signal[x]]
     alldata = [y for x in model.data for y in model.data[x]]
     for x in allmc:
-        print(x, "\t", samples[x]["xsec"])
+        logger.info("%s\t%s" % (x, samples[x]["xsec"]))
     for x in alldata:
-        print(x, "\t", samples[x]["lumi"])
+        logger.info("%s\t%s" % (x, samples[x]["lumi"]))
 
     toproc = [
         (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
@@ -257,14 +292,14 @@ elif args.model[:5] == "model":
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]
 
-print("Will process", [x[0] for x in toproc])
+logger.info("Will process %s" % [x[0] for x in toproc])
 
 if nprocesses > 1:
     results = zip(runpool.map(runSample, toproc), [x[0] for x in toproc])
 else:
     results = zip([runSample(x) for x in toproc], [x[0] for x in toproc])
 
-print("Results", results)
-print("To resubmit", [x[1] for x in results if x[0]])
+logger.info("Results %s" % results)
+logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 
-print("time:  ", time.time() - start)
+logger.info("time:   %s" % (time.time() - start))

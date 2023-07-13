@@ -21,20 +21,18 @@ def getFlowMC(flow):
         sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
     )
 
-    ## Defining subsamples
-
-    # TwoB if there are at least two b jets, not necessarily the first two
+    # Defining subsamples based on flavour of the leading and subleading GenJets
     flow.Define(
         "TwoB",
         "Sum(SelectedGenJet_hadronFlavour == 5) >= 2",
     )
     flow.Define(
         "OneB",
-        "Sum(SelectedGenJet_hadronFlavour == 5) == 1",
+        "(nCleanGenJet >= 1  && ((CleanGenJet_hadronFlavour[0] == 5 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 5))) ",
     )
     flow.Define(
         "C",
-        "Sum(SelectedGenJet_hadronFlavour == 4) >= 1 && Sum(SelectedGenJet_hadronFlavour == 5) == 0",
+        "nCleanGenJet >= 1 && ((CleanGenJet_hadronFlavour[0] == 4 && CleanGenJet_hadronFlavour[1] != 5) || (CleanGenJet_hadronFlavour[0] != 5 && CleanGenJet_hadronFlavour[1] == 4))",
     )
     flow.Define(
         "Light",

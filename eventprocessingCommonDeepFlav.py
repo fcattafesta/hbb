@@ -1,7 +1,7 @@
 from nail.nail import *
 
 
-def getFlowCommon(flow):
+def getFlowCommonDeepFlav(flow):
     ### Common preselections for leptons ###
     ## Muons ##
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")

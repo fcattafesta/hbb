@@ -155,3 +155,6 @@ libNailExternals.so
 
 # Matteo personal stuff
 to_do.txt
+runs/
+model_*
+roc_curve/

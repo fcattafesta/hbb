@@ -1,5 +1,7 @@
+from args_analysis import args
+
 ### List of histograms to be plotted ###
-histos = [
+histosData = [
     "Z_mass",
     "Z_pt",
     "Dijets_mass",
@@ -18,32 +20,19 @@ histos = [
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
 ]
+if args.eval_model:
+    histosData.append("DNN_Score")
+    histosData.append("atanhDNN_Score")
+
+histosMC = histosData + ["hadronFlavour_btag_max", "hadronFlavour_btag_min", "LHE_Nb"]
 
 ### List of selections for muons and electrons ###
 selsMu = ["SR_mm", "CR_Zmm_bjets", "CR_Zmm_lightjets", "CR_mm_ttbar"]
 selsEle = ["SR_ee", "CR_Zee_bjets", "CR_Zee_lightjets", "CR_ee_ttbar"]
 
 ### Dictionary of histograms per selection ###
-histosPerSelectionMuon = {sel: histos for sel in selsMu}
-histosPerSelectionElectron = {sel: histos for sel in selsEle}
+histosPerSelectionMuonMC = {sel: histosMC for sel in selsMu}
+histosPerSelectionElectronMC = {sel: histosMC for sel in selsEle}
 
-preSelsEle = [
-    "",
-    "twoElectrons",
-    "twoOppositeSignElectrons",
-    "PtSelEl",
-    "CommonSelEle",
-    "twoJets",
-    "JetBtagMaxMedium",
-    "JetBtagMinLoose",
-    "JetBtagMaxTight",
-]
-
-preHistosEle = [
-    "nElectron",
-    "nJet",
-    "nSelectedElectron",
-    "nSelectedJet",
-]
-
-histosPerSelectionElectron.update({sel: preHistosEle for sel in preSelsEle})
+histosPerSelectionElectronData = {sel: histosData for sel in selsEle}
+histosPerSelectionMuonData = {sel: histosData for sel in selsMu}

@@ -15,13 +15,7 @@ from args_plot import args
 from labelDict import *
 from logger import setup_logger
 
-# NOTE: gr is the sample name and hn is the variable name
-
-
-if labelBtag:
-    btag_label = labelBtag[args.btag]
-else:
-    btag_label = ""
+btag_label = labelBtag[args.btag]
 
 outdir = args.workspace
 
@@ -565,11 +559,10 @@ f = {}
 folder = args.histfolder
 for group in model.signal:
     for s in model.signal[group]:
-        f[s] = ROOT.TFile.Open(folder + "/%s_Histos.root" % s)
+        f[s] = ROOT.TFile.Open(folder + "%s_Histos.root" % s)
 for group in model.background:
     for b in model.background[group]:
-        # f[b] = ROOT.TFile.Open(folder + "/%s_Histos.root" % b) # original
-        f[b] = ROOT.TFile.Open(folder + "/%sHistos.root" % b)
+        f[b] = ROOT.TFile.Open(folder + "/%s_Histos.root" % b)
 for group in model.data:
     for d in model.data[group]:
         f[d] = ROOT.TFile.Open(folder + "/%s_Histos.root" % d)
@@ -590,7 +583,7 @@ datasumSyst = {}
 histosumSyst = {}
 histoSigsumSyst = {}
 histosSignal = {}
-histosOverlayed = {}
+histosNotStacked = {}
 all_histo_all_syst = {}
 
 integral = {}
@@ -653,6 +646,7 @@ def fill_datasum(
         if makeWorkspace:
             all_histo_all_syst[hn][d] = {}
         if f[d]:
+            logger.info("Adding %s" % d)
             h = f[d].Get(hn)
             histoSingleSyst[hn][d] = {}
             if h:
@@ -913,11 +907,11 @@ def fill_datasum(
                     histosSignal[hn][gr] = h.Clone()
                 else:
                     histosSignal[hn][gr].Add(h)
-            if gr in model.histosOverlayed_list:
-                if gr not in list(histosOverlayed[hn].keys()):
-                    histosOverlayed[hn][gr] = h.Clone()
+            if gr in model.histosNotStacked_list:
+                if gr not in list(histosNotStacked[hn].keys()):
+                    histosNotStacked[hn][gr] = h.Clone()
                 else:
-                    histosOverlayed[hn][gr].Add(h)
+                    histosNotStacked[hn][gr].Add(h)
     if not data:
         writeYields(
             ftxt,
@@ -982,7 +976,7 @@ def makeplot(hn, saveintegrals=True):
 
         histoSingleSyst[hn] = {}
         histosSignal[hn] = {}
-        histosOverlayed[hn] = {}
+        histosNotStacked[hn] = {}
         for gr in model.data:
             h = fill_datasum(
                 f,
@@ -1073,6 +1067,7 @@ def makeplot(hn, saveintegrals=True):
             Significance = S.Clone()
             for i in range(Significance.GetNbinsX() + 1):
                 try:
+                    # TODO: sum the background in quadrature
                     Significance.SetBinContent(
                         i,
                         Significance.GetBinContent(i)
@@ -1086,6 +1081,18 @@ def makeplot(hn, saveintegrals=True):
                     Significance.SetBinContent(i, 0)
                     logger.info("ValueError in bin %i in histogram %s" % (i, hn))
                     logger.info("setting bin content to 0")
+
+            # for i in range(B.GetNbinsX() + 2):
+            #     logger.info(
+            #         "histograms %s bin %i: S = %.2f, B = %.2f, S/sqrt(B) = %.2f"
+            #         % (
+            #             hn,
+            #             i,
+            #             S.GetBinContent(i),
+            #             B.GetBinContent(i),
+            #             Significance.GetBinContent(i),
+            #         )
+            #     )
 
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(
@@ -1105,8 +1112,8 @@ def makeplot(hn, saveintegrals=True):
 
             c_significance = ROOT.TCanvas("c_significance", "", 1200, 1000)
             Significance.Draw("hist")
-            t1 = makeText(0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
+            t1 = makeText(0.25, 0.95, "CMS", 61)
+            t2 = makeText(0.8, 0.95, SignificanceSum_str, 42, size=0.02)
             t1.Draw()
             t2.Draw()
             c_significance.SaveAs(outpath + "/%s_%s_Significance.png" % (hn, args.btag))
@@ -1117,22 +1124,23 @@ def makeplot(hn, saveintegrals=True):
             c_significance.Write()
             fR.Close()
 
-        for gr in model.signalSortedForLegend:
-            h = histosSignal[hn][gr]
+        # for gr in model.signalSortedForLegend:
+        #     h = histosSignal[hn][gr]
+        #     histos[hn].Add(h.Clone())
+        #     h.SetLineColor(model.linecolor[gr])
+        #     h.SetFillStyle(0)
+        #     h.SetLineWidth(3)
+        #     h.SetLineStyle(2)
+        #     h.Scale(5000.0)
+        #     myLegend_1.AddEntry(h, gr + " x5k", "l")
+
+        for gr in model.histosNotStacked_list:
+            h = histosNotStacked[hn][gr]
             histos[hn].Add(h.Clone())
-            h.SetLineColor(model.linecolor[gr])
+            h.SetLineColor(model.linecolorNotStacked[gr])
             h.SetFillStyle(0)
             h.SetLineWidth(3)
             h.SetLineStyle(2)
-            # h.Scale(5000.0)
-            myLegend_1.AddEntry(h, gr, "l")
-
-        for gr in model.histosOverlayed_list:
-            h = histosOverlayed[hn][gr]
-            h.SetLineColor(model.linecolorOverlayed[gr])
-            h.SetFillStyle(0)
-            h.SetLineWidth(3)
-            h.SetLineStyle(model.linestyleOverlayed[gr])
             myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
         firstBlind = 100000
@@ -1164,7 +1172,7 @@ def makeplot(hn, saveintegrals=True):
                     datasum[hn].SetBinContent(i, 0)
                     logger.info("blinded %s bin %i" % (hn, i))
 
-        if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
+        if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
             myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
 
         canvas[hn] = ROOT.TCanvas("canvas_" + hn, "", 1200, 1000)
@@ -1246,7 +1254,7 @@ def makeplot(hn, saveintegrals=True):
             histosum[hn].SetFillStyle(3004)
             setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
             c.Update()
-            if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
+            if not all([model.fillcolor[hn] == ROOT.kWhite for hn in model.fillcolor]):
                 histosum[hn].Draw("same E2")
 
             if hn in datasum.keys():
@@ -1254,11 +1262,11 @@ def makeplot(hn, saveintegrals=True):
                 datasum[hn].Draw("E P same")
             for gr in model.signal:
                 histosSignal[hn][gr].Draw("hist same")
-            for gr in model.histosOverlayed_list:
-                histosOverlayed[hn][gr].Draw("hist same")
+            for gr in model.histosNotStacked_list:
+                histosNotStacked[hn][gr].Draw("hist same")
 
             t0 = makeText(
-                0.25,
+                0.5,
                 0.85,
                 labelRegion[hn.split("___")[1]]
                 if hn.split("___")[1] in list(labelRegion.keys())
@@ -1267,11 +1275,11 @@ def makeplot(hn, saveintegrals=True):
                 size=0.04,
             )
 
-            t1 = makeText(0.28 if i == 0 else 0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.38 if i == 0 else 0.32, 0.95, str(year), 42)
-            t3 = makeText(0.68, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t1 = makeText(0.25, 0.95, "CMS", 61)
+            t2 = makeText(0.45, 0.95, str(year), 42)
+            t3 = makeText(0.95, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
-                0.25,
+                0.5,
                 0.8,
                 labelLeptons[hn.split("___")[1]] + btag_label
                 if hn.split("___")[1] in list(labelLeptons.keys())
@@ -1289,7 +1297,7 @@ def makeplot(hn, saveintegrals=True):
             t4.Draw()
             # td.Draw()
             if SignificanceSum_str:
-                t_sig = makeText(0.25, 0.7, SignificanceSum_str, 42, size=0.025)
+                t_sig = makeText(0.5, 0.7, SignificanceSum_str, 42, size=0.025)
                 t_sig.Draw()
             if hn in datasum.keys():
                 datasum[hn].SetMarkerStyle(20)
@@ -1437,4 +1445,3 @@ for s in totevCount:
     tot += totevSkim[s]
 
 logger.info("%d input events" % tot)
-logger.info("outpath %s" % outpath)

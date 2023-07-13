@@ -1,19 +1,29 @@
 from samples import *
+from collections import defaultdict
 
-name = "HBB"
+name = "HBB_mm"
 
-background = {
-    f"VV{flavour}": [
-        f"WWTo2L2Nu_{flavour}",
-        f"WZTo2Q2L_{flavour}",
-        f"WZTo3LNu_{flavour}",
-        f"ZZTo2L2Nu_{flavour}",
-        f"ZZTo2Q2L_{flavour}",
-        f"ZZTo4L_{flavour}",
-    ]
-    for flavour in flavourVVSplitting.keys()
+
+flavourVVSplitting = {
+    "HF": ["bb", "b", "c"],
+    "LF": ["udsg"],
 }
 
+VV_background_list = [
+    "WWTo2L2Nu",
+    "WZTo2Q2L",
+    "WZTo3LNu",
+    "ZZTo2L2Nu",
+    "ZZTo2Q2L",
+    "ZZTo4L",
+]
+
+background = defaultdict(list)
+for fs, flavours in flavourVVSplitting.items():
+    for flav in flavours:
+        background[f"VV{fs}"] += [f"{bkg}_{flav}" for bkg in VV_background_list]
+
+# TODO: add the inclusive DY sample
 background.update(
     {
         f"Z+{flavour}": [
@@ -43,9 +53,6 @@ background.update(
         "TT": ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"],
     }
 )
-
-# To be added
-
 data = {"2018": ["SingleMuon_2018"]}
 
 
@@ -65,7 +72,7 @@ fillcolor = {
 fillcolor.update(
     {
         f"VV{flavour}": ROOT.kOrange + i
-        for i, flavour in zip([0, -1], flavourVVSplitting)
+        for i, flavour in zip([-1, 0], flavourVVSplitting)
     }
 )
 fillcolor.update(
@@ -77,6 +84,7 @@ fillcolor.update(
     }
 )
 linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
+linecolorNotStacked = {}
 markercolor = fillcolor
 
 
@@ -86,6 +94,8 @@ backgroundSortedForLegend += [
     x for x in background if x not in backgroundSortedForLegend
 ]
 backgroundSorted = backgroundSortedForLegend
+
+histosNotStacked_list = []
 
 signalSortedForLegend = []
 signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
