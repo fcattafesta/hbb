@@ -71,25 +71,36 @@ def getFlowSys(flow, btag, MC):
         )
         # NOTE: btag weights to all jets or to only selected jets?
         for suffix, names in sf_btag.items():
-            for i, name in enumerate(names):
+            for name in names:
+                unc=name.replace("up_", "").replace("down_", "")
+                
+                if btag == "deepflav":
+                    btag_score="Jet_btagDeepFlav"
+                else :
+                    btag_score= "Jet_btagDeep"
+                if "cf" in name:
+                    btag_score += "C"
+                else:
+                    btag_score += "B"
+
                 flow.Define(
-                    "Jet_btagWeight_%s%s" % (suffix, i),
+                    "Jet_btagWeight_%s" % name,
                     'sf_btag("%s", Jet_hadronFlavour, Jet_eta, Jet_pt, %s)'
-                    % (name, "Jet_btagDeepFlavB" if btag == "deepflav" else "Jet_btagDeepB"),
+                    % (name, btag_score), #FIXME: use score for c jet
                 )
                 if suffix == "Central":
                     flow.Define(
                         "btagWeight%s" % (suffix),
-                        "ROOT::VecOps::Product(Jet_btagWeight_%s%s)" % (suffix, i),
+                        "ROOT::VecOps::Product(Jet_btagWeight_%s)" % name,
                     )
                     flow.CentralWeight("btagWeightCentral", ["twoJets"])
                 else:
                     flow.Define(
-                        "btagWeight_%s%s" % (unc_btag[i], suffix),
-                        "ROOT::VecOps::Product(Jet_btagWeight_%s%s)" % (suffix, i),
+                        "btagWeight_%s%s" % (unc, suffix),
+                        "ROOT::VecOps::Product(Jet_btagWeight_%s)" % name,
                     )
                     flow.VariationWeight(
-                        "btagWeight_%s%s" % (unc_btag[i], suffix), "btagWeightCentral"
+                        "btagWeight_%s%s" % (unc, suffix), "btagWeightCentral"
                     )
 
         # JER systematics

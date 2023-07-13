@@ -1,23 +1,17 @@
 from samples import *
+from collections import defaultdict
 
 from btagging_sys import btag_sys
 
-name = "DY_stack"
+name = "TestZH"
 
-# TODO: add the inclusive DY sample
 background = {
-    f"Z+{flavour}": [
-        f"DYZpt-0To50_{flavour}",
-        f"DYZpt-50To100_{flavour}",
-        f"DYZpt-100To250_{flavour}",
-        f"DYZpt-250To400_{flavour}",
-        f"DYZpt-400To650_{flavour}",
-        f"DYZpt-650ToInf_{flavour}",
-    ]
-    for flavour in flavourSplitting.keys()
+    "ZH": ["ZH"],
 }
 
+
 data = {}
+
 
 signal = {}
 
@@ -29,7 +23,20 @@ fillcolor = {
     f"Z+{flavour}": ROOT.kGreen + i
     for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
 }
-
+fillcolor.update(
+    {
+        f"VV{flavour}": ROOT.kOrange + i
+        for i, flavour in zip([-1, 0], flavourVVSplitting)
+    }
+)
+fillcolor.update(
+    {
+        "TT": ROOT.kBlue - 4,
+        "ST": ROOT.kBlue + 2,
+        "ZH": ROOT.kRed + 2,
+        "ggZH": ROOT.kRed - 3,
+    }
+)
 linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
 linecolorOverlayed = {}
 markercolor = fillcolor
@@ -55,6 +62,7 @@ systematicsToPlot += ["lumi", "BR_Hbb", "XSecAndNorm", "JERDown", "JERUp"]
 systematicsForDC = systematicsToPlot
 
 from systematicGrouping import *
-systematicDetail = systematicGrouping(background, signal,[],"2018")
+
+systematicDetail = systematicGrouping(background, signal, [], "2018")
 
 rescaleSample = {}
