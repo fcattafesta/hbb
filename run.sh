@@ -19,9 +19,6 @@ if [[ $flavsplit == true ]]; then
     model="${model}FlavSplit"
 fi
 
-<<<<<<< HEAD
-histodir="/gpfs/ddn/cms/user/cattafe/hbb_out"
-=======
 btag=""
 if [[ $suffix == *deepcsv* ]]; then
     btag="deepcsv"
@@ -47,7 +44,6 @@ fi
 btag="--btag "${btag}
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
->>>>>>> SigBkgDNN
 
 $CMD \
     --model ${model} \
