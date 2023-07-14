@@ -36,7 +36,7 @@ def getFlowMC(flow):
         "SelectedGenJet",
         sel="SelectedGenJet_GenLeptonDr > 0.4 || SelectedGenJet_GenLeptonIdx==-1",
     )
-    flow.Define("CleanedGenJet_ptOrderIdx", "argsort(-CleanedGenJet_pt)")
+    flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
     flow.Selection("twoGenJets", "nCleanedGenJet >= 2")
     flow.ObjectAt(
         "LeadingGenJet",
