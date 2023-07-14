@@ -824,7 +824,7 @@ if __name__ == "__main__":
                         )
 
                         h.Scale(samples[d]["xsec"] * lumi)
-                        if normalize:
+                        if normalize and h.Integral() > 0:
                             h.Scale(1.0 / h.Integral())
                         error_b = ctypes.c_double(0)
                         integral[gr]["nom"] += h.IntegralAndError(
