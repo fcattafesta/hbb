@@ -1384,8 +1384,8 @@ if __name__ == "__main__":
                 h.SetLineColor(model.linecolorOverlayed[gr])
                 h.SetFillStyle(0)
                 h.SetLineWidth(3)
-                if model.lineStyleOverlayed:
-                    h.SetLineStyle(model.lineStyleOverlayed[gr])
+                if model.linestyleOverlayed:
+                    h.SetLineStyle(model.linestyleOverlayed[gr])
                 else:
                     h.SetLineStyle(1)
                 myLegend_1.AddEntry(h, labelLegend[gr], "l")
