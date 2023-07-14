@@ -69,4 +69,25 @@ def getFlowElectrons(flow):
         requires=["CommonSelEle"],
     )
 
+    flow.Selection("SR_twoGenJets", "GenJet_pt.size() >= 2")
+    flow.SubCollection(
+        "GenLepton",
+        "GenPart",
+        sel="abs(GenPart_pdgId) == 11 || abs(GenPart_pdgId) == 13",
+    )
+    flow.MatchDeltaR("SelectedGenJet", "GenLepton")
+
+    flow.SubCollection(
+        "CleanedGenJet",
+        "SelectedGenJet",
+        sel="SelectedGenJet_GenLeptonDr > 0.4 || SelectedGenJet_GenLeptonIdx==-1",
+    )
+    flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
+    flow.ObjectAt(
+        "SubLeadingGenJet",
+        "CleanedGenJet",
+        "At(CleanedGenJet_ptOrderIdx,1)",
+        requires=["SR_twoGenJets"],
+    )
+
     return flow
