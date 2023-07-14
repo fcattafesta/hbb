@@ -25,7 +25,14 @@ fillcolor = {key: ROOT.kWhite for key in background.keys()}
 linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
 markercolor = fillcolor
 
-histosOverlayed_list = ["FullSim", "FlashSim"]
+histosOverlayed_list = [
+    "DY0To50",
+    "DY50To100",
+    "DY100To250",
+    "DY250To400",
+    "DY400To650",
+    "DY650ToInf",
+]
 linecolorOverlayed = {
     key: color
     for key, color in zip(
