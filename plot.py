@@ -779,6 +779,7 @@ if __name__ == "__main__":
         data=False,
         SumTH1Rescaled={},
         SumTH1RescaledDict={},
+        normalize=False,
     ):
         integral[gr] = {}
         integral[gr]["nom"] = 0
@@ -821,7 +822,10 @@ if __name__ == "__main__":
                                 d,
                             )
                         )
+
                         h.Scale(samples[d]["xsec"] * lumi)
+                        if normalize:
+                            h.Scale(1.0 / h.Integral())
                         error_b = ctypes.c_double(0)
                         integral[gr]["nom"] += h.IntegralAndError(
                             0, h.GetNbinsX() + 1, error_b
@@ -1261,6 +1265,7 @@ if __name__ == "__main__":
                     lumis=lumis,
                     SumTH1Rescaled=histosumRescaled,
                     SumTH1RescaledDict=histosumRescaledDict,
+                    normalize=args.normalize,
                 )
                 dictLegendBackground[gr] = h
 
@@ -1379,7 +1384,10 @@ if __name__ == "__main__":
                 h.SetLineColor(model.linecolorOverlayed[gr])
                 h.SetFillStyle(0)
                 h.SetLineWidth(3)
-                h.SetLineStyle(1)
+                if model.lineStyleOverlayed:
+                    h.SetLineStyle(model.lineStyleOverlayed[gr])
+                else:
+                    h.SetLineStyle(1)
                 myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
             firstBlind = 100000

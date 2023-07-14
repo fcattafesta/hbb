@@ -19,8 +19,8 @@ labelLeptons = {
     "CR_mm_ttbar": "Muons",
 }
 labelBtag = {
-    "deepflav": " DeepFlav",
-    "deepcsv": " DeepCSV",
+    "deepflav": "",
+    "deepcsv": "",
 }
 
 labelVariable = {

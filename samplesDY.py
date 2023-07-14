@@ -2,23 +2,29 @@
 import glob
 
 flavourSplitting = {
-    # "b": "OneB",
-    # "bb": "TwoB",
-    # "c": "OneC",
-    # "udsg": "Light",
+    "bb": "TwoB",
+    "b": "OneB",
+    "c": "C",
+    "udsg": "Light",
 }
 
 flavourVVSplitting = {
-    "HF": "HF",
-    "LF": "LF",
+    "HF": ["bb", "b", "c"],
+    "LF": ["udsg"],
 }
 
+
+number_of_b = {
+    "0b": ["udsg", "c"],
+    "1b": ["b"],
+    "2b": ["bb"],
+}
 samples = {
-    # "DYM50": {
-    #     "xsec": 5765.40,
-    #     "subsamples": flavourSplitting,
-    #     "training": True,
-    # },
+    "DYM50": {
+        "xsec": 5765.40,
+        "subsamples": flavourSplitting,
+        "training": True,
+    },
     "DYZpt-0To50": {
         "xsec": 1341.42,
         "subsamples": flavourSplitting,
@@ -53,11 +59,11 @@ samples = {
 
 samples.update(
     {
-        # "DYM50_full": {
-        #     "xsec": 5765.40,
-        #     "subsamples": flavourSplitting,
-        #     "training": True,
-        # },
+        "DYM50Full": {
+            "xsec": 5765.40,
+            "subsamples": flavourSplitting,
+            "training": True,
+        },
         "DYZpt-0To50Full": {
             "xsec": 1341.42,
             "subsamples": flavourSplitting,

@@ -39,6 +39,7 @@ def plot_common_style(signal, background):
     backgroundSorted = backgroundSortedForLegend
 
     histosOverlayed_list = []
+    linestyleOverlayed = {}
 
     signalSortedForLegend = []
     signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
@@ -55,6 +56,7 @@ def plot_common_style(signal, background):
         fillcolor,
         linecolor,
         linecolorOverlayed,
+        linestyleOverlayed,
         markercolor,
         backgroundSortedForLegend,
         backgroundSorted,
@@ -65,6 +67,3 @@ def plot_common_style(signal, background):
         systematicsForDC,
         systematicDetail,
     )
-
-
-
