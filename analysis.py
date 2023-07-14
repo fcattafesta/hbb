@@ -243,6 +243,7 @@ def runSample(ar):
                 outFile.Write()
                 outFile.Close()
 
+            logger.info("Finish sample %s: nevents %s" % (s, nevents))
             return 0
         except Exception as e:
             logger.error(e)
@@ -252,7 +253,6 @@ def runSample(ar):
     else:
         logger.info("Null file %s" % s)
 
-    logger.info("Finish sample %s: nevents %s" % (s, nevents))
 
 
 
