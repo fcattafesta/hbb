@@ -26,7 +26,6 @@ histosData += [
     "GenJet_pt",
     "Jet_pt",
     "Jet_pt_Nom",
-    "SubLeadingGenJet_pt",
 ]
 
 if args.eval_model:
@@ -56,6 +55,7 @@ if args.sf:
 ### Dictionary of histograms per selection ###
 histosPerSelectionMuonMC = {sel: histosMC for sel in selsMu}
 histosPerSelectionElectronMC = {sel: histosMC for sel in selsEle}
+histosPerSelectionElectronMC.update({"SRtwoGenJets": ["SubLeadingGenJet_pt"]})
 
 histosPerSelectionElectronData = {sel: histosData for sel in selsEle}
 histosPerSelectionMuonData = {sel: histosData for sel in selsMu}

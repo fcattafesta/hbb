@@ -87,11 +87,12 @@ def getFlowElectrons(flow):
     )
     flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
     flow.Selection("twoGenJets", "nCleanedGenJet >= 2")
+    flow.Selection("SRtwoGenJets", "SR_ee && twoGenJets")
     flow.ObjectAt(
         "SubLeadingGenJet",
         "CleanedGenJet",
         "At(CleanedGenJet_ptOrderIdx,1)",
-        requires=["SR_ee", "twoGenJets"],
+        requires=["SRtwoGenJets"],
     )
 
     return flow
