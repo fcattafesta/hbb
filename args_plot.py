@@ -22,6 +22,7 @@ parser.add_argument(
     "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
 )
 parser.add_argument("--normalize", help="Normalize plots", action="store_true")
+parser.add_argument("--MCUncert", help="Plot MC uncertainty", action="store_true")
 parser.print_help()
 args = parser.parse_args()
 print(args)

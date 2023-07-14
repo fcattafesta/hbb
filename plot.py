@@ -1548,7 +1548,10 @@ if __name__ == "__main__":
                 for gr in model.signal:
                     histosSignal[hn][gr].Draw("hist same")
                 for gr in model.histosOverlayed_list:
-                    histosOverlayed[hn][gr].Draw("hist same")
+                    if args.MCUncert:
+                        histosOverlayed[hn][gr].Draw("E1 hist same")
+                    else:
+                        histosOverlayed[hn][gr].Draw("hist same")
 
                 t0.Draw()
                 t1.Draw()
