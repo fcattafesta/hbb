@@ -43,14 +43,12 @@ fi
 
 btag="--btag "${btag}
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
-totaldir="${histodir}/${lep}/${suffix}/"
+histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"${lep}"/"${suffix}"/"
 
 $CMD \
     --model ${model} \
-    --histfolder ${totaldir}/ \
+    --histfolder ${histodir}/ \
     --lep ${lep} \
-    --workspace ${totaldir}/workspace/ \
     ${eval} \
     ${snap} \
     ${btag} \

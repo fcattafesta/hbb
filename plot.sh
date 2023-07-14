@@ -34,13 +34,14 @@ if [[ $suffix == *_sf* ]]; then
 fi
 
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out"
-plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots"
+histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"${lep}"/"${suffix}"/"
+plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots/"${lep}"/"${suffix}${fs}"/"
 
 $CMD \
     --model ${model} \
-    --histfolder ${histodir}/${lep}/${suffix}/ \
-    --outfolder ${plotdir}/${lep}/${suffix}${fs}/ \
+    --histfolder ${histodir} \
+    --outfolder ${plotdir} \
+    --workspace ${histodir}/workspace/ \
     --blind \
     ${btag} \
     ${sf} \
