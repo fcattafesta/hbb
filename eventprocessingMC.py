@@ -37,18 +37,10 @@ def getFlowMC(flow):
         sel="SelectedGenJet_GenLeptonDr > 0.4 || SelectedGenJet_GenLeptonIdx==-1",
     )
     flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
-    flow.Selection("twoGenJets", "nCleanedGenJet >= 2")
-    flow.ObjectAt(
-        "LeadingGenJet",
-        "CleanedGenJet",
-        "At(CleanedGenJet_ptOrderIdx,0)",
-        requires=["twoGenJets"],
-    )
     flow.ObjectAt(
         "SubLeadingGenJet",
         "CleanedGenJet",
         "At(CleanedGenJet_ptOrderIdx,1)",
-        requires=["twoGenJets"],
     )
 
     ## Defining subsamples
