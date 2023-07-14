@@ -70,6 +70,11 @@ def getFlowElectrons(flow):
     )
 
     flow.SubCollection(
+        "SelectedGenJet",
+        "GenJet",
+        sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
+    )
+    flow.SubCollection(
         "GenLepton",
         "GenPart",
         sel="abs(GenPart_pdgId) == 11 || abs(GenPart_pdgId) == 13",

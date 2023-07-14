@@ -18,12 +18,6 @@ def getFlowMC(flow):
 
     flow.CentralWeight("genWeight")  # add a central weight
 
-    flow.SubCollection(
-        "SelectedGenJet",
-        "GenJet",
-        sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
-    )
-
     ## Defining subsamples
     flow.Define(
         "TwoB",
