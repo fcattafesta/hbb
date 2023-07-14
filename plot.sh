@@ -41,7 +41,7 @@ $CMD \
     --model ${model} \
     --histfolder ${histodir} \
     --outfolder ${plotdir} \
-    --workspace ${histodir}/workspace/ \
+    --workspace ${plotdir}/workspace/ \
     --blind \
     ${btag} \
     ${sf} \
