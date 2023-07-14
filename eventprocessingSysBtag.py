@@ -55,7 +55,7 @@ def getFlowSysBtag(flow, btag):
                 }
                 // If no matching flavor is found, set the scale factor to 1
                 if (!correct_flav) {
-                    sf[i]=btag_shape_corr->evaluate({central, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+                    sf[i]=btag_shape_corr->evaluate({"central", hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                 }
             }
             // Return the vector of scale factors
