@@ -43,16 +43,19 @@ def getFlowSysBtag(flow, btag):
 
             // Loop over each input and calculate the scale factor
             for(size_t i=0;i<hadronFlavour.size(); i++) {
-                sf[i]=1.;
-                if (abs(eta[i]) < 2.5) {
-                    // Loop over each flavor and check if it matches the input flavor
-                    for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
-                        if (hadronFlavour[i] == flav[j]) {
-                            // Calculate the scale factor using the btag_shape_corr object
-                            sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
-                            break;
-                        }
+                bool correct_flav = false;
+                // Loop over each flavor and check if it matches the input flavor
+                for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
+                    if (hadronFlavour[i] == flav[j]) {
+                        // Calculate the scale factor using the btag_shape_corr object
+                        sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+                        correct_flav = true;
+                        break;
                     }
+                }
+                // If no matching flavor is found, set the scale factor to 1
+                if (!correct_flav) {
+                    sf[i]=btag_shape_corr->evaluate({central, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
                 }
             }
             // Return the vector of scale factors
