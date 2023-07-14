@@ -69,7 +69,7 @@ def getFlowElectrons(flow):
         requires=["CommonSelEle"],
     )
 
-    flow.Selection("SR_twoGenJets", "GenJet_pt.size() >= 2")
+    flow.Selection("twoGenJets", "GenJet_pt.size() >= 2")
     flow.SubCollection(
         "GenLepton",
         "GenPart",
@@ -87,7 +87,7 @@ def getFlowElectrons(flow):
         "SubLeadingGenJet",
         "CleanedGenJet",
         "At(CleanedGenJet_ptOrderIdx,1)",
-        requires=["SR_twoGenJets"],
+        requires=["SR_ee", "twoGenJets"],
     )
 
     return flow
