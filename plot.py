@@ -233,7 +233,7 @@ if __name__ == "__main__":
             h1 = h
 
         h.SetTitle("")
-        w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
+        w = 0.055 * (2.3 if (isRatio or isSys) else 0.8)
         h.GetYaxis().SetLabelSize(w*0.5 if isSys else w)
         h.GetXaxis().SetLabelSize(w*0.5 if isSys else w)
         h.GetYaxis().SetTitleSize(w)
@@ -1137,11 +1137,11 @@ if __name__ == "__main__":
         for j, c_sys in enumerate(canvas_tuple_sys):
             c_sys.Divide(1, 2)
             c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.3)
-            c_sys.GetPad(1).SetPad(0.0, 0.2, 0.90, 1.0)
+            c_sys.GetPad(1).SetPad(0.0, 0.25, 0.90, 1.0)
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.35)
-            c_sys.GetPad(2).SetTopMargin(0.0)
+            c_sys.GetPad(2).SetTopMargin(0.1)
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
@@ -1182,7 +1182,7 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            ratio_sys.SetAxisRange(-1., 1., "Y")
+            ratio_sys.SetAxisRange(-0.7, 0.7, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
