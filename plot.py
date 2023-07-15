@@ -1156,7 +1156,6 @@ if __name__ == "__main__":
             histo.Draw("hist")
             setStyle(histo)
             myLegend_sys.AddEntry(histo, "Nominal", "FL")
-            c_sys.Update()
 
             for i, sy in enumerate(
                 systematic,
