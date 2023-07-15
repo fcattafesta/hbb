@@ -98,6 +98,6 @@ def getFlowElectrons(flow):
         requires=["SR_ee"],
     )
 
-    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(SubLeadingGenJet_pt)")
+    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(orderCleanedGenJet_pt)")
 
     return flow
