@@ -1178,8 +1178,8 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            #ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
-            #ratio_sys.GetYaxis().SetNdivisions(5)
+            ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
+            ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
             for i, sy in enumerate(
