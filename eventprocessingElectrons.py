@@ -87,10 +87,10 @@ def getFlowElectrons(flow):
     )
     flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
     flow.AddCppCode(
-        """'
+        """
     template<typename T>
     auto subLeadingPt (const ROOT::VecOps::RVec<T>& pt) { return (pt.size() > 1) ? pt[1] : 0.0; }
-     }"""
+        """
     )
     flow.SubCollection(
         "orderedCleanedGenJet",
@@ -98,6 +98,6 @@ def getFlowElectrons(flow):
         requires=["SR_ee"],
     )
 
-    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(orderCleanedGenJet_pt)")
+    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(orderedCleanedGenJet_pt)")
 
     return flow
