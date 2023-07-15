@@ -1184,7 +1184,7 @@ if __name__ == "__main__":
             for i, sy in enumerate(
                 systematic,
             ):
-                ratio_sys_list.append(histoSy)
+                ratio_sys_list.append(histoSys[sy].Clone())
                 ratio_sys_list[-1].Add(histo, -1.0)
                 ratio_sys_list[-1].Divide(histo)
                 ratio_sys_list[-1].SetLineColor(colors[i])
