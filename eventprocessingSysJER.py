@@ -1,3 +1,9 @@
+from nail.nail import *
+import correctionlib
+
+correctionlib.register_pyroot_binding()
+
+
 def getFlowSysJER(flow, sys):
     if sys:
         # JER systematics

@@ -1,7 +1,4 @@
 from nail.nail import *
-import correctionlib
-
-correctionlib.register_pyroot_binding()
 
 
 def getFlowMC(flow):

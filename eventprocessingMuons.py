@@ -1,7 +1,4 @@
 from nail.nail import *
-import ROOT
-import sys
-import copy
 
 
 def getFlowMuons(flow):

@@ -1084,10 +1084,19 @@ if __name__ == "__main__":
         canvas_sys_log = ROOT.TCanvas("canvas_sys_log_" + hn, "", 1200, 1000)
 
         ROOT.gStyle.SetPadLeftMargin(0.18)
-        setStyle(histosum[hn], noData=True)
+        setStyle(histosum[hn])
 
         canvas_tuple_sys = (canvas_sys, canvas_sys_log)
         for j, c_sys in enumerate(canvas_tuple_sys):
+            c_sys.Divide(1, 2)
+            c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
+            c_sys.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
+
+            ROOT.gStyle.SetPadLeftMargin(0.18)
+            c_sys.GetPad(2).SetBottomMargin(0.35)
+            c_sys.GetPad(2).SetTopMargin(0.0)
+
+            c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
             max_value = max(
                 histosum[hn].GetMaximum(), histosumSyst[hn][systematic[0]].GetMaximum()
@@ -1100,7 +1109,6 @@ if __name__ == "__main__":
             else:
                 histosum[hn].SetMaximum(max_value**2)
 
-            c_sys.cd()
             histosum[hn].Draw("hist")
             myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
 
@@ -1109,7 +1117,6 @@ if __name__ == "__main__":
             ):
                 histosumSyst[hn][sy].SetFillStyle(0)
                 histosumSyst[hn][sy].SetLineColor(colors[i])
-
 
                 myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
                 histosumSyst[hn][sy].Draw("hist same")
@@ -1120,6 +1127,22 @@ if __name__ == "__main__":
             myLegend_sys.Draw()
             c_sys.Update()
 
+            c_sys.cd(2)
+            ratio_sys = histosum[hn].Clone().Add(histosum[hn], -1)
+            setStyle(ratio_sys, isRatio=True)
+            ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
+            ratio_sys.GetYaxis().SetNdivisions(5)
+            ratio_sys.Draw("hist")
+            ratio_sys_list = []
+            for i, sy in enumerate(systematicsSetToUse):
+                ratio_sys_list.append(histosumSyst[hn][sy].Clone())
+                ratio_sys_list[-1].Add(histosum[hn], -1.0)
+                ratio_sys_list[-1].Divide(histosum[hn])
+                ratio_sys_list[-1].SetLineColor(colors[i])
+                ratio_sys_list[-1].SetFillStyle(0)
+                ratio_sys_list[-1].Draw("same hist")
+            c_sys.cd()
+            
             if j == 0:
                 c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
                 c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))

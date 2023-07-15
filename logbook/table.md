@@ -40,3 +40,42 @@ LHE_HT>70 && LHE_HT<100 |15492 | 4857/15492 = 0.313 | 5765.40*15492/258335 = 345
 /DYJetsToLL_LHEFilterPtZ-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM | 24195330 |
 /DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM | 3936102 |
 /DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM | 3994997 |
+
+
+/scratchnvme/malucchi/hbb_samples:
+0       DYHT-100To200
+0       DYHT-1200To2500
+0       DYHT-200To400
+0       DYHT-2500ToInf
+0       DYHT-400To600
+0       DYHT-600To800
+0       DYHT-70To100
+0       DYHT-800To1200
+240G    DYM50
+258G    DYZpt-0To50
+139G    DYZpt-100To250
+54G     DYZpt-250To400
+9.3G    DYZpt-400To650
+180G    DYZpt-50To100
+9.8G    DYZpt-650ToInf
+1.3T    EGamma_2018
+10G     ggZH
+805G    SingleMuon_2018
+30G     ST_s-channel_4f_LD
+151G    ST_t-channel_antitop_4f_ID
+150G    ST_t-channel_antitop_5f_ID
+281G    ST_t-channel_top_4f_ID
+15G     ST_tW_antitop_5f_ID
+21G     ST_tW_antitop_5f_NFHD
+15G     ST_tW_top_5f_ID
+22G     ST_tW_top_5f_NFHD
+288G    TTTo2L2Nu
+672G    TTToHadronic
+961G    TTToSemiLeptonic
+15G     WWTo2L2Nu
+45G     WZTo2Q2L
+14G     WZTo3LNu
+9.1G    ZH
+75G     ZZTo2L2Nu
+46G     ZZTo2Q2L
+131G    ZZTo4L
