@@ -1172,6 +1172,7 @@ if __name__ == "__main__":
                     t.Draw()
 
             myLegend_sys.Draw()
+            c_sys.Update()
 
             c_sys.cd(2)
             ratio_sys = histo.Clone()
