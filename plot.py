@@ -233,7 +233,7 @@ if __name__ == "__main__":
             h1 = h
 
         h.SetTitle("")
-        w = 0.055 * (2.5 if isRatio else 0.8)
+        w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
         h.GetYaxis().SetLabelSize(w)
         h.GetXaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
@@ -1166,6 +1166,7 @@ if __name__ == "__main__":
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
             ratio_sys.SetLineColor(ROOT.kBlack)
+            ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
