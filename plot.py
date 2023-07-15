@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
         return SignificanceSum_str, SignificanceSum, Significance_list
 
-    def setStyle(h, isRatio=False, noData=False):
+    def setStyle(h, isRatio=False, noData=False, isSys=False):
         if type(h) == ROOT.THStack:
             h1 = h.GetStack().First()
         else:
@@ -239,8 +239,8 @@ if __name__ == "__main__":
         h.GetYaxis().SetTitleSize(w)
         h.GetXaxis().SetTitleSize(w)
         h.GetYaxis().SetMaxDigits(2)
-        if isRatio:
-            h.GetYaxis().SetTitle("Data/MC - 1")
+        if isRatio or isSys:
+            h.GetYaxis().SetTitle("Data/MC - 1" if isRatio else "Sys/Nom - 1")
             h.GetYaxis().SetTitleOffset(0.5)
             #        h.GetXaxis().SetTitle(str(h.GetName()).split("___")[0])
             xKey = str(h.GetName()).split("___")[0]
@@ -1143,7 +1143,7 @@ if __name__ == "__main__":
                 histosum[hn].SetMaximum(max_value**2)
 
             histosum[hn].Draw("hist")
-            myLegend_sys.AddEntry(histosum[hn], "nominal", "FL")
+            myLegend_sys.AddEntry(histosum[hn], "Nominal", "FL")
 
             for i, sy in enumerate(
                 systematic,
@@ -1163,9 +1163,9 @@ if __name__ == "__main__":
             c_sys.cd(2)
             ratio_sys = histosum[hn].Clone()
             ratio_sys.Add(histosum[hn], -1)
+            setStyle(ratio_sys, isSys=True)
+            ratio_sys.SetFillStyle(0)
             ratio_sys.SetLineColor(ROOT.kBlack)
-            setStyle(ratio_sys, isRatio=True)
-            ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
