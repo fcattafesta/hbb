@@ -233,7 +233,7 @@ if __name__ == "__main__":
             h1 = h
 
         h.SetTitle("")
-        w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
+        w = 0.055 * (2 if (isRatio or isSys) else 0.8)
         h.GetYaxis().SetLabelSize(w)
         h.GetXaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
@@ -1142,8 +1142,8 @@ if __name__ == "__main__":
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
             max_value = max(histo.Clone().GetMaximum(), histoSys[systematic[0]].GetMaximum())
             min_value=max(0.1, 0.1 * histo.Clone().GetMinimum())
-            print("max_value", max_value)
-            print("min_value", min_value)
+            print("max_value", j,  max_value)
+            print("min_value", j, min_value)
             max_value_old = histo.Clone().GetMaximum()
             min_value_old = histo.Clone().GetMinimum()
 
@@ -1207,7 +1207,8 @@ if __name__ == "__main__":
                 c_sys.SaveAs(
                     outpath + "/%s_%s_%s_%s_log.root" % (hn, args.btag, sy_base, sample)
                 )
-
+            print("max_value_old", j,max_value_old)
+            print("min_value_old", j,min_value_old)
             histo.SetMaximum(max_value_old)
             histo.SetMinimum(min_value_old)
 
