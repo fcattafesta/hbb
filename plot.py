@@ -1118,7 +1118,7 @@ if __name__ == "__main__":
             histo = histosum[hn]
             histoSys  = histosumSyst[hn]
         else:
-            histo =all_histo_all_syst_grouped[sample][hn]
+            histo =all_histo_all_syst_grouped[sample][hn]["nom"]
             histoSys = all_histo_all_syst_grouped[sample][hn]
 
         histo.SetFillStyle(3003)
