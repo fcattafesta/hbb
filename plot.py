@@ -1138,7 +1138,7 @@ if __name__ == "__main__":
             c_sys.GetPad(2).SetBottomMargin(0.35)
             c_sys.GetPad(2).SetTopMargin(0.0)
 
-            c_sys.cd(1)
+            c_sys.cd()
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
             #max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
             max_value = histo.GetMaximum()
@@ -1154,6 +1154,7 @@ if __name__ == "__main__":
             histo.Draw("hist")
             setStyle(histo)
             myLegend_sys.AddEntry(histo, "Nominal", "FL")
+            c_sys.Update()
 
             for i, sy in enumerate(
                 systematic,
@@ -1175,8 +1176,8 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
-            ratio_sys.GetYaxis().SetNdivisions(5)
+            #ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
+            #ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
             for i, sy in enumerate(
@@ -1188,6 +1189,7 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("hist same")
+            c_sys.GetPad(2).SetGridy()
             c_sys.cd()
 
             if j == 0:
@@ -1641,7 +1643,6 @@ if __name__ == "__main__":
                         ratiosy[-1].SetFillStyle(0)
                         myLegend_sy.AddEntry(ratiosy[-1], sy, "LE")
                         ratiosy[-1].Draw("same hist")
-                        # print "Heu",hn,sy,histosumSyst[hn][sy].Integral(),histosum[hn].Integral(),lumitot,ratiosy[-1]
                     c.cd()
                     if len(systematicsSetToUse) > 0:
                         myLegend_sy.Draw()
