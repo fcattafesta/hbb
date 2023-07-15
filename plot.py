@@ -1128,7 +1128,9 @@ if __name__ == "__main__":
             c_sys.Update()
 
             c_sys.cd(2)
-            ratio_sys = histosum[hn].Clone().Add(histosum[hn], -1)
+            ratio_sys = histosum[hn].Clone()
+            ratio_sys.Add(histosum[hn], -1)
+            ratio_sys_list[-1].SetLineColor(ROOT.kBlack)
             setStyle(ratio_sys, isRatio=True)
             ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
@@ -1142,7 +1144,7 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("same hist")
             c_sys.cd()
-            
+
             if j == 0:
                 c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
                 c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
