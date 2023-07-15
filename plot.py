@@ -1111,13 +1111,18 @@ if __name__ == "__main__":
         # else : myLegend.AddEntry(h,gr,"f")
         return h
 
-    def plot_sys(hn, sy_base, systematic, text):
+    def plot_sys(histo, histoSys, hn, sy_base, systematic, sample, text):
         # draw the histo for each systematic
-        canvas_sys = ROOT.TCanvas("canvas_sys_" + hn, "", 1200, 1000)
-        canvas_sys_log = ROOT.TCanvas("canvas_sys_log_" + hn, "", 1200, 1000)
+        if type(histo) == dict:
+            histo = histo["nom"]
+
+        canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + "_" + sample, "", 1200, 1000)
+        canvas_sys_log = ROOT.TCanvas(
+            "canvas_sys_log_" + hn + "_" + sample, "", 1200, 1000
+        )
 
         ROOT.gStyle.SetPadLeftMargin(0.18)
-        setStyle(histosum[hn])
+        setStyle(histo)
 
         canvas_tuple_sys = (canvas_sys, canvas_sys_log)
         for j, c_sys in enumerate(canvas_tuple_sys):
@@ -1131,28 +1136,26 @@ if __name__ == "__main__":
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
-            max_value = max(
-                histosum[hn].GetMaximum(), histosumSyst[hn][systematic[0]].GetMaximum()
-            )
-            min_value = histosum[hn].GetMinimum()
+            max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
+            min_value = histo.GetMinimum()
 
-            histosum[hn].SetMinimum(max(0.1, 0.1 * histosum[hn].GetMinimum()))
+            histo.SetMinimum(max(0.1, 0.1 * histo.GetMinimum()))
             if j == 0:
-                histosum[hn].SetMaximum(max_value * 2)
+                histo.SetMaximum(max_value * 2)
             else:
-                histosum[hn].SetMaximum(max_value**2)
+                histo.SetMaximum(max_value**2)
 
-            histosum[hn].Draw("hist")
-            myLegend_sys.AddEntry(histosum[hn], "Nominal", "FL")
+            histo.Draw("hist")
+            myLegend_sys.AddEntry(histo, "Nominal", "FL")
 
             for i, sy in enumerate(
                 systematic,
             ):
-                histosumSyst[hn][sy].SetFillStyle(0)
-                histosumSyst[hn][sy].SetLineColor(colors[i])
+                histoSys[sy].SetFillStyle(0)
+                histoSys[sy].SetLineColor(colors[i])
 
-                myLegend_sys.AddEntry(histosumSyst[hn][sy], sy, "FL")
-                histosumSyst[hn][sy].Draw("hist same")
+                myLegend_sys.AddEntry(histoSys[sy], sy, "FL")
+                histoSys[sy].Draw("hist same")
 
                 for t in text:
                     t.Draw()
@@ -1161,11 +1164,11 @@ if __name__ == "__main__":
             c_sys.Update()
 
             c_sys.cd(2)
-            ratio_sys = histosum[hn].Clone()
-            ratio_sys.Add(histosum[hn], -1)
+            ratio_sys = histo.Clone()
+            ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
-            ratio_sys.SetFillStyle(0)
             ratio_sys.SetLineColor(ROOT.kBlack)
+            ratio_sys.SetFillStyle(0)
             ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
@@ -1173,24 +1176,24 @@ if __name__ == "__main__":
             for i, sy in enumerate(
                 systematic,
             ):
-                ratio_sys_list.append(histosumSyst[hn][sy].Clone())
-                ratio_sys_list[-1].Add(histosum[hn], -1.0)
-                ratio_sys_list[-1].Divide(histosum[hn])
+                ratio_sys_list.append(histoSys[sy].Clone())
+                ratio_sys_list[-1].Add(histo, -1.0)
+                ratio_sys_list[-1].Divide(histo)
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("same hist")
             c_sys.cd()
 
             if j == 0:
-                c_sys.SaveAs(outpath + "/%s_%s_%s.png" % (hn, args.btag, sy_base))
-                c_sys.SaveAs(outpath + "/%s_%s_%s.root" % (hn, args.btag, sy_base))
+                c_sys.SaveAs(outpath + "/%s_%s_%s_%s.png" % (hn, args.btag, sy_base, sample))
+                c_sys.SaveAs(outpath + "/%s_%s_%s_%s.root" % (hn, args.btag, sy_base, sample))
             else:
                 c_sys.SetLogy(True)
-                c_sys.SaveAs(outpath + "/%s_%s_%s_log.png" % (hn, args.btag, sy_base))
-                c_sys.SaveAs(outpath + "/%s_%s_%s_log.root" % (hn, args.btag, sy_base))
+                c_sys.SaveAs(outpath + "/%s_%s_%s_%s_log.png" % (hn, args.btag, sy_base, sample))
+                c_sys.SaveAs(outpath + "/%s_%s_%s_%s_log.root" % (hn, args.btag, sy_base, sample))
 
-            histosum[hn].SetMaximum(max_value)
-            histosum[hn].SetMinimum(min_value)
+            histo.SetMaximum(max_value)
+            histo.SetMinimum(min_value)
 
             del c_sys
         del canvas_sys, canvas_sys_log
@@ -1676,7 +1679,6 @@ if __name__ == "__main__":
                     histos[hn].SetMinimum(min_value)
                     histos[hn].SetMaximum(max_value)
 
-            # sum histosumSyst and histoSigsumSyst
             systematics = defaultdict(list)
             if any([x in hn for x in Special_variables]):
                 for sy in histosumSyst[hn]:
@@ -1690,9 +1692,47 @@ if __name__ == "__main__":
             # histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
             histosum[hn].SetFillColor(ROOT.kBlack)
 
+            tot_dataset = model.signal
+            tot_dataset.update(model.backgrounds)
+            tot_dataset.update(model.data)
+
+            all_histo_all_syst_grouped = {}
+            for gr in tot_dataset:
+                all_histo_all_syst_grouped[gr] = {}
+                for hn in all_histo_all_syst:
+                    all_histo_all_syst_grouped[gr][hn] = {}
+                    for d in tot_dataset[gr]:
+                        for syst in all_histo_all_syst[hn][d]:
+                            if syst not in all_histo_all_syst_grouped[gr][hn]:
+                                all_histo_all_syst_grouped[gr][hn][
+                                    syst
+                                ] = all_histo_all_syst[hn][d][syst].Clone()
+                            else:
+                                all_histo_all_syst_grouped[gr][hn][syst].Add(
+                                    all_histo_all_syst[hn][d][syst]
+                                )
+
             if systematics:
                 for sy_base, systematic in systematics.items():
-                    plot_sys(hn, sy_base, systematic, [t0, t1, t2, t3, t4])
+                    plot_sys(
+                        histosum[hn],
+                        histosumSyst[hn],
+                        hn,
+                        sy_base,
+                        systematic,
+                        "total",
+                        [t0, t1, t2, t3, t4],
+                    )
+                    for gr in all_histo_all_syst_grouped:
+                        plot_sys(
+                            all_histo_all_syst_grouped[gr][hn],
+                            all_histo_all_syst_grouped[gr][hn],
+                            hn,
+                            sy_base,
+                            systematic,
+                            gr,
+                            [t0, t1, t2, t3, t4],
+                        )
 
     variablesToFit = []
     makeWorkspace = False
