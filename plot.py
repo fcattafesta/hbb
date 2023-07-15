@@ -1136,7 +1136,7 @@ if __name__ == "__main__":
         canvas_tuple_sys = (canvas_sys, canvas_sys_log)
         for j, c_sys in enumerate(canvas_tuple_sys):
             c_sys.Divide(1, 2)
-            c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.3)
+            c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
             c_sys.GetPad(1).SetPad(0.0, 0.2, 0.90, 1.0)
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
