@@ -95,6 +95,6 @@ def getFlowElectrons(flow):
     #endif
         """
     )
-    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(orderedCleanedGenJet_pt)")
+    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(CleanedGenJet_pt)")
 
     return flow
