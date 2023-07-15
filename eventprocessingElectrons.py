@@ -84,8 +84,8 @@ def getFlowElectrons(flow):
         "CleanedGenJet",
         "SelectedGenJet",
         sel="SelectedGenJet_GenLeptonDr > 0.4 || SelectedGenJet_GenLeptonIdx==-1",
+        requires=["SR_ee"],
     )
-    flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
     flow.AddCppCode(
         """
     #ifndef _PT_
@@ -95,12 +95,6 @@ def getFlowElectrons(flow):
     #endif
         """
     )
-    flow.SubCollection(
-        "orderedCleanedGenJet",
-        "CleanedGenJet",
-        requires=["SR_ee"],
-    )
-
     flow.Define("SubLeadingGenJet_pt", "subLeadingPt(orderedCleanedGenJet_pt)")
 
     return flow
