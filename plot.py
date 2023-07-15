@@ -1159,11 +1159,12 @@ if __name__ == "__main__":
             for i, sy in enumerate(
                 systematic,
             ):
-                histoSys[sy].SetFillStyle(0)
-                histoSys[sy].SetLineColor(colors[i])
+                histoSy=histoSys[sy].Clone()
+                histoSy.SetFillStyle(0)
+                histoSy.SetLineColor(colors[i])
 
-                myLegend_sys.AddEntry(histoSys[sy], sy, "FL")
-                histoSys[sy].Draw("hist same")
+                myLegend_sys.AddEntry(histoSy, sy, "FL")
+                histoSy.Draw("hist same")
 
                 for t in text:
                     t.Draw()
@@ -1183,7 +1184,7 @@ if __name__ == "__main__":
             for i, sy in enumerate(
                 systematic,
             ):
-                ratio_sys_list.append(histoSys[sy].Clone())
+                ratio_sys_list.append(histoSy)
                 ratio_sys_list[-1].Add(histo, -1.0)
                 ratio_sys_list[-1].Divide(histo)
                 ratio_sys_list[-1].SetLineColor(colors[i])
@@ -1747,8 +1748,8 @@ if __name__ == "__main__":
                                 size=0.03,
                             )
                             plot_sys(
-                                all_histo_all_syst_grouped[gr][hn].Clone(),
-                                all_histo_all_syst_grouped[gr][hn].Clone(),
+                                all_histo_all_syst_grouped[gr][hn],
+                                all_histo_all_syst_grouped[gr][hn],
                                 hn,
                                 sy_base,
                                 systematic,
