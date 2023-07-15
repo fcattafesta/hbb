@@ -1130,7 +1130,7 @@ if __name__ == "__main__":
             c_sys.cd(2)
             ratio_sys = histosum[hn].Clone()
             ratio_sys.Add(histosum[hn], -1)
-            ratio_sys_list[-1].SetLineColor(ROOT.kBlack)
+            ratio_sys.SetLineColor(ROOT.kBlack)
             setStyle(ratio_sys, isRatio=True)
             ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
