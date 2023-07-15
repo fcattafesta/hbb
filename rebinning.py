@@ -46,6 +46,7 @@ rebin = {
         0.9699,
         1.0,
     ],
+    "SubLeadingGenJet_pt": [i for i in range(0, 300, 60)],
 }
 
 # "atanhDNN_Score": [
