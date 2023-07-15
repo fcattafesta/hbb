@@ -1137,11 +1137,11 @@ if __name__ == "__main__":
         for j, c_sys in enumerate(canvas_tuple_sys):
             c_sys.Divide(1, 2)
             c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.3)
-            c_sys.GetPad(1).SetPad(0.0, 0.25, 0.90, 1.0)
+            c_sys.GetPad(1).SetPad(0.0, 0.2, 0.90, 1.0)
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.35)
-            c_sys.GetPad(2).SetTopMargin(0.1)
+            c_sys.GetPad(2).SetTopMargin(0.5)
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
