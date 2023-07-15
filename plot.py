@@ -1118,6 +1118,7 @@ if __name__ == "__main__":
 
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
+        ratio_sys.SetLineColor(ROOT.kBlack)
         histo.SetFillColor(ROOT.kBlack)
 
         canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + "_" + sample, "", 1200, 1000)
@@ -1126,7 +1127,6 @@ if __name__ == "__main__":
         )
 
         ROOT.gStyle.SetPadLeftMargin(0.18)
-        setStyle(histo)
 
         canvas_tuple_sys = (canvas_sys, canvas_sys_log)
         for j, c_sys in enumerate(canvas_tuple_sys):
@@ -1152,6 +1152,7 @@ if __name__ == "__main__":
                 histo.SetMaximum(max_value**2)
 
             histo.Draw("hist")
+            setStyle(histo)
             myLegend_sys.AddEntry(histo, "Nominal", "FL")
 
             for i, sy in enumerate(
@@ -1173,8 +1174,6 @@ if __name__ == "__main__":
             ratio_sys = histo.Clone()
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
-            ratio_sys.SetLineColor(ROOT.kBlack)
-            ratio_sys.SetLineStyle(1)
             ratio_sys.SetFillStyle(0)
             ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
@@ -1550,7 +1549,6 @@ if __name__ == "__main__":
                     datasum[hn].Draw("E P")
                     # datastack[hn].GetXaxis().SetTitle(hn)
                     setStyle(datasum[hn])
-                    datasum[hn].Draw("E P")
                     histos[hn].Draw("hist same")
                 else:
                     min_value = histos[hn].GetMinimum()
