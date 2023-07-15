@@ -233,11 +233,11 @@ if __name__ == "__main__":
             h1 = h
 
         h.SetTitle("")
-        w = 0.055 * (2.3 if (isRatio or isSys) else 0.8)
+        w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
         h.GetYaxis().SetLabelSize(w*0.5 if isSys else w)
         h.GetXaxis().SetLabelSize(w*0.5 if isSys else w)
-        h.GetYaxis().SetTitleSize(w)
-        h.GetXaxis().SetTitleSize(w)
+        h.GetYaxis().SetTitleSize(w*0.8 if isSys else w)
+        h.GetXaxis().SetTitleSize(w*0.8 if isSys else w)
         h.GetYaxis().SetMaxDigits(2)
         if isRatio or isSys:
             h.GetYaxis().SetTitle("Data/MC - 1" if isRatio else "Sys/Nom - 1")
@@ -1140,7 +1140,7 @@ if __name__ == "__main__":
             c_sys.GetPad(1).SetPad(0.0, 0.2, 0.90, 1.0)
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
-            c_sys.GetPad(2).SetBottomMargin(0.35)
+            c_sys.GetPad(2).SetBottomMargin(0.32)
             c_sys.GetPad(2).SetTopMargin(0.05)
 
             c_sys.cd(1)
