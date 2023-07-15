@@ -1693,7 +1693,7 @@ if __name__ == "__main__":
             histosum[hn].SetFillColor(ROOT.kBlack)
 
             tot_dataset = model.signal
-            tot_dataset.update(model.backgrounds)
+            tot_dataset.update(model.background)
             tot_dataset.update(model.data)
 
             all_histo_all_syst_grouped = {}
