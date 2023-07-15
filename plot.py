@@ -1141,7 +1141,7 @@ if __name__ == "__main__":
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.35)
-            c_sys.GetPad(2).SetTopMargin(0.5)
+            c_sys.GetPad(2).SetTopMargin(0.05)
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
