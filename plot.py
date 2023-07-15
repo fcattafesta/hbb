@@ -1118,7 +1118,7 @@ if __name__ == "__main__":
 
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
-        ratio_sys.SetLineColor(ROOT.kBlack)
+        histo.SetLineColor(ROOT.kBlack)
         histo.SetFillColor(ROOT.kBlack)
 
         canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + "_" + sample, "", 1200, 1000)
