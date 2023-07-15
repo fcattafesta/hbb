@@ -1116,8 +1116,6 @@ if __name__ == "__main__":
         if type(histo) == dict:
             histo = histo["nom"]
 
-        histo=histo.Clone()
-
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
         histo.SetLineColor(ROOT.kBlack)
@@ -1140,7 +1138,7 @@ if __name__ == "__main__":
             c_sys.GetPad(2).SetBottomMargin(0.35)
             c_sys.GetPad(2).SetTopMargin(0.0)
 
-            c_sys.cd()
+            c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
             #max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
             max_value = histo.GetMaximum()
@@ -1160,12 +1158,11 @@ if __name__ == "__main__":
             for i, sy in enumerate(
                 systematic,
             ):
-                histoSy=histoSys[sy].Clone()
-                histoSy.SetFillStyle(0)
-                histoSy.SetLineColor(colors[i])
+                histoSys[sy].SetFillStyle(0)
+                histoSys[sy].SetLineColor(colors[i])
 
-                myLegend_sys.AddEntry(histoSy, sy, "FL")
-                histoSy.Draw("hist same")
+                myLegend_sys.AddEntry(histoSys[sy], sy, "FL")
+                histoSys[sy].Draw("hist same")
 
                 for t in text:
                     t.Draw()
@@ -1191,9 +1188,7 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("hist same")
-
             c_sys.cd()
-            #c_sys.GetPad(2).SetGridy()
 
             if j == 0:
                 c_sys.SaveAs(
