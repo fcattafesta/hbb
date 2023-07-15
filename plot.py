@@ -1140,12 +1140,13 @@ if __name__ == "__main__":
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
-            #max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
-            max_value = histo.GetMaximum()
-            min_value = histo.GetMinimum()
+            max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
+            min_value=max(0.1, 0.1 * histo.GetMinimum())
+            max_value_old = histo.Clone().GetMaximum()
+            min_value_old = histo.Clone().GetMinimum()
 
-            # histo.SetMinimum(max(0.1, 0.1 * histo.GetMinimum()))
-            histo.SetMinimum(0.1 * min_value)
+            histo.SetMinimum(min_value)
+            #histo.SetMinimum(0.1 * min_value)
             if j == 0:
                 histo.SetMaximum(max_value * 2)
             else:
@@ -1175,7 +1176,7 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
+            ratio_sys.SetAxisRange(-500, 500, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
@@ -1206,8 +1207,8 @@ if __name__ == "__main__":
                     outpath + "/%s_%s_%s_%s_log.root" % (hn, args.btag, sy_base, sample)
                 )
 
-            histo.SetMaximum(max_value)
-            histo.SetMinimum(min_value)
+            histo.SetMaximum(max_value_old)
+            histo.SetMinimum(min_value_old)
 
             del c_sys
         del canvas_sys, canvas_sys_log
