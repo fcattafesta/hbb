@@ -1116,6 +1116,13 @@ if __name__ == "__main__":
         if type(histo) == dict:
             histo = histo["nom"]
 
+        histo.SetFillStyle(3003)
+        # histosum[hn].SetLineWidth(1)
+        # histosum[hn].SetLineStyle(1)
+        # histosum[hn].SetLineColor(ROOT.kBlack)
+        # histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
+        histo.SetFillColor(ROOT.kBlack)
+
         canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + "_" + sample, "", 1200, 1000)
         canvas_sys_log = ROOT.TCanvas(
             "canvas_sys_log_" + hn + "_" + sample, "", 1200, 1000
@@ -1136,7 +1143,8 @@ if __name__ == "__main__":
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
-            max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
+            #max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
+            max_value = histo.GetMaximum()
             min_value = histo.GetMinimum()
 
             histo.SetMinimum(max(0.1, 0.1 * histo.GetMinimum()))
@@ -1168,6 +1176,7 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetLineColor(ROOT.kBlack)
+            ratio_sys.SetLineStyle(1)
             ratio_sys.SetFillStyle(0)
             ratio_sys.SetAxisRange(-0.5, 0.5, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
@@ -1181,16 +1190,24 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].Divide(histo)
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
-                ratio_sys_list[-1].Draw("same hist")
+                ratio_sys_list[-1].Draw("hist same")
             c_sys.cd()
 
             if j == 0:
-                c_sys.SaveAs(outpath + "/%s_%s_%s_%s.png" % (hn, args.btag, sy_base, sample))
-                c_sys.SaveAs(outpath + "/%s_%s_%s_%s.root" % (hn, args.btag, sy_base, sample))
+                c_sys.SaveAs(
+                    outpath + "/%s_%s_%s_%s.png" % (hn, args.btag, sy_base, sample)
+                )
+                c_sys.SaveAs(
+                    outpath + "/%s_%s_%s_%s.root" % (hn, args.btag, sy_base, sample)
+                )
             else:
                 c_sys.SetLogy(True)
-                c_sys.SaveAs(outpath + "/%s_%s_%s_%s_log.png" % (hn, args.btag, sy_base, sample))
-                c_sys.SaveAs(outpath + "/%s_%s_%s_%s_log.root" % (hn, args.btag, sy_base, sample))
+                c_sys.SaveAs(
+                    outpath + "/%s_%s_%s_%s_log.png" % (hn, args.btag, sy_base, sample)
+                )
+                c_sys.SaveAs(
+                    outpath + "/%s_%s_%s_%s_log.root" % (hn, args.btag, sy_base, sample)
+                )
 
             histo.SetMaximum(max_value)
             histo.SetMinimum(min_value)
@@ -1679,60 +1696,66 @@ if __name__ == "__main__":
                     histos[hn].SetMinimum(min_value)
                     histos[hn].SetMaximum(max_value)
 
-            systematics = defaultdict(list)
             if any([x in hn for x in Special_variables]):
+                systematics = defaultdict(list)
                 for sy in histosumSyst[hn]:
                     sy_base = sy.replace("Up", "").replace("Down", "")
                     systematics[sy_base].append(sy)
 
-            histosum[hn].SetFillStyle(3003)
-            # histosum[hn].SetLineWidth(1)
-            # histosum[hn].SetLineStyle(1)
-            # histosum[hn].SetLineColor(ROOT.kBlack)
-            # histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
-            histosum[hn].SetFillColor(ROOT.kBlack)
+                tot_dataset = model.signal
+                tot_dataset.update(model.background)
+                tot_dataset.update(model.data)
 
-            tot_dataset = model.signal
-            tot_dataset.update(model.background)
-            tot_dataset.update(model.data)
-
-            all_histo_all_syst_grouped = {}
-            for gr in tot_dataset:
-                all_histo_all_syst_grouped[gr] = {}
-                for hn in all_histo_all_syst:
-                    all_histo_all_syst_grouped[gr][hn] = {}
-                    for d in tot_dataset[gr]:
-                        for syst in all_histo_all_syst[hn][d]:
-                            if syst not in all_histo_all_syst_grouped[gr][hn]:
-                                all_histo_all_syst_grouped[gr][hn][
-                                    syst
-                                ] = all_histo_all_syst[hn][d][syst].Clone()
-                            else:
-                                all_histo_all_syst_grouped[gr][hn][syst].Add(
-                                    all_histo_all_syst[hn][d][syst]
-                                )
-
-            if systematics:
-                for sy_base, systematic in systematics.items():
-                    plot_sys(
-                        histosum[hn],
-                        histosumSyst[hn],
-                        hn,
-                        sy_base,
-                        systematic,
-                        "total",
-                        [t0, t1, t2, t3, t4],
-                    )
-                    for gr in all_histo_all_syst_grouped:
+                all_histo_all_syst_grouped = {}
+                for gr in tot_dataset:
+                    all_histo_all_syst_grouped[gr] = {}
+                    for hn in all_histo_all_syst:
+                        all_histo_all_syst_grouped[gr][hn] = {}
+                        for d in tot_dataset[gr]:
+                            for syst in all_histo_all_syst[hn][d]:
+                                if syst not in all_histo_all_syst_grouped[gr][hn]:
+                                    all_histo_all_syst_grouped[gr][hn][
+                                        syst
+                                    ] = all_histo_all_syst[hn][d][syst].Clone()
+                                else:
+                                    all_histo_all_syst_grouped[gr][hn][syst].Add(
+                                        all_histo_all_syst[hn][d][syst]
+                                    )
+                if systematics:
+                    for sy_base, systematic in systematics.items():
+                        t5 = makeText(
+                            0.25,
+                            0.75,
+                            "Total",
+                            42,
+                            size=0.03,
+                        )
                         plot_sys(
-                            all_histo_all_syst_grouped[gr][hn],
-                            all_histo_all_syst_grouped[gr][hn],
+                            histosum[hn],
+                            histosumSyst[hn],
                             hn,
                             sy_base,
                             systematic,
-                            gr,
-                            [t0, t1, t2, t3, t4],
+                            "total",
+                            [t0, t1, t2, t3, t4, t5],
                         )
+                        for gr in all_histo_all_syst_grouped:
+                            t5 = makeText(
+                                0.25,
+                                0.75,
+                                gr,
+                                42,
+                                size=0.03,
+                            )
+                            plot_sys(
+                                all_histo_all_syst_grouped[gr][hn],
+                                all_histo_all_syst_grouped[gr][hn],
+                                hn,
+                                sy_base,
+                                systematic,
+                                gr,
+                                [t0, t1, t2, t3, t4, t5],
+                            )
 
     variablesToFit = []
     makeWorkspace = False
