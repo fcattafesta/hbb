@@ -730,6 +730,7 @@ if __name__ == "__main__":
     histosSignal = {}
     histosOverlayed = {}
     all_histo_all_syst = {}
+    all_histo_all_syst_grouped = {}
 
     SignificanceSum_list = [[], []]
 
@@ -1111,11 +1112,15 @@ if __name__ == "__main__":
         # else : myLegend.AddEntry(h,gr,"f")
         return h
 
-    def plot_sys(histo_, histoSys, hn, sy_base, systematic, sample, text):
+    def plot_sys(hn, sy_base, systematic, sample, text):
         # draw the histo for each systematic
-        if type(histo_) == dict:
-            histo_ = histo_["nom"]
-        histo=histo_.Clone()
+        if sample == "total":
+            histo = histosum[hn]
+            histoSys  = histosumSyst[hn]
+        else:
+            histo =all_histo_all_syst_grouped[sample][hn]
+            histoSys = all_histo_all_syst_grouped[sample][hn]
+
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
         histo.SetLineColor(ROOT.kBlack)
@@ -1132,7 +1137,7 @@ if __name__ == "__main__":
         for j, c_sys in enumerate(canvas_tuple_sys):
             c_sys.Divide(1, 2)
             c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
-            c_sys.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
+            c_sys.GetPad(1).SetPad(0.0, 0.25, 0.90, 1.0)
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.35)
@@ -1140,12 +1145,12 @@ if __name__ == "__main__":
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
-            max_value = max(histo.Clone().GetMaximum(), histoSys[systematic[0]].GetMaximum())
-            min_value=max(0.1, 0.1 * histo.Clone().GetMinimum())
+            max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
+            min_value=max(0.1, 0.1 * histo.GetMinimum())
             print("max_value", j,  max_value)
             print("min_value", j, min_value)
-            max_value_old = histo.Clone().GetMaximum()
-            min_value_old = histo.Clone().GetMinimum()
+            max_value_old = histo.GetMaximum()
+            min_value_old = histo.GetMinimum()
 
             histo.SetMinimum(min_value)
             if j == 0:
@@ -1704,21 +1709,20 @@ if __name__ == "__main__":
                 tot_dataset.update(model.background)
                 tot_dataset.update(model.data)
 
-                all_histo_all_syst_grouped = {}
+
                 for gr in tot_dataset:
                     all_histo_all_syst_grouped[gr] = {}
-                    for hn in all_histo_all_syst:
-                        all_histo_all_syst_grouped[gr][hn] = {}
-                        for d in tot_dataset[gr]:
-                            for syst in all_histo_all_syst[hn][d]:
-                                if syst not in all_histo_all_syst_grouped[gr][hn]:
-                                    all_histo_all_syst_grouped[gr][hn][
-                                        syst
-                                    ] = all_histo_all_syst[hn][d][syst].Clone()
-                                else:
-                                    all_histo_all_syst_grouped[gr][hn][syst].Add(
-                                        all_histo_all_syst[hn][d][syst]
-                                    )
+                    all_histo_all_syst_grouped[gr][hn] = {}
+                    for d in tot_dataset[gr]:
+                        for syst in all_histo_all_syst[hn][d]:
+                            if syst not in all_histo_all_syst_grouped[gr][hn]:
+                                all_histo_all_syst_grouped[gr][hn][
+                                    syst
+                                ] = all_histo_all_syst[hn][d][syst].Clone()
+                            else:
+                                all_histo_all_syst_grouped[gr][hn][syst].Add(
+                                    all_histo_all_syst[hn][d][syst]
+                                )
                 if systematics:
                     for sy_base, systematic in systematics.items():
                         t5 = makeText(
@@ -1729,8 +1733,6 @@ if __name__ == "__main__":
                             size=0.03,
                         )
                         plot_sys(
-                            histosum[hn],
-                            histosumSyst[hn],
                             hn,
                             sy_base,
                             systematic,
@@ -1746,8 +1748,6 @@ if __name__ == "__main__":
                                 size=0.03,
                             )
                             plot_sys(
-                                all_histo_all_syst_grouped[gr][hn],
-                                all_histo_all_syst_grouped[gr][hn],
                                 hn,
                                 sy_base,
                                 systematic,
