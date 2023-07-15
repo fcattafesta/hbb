@@ -86,13 +86,18 @@ def getFlowElectrons(flow):
         sel="SelectedGenJet_GenLeptonDr > 0.4 || SelectedGenJet_GenLeptonIdx==-1",
     )
     flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
-    flow.Selection("twoGenJets", "nCleanedGenJet >= 2")
-    flow.Selection("SRtwoGenJets", "SR_ee && twoGenJets")
-    flow.ObjectAt(
-        "SubLeadingGenJet",
-        "CleanedGenJet",
-        "At(CleanedGenJet_ptOrderIdx,1)",
-        requires=["SRtwoGenJets"],
+    flow.AddCppCode(
+        """'
+    template<typename T>
+    auto subLeadingPt (const ROOT::VecOps::RVec<T>& pt) { return (pt.size() > 1) ? pt[1] : 0.0; }
+     }"""
     )
+    flow.SubCollection(
+        "orderedCleanedGenJet",
+        "CleanedGenJet",
+        requires=["SR_ee"],
+    )
+
+    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(SubLeadingGenJet_pt)")
 
     return flow
