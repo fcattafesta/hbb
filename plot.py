@@ -1730,8 +1730,8 @@ if __name__ == "__main__":
                             size=0.03,
                         )
                         plot_sys(
-                            histosum[hn],
-                            histosumSyst[hn],
+                            histosum[hn].Clone(),
+                            histosumSyst[hn].Clone(),
                             hn,
                             sy_base,
                             systematic,
@@ -1747,8 +1747,8 @@ if __name__ == "__main__":
                                 size=0.03,
                             )
                             plot_sys(
-                                all_histo_all_syst_grouped[gr][hn],
-                                all_histo_all_syst_grouped[gr][hn],
+                                all_histo_all_syst_grouped[gr][hn].Clone(),
+                                all_histo_all_syst_grouped[gr][hn].Clone(),
                                 hn,
                                 sy_base,
                                 systematic,
