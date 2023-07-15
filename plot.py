@@ -1117,10 +1117,7 @@ if __name__ == "__main__":
             histo = histo["nom"]
 
         histo.SetFillStyle(3003)
-        # histosum[hn].SetLineWidth(1)
-        # histosum[hn].SetLineStyle(1)
-        # histosum[hn].SetLineColor(ROOT.kBlack)
-        # histosum[hn].SetFillColorAlpha(ROOT.kBlack, 0.35)
+        histo.SetLineStyle(1)
         histo.SetFillColor(ROOT.kBlack)
 
         canvas_sys = ROOT.TCanvas("canvas_sys_" + hn + "_" + sample, "", 1200, 1000)
@@ -1147,7 +1144,8 @@ if __name__ == "__main__":
             max_value = histo.GetMaximum()
             min_value = histo.GetMinimum()
 
-            histo.SetMinimum(max(0.1, 0.1 * histo.GetMinimum()))
+            # histo.SetMinimum(max(0.1, 0.1 * histo.GetMinimum()))
+            histo.SetMinimum(0.1 * min_value)
             if j == 0:
                 histo.SetMaximum(max_value * 2)
             else:
