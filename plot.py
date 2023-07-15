@@ -1191,7 +1191,8 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].Draw("hist same")
 
             c_sys.cd()
-            c_sys.GetPad(2).SetGridy()
+            c_sys.Update()
+            #c_sys.GetPad(2).SetGridy()
 
             if j == 0:
                 c_sys.SaveAs(
