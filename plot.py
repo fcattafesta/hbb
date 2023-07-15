@@ -233,9 +233,9 @@ if __name__ == "__main__":
             h1 = h
 
         h.SetTitle("")
-        w = 0.055 * (2 if (isRatio or isSys) else 0.8)
-        h.GetYaxis().SetLabelSize(w)
-        h.GetXaxis().SetLabelSize(w)
+        w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
+        h.GetYaxis().SetLabelSize(w*0.5 if isSys else w)
+        h.GetXaxis().SetLabelSize(w*0.5 if isSys else w)
         h.GetYaxis().SetTitleSize(w)
         h.GetXaxis().SetTitleSize(w)
         h.GetYaxis().SetMaxDigits(2)
@@ -1111,11 +1111,11 @@ if __name__ == "__main__":
         # else : myLegend.AddEntry(h,gr,"f")
         return h
 
-    def plot_sys(histo, histoSys, hn, sy_base, systematic, sample, text):
+    def plot_sys(histo_, histoSys, hn, sy_base, systematic, sample, text):
         # draw the histo for each systematic
-        if type(histo) == dict:
-            histo = histo["nom"]
-
+        if type(histo_) == dict:
+            histo_ = histo_["nom"]
+        histo=histo_.Clone()
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
         histo.SetLineColor(ROOT.kBlack)
