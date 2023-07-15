@@ -1140,13 +1140,12 @@ if __name__ == "__main__":
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
-            max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
-            min_value=max(0.1, 0.1 * histo.GetMinimum())
+            max_value = max(histo.Clone().GetMaximum(), histoSys[systematic[0]].GetMaximum())
+            min_value=max(0.1, 0.1 * histo.Clone().GetMinimum())
             max_value_old = histo.Clone().GetMaximum()
             min_value_old = histo.Clone().GetMinimum()
 
             histo.SetMinimum(min_value)
-            #histo.SetMinimum(0.1 * min_value)
             if j == 0:
                 histo.SetMaximum(max_value * 2)
             else:
@@ -1176,7 +1175,7 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            ratio_sys.SetAxisRange(-500, 500, "Y")
+            ratio_sys.SetAxisRange(-0.6, 0.6, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
