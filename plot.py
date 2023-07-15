@@ -33,6 +33,7 @@ def makeText(x, y, someText, font, size=0.05):
     tex.SetLineWidth(2)
     return tex
 
+
 if __name__ == "__main__":
     from args_plot import args
     from labelDict import *
@@ -74,7 +75,6 @@ if __name__ == "__main__":
     logger = setup_logger(outpath + "/logger.log")
     logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
-
     def d_value(h1, h2):
         hSignal = h1.Clone()
         hBackground = h2.Clone()
@@ -89,7 +89,6 @@ if __name__ == "__main__":
         # return str(round(adiff, 2))
         return str(adiff)[0:4]
 
-
     def setHistoStyle(h, gr, boundary=False):
         h.SetFillColor(model.fillcolor[gr])
         h.SetTitle("")
@@ -100,17 +99,19 @@ if __name__ == "__main__":
         h.SetFillStyle(1001)  # NEW
         h.SetLineStyle(1)  # NEW
 
-
     def makeRatioMCplot(h):
         hMC = h.Clone()
         hMC.SetLineWidth(1)
         for n in range(hMC.GetNbinsX() + 1):
             # hMC.SetBinError(n,  hMC.GetBinError(n)/hMC.GetBinContent(n) if hMC.GetBinContent(n)>0 else 0 )
-            e = hMC.GetBinError(n) / hMC.GetBinContent(n) if hMC.GetBinContent(n) > 0 else 0
+            e = (
+                hMC.GetBinError(n) / hMC.GetBinContent(n)
+                if hMC.GetBinContent(n) > 0
+                else 0
+            )
             hMC.SetBinError(n, e if e < 0.5 else 0.5)
             hMC.SetBinContent(n, 0.0)
         return hMC
-
 
     def significanceHandler(sig_histo, bkg_histo, hn, rescale=False, btag_rescale=None):
         if not btag_rescale:
@@ -145,14 +146,19 @@ if __name__ == "__main__":
         SignificanceSum = sqrt(SignificanceSum)
 
         Significance_list = [
-            Significance.GetBinContent(i) for i in range(1, Significance.GetNbinsX() + 1)
+            Significance.GetBinContent(i)
+            for i in range(1, Significance.GetNbinsX() + 1)
         ]
 
         if not btag_rescale:
             SignificanceSum_str = (
                 " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
                 + str("%.2f" % SignificanceSum)
-                + (f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})" if rescale else "")
+                + (
+                    f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})"
+                    if rescale
+                    else ""
+                )
             )
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(
@@ -191,7 +197,9 @@ if __name__ == "__main__":
             t4 = makeText(
                 0.25,
                 0.8,
-                labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
+                labelLeptons[hn.split("___")[1]]
+                + btag_label
+                + (" SF" if args.sf else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
                 else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
                 42,
@@ -218,7 +226,6 @@ if __name__ == "__main__":
 
         return SignificanceSum_str, SignificanceSum, Significance_list
 
-
     def setStyle(h, isRatio=False, noData=False):
         if type(h) == ROOT.THStack:
             h1 = h.GetStack().First()
@@ -243,7 +250,8 @@ if __name__ == "__main__":
         else:
             # check if all bins are the same width
             if all(
-                h1.GetBinWidth(1) == h1.GetBinWidth(i) for i in range(1, h1.GetNbinsX() + 1)
+                h1.GetBinWidth(1) == h1.GetBinWidth(i)
+                for i in range(1, h1.GetNbinsX() + 1)
             ):
                 binWidht = str(h1.GetBinWidth(1))[:4]
                 if binWidht.endswith("."):
@@ -261,7 +269,6 @@ if __name__ == "__main__":
             else:
                 h.GetXaxis().SetLabelSize(0)
                 h.GetXaxis().SetTitleSize(0)
-
 
     def findSyst(hn, sy, f, silent=False):
         #  print hnForSys.keys()
@@ -288,7 +295,6 @@ if __name__ == "__main__":
             logger.info("none matching %s %s %s" % (hn, sy, f))
         return ""
 
-
     def writeYields(ftxt, gr, integral, error, dataEvents):
         if dataEvents != 0:
             line = "%s,%s,%s,%s " % (
@@ -310,19 +316,19 @@ if __name__ == "__main__":
                 line += ",%s " % (round(integral[gr][sy], 5))
         ftxt.write(line + "\n")
 
-
     def powerHisto(histo1, power):
         #        print histo1.GetName()
         for i in range(len(histo1) + 2):
             val = histo1.GetBinContent(i)
             if val != 0:
-                histo1.SetBinContent(i, (pow(val, power) if val > 0 else -pow(-val, power)))
+                histo1.SetBinContent(
+                    i, (pow(val, power) if val > 0 else -pow(-val, power))
+                )
             else:
                 histo1.SetBinContent(i, 0.0)
             histo1.SetBinError(i, 0.0)
         #                print histo1.GetBinContent(i)
         return histo1
-
 
     def makeAlternativeShape(
         hn, sy, f, nominalSample, alternativeSamples, alphaUp=+1, alphaDown=-1
@@ -331,7 +337,9 @@ if __name__ == "__main__":
         if not altSampleUp in f:
             f[altSampleUp] = ROOT.TFile.Open(folder + "/%s_Histos.root" % altSampleUp)
         if not altSampleDown in f:
-            f[altSampleDown] = ROOT.TFile.Open(folder + "/%s_Histos.root" % altSampleDown)
+            f[altSampleDown] = ROOT.TFile.Open(
+                folder + "/%s_Histos.root" % altSampleDown
+            )
         histoNameNom = hn + "rebin"
         histoNameUp = hn + "rebinAltSampleUp"
         histoNameDown = hn + "rebinAltSampleDown"
@@ -375,7 +383,6 @@ if __name__ == "__main__":
         #    print "Making %s using %s %s %s %s %s %f"%(sy, nominalSample, alternativeSamples, str(alpha), hn, histoNameSyst, histoSyst.GetMean()/histoNom.GetMean())
         return copy.copy(histoSyst)
 
-
     def makeEnvelopeShape(hn, sy, f, d, model):
         sy_base = sy.replace("Up", "").replace("Down", "")
         envelope = model.systematicDetail[sy_base]["envelope"]
@@ -397,7 +404,9 @@ if __name__ == "__main__":
 
         nomHistoRebinned = f[d].Get(hn).Clone("nomHistoRebinned")
         if (hn, d) in model.systematicDetail[sy_base]["envelopeBinning"]:
-            envelopeBinning = model.systematicDetail[sy_base]["envelopeBinning"][(hn, d)]
+            envelopeBinning = model.systematicDetail[sy_base]["envelopeBinning"][
+                (hn, d)
+            ]
             nomHistoRebinned = nomHistoRebinned.Rebin(
                 len(envelopeBinning) - 1,
                 nomHistoRebinned.GetName(),
@@ -475,7 +484,15 @@ if __name__ == "__main__":
                 badFit += 1
                 logger.info(
                     "BAD Fit %s %s %s %s %s %f %f"
-                    % (hn, sy, f, d, model, funct.GetParameter(0), funct.GetParameter(1))
+                    % (
+                        hn,
+                        sy,
+                        f,
+                        d,
+                        model,
+                        funct.GetParameter(0),
+                        funct.GetParameter(1),
+                    )
                 )
             i = i + 1
             hs = f[d].Get(findSyst(hn, pdf + str(i), f[d]))
@@ -501,19 +518,23 @@ if __name__ == "__main__":
             )
             and (i - badFit) > 0
         ):
-            logger.info("REPLICAS, not HESSIAN for %s %s %s %s %s" % (hn, sy, f, d, model))
+            logger.info(
+                "REPLICAS, not HESSIAN for %s %s %s %s %s" % (hn, sy, f, d, model)
+            )
             par2 = par2 / (i - badFit)
 
         funct.SetParameters(*envelopeFunctionParameterValues)
         if "Up" in sy:
             funct.SetParameter(
                 envelopeFunctionParameter,
-                envelopeFunctionParameterValues[envelopeFunctionParameter] + par2**0.5,
+                envelopeFunctionParameterValues[envelopeFunctionParameter]
+                + par2**0.5,
             )
         elif "Down" in sy:
             funct.SetParameter(
                 envelopeFunctionParameter,
-                envelopeFunctionParameterValues[envelopeFunctionParameter] - par2**0.5,
+                envelopeFunctionParameterValues[envelopeFunctionParameter]
+                - par2**0.5,
             )
         else:
             raise Exception("Error in makeEnvelopeShape")
@@ -526,7 +547,6 @@ if __name__ == "__main__":
             % (nhisto.Integral(), funct.GetParameters()[0], funct.GetParameters()[1])
         )
         return copy.copy(nhisto)
-
 
     def makeEnvelopeShapeOld(hn, sy, f, d, model):
         sy_base = sy.replace("Up", "").replace("Down", "")
@@ -590,7 +610,9 @@ if __name__ == "__main__":
         sumSquares = [0] * len(ratio)
         i = 0  # nominal is the first entry.
         hs = f[d].Get(findSyst(hn, pdf + str(i), f[d], silent=True))
-        hs = hs.Rebin(len(envelopeBinning) - 1, hs.GetName(), array("d", envelopeBinning))
+        hs = hs.Rebin(
+            len(envelopeBinning) - 1, hs.GetName(), array("d", envelopeBinning)
+        )
         #        Calculate ratio wrt to PDF0:
         hs0 = hs
         while hs and hs.GetMaximum() > 0:
@@ -674,7 +696,6 @@ if __name__ == "__main__":
         #    testFile.Close()
         return copy.copy(nhisto)
 
-
     f = {}
     folder = args.histfolder
     for group in model.signal:
@@ -720,8 +741,9 @@ if __name__ == "__main__":
     # i=1
     ROOT.gStyle.SetOptStat(0)
 
-
-    def addHistoInTStack(hs, stackSys, all_histo_all_syst, gr, hn, sy, d, makeWorkspace):
+    def addHistoInTStack(
+        hs, stackSys, all_histo_all_syst, gr, hn, sy, d, makeWorkspace
+    ):
         #    print "Adding %s with integral %f"%(hs.GetName(), hs.Integral())
         if sy not in list(stackSys[hn].keys()):
             stackSys[hn][sy] = hs.Clone()
@@ -736,14 +758,12 @@ if __name__ == "__main__":
         if makeWorkspace:
             all_histo_all_syst[hn][d][sy] = hs.Clone()
 
-
     def getYear(sample):
         if "201" in sample:
             return "201" + sample.split("201")[1][:1]
         else:
             raise Exception("ERROR in getYear ( sample = %s ) " % sample)
             return
-
 
     def fill_datasum(
         f,
@@ -837,7 +857,9 @@ if __name__ == "__main__":
                                                 "alternativeSamples"
                                             ][d],
                                             model.systematicDetail[sy_base]["powerUp"],
-                                            model.systematicDetail[sy_base]["powerDown"],
+                                            model.systematicDetail[sy_base][
+                                                "powerDown"
+                                            ],
                                         )
                                     else:
                                         hs = f[d].Get(hn).Clone(hn + sy)
@@ -850,7 +872,8 @@ if __name__ == "__main__":
                                                     - 1,
                                                     "hnew" + sy,
                                                     array(
-                                                        "d", model.rebin[hn.split("___")[0]]
+                                                        "d",
+                                                        model.rebin[hn.split("___")[0]],
                                                     ),
                                                 )
                                             ).Clone(hs.GetName() + "rebinned")
@@ -866,9 +889,12 @@ if __name__ == "__main__":
                                     ):
                                         hs = (
                                             hs.Rebin(
-                                                len(model.rebin[hn.split("___")[0]]) - 1,
+                                                len(model.rebin[hn.split("___")[0]])
+                                                - 1,
                                                 "hnew" + sy,
-                                                array("d", model.rebin[hn.split("___")[0]]),
+                                                array(
+                                                    "d", model.rebin[hn.split("___")[0]]
+                                                ),
                                             )
                                         ).Clone(hs.GetName() + "rebinned")
                                 # if postfit :
@@ -932,11 +958,14 @@ if __name__ == "__main__":
                             sy_base = sy.replace("Up", "").replace("Down", "")
                             if (
                                 sy_base in model.systematicDetail
-                                and "alternativeSamples" in model.systematicDetail[sy_base]
+                                and "alternativeSamples"
+                                in model.systematicDetail[sy_base]
                             ):
                                 if (
                                     d
-                                    in model.systematicDetail[sy_base]["alternativeSamples"]
+                                    in model.systematicDetail[sy_base][
+                                        "alternativeSamples"
+                                    ]
                                 ):
                                     hs = makeAlternativeShape(
                                         hn,
@@ -956,9 +985,12 @@ if __name__ == "__main__":
                                     ):
                                         hs = (
                                             hs.Rebin(
-                                                len(model.rebin[hn.split("___")[0]]) - 1,
+                                                len(model.rebin[hn.split("___")[0]])
+                                                - 1,
                                                 "hnew" + sy,
-                                                array("d", model.rebin[hn.split("___")[0]]),
+                                                array(
+                                                    "d", model.rebin[hn.split("___")[0]]
+                                                ),
                                             )
                                         ).Clone(hs.GetName() + "rebinned")
                             elif (
@@ -968,7 +1000,9 @@ if __name__ == "__main__":
                                 hs = makeEnvelopeShape(hn, sy, f, d, model)
                             else:
                                 hs = f[d].Get(findSyst(hn, sy, f[d]))
-                                if hs and hn.split("___")[0] in list(model.rebin.keys()):
+                                if hs and hn.split("___")[0] in list(
+                                    model.rebin.keys()
+                                ):
                                     hs = (
                                         hs.Rebin(
                                             len(model.rebin[hn.split("___")[0]]) - 1,
@@ -1077,7 +1111,6 @@ if __name__ == "__main__":
         # else : myLegend.AddEntry(h,gr,"f")
         return h
 
-
     def plot_sys(hn, sy_base, systematic, text):
         # draw the histo for each systematic
         canvas_sys = ROOT.TCanvas("canvas_sys_" + hn, "", 1200, 1000)
@@ -1136,7 +1169,9 @@ if __name__ == "__main__":
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
-            for i, sy in enumerate(systematicsSetToUse):
+            for i, sy in enumerate(
+                systematic,
+            ):
                 ratio_sys_list.append(histosumSyst[hn][sy].Clone())
                 ratio_sys_list[-1].Add(histosum[hn], -1.0)
                 ratio_sys_list[-1].Divide(histosum[hn])
@@ -1158,7 +1193,6 @@ if __name__ == "__main__":
 
             del c_sys
         del canvas_sys, canvas_sys_log
-
 
     def makeplot(hn, saveintegrals=True):
         if "__syst__" not in hn:
@@ -1234,7 +1268,8 @@ if __name__ == "__main__":
             # if saveintegrals:
             if hn in datasum.keys():
                 ftxt.write(
-                    "DATA,%s \n" % (datasum[hn].Integral(0, datasum[hn].GetNbinsX() + 1))
+                    "DATA,%s \n"
+                    % (datasum[hn].Integral(0, datasum[hn].GetNbinsX() + 1))
                 )
             if any([x in hn for x in Special_variables]):
                 histosumRescaledDict[hn] = {}
@@ -1313,7 +1348,11 @@ if __name__ == "__main__":
                     )
 
                     writer.writerow(["Significance_list", Significance_list])
-                    if args.btag == "deepcsv" and histoSigsumRescaled and histosumRescaled:
+                    if (
+                        args.btag == "deepcsv"
+                        and histoSigsumRescaled
+                        and histosumRescaled
+                    ):
                         (
                             SignificanceSum_str_rescaled,
                             SignificanceSum_rescaled,
@@ -1346,7 +1385,9 @@ if __name__ == "__main__":
                             ]
                         )
             if model.signal:
-                histosum[hn].Add(histoSigsum[hn])  # NOTE: is this the right place for this?
+                histosum[hn].Add(
+                    histoSigsum[hn]
+                )  # NOTE: is this the right place for this?
 
             for gr in model.signalSortedForLegend:
                 h = histosSignal[hn][gr]
@@ -1420,7 +1461,9 @@ if __name__ == "__main__":
             t4 = makeText(
                 0.25,
                 0.8,
-                labelLeptons[hn.split("___")[1]] + btag_label + (" SF" if args.sf else "")
+                labelLeptons[hn.split("___")[1]]
+                + btag_label
+                + (" SF" if args.sf else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
                 else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
                 42,
@@ -1511,7 +1554,9 @@ if __name__ == "__main__":
                 histosum[hn].SetFillStyle(3004)
                 setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
                 c.Update()
-                if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
+                if not all(
+                    [model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]
+                ):
                     histosum[hn].Draw("same E2")
 
                 if hn in datasum.keys():
@@ -1588,7 +1633,9 @@ if __name__ == "__main__":
                         0.19,
                         0.26,
                         "#chi^{2}="
-                        + str(round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)),
+                        + str(
+                            round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)
+                        ),
                         42,
                         0.025,
                     )
@@ -1646,7 +1693,6 @@ if __name__ == "__main__":
                 for sy_base, systematic in systematics.items():
                     plot_sys(hn, sy_base, systematic, [t0, t1, t2, t3, t4])
 
-
     variablesToFit = []
     makeWorkspace = False
     systematicsSetToUse = model.systematicsToPlot
@@ -1703,7 +1749,6 @@ if __name__ == "__main__":
         runpool = Pool(20)
         # toproc=[(x,y,i) for y in sams for i,x in enumerate(samples[y]["files"])]
         runpool.map(makeplot, his[1:])
-
 
     tot = 0
     for s in totevCount:
