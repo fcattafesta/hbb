@@ -1116,6 +1116,8 @@ if __name__ == "__main__":
         if type(histo) == dict:
             histo = histo["nom"]
 
+        histo=histo.Clone()
+        
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
         histo.SetLineColor(ROOT.kBlack)
@@ -1731,8 +1733,8 @@ if __name__ == "__main__":
                             size=0.03,
                         )
                         plot_sys(
-                            histosum[hn].Clone(),
-                            histosumSyst[hn].Clone(),
+                            histosum[hn],
+                            histosumSyst[hn],
                             hn,
                             sy_base,
                             systematic,
