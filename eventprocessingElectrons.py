@@ -88,8 +88,11 @@ def getFlowElectrons(flow):
     flow.Define("CleanedGenJet_ptOrderIdx", "Argsort(-CleanedGenJet_pt)")
     flow.AddCppCode(
         """
+    #ifndef _PT_
+    #define _PT_
     template<typename T>
     auto subLeadingPt (const ROOT::VecOps::RVec<T>& pt) { return (pt.size() > 1) ? pt[1] : 0.0; }
+    #endif
         """
     )
     flow.SubCollection(
