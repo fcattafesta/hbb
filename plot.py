@@ -1136,8 +1136,8 @@ if __name__ == "__main__":
         canvas_tuple_sys = (canvas_sys, canvas_sys_log)
         for j, c_sys in enumerate(canvas_tuple_sys):
             c_sys.Divide(1, 2)
-            c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
-            c_sys.GetPad(1).SetPad(0.0, 0.25, 0.90, 1.0)
+            c_sys.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.3)
+            c_sys.GetPad(1).SetPad(0.0, 0.2, 0.90, 1.0)
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.35)
@@ -1196,6 +1196,7 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("hist same")
             c_sys.cd()
+            c_sys.GetPad(2).SetGridy()
 
             if j == 0:
                 c_sys.SaveAs(
@@ -1205,7 +1206,7 @@ if __name__ == "__main__":
                     outpath + "/%s_%s_%s_%s.root" % (hn, args.btag, sy_base, sample)
                 )
             else:
-                c_sys.SetLogy(True)
+                c_sys.GetPad(1).SetLogy(True)
                 c_sys.SaveAs(
                     outpath + "/%s_%s_%s_%s_log.png" % (hn, args.btag, sy_base, sample)
                 )
