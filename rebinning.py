@@ -48,7 +48,7 @@ rebin = {
         0.9699,
         1.0,
     ],
-    "SubLeadingGenJet_pt": np.linspace(0, 300, 60),
+    "SubLeadingGenJet_pt": list(np.linspace(0, 300, 60)),
 }
 
 # "atanhDNN_Score": [
