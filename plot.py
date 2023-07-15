@@ -1117,7 +1117,7 @@ if __name__ == "__main__":
             histo = histo["nom"]
 
         histo=histo.Clone()
-        
+
         histo.SetFillStyle(3003)
         histo.SetLineStyle(1)
         histo.SetLineColor(ROOT.kBlack)
@@ -1172,7 +1172,6 @@ if __name__ == "__main__":
                     t.Draw()
 
             myLegend_sys.Draw()
-            c_sys.Update()
 
             c_sys.cd(2)
             ratio_sys = histo.Clone()
