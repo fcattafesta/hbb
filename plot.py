@@ -40,7 +40,7 @@ if __name__ == "__main__":
     from logger import setup_logger
 
     btag_label = labelBtag[args.btag]
-    Special_variables = ["atanhDNN_Score", "Jet_pt"]
+    Special_variables = ["atanhDNN_Score"]
 
 
     colors = [
