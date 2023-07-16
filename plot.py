@@ -1141,7 +1141,7 @@ if __name__ == "__main__":
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.32)
-            c_sys.GetPad(2).SetTopMargin(0.)
+            c_sys.GetPad(2).SetTopMargin(0.1)
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
@@ -1182,7 +1182,7 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            ratio_sys.SetAxisRange(-0.7, 0.7, "Y")
+            ratio_sys.SetAxisRange(-0.6, 0.6, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
