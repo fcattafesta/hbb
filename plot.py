@@ -42,7 +42,6 @@ if __name__ == "__main__":
     btag_label = labelBtag[args.btag]
     Special_variables = ["atanhDNN_Score", "Jet_pt"]
 
-    outdir = args.workspace
 
     colors = [
         ROOT.kRed,
@@ -70,6 +69,7 @@ if __name__ == "__main__":
     date_time = time.strftime("%m%d-%H%M%S")
 
     outpath = f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
+    outdir = f"{args.workspace}/{year}/{model.name}_{args.foldersuffix}_{date_time}/workspace/"
     os.system("mkdir -p " + outpath)
 
     logger = setup_logger(outpath + "/logger.log")
@@ -1141,7 +1141,7 @@ if __name__ == "__main__":
 
             ROOT.gStyle.SetPadLeftMargin(0.18)
             c_sys.GetPad(2).SetBottomMargin(0.32)
-            c_sys.GetPad(2).SetTopMargin(0.05)
+            c_sys.GetPad(2).SetTopMargin(0.)
 
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
