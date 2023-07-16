@@ -1056,7 +1056,9 @@ if __name__ == "__main__":
                                     d,
                                     makeWorkspace,
                                 )
-                    if gr in model.rescaleSample and hn in Special_variables:
+                    if gr in model.rescaleSample and any(
+                        [x in hn for x in Special_variables]
+                    ):
                         logger.info(
                             "rescale %s %s %s " % (hn, gr, model.rescaleSample[gr][0])
                         )
@@ -1296,7 +1298,7 @@ if __name__ == "__main__":
                     "DATA,%s \n"
                     % (datasum[hn].Integral(0, datasum[hn].GetNbinsX() + 1))
                 )
-            if hn in Special_variables:
+            if any([x in hn for x in Special_variables]):
                 histosumRescaledDict[hn] = {}
                 histoSigsumRescaledDict[hn] = {}
 
@@ -1361,7 +1363,7 @@ if __name__ == "__main__":
 
             SignificanceSum_str = ""
             SignificanceSum_str_rescaled = ""
-            if hn in Special_variables and hn in histoSigsum.keys():
+            if any([x in hn for x in Special_variables]) and hn in histoSigsum.keys():
                 with open(
                     outpath + "/%s_%s_SignificanceSum_list.csv" % (hn, args.btag),
                     "w",
@@ -1698,7 +1700,7 @@ if __name__ == "__main__":
                     histos[hn].SetMinimum(min_value)
                     histos[hn].SetMaximum(max_value)
 
-            if hn in Special_variables:
+            if any([x in hn for x in Special_variables]):
                 systematics = defaultdict(list)
                 for sy in histosumSyst[hn]:
                     sy_base = sy.replace("Up", "").replace("Down", "")
