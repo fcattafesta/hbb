@@ -1803,9 +1803,9 @@ if __name__ == "__main__":
                                     all_histo_all_syst[hn][d][syst]
                                 )
         #    print("DEBUG", model, all_histo_all_syst, year)
-        import WorkSpace as WorkSpace
-
-        WorkSpace.createWorkSpace(model, all_histo_all_syst, year, outdir)
+        if model.background and model.signal and model.data:
+            import WorkSpace as WorkSpace
+            WorkSpace.createWorkSpace(model, all_histo_all_syst, year, outdir)
     else:
         from multiprocessing import Pool
 
