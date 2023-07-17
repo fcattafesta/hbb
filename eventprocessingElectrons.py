@@ -69,32 +69,4 @@ def getFlowElectrons(flow):
         requires=["CommonSelEle"],
     )
 
-    flow.SubCollection(
-        "SelectedGenJet",
-        "GenJet",
-        sel="abs(GenJet_eta) < 2.5",
-    )
-    flow.SubCollection(
-        "GenLepton",
-        "GenPart",
-        sel="abs(GenPart_pdgId) == 11 || abs(GenPart_pdgId) == 13",
-    )
-    flow.MatchDeltaR("SelectedGenJet", "GenLepton")
-    flow.SubCollection(
-        "CleanedGenJet",
-        "SelectedGenJet",
-        sel="SelectedGenJet_GenLeptonDr > 0.4 || SelectedGenJet_GenLeptonIdx==-1",
-        requires=["SR_ee"],
-    )
-    flow.AddCppCode(
-        """
-    #ifndef _PT_
-    #define _PT_
-    template<typename T>
-    auto subLeadingPt (const ROOT::VecOps::RVec<T>& pt) { return (pt.size() > 1) ? pt[1] : 0.0; }
-    #endif
-        """
-    )
-    flow.Define("SubLeadingGenJet_pt", "subLeadingPt(CleanedGenJet_pt)")
-
     return flow
