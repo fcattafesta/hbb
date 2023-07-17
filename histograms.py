@@ -55,7 +55,6 @@ if args.sf:
 ### Dictionary of histograms per selection ###
 histosPerSelectionMuonMC = {sel: histosMC for sel in selsMu}
 histosPerSelectionElectronMC = {sel: histosMC for sel in selsEle}
-histosPerSelectionElectronMC.update({"SR_ee": ["SubLeadingGenJet_pt"]})
 
 histosPerSelectionElectronData = {sel: histosData for sel in selsEle}
 histosPerSelectionMuonData = {sel: histosData for sel in selsMu}

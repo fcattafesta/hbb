@@ -21,9 +21,7 @@ background = {
     ],
 }
 
-
 data = {}
-
 
 signal = {}
 
