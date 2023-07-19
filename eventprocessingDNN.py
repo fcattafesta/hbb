@@ -11,7 +11,7 @@ if "DNN_weight" in DNN_input_variables:
     DNN_input_variables.remove("DNN_weight")
 
 
-def getFlowDNN(model, flow=None):
+def getFlowDNN(flow, model, define=False):
     nthreads = args.nthreads if args.range == -1 else 0
 
     if model.endswith(".onnx"):
@@ -26,7 +26,7 @@ def getFlowDNN(model, flow=None):
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
     nl = "\n"
-    if flow:
+    if flow and define=True:
         flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
         flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
         flow.AddCppCode(
@@ -85,4 +85,4 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--model", help="Path to the model", type=str)
     args = parser.parse_args()
 
-    _ = getFlowDNN(args.model)
+    _ = getFlowDNN(None, args.model)

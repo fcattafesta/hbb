@@ -72,7 +72,7 @@ if __name__ == "__main__":
     outdir = f"{args.workspace}/{year}/{model.name}_{args.foldersuffix}_{date_time}/workspace/"
     os.system("mkdir -p " + outpath)
 
-    logger = setup_logger(outpath + "/logger.log")
+    logger = setup_logger(outpath + f"/logger_{date_time}.log")
     logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
     def d_value(h1, h2):
@@ -1182,7 +1182,7 @@ if __name__ == "__main__":
             ratio_sys.Add(histo, -1)
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            #ratio_sys.SetAxisRange(-0.6, 0.6, "Y")
+            ratio_sys.SetAxisRange(-0.6, 0.6, "Y")
             ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []

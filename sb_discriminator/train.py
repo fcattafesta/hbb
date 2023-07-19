@@ -44,7 +44,7 @@ if __name__ == "__main__":
     os.makedirs(main_dir, exist_ok=True)
     writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
     # Create the logger
-    logger = setup_logger(f"{main_dir}/logger.log")
+    logger = setup_logger(f"{main_dir}/logger_{timestamp}.log")
 
     logger.info('args:\n - %s', '\n - '.join(str(it) for it in args.__dict__.items()))
 

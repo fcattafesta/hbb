@@ -49,8 +49,8 @@ os.makedirs(args.histfolder, exist_ok=True)
 # remove the log file if already exists
 if os.path.exists(f"{args.histfolder}/logger.log"):
     os.remove(f"{args.histfolder}/logger.log")
-
-logger = setup_logger(f"{args.histfolder}/logger.log")
+date_time = time.strftime("%m%d-%H%M%S")
+logger = setup_logger(f"{args.histfolder}/logger_{date_time}.log")
 
 
 logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
@@ -70,7 +70,7 @@ flowData= getFlowSysJER(flowData, sys=False)
 flowData = getFlowCommon(flowData, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
-    flowData = getFlowDNN(args.eval_model, flowData)
+    flowData = getFlowDNN(flowData, args.eval_model, define=True)
 
 # Flow for MC
 if args.sf:
@@ -82,7 +82,7 @@ if args.sf:
     flowMC = getFlowSysBtag(flowMC, args.btag)
 flowMC = getFlow(flowMC)
 if args.eval_model:
-    flowMC = getFlowDNN(args.eval_model, flowMC)
+    flowMC = getFlowDNN(flowMC, args.eval_model, define=False)
 flowMC = getFlowMC(flowMC)
 
 # systematics
@@ -92,7 +92,7 @@ histosWithSystematicsMC=flowMC.createSystematicBranches(systematics,histosPerSel
 logger.info("Histograms with systematics: %s"% histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
-    "eventProcessorMC",
+    f"{args.histfolder}/eventProcessorMC",
     [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
@@ -100,7 +100,7 @@ procMC = flowMC.CreateProcessor(
     nthreads,
 )
 procData = flowData.CreateProcessor(
-    "eventProcessorData",
+    f"{args.histfolder}/eventProcessorData",
     [],
     histosPerSelectionData,
     [],
