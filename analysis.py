@@ -70,7 +70,7 @@ flowData= getFlowSysJER(flowData, sys=False)
 flowData = getFlowCommon(flowData, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
-    flowData = getFlowDNN(flowData, args.eval_model, define=True)
+    flowData = getFlowDNN(flowData, args.eval_model, sample_type="data", define=True)
 
 # Flow for MC
 if args.sf:
@@ -82,7 +82,7 @@ if args.sf:
     flowMC = getFlowSysBtag(flowMC, args.btag)
 flowMC = getFlow(flowMC)
 if args.eval_model:
-    flowMC = getFlowDNN(flowMC, args.eval_model, define=False)
+    flowMC = getFlowDNN(flowMC, args.eval_model, sample_type="mc", define=False)
 flowMC = getFlowMC(flowMC)
 
 # systematics

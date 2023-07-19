@@ -11,46 +11,46 @@ if "DNN_weight" in DNN_input_variables:
     DNN_input_variables.remove("DNN_weight")
 
 
-def getFlowDNN(flow, model, define=False):
-    nthreads = args.nthreads if args.range == -1 else 0
+def getFlowDNN(flow, model, sample_type="data", define=True):
 
-    if model.endswith(".onnx"):
-        if flow:
+    if flow:
+        nthreads = args.nthreads if args.range == -1 else 0
+        if model.endswith(".onnx"):
             flow.AddCppCode('\n#include "TMVA_SOFIE_ONNX.h"\n')
-        else:
-            ROOT.gInterpreter.Declare('\n#include "TMVA_SOFIE_ONNX.h"\n')
         ROOT.TMVA_SOFIE_ONNX(model)
 
-    modelName = os.path.splitext(model)[0]
+        modelName = os.path.splitext(model)[0]
+        if define:
+            print("compiling SOFIE model and functor....")
+            # compile using ROOT JIT trained model
+            flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
+            flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
 
-    # compile using ROOT JIT trained model
-    print("compiling SOFIE model and functor....")
-    nl = "\n"
-    if flow and define:
-        flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
-        flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
+        nl = "\n"
         flow.AddCppCode(
-            f"{nl}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
+            f"{nl}auto sofie_functor_{sample_type} = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
             + f"::Session>({nthreads});{nl}"
         )
+
+        eval_string = f"sofie_functor_{sample_type}(__slot,"
+        for i in DNN_input_variables:
+            eval_string += i + ", "
+        eval_string = eval_string[:-2] + ")"
+
+        flow.Define("DNN_Score", eval_string)
+        flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
+        
     else:
+        ROOT.gInterpreter.Declare('\n#include "TMVA_SOFIE_ONNX.h"\n')
+        ROOT.TMVA_SOFIE_ONNX(model)
+        modelName = os.path.splitext(model)[0]
         ROOT.gInterpreter.Declare(f'#include "{modelName}.hxx"')
         ROOT.gInterpreter.Declare(
             f"auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
             + "::Session>(0);"
         )
-
-
-    if flow:
-        eval_string = "sofie_functor(__slot,"
-        for i in DNN_input_variables:
-            eval_string += i + ", "
-        eval_string = eval_string[:-2] + ")"
-        flow.Define("DNN_Score", eval_string)
-        flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
-    else:
         # test on a RDataFrame
         eval_string = "sofie_functor(rdfslot_,"
         for i in DNN_input_variables:
@@ -76,13 +76,12 @@ def getFlowDNN(flow, model, define=False):
         h2.Draw()
         c2.SaveAs("test2.png")
 
-
     return flow
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", "--model", help="Path to the model", type=str)
-    args = parser.parse_args()
+    args_ = parser.parse_args()
 
-    _ = getFlowDNN(None, args.model)
+    _ = getFlowDNN(None, args_.model)
