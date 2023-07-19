@@ -20,13 +20,13 @@ def getFlowDNN(flow, model, sample_type="data", define=True):
         ROOT.TMVA_SOFIE_ONNX(model)
 
         modelName = os.path.splitext(model)[0]
+        nl = "\n"
         if define:
             print("compiling SOFIE model and functor....")
             # compile using ROOT JIT trained model
             flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
             flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
 
-        nl = "\n"
         flow.AddCppCode(
             f"{nl}auto sofie_functor_{sample_type} = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
@@ -40,7 +40,7 @@ def getFlowDNN(flow, model, sample_type="data", define=True):
 
         flow.Define("DNN_Score", eval_string)
         flow.Define("atanhDNN_Score", "atanh(DNN_Score)")
-        
+
     else:
         ROOT.gInterpreter.Declare('\n#include "TMVA_SOFIE_ONNX.h"\n')
         ROOT.TMVA_SOFIE_ONNX(model)
