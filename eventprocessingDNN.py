@@ -15,14 +15,12 @@ def getFlowDNN(flow, model, sample_type="data", define=True):
 
     if flow:
         nthreads = args.nthreads if args.range == -1 else 0
-        if model.endswith(".onnx"):
+        if model.endswith(".onnx") and define:
             flow.AddCppCode('\n#include "TMVA_SOFIE_ONNX.h"\n')
-        ROOT.TMVA_SOFIE_ONNX(model)
+            ROOT.TMVA_SOFIE_ONNX(model)
 
         modelName = os.path.splitext(model)[0]
         nl = "\n"
-        if define:
-            pass
         print("compiling SOFIE model and functor....")
         # compile using ROOT JIT trained model
         flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
