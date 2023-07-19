@@ -26,7 +26,7 @@ def getFlowDNN(flow, model, define=False):
     # compile using ROOT JIT trained model
     print("compiling SOFIE model and functor....")
     nl = "\n"
-    if flow and define==True:
+    if flow and define:
         flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
         flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
         flow.AddCppCode(

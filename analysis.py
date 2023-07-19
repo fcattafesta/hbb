@@ -92,7 +92,7 @@ histosWithSystematicsMC=flowMC.createSystematicBranches(systematics,histosPerSel
 logger.info("Histograms with systematics: %s"% histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
-    f"{args.histfolder}/eventProcessorMC",
+    "eventProcessorMC",
     [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
@@ -100,7 +100,7 @@ procMC = flowMC.CreateProcessor(
     nthreads,
 )
 procData = flowData.CreateProcessor(
-    f"{args.histfolder}/eventProcessorData",
+    "eventProcessorData",
     [],
     histosPerSelectionData,
     [],
@@ -334,6 +334,8 @@ else:
 
 logger.info("Results %s" % results)
 logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
+
+os.system("cp " + "eventProcessor* libNailExternals.so tmp* " + args.histfolder)
 
 logger.info("histo folder %s" % args.histfolder)
 logger.info("time:   %s" % (time.time() - start))
