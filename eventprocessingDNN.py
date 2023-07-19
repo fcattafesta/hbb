@@ -22,10 +22,11 @@ def getFlowDNN(flow, model, sample_type="data", define=True):
         modelName = os.path.splitext(model)[0]
         nl = "\n"
         if define:
-            print("compiling SOFIE model and functor....")
-            # compile using ROOT JIT trained model
-            flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
-            flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
+            pass
+        print("compiling SOFIE model and functor....")
+        # compile using ROOT JIT trained model
+        flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
+        flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
 
         flow.AddCppCode(
             f"{nl}auto sofie_functor_{sample_type} = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
