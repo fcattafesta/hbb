@@ -78,7 +78,7 @@ if args.sf:
 else:
     flowMC = getFlowSysJER(flowMC, sys=False)
 flowMC = getFlowCommon(flowMC, args.btag)
-if args.sf:
+if args.sf or args.sf_only:
     flowMC = getFlowSysBtag(flowMC, args.btag)
 flowMC = getFlow(flowMC)
 if args.eval_model:
