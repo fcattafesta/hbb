@@ -22,6 +22,7 @@ sf_btag = (
 
 
 def getFlowSysBtag(flow, btag):
+    flow.AddCppCode('#include "correction.h"\n')
     # Btag systematics
     flow.AddCppCode(
         'auto btag_corr = correction::CorrectionSet::from_file("btagging.json.gz");\n'
