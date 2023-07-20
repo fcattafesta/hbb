@@ -25,6 +25,11 @@ def systematicGrouping(background, signal, jesList, year):
 
     DY = [x + y for x in DY_ for y in ["_bb", "_b", "_c", "_udsg"]]
 
+    DY_bb = [x + "_bb" for x in DY_]
+    DY_b = [x + "_b" for x in DY_]
+    DY_c = [x + "_c" for x in DY_]
+    DY_udsg = [x + "_udsg" for x in DY_]
+
     VV_ = [
         "WWTo2L2Nu",
         "WZTo2Q2L",
@@ -63,17 +68,23 @@ def systematicGrouping(background, signal, jesList, year):
             "decorrelate": {
                 "ZH": ["ZH"],
                 "ggZH": ["ggZH"],
-                "DY": DY,
-                "VV": VV,
+                "DY_bb": DY_bb,
+                "DY_b": DY_b,
+                "DY_c": DY_c,
+                "DY_udsg": DY_udsg,
+                "VV": VV_,
                 "TT": TT,
                 "ST": ST,
             },
             "groupValues": {
-                "ZH": 1.006, #1.010,
-                "ggZH": 1.25, #1.010,
-                "DY": 1.15, #1.010, #NOTE?
+                "ZH": 1.006,  # 1.010,
+                "ggZH": 1.25,  # 1.010,
+                "DY_bb": 1.15,  # 1.010, #NOTE?
+                "DY_b": 1.15,  # 1.010, #NOTE?
+                "DY_c": 1.15,  # 1.010, #NOTE?
+                "DY_udsg": 1.15,  # 1.010, #NOTE?
                 "VV": 1.15,  # 1.010,
-                "TT": 1.15, #1.005, #NOTE?
+                "TT": 1.15,  # 1.005, #NOTE?
                 "ST": 1.15,  # 1.005,
             },
         },
@@ -84,7 +95,7 @@ def systematicGrouping(background, signal, jesList, year):
             # x: {
             "type": "shape",
             "value": 1.0,
-            "decorrelate": {"": Hbb + DY + VV + TT + ST},  # NOTE: ok?
+            "decorrelate": {"": Hbb + DY_ + VV_ + TT + ST},  # NOTE: ok?
         }
         for x in btag_sys
         if "Down" in x  # NOTE: ?
@@ -93,10 +104,10 @@ def systematicGrouping(background, signal, jesList, year):
 
     jer = {
         f"JER": {
-        # f"JER{type}": {
+            # f"JER{type}": {
             "type": "shape",
             "value": 1.0,
-            "decorrelate": {"": Hbb + DY + VV + TT + ST},  # NOTE: ok?
+            "decorrelate": {"": Hbb + DY_ + VV_ + TT + ST},  # NOTE: ok?
         }
         # for type in ["Up", "Down"]
     }

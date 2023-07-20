@@ -41,6 +41,11 @@ if [[ $suffix == *_eval* ]]; then
     eval="--eval model_"${btag}".onnx"
 fi
 
+fit=""
+if [[ $suffix == *_fit* ]]; then
+    fit="--fit"
+fi
+
 btag="--btag "${btag}
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"${lep}"/"${suffix}"/"
@@ -53,4 +58,5 @@ $CMD \
     ${snap} \
     ${btag} \
     ${sf} \
+    ${fit} \
     "${@:3}"

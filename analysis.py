@@ -66,7 +66,7 @@ flowMC.binningRules = binningRules
 flowData = copy.deepcopy(flowMC)
 
 # Flow for data
-flowData= getFlowSysJER(flowData, sys=False)
+flowData = getFlowSysJER(flowData, sys=False)
 flowData = getFlowCommon(flowData, args.btag)
 flowData = getFlow(flowData)
 if args.eval_model:
@@ -85,11 +85,21 @@ if args.eval_model:
     flowMC = getFlowDNN(flowMC, args.eval_model, sample_type="mc", define=False)
 flowMC = getFlowMC(flowMC)
 
+if args.fit:
+    histosPerSelectionMC = {
+        ("SR_mm" if args.lep == "mu" else "SR_ee"): ["atanhDNN_Score"]
+    }
+    histosPerSelectionMData = histosPerSelectionMC.copy()
+    # histosPerSelectionMC = {s: ["atanhDNN_Score"] for s in sels}
+    # histosPerSelectionMData = {s: ["atanhDNN_Score"] for s in sels}
+
 # systematics
-systematics=flowMC.variations
-logger.info("Systematics for all plots: %s"% systematics)
-histosWithSystematicsMC=flowMC.createSystematicBranches(systematics,histosPerSelectionMC)
-logger.info("Histograms with systematics: %s"% histosWithSystematicsMC)
+systematics = flowMC.variations
+logger.info("Systematics for all plots: %s" % systematics)
+histosWithSystematicsMC = flowMC.createSystematicBranches(
+    systematics, histosPerSelectionMC
+)
+logger.info("Histograms with systematics: %s" % histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
     "eventProcessorMC",
@@ -102,7 +112,7 @@ procMC = flowMC.CreateProcessor(
 procData = flowData.CreateProcessor(
     "eventProcessorData",
     [],
-    histosPerSelectionData,
+    histosPerSelectionMData,
     [],
     "",
     nthreads,
@@ -185,6 +195,7 @@ def runSample(ar):
 
             if (
                 args.snapshot
+                and not args.fit
                 and "snapshot" in samples[s].keys()
                 and samples[s]["snapshot"]
             ):
@@ -203,15 +214,17 @@ def runSample(ar):
                         snaplist,
                     )
                     if "xsec" in samples[s].keys():
-                        output_file = ROOT.TFile(f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root", "UPDATE")
+                        output_file = ROOT.TFile(
+                            f"{args.histfolder}/Snapshots/{s}_{region}_Snapshot.root",
+                            "UPDATE",
+                        )
                         tree = ROOT.TTree("Runs", "Runs")
-                        x = ROOT.std.vector('double')()
+                        x = ROOT.std.vector("double")()
                         tree.Branch("genEventSumw", x)
                         x.push_back(sumws)
                         tree.Fill()
                         output_file.Write()
                         output_file.Close()
-
 
             outFile = ROOT.TFile.Open(f"{args.histfolder}/{s}_Histos.root", "recreate")
             if nthreads != 0:
@@ -254,8 +267,6 @@ def runSample(ar):
             return 1
     else:
         logger.info("Null file %s" % s)
-
-
 
 
 # from multiprocessing.pool import ThreadPool as Pool
@@ -307,7 +318,11 @@ elif "model" in args.model[:5]:
     allmc = []
     for x in model.background:
         for y in model.background[x]:
-            if x.endswith(tuple(flavourSplitting.keys())+tuple(flavourVVSplitting.keys())+tuple(number_of_b.keys())):
+            if x.endswith(
+                tuple(flavourSplitting.keys())
+                + tuple(flavourVVSplitting.keys())
+                + tuple(number_of_b.keys())
+            ):
                 if y.rsplit("_", 1)[0] not in allmc:
                     allmc.append(y.rsplit("_", 1)[0])
             else:

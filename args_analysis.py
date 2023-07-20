@@ -43,6 +43,12 @@ parser.add_argument(
     action="store_true",
     help="Apply scale factors and systematics",
 )
+parser.add_argument(
+    "--fit",
+    default=False,
+    action="store_true",
+    help="Only essential histograms for fitting",
+)
 parser.print_help()
 args = parser.parse_args()
 print(args)
