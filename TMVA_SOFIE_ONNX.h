@@ -19,20 +19,20 @@ void TMVA_SOFIE_ONNX(std::string inputFile = "")
 
     model.OutputGenerated(outputFile);
 
-    // Printing required input tensors
-    model.PrintRequiredInputTensors();
+    // // Printing required input tensors
+    // model.PrintRequiredInputTensors();
 
-    // Printing initialized tensors (weights)
-    std::cout << "\n\n";
-    model.PrintInitializedTensors();
+    // // Printing initialized tensors (weights)
+    // std::cout << "\n\n";
+    // model.PrintInitializedTensors();
 
-    // Printing intermediate tensors
-    std::cout << "\n\n";
-    model.PrintIntermediateTensors();
+    // // Printing intermediate tensors
+    // std::cout << "\n\n";
+    // model.PrintIntermediateTensors();
 
-    // Printing generated inference code
-    std::cout << "\n\n";
-    model.PrintGenerated();
+    // // Printing generated inference code
+    // std::cout << "\n\n";
+    // model.PrintGenerated();
 }
 
 #endif
