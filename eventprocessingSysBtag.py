@@ -10,8 +10,8 @@ correctionlib.register_pyroot_binding()
 sf_btag = (
     {
         "Central": ["central"],
-        "Up": ["up_hf"],
-        "Down": ["down_hf"],
+        "Up": ["up_cferr1"],
+        "Down": ["down_cferr1"],
     }
     if args.sf_only
     else {
