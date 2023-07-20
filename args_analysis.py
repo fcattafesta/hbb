@@ -44,6 +44,12 @@ parser.add_argument(
     help="Apply scale factors and systematics",
 )
 parser.add_argument(
+    "--sf-only",
+    default=False,
+    action="store_true",
+    help="Apply scale factors only",
+)
+parser.add_argument(
     "--fit",
     default=False,
     action="store_true",

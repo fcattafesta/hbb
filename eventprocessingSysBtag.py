@@ -2,15 +2,22 @@ from nail.nail import *
 import correctionlib
 
 from btagging_sys import unc_btag
+from args_analysis import args
 
 correctionlib.register_pyroot_binding()
 
 
-sf_btag = {
-    "Central": ["central"],
-    "Up": ["up_" + x for x in unc_btag],
-    "Down": ["down_" + x for x in unc_btag],
-}
+sf_btag = (
+    {
+        "Central": ["central"],
+    }
+    if args.sf_only
+    else {
+        "Central": ["central"],
+        "Up": ["up_" + x for x in unc_btag],
+        "Down": ["down_" + x for x in unc_btag],
+    }
+)
 
 
 def getFlowSysBtag(flow, btag):
@@ -23,7 +30,6 @@ def getFlowSysBtag(flow, btag):
         % ("deepJet_shape" if btag == "deepflav" else "deepCSV_shape")
     )
 
-    # NOTE: cut on eta for the jet
     flow.AddCppCode(
         """
         // Calculate b-tagging scale factors for a given set of inputs
@@ -44,14 +50,12 @@ def getFlowSysBtag(flow, btag):
             // Loop over each input and calculate the scale factor
             for(size_t i=0;i<hadronFlavour.size(); i++) {
                 bool correct_flav = false;
-                // Loop over each flavor and check if it matches the input flavor
-                for (long unsigned int j = 0; j < sizeof(flav) / sizeof(flav[0]); j++) {
-                    if (hadronFlavour[i] == flav[j]) {
-                        // Calculate the scale factor using the btag_shape_corr object
-                        sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
-                        correct_flav = true;
-                        break;
-                    }
+                // check if the flav matches the input flavor
+                int *match_flav = std::find(std::begin(flav), std::end(flav), hadronFlavour[i]);
+                if (match_flav != std::end(flav)) {
+                    // Calculate the scale factor using the btag_shape_corr object
+                    sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]});
+                    correct_flav = true;
                 }
                 // If no matching flavor is found, set the scale factor to the central value
                 if (!correct_flav) {
@@ -64,19 +68,19 @@ def getFlowSysBtag(flow, btag):
     """
     )
 
-    # FIXME: btag weights to all jets or to only selected jets? i think to only selected jets
+    # NOTE: btag weights to all jets or to only selected jets? i think to only selected jets
     for suffix, names in sf_btag.items():
         for name in names:
             unc = name.replace("up_", "").replace("down_", "")
-
-            # NOTE: which score? C or B?
 
             flow.Define(
                 "SelectedJet_btagWeight_%s" % name,
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
                 % (
                     name,
-                    "SelectedJet_btagDeepFlavB" if btag == "deepflav" else "SelectedJet_btagDeepB",
+                    "SelectedJet_btagDeepFlavB"
+                    if btag == "deepflav"
+                    else "SelectedJet_btagDeepB",
                 ),
             )
             if suffix == "Central":
@@ -84,7 +88,7 @@ def getFlowSysBtag(flow, btag):
                     "btagWeight%s" % (suffix),
                     "ROOT::VecOps::Product(SelectedJet_btagWeight_%s)" % name,
                 )
-                flow.CentralWeight("btagWeightCentral", ["twoJets"]) #HERE
+                flow.CentralWeight("btagWeightCentral", ["twoJets"])
             else:
                 flow.Define(
                     "btagWeight_%s%s" % (unc, suffix),

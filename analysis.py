@@ -89,9 +89,9 @@ if args.fit:
     histosPerSelectionMC = {
         ("SR_mm" if args.lep == "mu" else "SR_ee"): ["atanhDNN_Score"]
     }
-    histosPerSelectionMData = histosPerSelectionMC.copy()
+    histosPerSelectionData = histosPerSelectionMC.copy()
     # histosPerSelectionMC = {s: ["atanhDNN_Score"] for s in sels}
-    # histosPerSelectionMData = {s: ["atanhDNN_Score"] for s in sels}
+    # histosPerSelectionData = {s: ["atanhDNN_Score"] for s in sels}
 
 # systematics
 systematics = flowMC.variations
@@ -112,7 +112,7 @@ procMC = flowMC.CreateProcessor(
 procData = flowData.CreateProcessor(
     "eventProcessorData",
     [],
-    histosPerSelectionMData,
+    histosPerSelectionData,
     [],
     "",
     nthreads,
