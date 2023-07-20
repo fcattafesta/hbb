@@ -11,6 +11,7 @@ sf_btag = (
     {
         "Central": ["central"],
         "Up": ["up_hf"],
+        "Down": ["down_hf"],
     }
     if args.sf_only
     else {
