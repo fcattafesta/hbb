@@ -140,6 +140,7 @@ def sumwsents(files):
 
 
 def runSample(ar):
+    time_sample = time.time()
     # f,s,i=ar
     p = psutil.Process()
     #    print("Affinity", p.cpu_affinity())
@@ -243,7 +244,8 @@ def runSample(ar):
                 outFile.Write()
                 outFile.Close()
 
-            logger.info("Finish sample %s: nevents %s" % (s, nevents))
+            logger.info("Finish sample %s in %s s" % (s, time.time() - time_sample))
+
             return 0
         except Exception as e:
             logger.error(e)
@@ -338,4 +340,4 @@ logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 os.system("cp " + "eventProcessor* libNailExternals.so tmp* " + args.histfolder)
 
 logger.info("histo folder %s" % args.histfolder)
-logger.info("time:   %s" % (time.time() - start))
+logger.info("time:   %s s" % (time.time() - start))
