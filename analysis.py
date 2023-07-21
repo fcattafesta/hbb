@@ -43,7 +43,7 @@ else:
 
 nthreads = args.nthreads if args.range == -1 else 0
 nprocesses = args.num_processes
-tot_nevents = Value('i', 0)
+tot_nevents = Value("i", 0)
 
 start = time.time()
 
@@ -170,7 +170,9 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("Start sample {}: sumws {:.2e} nevents {:.2e}".format(s, sumws, nevents))
+        logger.info(
+            "Start sample {}: sumws {:.2e} nevents {:.2e}".format(s, sumws, nevents)
+        )
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
         logger.info("Start sample %s" % s)
@@ -260,14 +262,20 @@ def runSample(ar):
                 sumWeights.Write()
                 outFile.Write()
                 outFile.Close()
-                
+
             with tot_nevents.get_lock():
                 tot_nevents.value += nevents
 
-            percentage=100.0*tot_nevents.value/5e9
+            percentage = 100.0 * tot_nevents.value / 5e9
             logger.info(
-                "Finish sample {} (nevents {:.2e}) in {:.1f} s __________ tot_neventsMC processed {:.2e} (percentage of MC {:.2f} %)"
-                .format(nevents, time.time() - time_sample, tot_nevents.value, percentage)
+                "Finish sample {} (nevents {:.2e}) in {:.1f} s __________ tot_neventsMC processed {:.2e} in  {:.1f} s  (percentage of MC {:.2f} %)".format(
+                    s,
+                    nevents,
+                    time.time() - time_sample,
+                    tot_nevents.value,
+                    time.time() - start,
+                    percentage,
+                )
             )
 
             return 0
