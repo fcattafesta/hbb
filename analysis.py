@@ -1,4 +1,4 @@
-from multiprocessing import Pool
+from multiprocessing import Pool, Value
 import psutil
 import copy
 import sys
@@ -120,7 +120,7 @@ procData = flowData.CreateProcessor(
 
 os.system("cp " + "eventProcessor* libNailExternals.so tmp* " + args.histfolder)
 
-tot_nevents = 0
+tot_nevents = Value('i', 0)
 
 def sumwsents(files):
     sumws = 1e-9
@@ -259,8 +259,9 @@ def runSample(ar):
                 sumWeights.Write()
                 outFile.Write()
                 outFile.Close()
-
-            tot_nevents += nevents
+            with tot_nevents.get_lock():
+                tot_nevents += nevents
+                
             percentage=100.0*tot_nevents/5e9
             logger.info(
                 "Finish sample {} (nevents {:.2e}) in {:.1f} s __________ tot_neventsMC processed {:.2e} (percentage of MC {:.2f} %)"
