@@ -120,6 +120,7 @@ procData = flowData.CreateProcessor(
 
 os.system("cp " + "eventProcessor* libNailExternals.so tmp* " + args.histfolder)
 
+tot_nevents = 0
 
 def sumwsents(files):
     sumws = 1e-9
@@ -168,10 +169,10 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("Start sample %s: sumws %s, nevents %s" % (s, sumws, nevents))
+        logger.info("Start sample %s: sumws {:.2e} nevents {:.2e}".format(s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
-        logger.info("Start sample %s: nevents %s" % (s, nevents))
+        logger.info("Start sample %s" % s)
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
     if args.range != -1:
@@ -259,9 +260,11 @@ def runSample(ar):
                 outFile.Write()
                 outFile.Close()
 
+            tot_nevents += nevents
+            percentage=100.0*tot_nevents/5e9
             logger.info(
-                "Finish sample %s (nevents %s) in %s s"
-                % (s, nevents, time.time() - time_sample)
+                "Finish sample %s (nevents {:.2e}) in {:.1f} s __________ tot_nevents processed {:.2e} (percentage {:.2f} %)"
+                .format(nevents, time.time() - time_sample, tot_nevents, percentage)
             )
 
             return 0
