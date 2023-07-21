@@ -40,7 +40,7 @@ def getFlowSysJER(flow, sys):
         )
 
         flow.Define("Jet_genPt", "TakeDef(GenJet_pt,Jet_genJetIdx,Jet_pt)")
-        for name in ["Nom", "Up"] if args.sf_only else ["Nom", "Down", "Up"]:
+        for name in ["Nom", "Down", "Up"]:
             flow.Define(
                 "Jet_jer%sSF" % (name),
                 'sf_jer(Jet_eta, "%s")' % (name.lower()),
