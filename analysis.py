@@ -169,7 +169,7 @@ def runSample(ar):
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
-        logger.info("Start sample %s: sumws {:.2e} nevents {:.2e}".format(s, sumws, nevents))
+        logger.info("Start sample {}: sumws {:.2e} nevents {:.2e}".format(s, sumws, nevents))
     else:  # is data
         sumws, LHEPdfSumw, nevents = 1.0, [], 0
         logger.info("Start sample %s" % s)
@@ -263,7 +263,7 @@ def runSample(ar):
             tot_nevents += nevents
             percentage=100.0*tot_nevents/5e9
             logger.info(
-                "Finish sample %s (nevents {:.2e}) in {:.1f} s __________ tot_nevents processed {:.2e} (percentage {:.2f} %)"
+                "Finish sample {} (nevents {:.2e}) in {:.1f} s __________ tot_neventsMC processed {:.2e} (percentage of MC {:.2f} %)"
                 .format(nevents, time.time() - time_sample, tot_nevents, percentage)
             )
 
