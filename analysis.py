@@ -260,13 +260,14 @@ def runSample(ar):
                 sumWeights.Write()
                 outFile.Write()
                 outFile.Close()
+                
             with tot_nevents.get_lock():
-                tot_nevents += nevents
+                tot_nevents.value += nevents
 
-            percentage=100.0*tot_nevents/5e9
+            percentage=100.0*tot_nevents.value/5e9
             logger.info(
                 "Finish sample {} (nevents {:.2e}) in {:.1f} s __________ tot_neventsMC processed {:.2e} (percentage of MC {:.2f} %)"
-                .format(nevents, time.time() - time_sample, tot_nevents, percentage)
+                .format(nevents, time.time() - time_sample, tot_nevents.value, percentage)
             )
 
             return 0
