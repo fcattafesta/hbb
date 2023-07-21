@@ -164,3 +164,4 @@ btag_files/
 workspace/
 figure/
 *.out
+test*
