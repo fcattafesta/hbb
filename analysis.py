@@ -73,7 +73,7 @@ if args.eval_model:
     flowData = getFlowDNN(flowData, args.eval_model, sample_type="data", define=True)
 
 # Flow for MC
-if args.sf:
+if args.sf or args.sf_only:
     flowMC = getFlowSysJER(flowMC, sys=True)
 else:
     flowMC = getFlowSysJER(flowMC, sys=False)

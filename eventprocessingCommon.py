@@ -33,13 +33,13 @@ def getFlowCommon(flow, btag):
     flow.SubCollection(
         "SelectedJet",
         "CleanJet",
-        sel="CleanJet_pt_Nom > 20. && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0",
+        sel="CleanJet_pt_jerNom > 20. && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0",
     )
 
     flow.Selection("twoJets", "nSelectedJet >= 2")
 
     # Define LeadingJet and SubLeadingJet
-    flow.Define("SelectedJetPtOrderIndices", "Argsort(-SelectedJet_pt_Nom)")
+    flow.Define("SelectedJetPtOrderIndices", "Argsort(-SelectedJet_pt_jerNom)")
     flow.ObjectAt(
         "LeadingJet",
         "SelectedJet",
@@ -55,7 +55,7 @@ def getFlowCommon(flow, btag):
     )
 
     # Define p4
-    flow.Define("SelectedJet_p4","vector_map_t<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<float> >        >(SelectedJet_pt_Nom , SelectedJet_eta, SelectedJet_phi, SelectedJet_mass)")
+    flow.Define("SelectedJet_p4","vector_map_t<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<float> >        >(SelectedJet_pt_jerNom , SelectedJet_eta, SelectedJet_phi, SelectedJet_mass)")
     #flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
 
     btag_score="btagDeepFlavB" if btag == "deepflav" else "btagDeepB"

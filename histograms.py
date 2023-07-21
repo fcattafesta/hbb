@@ -24,7 +24,7 @@ histosData = [
 ]
 histosData += [
     "Jet_pt",
-    "Jet_pt_Nom",
+    "Jet_pt_jerNom",
     "SelectedJet_"+ ("btagDeepFlavB" if args.btag == "deepflav" else "btagDeepB"),
 ]
 

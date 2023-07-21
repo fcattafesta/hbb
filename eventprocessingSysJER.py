@@ -1,6 +1,8 @@
 from nail.nail import *
 import correctionlib
 
+from args_analysis import args
+
 correctionlib.register_pyroot_binding()
 
 
@@ -38,21 +40,22 @@ def getFlowSysJER(flow, sys):
         )
 
         flow.Define("Jet_genPt", "TakeDef(GenJet_pt,Jet_genJetIdx,Jet_pt)")
-        for name in ["Nom", "Up", "Down"]:
+        for name in ["Nom", "Up"] if args.sf_only else ["Nom", "Down", "Up"]:
             flow.Define(
                 "Jet_jer%sSF" % (name),
                 'sf_jer(Jet_eta, "%s")' % (name.lower()),
             )
-        flow.Define("Jet_pt_Nom", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerNomSF")
-        flow.Define("Jet_pt_jerDown", "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerDownSF")
-        flow.Define(
-            "Jet_pt_jerUp",
-            "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jerUpSF",  # +(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
-        )
-        flow.Systematic("JERDown", "Jet_pt_Nom", "Jet_pt_jerDown")
-        flow.Systematic("JERUp", "Jet_pt_Nom", "Jet_pt_jerUp")
+            flow.Define(
+                "Jet_pt_jer%s" % (name),
+                "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jer%sSF" % (name),
+            )
+            if name != "Nom":
+                flow.Systematic(
+                    "JER%s" % (name), "Jet_pt_jerNom", "Jet_pt_jer%s" % (name)
+                )
+        # +(Jet_genPt==Jet_pt)*Map(Jet_pt, [](float sigma) {TRandom3 r; return float(r.Gaus(0,0.15*sigma));} )",
 
     else:
-        flow.Define("Jet_pt_Nom", "Jet_pt")
+        flow.Define("Jet_pt_jerNom", "Jet_pt")
 
     return flow

@@ -10,7 +10,7 @@ ROOT.gStyle.SetOptStat(0)
 #/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf/
 root_files = {
     "Jet_pt":["ZH_Histos.root", "Dijets_mass___SR_mm"],
-    "Jet_pt_Nom":["ZH_Histos_sf_2.root", "Dijets_mass___SR_mm"],
+    "Jet_pt_jerNom":["ZH_Histos_sf_2.root", "Dijets_mass___SR_mm"],
     "Jet_pt_jerUp"  :["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
     "Jet_pt_jerDown":["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
 }
@@ -21,7 +21,7 @@ t1 = makeText(0.8, 0.95,"(13 TeV)", 42)
 histos={}
 histos_pt={}
 
-pts=["GenJet_pt___SR_mm", "Jet_pt___SR_mm", "Jet_pt_Nom___SR_mm", "Jet_pt_jerUp___SR_mm", "Jet_pt_jerDown___SR_mm"]
+pts=["GenJet_pt___SR_mm", "Jet_pt___SR_mm", "Jet_pt_jerNom___SR_mm", "Jet_pt_jerUp___SR_mm", "Jet_pt_jerDown___SR_mm"]
 rebinning=list(np.linspace(50, 200, 40))
 files={}
 sumws={}
@@ -31,7 +31,7 @@ for type, names in root_files.items():
     h=files[type].Get(names[1]).Rebin(len(rebinning)-1, "hnew"+type, array("d", rebinning))
     sumws[type]=files[type].Get("sumWeights")
     histos[type] = h
-    if type=="Jet_pt_Nom":
+    if type=="Jet_pt_jerNom":
         for pt in pts:
             histos_pt[pt] = files[type].Get(pt)#.Rebin(len(rebinning)-1, "hnew"+pt, array("d", rebinning))
 
