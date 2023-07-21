@@ -118,6 +118,8 @@ procData = flowData.CreateProcessor(
     nthreads,
 )
 
+os.system("cp " + "eventProcessor* libNailExternals.so tmp* " + args.histfolder)
+
 
 def sumwsents(files):
     sumws = 1e-9
@@ -257,7 +259,10 @@ def runSample(ar):
                 outFile.Write()
                 outFile.Close()
 
-            logger.info("Finish sample %s in %s s" % (s, time.time() - time_sample))
+            logger.info(
+                "Finish sample %s (nevents %s) in %s s"
+                % (s, nevents, time.time() - time_sample)
+            )
 
             return 0
         except Exception as e:
@@ -352,7 +357,6 @@ else:
 logger.info("Results %s" % results)
 logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 
-os.system("cp " + "eventProcessor* libNailExternals.so tmp* " + args.histfolder)
 
 logger.info("histo folder %s" % args.histfolder)
 logger.info("time:   %s s" % (time.time() - start))

@@ -41,17 +41,17 @@ histosMC = histosData + [
     "SelectedJet_hadronFlavour",
 ]
 
-if args.sf:
-    histosMC += ["btagWeightCentral"]
-    histosMC += btag_sys
-    histosMC += jet_btag_sys + ["SelectedJet_btagWeight_central"]
-    histosMC += [
-        "Jet_pt_jerUp",
-        "Jet_pt_jerDown",
-        "Jet_jerNomSF",
-        "Jet_jerUpSF",
-        "Jet_jerDownSF",
-    ]
+# if args.sf:
+#     histosMC += ["btagWeightCentral"]
+#     histosMC += btag_sys
+#     histosMC += jet_btag_sys + ["SelectedJet_btagWeight_central"]
+#     histosMC += [
+#         "Jet_pt_jerUp",
+#         "Jet_pt_jerDown",
+#         "Jet_jerNomSF",
+#         "Jet_jerUpSF",
+#         "Jet_jerDownSF",
+#     ]
 
 
 ### Dictionary of histograms per selection ###

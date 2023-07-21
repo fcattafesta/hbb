@@ -34,6 +34,7 @@ print(wp_lists)
 
 
 TT_list = ["TTToHadronic"]
+#NOTE: CleanJet_jetId > 0 && CleanJet_puId > 0
 var_list = [
     "Jet_btagDeepB",
     "Jet_btagDeepFlavB",
@@ -77,10 +78,10 @@ def load_data(dirs, variables_list):
         # exclude the events with -1 in the DeepCSV column
         mask = (
             np.array(variables[0, :] != -1)
-            * np.array(variables[3, :] > 30)
+            * np.array(variables[3, :] > 30) #>20
             * np.array(variables[3, :] < 200)
-            * np.array(variables[4, :] < 1.4)
-            * np.array(variables[4, :] > -1.4)
+            * np.array(variables[4, :] < 1.4) #<2.5
+            * np.array(variables[4, :] > -1.4) # >2.5
         )
         print("mask", mask)
         variables = variables[:, mask]
