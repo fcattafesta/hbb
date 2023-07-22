@@ -26,7 +26,7 @@ def plot_common_style(signal, background):
             "ggZH": ROOT.kRed - 3,
         }
     )
-    fillcolor.update({bkg: ROOT.kAzure + i for i, bkg in zip([7, 0, 3], background)})
+    fillcolor.update({f"bkg_{num_b}": ROOT.kAzure + i for i, num_b in zip([7, 0, 3], number_of_b)})
     linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
     linecolorOverlayed = {}
     markercolor = fillcolor
@@ -65,6 +65,3 @@ def plot_common_style(signal, background):
         systematicsForDC,
         systematicDetail,
     )
-
-
-
