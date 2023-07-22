@@ -62,6 +62,7 @@ labelLegend = {
     "Z+c": "Z+c",
     "VVHF": "VVHF",
     "VVLF": "VVLF",
+    "VV": "VV",
     "bkg_0b": "bkg_{0b}",
     "bkg_1b": "bkg_{1b}",
     "bkg_2b": "bkg_{2b}",
