@@ -33,7 +33,7 @@ if [[ $suffix == *_sf* ]]; then
     sf="--sf"
 fi
 
-if [[ $suffix == *_fit* ]]; then
+if [[ $suffix == *_fit*  ||  $fit == true ]]; then
     model="${model}Fit"
 fi
 

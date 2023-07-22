@@ -95,7 +95,7 @@ def systematicGrouping(background, signal, jesList, year):
             # x: {
             "type": "shape",
             "value": 1.0,
-            "decorrelate": {"": Hbb + DY_ + VV_ + TT + ST},  # NOTE: ok?
+            "decorrelate": {"": Hbb + DY_bb + DY_b + DY_c + DY_udsg + VV_ + TT + ST},  # NOTE: ok?
         }
         for x in btag_sys
         if "Down" in x  # NOTE: ?
@@ -107,7 +107,7 @@ def systematicGrouping(background, signal, jesList, year):
             # f"JER{type}": {
             "type": "shape",
             "value": 1.0,
-            "decorrelate": {"": Hbb + DY_ + VV_ + TT + ST},  # NOTE: ok?
+            "decorrelate": {"": Hbb + DY_bb + DY_b + DY_c + DY_udsg + VV_ + TT + ST},  # NOTE: ok?
         }
         # for type in ["Up", "Down"]
     }

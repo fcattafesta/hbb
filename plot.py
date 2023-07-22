@@ -1718,7 +1718,7 @@ if __name__ == "__main__":
                                 ] = all_histo_all_syst[hn][d][syst].Clone()
                             else:
                                 all_histo_all_syst_grouped[gr][hn][syst].Add(
-                                    all_histo_all_syst[hn][d][syst]
+                                    all_histo_all_syst[hn][d][syst].Clone()
                                 )
                 if systematics:
                     for sy_base, systematic in systematics.items():
