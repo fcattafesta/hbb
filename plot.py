@@ -1702,7 +1702,7 @@ if __name__ == "__main__":
                     sy_base = sy.replace("Up", "").replace("Down", "")
                     systematics[sy_base].append(sy)
 
-                tot_dataset = model.signal
+                tot_dataset = model.signal.copy()
                 tot_dataset.update(model.background)
                 tot_dataset.update(model.data)
 
@@ -1801,7 +1801,7 @@ if __name__ == "__main__":
         #    print("DEBUG", model, all_histo_all_syst, year)
         if model.background and model.signal and model.data:
             import WorkSpace as WorkSpace
-            WorkSpace.createWorkSpace(model, all_histo_all_syst, year, outdir)
+            WorkSpace.createWorkSpace(model, all_histo_all_syst, year, args.btag, outdir)
     else:
         from multiprocessing import Pool
 

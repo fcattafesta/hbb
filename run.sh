@@ -46,9 +46,9 @@ if [[ $suffix == *_fit* ]]; then
     fit="--fit"
 fi
 
-btag="--btag "${btag}
+btag="--btag ${btag}"
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"${lep}"/"${suffix}"/"
+histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
 
 $CMD \
     --model ${model} \

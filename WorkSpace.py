@@ -488,7 +488,7 @@ def modifyRegionName(region):
                     regionName[x] = regionName[r]
 
 
-def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
+def createWorkSpace(model, all_histo_all_syst, year, btag, outdir="workspace/"):
     logger.info("WorkSpace creation")
     nBins = {}
     varName = {}
@@ -511,7 +511,7 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     region = collections.OrderedDict(sorted(region.items()))
 
     os.system("mkdir -p " + outdir)
-    datacard = open(outdir + "/datacard" + year + model.name + ".txt", "w")
+    datacard = open(outdir + "/datacard" + year + model.name + "_" + btag + ".txt", "w")
 
     datacard.write(
         "imax " + str(len(list(all_histo_all_syst.keys()))) + "  number of channels\n"
@@ -528,6 +528,8 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
             + "  fileCombine"
             + year
             + model.name
+            + "_"
+            + btag
             + ".root "
             + varName[x]
             + "_$CHANNEL_$PROCESS "
@@ -585,8 +587,8 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
         availableSamples[x] = [s for s in listAllSample if s not in emptySamples[x]]
 
     listAllSample_noYear = [s.split("_")[0] if "201" in s else s for s in listAllSample]
-    # print("listAllSample_noYear", listAllSample_noYear)
-    # print("listAllSample", listAllSample)
+    # logger.info("listAllSample_noYear %s"% listAllSample_noYear)
+    # logger.info("listAllSample %s"% listAllSample)
     availableSamples = collections.OrderedDict(sorted(availableSamples.items()))
 
     datacard.write("bin \t \t \t \t \t")
@@ -652,7 +654,7 @@ def createWorkSpace(model, all_histo_all_syst, year, outdir="workspace/"):
     printSystematicGrouping(model.systematicDetail, outdir + "/grouping7.py")
 
     writeSystematic(
-        outdir + "/fileCombine" + year + model.name + ".root",
+        outdir + "/fileCombine" + year + model.name + "_" + btag + ".root",
         region,
         varName,
         model.systematicDetail,

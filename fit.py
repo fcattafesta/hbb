@@ -14,12 +14,13 @@ datacard = os.path.splitext(
     [f for f in os.listdir(workdir) if f.startswith("datacard")][0]
 )[0]
 
-name = datacard.split("2018")[1]
+name = datacard.split("2018")[1] if "2018" in datacard else datacard
 
 # Define the file name for the output log
 log_file = 'output.log'
-os.remove(log_file)
-
+# If the file already exists, delete it
+if os.path.exists(log_file):
+    os.remove(log_file)
 # Open the log file for writing
 with open(log_file, 'w') as f:
     # Run the combine command and capture the output

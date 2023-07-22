@@ -33,12 +33,12 @@ if [[ $suffix == *_sf* ]]; then
     sf="--sf"
 fi
 
-if [[ $suffix == *_fit*  ||  $fit == true ]]; then
+if [[ $suffix == *_fit*  ||  $fit == true  || "${@:3}" == *" -v "* ]]; then
     model="${model}Fit"
 fi
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/"${lep}"/"${suffix}"/"
-plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots/"${lep}"/"${suffix}${fs}"/"
+histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
+plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots/${lep}/${suffix}${fs}/"
 
 $CMD \
     --model ${model} \
