@@ -91,9 +91,8 @@ if args.fit:
     histosPerSelectionMC = {
         ("SR_mm" if args.lep == "mu" else "SR_ee"): ["atanhDNN_Score"]
     }
-    histosPerSelectionData = histosPerSelectionMC.copy()
     # histosPerSelectionMC = {s: ["atanhDNN_Score"] for s in sels}
-    # histosPerSelectionData = {s: ["atanhDNN_Score"] for s in sels}
+    histosPerSelectionData = histosPerSelectionMC.copy()
 
 # systematics
 systematics = flowMC.variations
@@ -194,7 +193,11 @@ def runSample(ar):
                 snaplist += histosData
             else:
                 if "subsamples" in samples[s].keys():
-                    subs = samples[s]["subsamples"]
+                    subs = (
+                        samples[s]["subsamples"]
+                        if not args.fit
+                        else (samples[s]["subsamples"] if "DY" in s else {})
+                    )
                 rdf = rdf.Define("isMC", "true")
                 out = procMC(rdf, subs)
                 snaplist += histosMC + ["DNN_weight"]
@@ -266,7 +269,7 @@ def runSample(ar):
             with tot_nevents.get_lock():
                 tot_nevents.value += nevents
 
-            percentage = 100.0 * tot_nevents.value / 5e9
+            percentage = 100.0 * tot_nevents.value / 2.06e9
             logger.info(
                 "Finish sample {} (nevents {:.2e}) in {:.1f} s __________ tot_neventsMC processed {:.2e} in  {:.1f} s  (percentage of MC {:.2f} %)".format(
                     s,
