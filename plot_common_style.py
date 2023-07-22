@@ -17,12 +17,10 @@ def plot_common_style(signal, background):
             f"VV{flavour}": ROOT.kOrange + i
             for i, flavour in zip([-1, 0], flavourVVSplitting)
         },
-        {
-            "VV": ROOT.kOrange + 1,
-        },
     )
     fillcolor.update(
         {
+            "VV": ROOT.kOrange + 1,
             "TT": ROOT.kBlue - 4,
             "ST": ROOT.kBlue + 2,
             "ZH": ROOT.kRed + 2,
