@@ -1147,8 +1147,6 @@ if __name__ == "__main__":
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
             max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
             min_value=max(0.1, 0.1 * histo.GetMinimum())
-            print("max_value", j,  max_value)
-            print("min_value", j, min_value)
             max_value_old = histo.GetMaximum()
             min_value_old = histo.GetMinimum()
 
@@ -1213,8 +1211,6 @@ if __name__ == "__main__":
                 c_sys.SaveAs(
                     outpath + "/%s_%s_%s_%s_log.root" % (hn, args.btag, sy_base, sample)
                 )
-            print("max_value_old", j,max_value_old)
-            print("min_value_old", j,min_value_old)
             histo.SetMaximum(max_value_old)
             histo.SetMinimum(min_value_old)
 
