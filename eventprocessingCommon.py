@@ -61,10 +61,10 @@ def getFlowCommon(flow, btag, btag_bit):
     )
     # flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
 
-    btag_bit = "btagDeepFlavB" if btag == "deepflav" else "btagDeepB"
+    btag_score = "btagDeepFlavB" if btag == "deepflav" else "btagDeepB"
 
     # Order by btag score
-    flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_%s)" % btag_bit)
+    flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_%s)" % btag_score)
     flow.ObjectAt(
         "JetBtagMax",
         "SelectedJet",
@@ -97,31 +97,31 @@ def getFlowCommon(flow, btag, btag_bit):
     )
 
     # B-tagging working points
-    flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_bit, btag_wp[0]))
-    flow.Selection("JetBtagMaxMedium", "JetBtagMax_%s > %f" % (btag_bit, btag_wp[1]))
-    flow.Selection("JetBtagMaxTight", "JetBtagMax_%s > %f" % (btag_bit, btag_wp[2]))
-    flow.Selection("JetBtagMinLoose", "JetBtagMin_%s > %f" % (btag_bit, btag_wp[0]))
+    flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_score, btag_wp[0]))
+    flow.Selection("JetBtagMaxMedium", "JetBtagMax_%s > %f" % (btag_score, btag_wp[1]))
+    flow.Selection("JetBtagMaxTight", "JetBtagMax_%s > %f" % (btag_score, btag_wp[2]))
+    flow.Selection("JetBtagMinLoose", "JetBtagMin_%s > %f" % (btag_score, btag_wp[0]))
 
     # B-tagging distributions for JetBtagMax and JetBtagMin
     if btag_bit:
         flow.Define(
             "btag_max",
             "int(JetBtagMax_%s > %f) + int(JetBtagMax_%s > %f) + int(JetBtagMax_%s > %f)"
-            % (btag_bit, btag_wp[2], btag_bit, btag_wp[1], btag_bit, btag_wp[0]),
+            % (btag_score, btag_wp[2], btag_score, btag_wp[1], btag_score, btag_wp[0]),
         )
         flow.Define(
             "btag_min",
             "int(JetBtagMin_%s > %f) + int(JetBtagMin_%s > %f) + int(JetBtagMin_%s > %f)"
-            % (btag_bit, btag_wp[2], btag_bit, btag_wp[1], btag_bit, btag_wp[0]),
+            % (btag_score, btag_wp[2], btag_score, btag_wp[1], btag_score, btag_wp[0]),
         )
     else:
         flow.Define(
             "btag_max",
-            "JetBtagMax_%s" % btag_bit,
+            "JetBtagMax_%s" % btag_score,
         )
         flow.Define(
             "btag_min",
-            "JetBtagMin_%s" % btag_bit,
+            "JetBtagMin_%s" % btag_score,
         )
-        
+
     return flow
