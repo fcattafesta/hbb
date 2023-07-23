@@ -209,6 +209,8 @@ def runSample(ar):
                 and samples[s]["snapshot"]
             ):
                 for region in sels:
+                    if args.train and (region != "SR_mm" and region != "SR_ee"):
+                        continue
                     # create snapshot directory
                     os.makedirs(f"{args.histfolder}/Snapshots", exist_ok=True)
                     processed_rdf = out.rdf.find(region).second
