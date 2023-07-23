@@ -354,7 +354,7 @@ elif "model" in args.model[:5]:
                     allmc.append(y)
 
     allmc += [y for x in model.signal for y in model.signal[x]]
-    alldata = [y for x in model.data for y in model.data[x]]
+    alldata = [y for x in model.data for y in model.data[x]] if not args.train else []
     for x in allmc:
         logger.info("%s\t%s" % (x, samples[x]["xsec"]))
     for x in alldata:
@@ -378,4 +378,4 @@ logger.info("To resubmit %s" % [x[1] for x in results if x[0] == 1])
 
 
 logger.info("histo folder %s" % args.histfolder)
-logger.info("time:   %s s" % (time.time() - start))
+logger.info("time:   %.2f s" % (time.time() - start))
