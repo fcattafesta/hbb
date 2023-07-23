@@ -1,7 +1,7 @@
 from nail.nail import *
 
 
-def getFlowCommon(flow, btag):
+def getFlowCommon(flow, btag, btag_bit):
     ### Common preselections for leptons ###
     ## Muons ##
     flow.Define("Muon_iso", "(Muon_pfRelIso04_all)")
@@ -55,13 +55,16 @@ def getFlowCommon(flow, btag):
     )
 
     # Define p4
-    flow.Define("SelectedJet_p4","vector_map_t<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<float> >        >(SelectedJet_pt_jerNom , SelectedJet_eta, SelectedJet_phi, SelectedJet_mass)")
-    #flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
+    flow.Define(
+        "SelectedJet_p4",
+        "vector_map_t<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<float> >        >(SelectedJet_pt_jerNom , SelectedJet_eta, SelectedJet_phi, SelectedJet_mass)",
+    )
+    # flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
 
-    btag_score="btagDeepFlavB" if btag == "deepflav" else "btagDeepB"
+    btag_bit = "btagDeepFlavB" if btag == "deepflav" else "btagDeepB"
 
     # Order by btag score
-    flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_%s)" % btag_score)
+    flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_%s)" % btag_bit)
     flow.ObjectAt(
         "JetBtagMax",
         "SelectedJet",
@@ -89,22 +92,36 @@ def getFlowCommon(flow, btag):
     )
     flow.Define("jj_dr", "TMath::Sqrt(jj_deta*jj_deta + jj_dphi*jj_dphi)")
 
-    btag_wp=[0.0490, 0.2783, 0.7100] if btag == "deepflav" else [0.1208, 0.4168, 0.7665]
+    btag_wp = (
+        [0.0490, 0.2783, 0.7100] if btag == "deepflav" else [0.1208, 0.4168, 0.7665]
+    )
 
     # B-tagging working points
-    flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_score, btag_wp[0]))
-    flow.Selection("JetBtagMaxMedium", "JetBtagMax_%s > %f" % (btag_score, btag_wp[1]))
-    flow.Selection("JetBtagMaxTight", "JetBtagMax_%s > %f" % (btag_score, btag_wp[2]))
-    flow.Selection("JetBtagMinLoose", "JetBtagMin_%s > %f" % (btag_score, btag_wp[0]))
+    flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_bit, btag_wp[0]))
+    flow.Selection("JetBtagMaxMedium", "JetBtagMax_%s > %f" % (btag_bit, btag_wp[1]))
+    flow.Selection("JetBtagMaxTight", "JetBtagMax_%s > %f" % (btag_bit, btag_wp[2]))
+    flow.Selection("JetBtagMinLoose", "JetBtagMin_%s > %f" % (btag_bit, btag_wp[0]))
 
     # B-tagging distributions for JetBtagMax and JetBtagMin
-    flow.Define(
-        "btag_max",
-        "JetBtagMax_%s" % btag_score,
-    )
-    flow.Define(
-        "btag_min",
-        "JetBtagMin_%s" % btag_score,
-    )
-
+    if btag_bit:
+        flow.Define(
+            "btag_max",
+            "int(JetBtagMax_%s > %f) + int(JetBtagMax_%s > %f) + int(JetBtagMax_%s > %f)"
+            % (btag_bit, btag_wp[2], btag_bit, btag_wp[1], btag_bit, btag_wp[0]),
+        )
+        flow.Define(
+            "btag_min",
+            "int(JetBtagMin_%s > %f) + int(JetBtagMin_%s > %f) + int(JetBtagMin_%s > %f)"
+            % (btag_bit, btag_wp[2], btag_bit, btag_wp[1], btag_bit, btag_wp[0]),
+        )
+    else:
+        flow.Define(
+            "btag_max",
+            "JetBtagMax_%s" % btag_bit,
+        )
+        flow.Define(
+            "btag_min",
+            "JetBtagMin_%s" % btag_bit,
+        )
+        
     return flow

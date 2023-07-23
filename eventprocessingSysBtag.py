@@ -9,7 +9,7 @@ correctionlib.register_pyroot_binding()
 
 sf_btag = (
     {
-        # "Central": ["central"],
+        "Central": ["central"],
         # "Up": ["up_cferr1", "up_hf", "up_lfstats1", "up_lf"],
         # "Down": ["down_cferr1", "down_hf", "down_lfstats1", "down_lf"],
     }

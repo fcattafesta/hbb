@@ -69,18 +69,18 @@ flowData = copy.deepcopy(flowMC)
 
 # Flow for data
 flowData = getFlowSysJER(flowData, sys=False)
-flowData = getFlowCommon(flowData, args.btag)
+flowData = getFlowCommon(flowData, args.btag, args.btag_bit)
 flowData = getFlow(flowData)
 if args.eval_model:
     flowData = getFlowDNN(flowData, args.eval_model, sample_type="data", define=True)
 
 # Flow for MC
-if args.sf or args.sf_only:
+if args.sys or args.sf_only:
     flowMC = getFlowSysJER(flowMC, sys=True)
 else:
     flowMC = getFlowSysJER(flowMC, sys=False)
-flowMC = getFlowCommon(flowMC, args.btag)
-if args.sf or args.sf_only:
+flowMC = getFlowCommon(flowMC, args.btag, args.btag_bit)
+if args.sys or args.sf_only:
     flowMC = getFlowSysBtag(flowMC, args.btag)
 flowMC = getFlow(flowMC)
 if args.eval_model:

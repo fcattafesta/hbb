@@ -26,9 +26,14 @@ elif [[ $suffix == *deepflav* ]]; then
     btag="deepflav"
 fi
 
-sf=""
+sys=""
+if [[ $suffix == *_sys* ]]; then
+    sys="--sys"
+fi
+
+sf_only=""
 if [[ $suffix == *_sf* ]]; then
-    sf="--sf"
+    sf_only="--sf-only"
 fi
 
 snap="--snapshot"
@@ -46,6 +51,16 @@ if [[ $suffix == *_fit* ]]; then
     fit="--fit"
 fi
 
+bit=""
+if [[ $suffix == *_bit* ]]; then
+    bit="--btag-bit"
+fi
+
+train=""
+if [[ $suffix == *_train* ]]; then
+    train="--train"
+fi
+
 btag="--btag ${btag}"
 
 histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
@@ -57,6 +72,9 @@ $CMD \
     ${eval} \
     ${snap} \
     ${btag} \
-    ${sf} \
+    ${sys} \
+    ${sf_only} \
     ${fit} \
+    ${bit} \
+    ${train} \
     "${@:3}"

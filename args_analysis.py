@@ -38,7 +38,7 @@ parser.add_argument(
     type=str,
 )
 parser.add_argument(
-    "--sf",
+    "--sys",
     default=False,
     action="store_true",
     help="Apply scale factors and systematics",
@@ -55,6 +55,19 @@ parser.add_argument(
     action="store_true",
     help="Only essential histograms for fitting",
 )
+parser.add_argument(
+    "--btag-bit",
+    default=False,
+    help="Btagging bit for different WP (1, 2, 3) instead of discriminator value",
+    action="store_true",
+)
+parser.add_argument(
+    "--train",
+    default=False,
+    action="store_true",
+    help="Only essential histograms for training",
+)
+
 parser.print_help()
 args = parser.parse_args()
 print(args)
