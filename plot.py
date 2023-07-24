@@ -1335,10 +1335,7 @@ if __name__ == "__main__":
             # myLegend.AddEntry(None, "", "")
             for gr in model.backgroundSortedForLegend:
                 if model.fillcolor[gr] != ROOT.kWhite:
-                    logger.info("Adding %s to legend for variable %s" % (gr, hn))
                     myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
-                    logger.info("Added %s to legend for variable %s" % (gr, hn))
-
             # myLegend.AddEntry(None, "", "")
             for gr in model.signalSortedForLegend:
                 if model.fillcolor[gr] != ROOT.kWhite:
@@ -1806,14 +1803,11 @@ if __name__ == "__main__":
             import WorkSpace as WorkSpace
             WorkSpace.createWorkSpace(model, all_histo_all_syst, year, args.btag, outdir)
     else:
-        # from multiprocessing import Pool
+        from multiprocessing import Pool
 
-        # runpool = Pool(20)
-        # # toproc=[(x,y,i) for y in sams for i,x in enumerate(samples[y]["files"])]
-        # runpool.map(makeplot, his[1:])
-
-        for h in his[1:]:
-            makeplot(h)
+        runpool = Pool(20)
+        # toproc=[(x,y,i) for y in sams for i,x in enumerate(samples[y]["files"])]
+        runpool.map(makeplot, his[1:])
 
     tot = 0
     for s in totevCount:
