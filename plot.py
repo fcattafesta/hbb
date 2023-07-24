@@ -1806,11 +1806,14 @@ if __name__ == "__main__":
             import WorkSpace as WorkSpace
             WorkSpace.createWorkSpace(model, all_histo_all_syst, year, args.btag, outdir)
     else:
-        from multiprocessing import Pool
+        # from multiprocessing import Pool
 
-        runpool = Pool(20)
-        # toproc=[(x,y,i) for y in sams for i,x in enumerate(samples[y]["files"])]
-        runpool.map(makeplot, his[1:])
+        # runpool = Pool(20)
+        # # toproc=[(x,y,i) for y in sams for i,x in enumerate(samples[y]["files"])]
+        # runpool.map(makeplot, his[1:])
+
+        for h in his[1:]:
+            makeplot(h)
 
     tot = 0
     for s in totevCount:
