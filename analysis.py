@@ -89,7 +89,8 @@ flowMC = getFlowMC(flowMC)
 
 if args.fit:
     histosPerSelectionMC = {
-        ("SR_mm" if args.lep == "mu" else "SR_ee"): ["atanhDNN_Score"]
+        ("SR_mm" if args.lep == "mu" else "SR_ee"): ["atanhDNN_Score"],
+        "CR_mm_ttbar": ["number_of_events"],
     }
     # histosPerSelectionMC = {s: ["atanhDNN_Score"] for s in sels}
     histosPerSelectionData = histosPerSelectionMC.copy()
