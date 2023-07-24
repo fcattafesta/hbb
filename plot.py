@@ -1217,7 +1217,7 @@ if __name__ == "__main__":
             del c_sys
         del canvas_sys, canvas_sys_log
 
-    def makeplot(hn, saveintegrals=True, makeWorkspace=False):
+    def makeplot(hn, saveintegrals=True):
         if "__syst__" not in hn:
             dictLegendBackground = dict()
             dictLegendSignal = dict()
@@ -1696,7 +1696,7 @@ if __name__ == "__main__":
                     histos[hn].SetMinimum(min_value)
                     histos[hn].SetMaximum(max_value)
 
-            if WorkSpace and any([x in hn for x in Special_variables]):
+            if makeWorkspace and any([x in hn for x in Special_variables]):
                 systematics = defaultdict(list)
                 for sy in histosumSyst[hn]:
                     sy_base = sy.replace("Up", "").replace("Down", "")
@@ -1771,7 +1771,7 @@ if __name__ == "__main__":
     his = [x for x in histoNames if "__syst__" not in x and "sumWeight" not in x]
     logger.info(his[0])
     # do once for caching normalizations and to dump integrals
-    makeplot(variablesToFit[0] if makeWorkspace else his[0], True, makeWorkspace)
+    makeplot(variablesToFit[0] if makeWorkspace else his[0], True)
 
     if not makeWorkspace:
         logger.info("Preload")
@@ -1782,7 +1782,7 @@ if __name__ == "__main__":
 
     if makeWorkspace:
         for hn in variablesToFit[1:]:
-            makeplot(hn, True, makeWorkspace)
+            makeplot(hn, True)
         # Merge data in one plot for workspace, if is not already there
         for hn in variablesToFit:
             if not "data" + year in all_histo_all_syst[hn]:
@@ -1807,7 +1807,7 @@ if __name__ == "__main__":
 
         runpool = Pool(20)
         # toproc=[(x,y,i) for y in sams for i,x in enumerate(samples[y]["files"])]
-        runpool.map(makeplot, his[1:], makeWorkspace)
+        runpool.map(makeplot, his[1:])
 
     tot = 0
     for s in totevCount:
