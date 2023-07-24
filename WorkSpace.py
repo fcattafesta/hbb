@@ -6,14 +6,14 @@ import copy
 import re
 import logging
 
-from selections import selsMu, selsEle
+from regions import regionsMu, regionsEl
 
 logger = logging.getLogger(__name__)
 
 ##############################################################################################################
 #########################  region[x] : keys are plot names, values are region names  #########################
 ##############################################################################################################
-regionName = {x: x for x in selsMu + selsEle}
+regionName = {x: x for x in regionsMu + regionsEl}
 
 
 def writeSystematic(

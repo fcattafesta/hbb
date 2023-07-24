@@ -1,6 +1,6 @@
 from args_analysis import args
 from btagging_sys import *
-from selections import selsMu, selsEle
+from regions import regionsMu, regionsEl
 
 ### List of histograms to be plotted ###
 histosData = [
@@ -66,8 +66,8 @@ else:
     #     ]
 
     ### Dictionary of histograms per selection ###
-    histosPerSelectionMuonMC = {sel: histosMC for sel in selsMu}
-    histosPerSelectionElectronMC = {sel: histosMC for sel in selsEle}
+    histosPerSelectionMuonMC = {sel: histosMC for sel in regionsMu}
+    histosPerSelectionElectronMC = {sel: histosMC for sel in regionsEl}
 
-    histosPerSelectionMuonData = {sel: histosData for sel in selsMu}
-    histosPerSelectionElectronData = {sel: histosData for sel in selsEle}
+    histosPerSelectionMuonData = {sel: histosData for sel in regionsMu}
+    histosPerSelectionElectronData = {sel: histosData for sel in regionsEl}

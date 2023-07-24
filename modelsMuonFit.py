@@ -46,7 +46,7 @@ background.update(
         "TT": ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"],
     }
 )
-data = {}#"2018": ["SingleMuon_2018"]}
+data = {"2018": ["SingleMuon_2018"]}
 
 signal = {
     "ZH": ["ZH"],

@@ -31,12 +31,12 @@ if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
     from histograms import histosPerSelectionMuonMC as histosPerSelectionMC
     from histograms import histosPerSelectionMuonData as histosPerSelectionData
-    from histograms import selsMu as sels
+    from regions import regionsMu as sels
 elif args.lep == "el":
     from eventprocessingElectrons import getFlowElectrons as getFlow
     from histograms import histosPerSelectionElectronMC as histosPerSelectionMC
     from histograms import histosPerSelectionElectronData as histosPerSelectionData
-    from histograms import selsEle as sels
+    from regions import regionsEl as sels
 else:
     print("Lepton channel must be 'mu' or 'el'")
     sys.exit(1)

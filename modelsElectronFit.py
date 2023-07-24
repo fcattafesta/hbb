@@ -46,7 +46,7 @@ background.update(
 )
 
 data = {
-    #"2018": ["EGamma_2018"],
+    "2018": ["EGamma_2018"],
 }
 
 signal = {
