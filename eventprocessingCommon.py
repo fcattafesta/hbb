@@ -96,6 +96,10 @@ def getFlowCommon(flow, btag, btag_bit):
         [0.0490, 0.2783, 0.7100] if btag == "deepflav" else [0.1208, 0.4168, 0.7665]
     )
 
+    # define a variable that count the number of events
+    flow.Define("number_of_events", "1")
+    
+
     # B-tagging working points
     flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_score, btag_wp[0]))
     flow.Selection("JetBtagMaxMedium", "JetBtagMax_%s > %f" % (btag_score, btag_wp[1]))

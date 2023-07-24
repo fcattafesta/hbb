@@ -15,7 +15,8 @@ binningRules = [
     ("atanhDNN_Score", "10000, 0, 15"),
     ("hadronFlavour_btag.*", "6, -0.5, 5.5"),
     ("LHE_Nb", "6, -0.5, 5.5"),
-    ("btagWeight.*", "100, 0, 10"),
+    (".*btagWeight.*", "100, 0, 10"),
+    ("number_of_events", "1, 0.5, 1.5"),
 ]
 binningRules += [(".*_pt_.*", "30, 0, 300")]
 binningRules += [

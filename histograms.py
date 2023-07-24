@@ -21,6 +21,7 @@ histosData = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
+    "number_of_events",
 ]
 
 if args.train:
@@ -37,7 +38,6 @@ else:
     histosData += [
         "Jet_pt",
         "Jet_pt_jerNom",
-        "SelectedJet_"+ ("btagDeepFlavB" if args.btag == "deepflav" else "btagDeepB"),
     ]
 
     if args.eval_model:
