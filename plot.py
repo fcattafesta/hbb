@@ -1337,6 +1337,8 @@ if __name__ == "__main__":
                 if model.fillcolor[gr] != ROOT.kWhite:
                     logger.info("Adding %s to legend for variable %s" % (gr, hn))
                     myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
+                    logger.info("Added %s to legend for variable %s" % (gr, hn))
+
             # myLegend.AddEntry(None, "", "")
             for gr in model.signalSortedForLegend:
                 if model.fillcolor[gr] != ROOT.kWhite:
