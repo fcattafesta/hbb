@@ -453,7 +453,7 @@ if __name__ == "__main__":
         funct.SetParameters(*envelopeFunctionParameterValues)
         par2 = 0
         i = 0
-        hs = f[d].Get(findSyst(hn, pdf + str(i), f[d]))
+        hs = f[d].Get(findSyst(hn, pdf + str(i), f[d], silent=True))
         badFit = 0
         hs0 = None
         while hs and hs.GetMaximum() > 0:
@@ -468,7 +468,7 @@ if __name__ == "__main__":
                     hs0 = hs.Clone("hs0")
                     i += 1
                     badFit += 1
-                    hs = f[d].Get(findSyst(hn, pdf + str(i), f[d]))
+                    hs = f[d].Get(findSyst(hn, pdf + str(i), f[d], silent=True))
                     continue
                 else:
                     hs0 = nomHistoRebinned
@@ -495,7 +495,7 @@ if __name__ == "__main__":
                     )
                 )
             i = i + 1
-            hs = f[d].Get(findSyst(hn, pdf + str(i), f[d]))
+            hs = f[d].Get(findSyst(hn, pdf + str(i), f[d], silent=True))
 
         # if not hessian
         if (
@@ -884,7 +884,7 @@ if __name__ == "__main__":
                                 ):
                                     hs = makeEnvelopeShape(hn, sy, f, d, model)
                                 else:
-                                    hs = f[d].Get(findSyst(hn, sy, f[d]))
+                                    hs = f[d].Get(findSyst(hn, sy, f[d], silent=True))
                                     if hs and hn.split("___")[0] in list(
                                         model.rebin.keys()
                                     ):
@@ -1000,7 +1000,7 @@ if __name__ == "__main__":
                             ):
                                 hs = makeEnvelopeShape(hn, sy, f, d, model)
                             else:
-                                hs = f[d].Get(findSyst(hn, sy, f[d]))
+                                hs = f[d].Get(findSyst(hn, sy, f[d], silent=True))
                                 if hs and hn.split("___")[0] in list(
                                     model.rebin.keys()
                                 ):
@@ -1335,6 +1335,7 @@ if __name__ == "__main__":
             # myLegend.AddEntry(None, "", "")
             for gr in model.backgroundSortedForLegend:
                 if model.fillcolor[gr] != ROOT.kWhite:
+                    logger.info("Adding %s to legend for variable %s" % (gr, hn))
                     myLegend_2.AddEntry(dictLegendBackground[gr], labelLegend[gr], "FL")
             # myLegend.AddEntry(None, "", "")
             for gr in model.signalSortedForLegend:

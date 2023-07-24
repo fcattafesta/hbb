@@ -4,7 +4,6 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 
-# Plot
 parser.add_argument("-d", "--dir", help="Directory", type=str, default=".")
 args = parser.parse_args()
 
