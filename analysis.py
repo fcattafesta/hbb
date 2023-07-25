@@ -98,6 +98,11 @@ if args.fit:
     # histosPerSelectionMC = {s: ["atanhDNN_Score"] for s in sels}
     histosPerSelectionData = histosPerSelectionMC.copy()
 
+
+# histosPerSelectionMC = {
+#     "": ["btagWeightCentral", "SelectedJet_btagWeight_central", "number_of_events"],
+# }
+
 # systematics
 systematics = flowMC.variations
 logger.info("Systematics for all plots: %s" % systematics)
@@ -204,7 +209,7 @@ def runSample(ar):
                     )
                 rdf = rdf.Define("isMC", "true")
                 out = procMC(rdf, subs)
-                snaplist += histosMC + ["DNN_weight"]
+                snaplist += histosMC + ["DNN_weight"] #["btagWeightCentral", "Jet_btagWeight_central", "number_of_events"]
 
             if (
                 args.snapshot
@@ -212,7 +217,7 @@ def runSample(ar):
                 and "snapshot" in samples[s].keys()
                 and samples[s]["snapshot"]
             ):
-                for region in sels:
+                for region in sels: #[""]
                     if args.train and (region != "SR_mm" and region != "SR_ee"):
                         continue
                     # create snapshot directory
