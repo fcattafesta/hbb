@@ -54,6 +54,7 @@ fi
 bit=""
 if [[ $suffix == *_bit* ]]; then
     bit="--btag-bit"
+    eval="--eval model_${btag}_bit.onnx"
 fi
 
 train=""
