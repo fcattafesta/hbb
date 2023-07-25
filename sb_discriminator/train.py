@@ -88,7 +88,7 @@ if __name__ == "__main__":
         optimizer.load_state_dict(checkpoint["optimizer"])
         loaded_epoch = checkpoint["epoch"]
         best_model_name = args.load_model if args.load_model else args.eval_model
-        with open(f"{main_dir}/logger.log", "r") as f:
+        with open(f"{main_dir}/logger_{timestamp}.log", "r") as f:
             for line in reversed(f.readlines()):
                 if "Best epoch" in line:
                     # get line from Best epoch onwards
@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
             # Log the running loss averaged per batch
             # for both training and validation
-            
+
             # writer.add_scalars(
             #     "Training vs. Validation Loss",
             #     {"Training": avg_loss, "Validation": avg_vloss},
@@ -185,7 +185,7 @@ if __name__ == "__main__":
             print("\n\n\n")
             logger.info("Plotting training and validation loss and accuracy")
             train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-                f"{main_dir}/logger.log"
+                f"{main_dir}/logger_{timestamp}.log"
             )
 
             plot_history(
