@@ -12,7 +12,7 @@ def get_model_parameters_number(model):
 def train_val_one_epoch(
     train,
     epoch_index,
-    tb_writer,
+    #tb_writer,
     model,
     loader,
     loss_fn,
@@ -105,8 +105,8 @@ def train_val_one_epoch(
             )
 
             type = "train" if train else "val"
-            tb_writer.add_scalar(f"Accuracy/{type}", last_accuracy, tb_x)
-            tb_writer.add_scalar(f"Loss/{type}", last_loss, tb_x)
+            #tb_writer.add_scalar(f"Accuracy/{type}", last_accuracy, tb_x)
+            #tb_writer.add_scalar(f"Loss/{type}", last_loss, tb_x)
 
             running_loss = 0.0
             running_correct = 0

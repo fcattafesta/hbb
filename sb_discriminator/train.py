@@ -6,7 +6,7 @@ import time
 import sys
 
 # PyTorch TensorBoard support
-from torch.utils.tensorboard import SummaryWriter
+#from torch.utils.tensorboard import SummaryWriter
 
 from dataset import load_data
 from tools import get_model_parameters_number, train_val_one_epoch, eval_model, export_onnx
@@ -42,7 +42,7 @@ if __name__ == "__main__":
         ).replace("models", "")
 
     os.makedirs(main_dir, exist_ok=True)
-    writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
+    #writer = SummaryWriter(f"runs/DNN_trainer_{timestamp}")
     # Create the logger
     logger = setup_logger(f"{main_dir}/logger_{timestamp}.log")
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
             avg_loss, avg_accuracy, *_ = train_val_one_epoch(
                 True,
                 epoch,
-                writer,
+                #writer,
                 model,
                 training_loader,
                 loss_fn,
@@ -135,7 +135,7 @@ if __name__ == "__main__":
             ) = train_val_one_epoch(
                 False,
                 epoch,
-                writer,
+                #writer,
                 model,
                 val_loader,
                 loss_fn,
@@ -164,18 +164,19 @@ if __name__ == "__main__":
 
             # Log the running loss averaged per batch
             # for both training and validation
-            writer.add_scalars(
-                "Training vs. Validation Loss",
-                {"Training": avg_loss, "Validation": avg_vloss},
-                epoch,
-            )
-            writer.add_scalars(
-                "Training vs. Validation Accuracy",
-                {"Training": avg_accuracy, "Validation": avg_vaccuracy},
-                epoch,
-            )
+            
+            # writer.add_scalars(
+            #     "Training vs. Validation Loss",
+            #     {"Training": avg_loss, "Validation": avg_vloss},
+            #     epoch,
+            # )
+            # writer.add_scalars(
+            #     "Training vs. Validation Accuracy",
+            #     {"Training": avg_accuracy, "Validation": avg_vaccuracy},
+            #     epoch,
+            # )
 
-            writer.flush()
+            # writer.flush()
             epoch += 1
             logger.info("time elapsed: {:.2f}s".format(time.time() - time_epoch))
 
