@@ -1,6 +1,7 @@
 import ROOT
 import sys
 import argparse
+import array
 
 from samples import samples
 
@@ -86,6 +87,14 @@ for n in range(len(binning_DNN) - 1, 0, -1):
 
 print("],")
 print(len(binning_DNN))
+
+hSignal.Rebin(len(binning_DNN) - 1, "hSignal_rebinned", array.array("d", binning_DNN))
+c=ROOT.TCanvas("c","c",800,800)
+hSignal.Draw()
+
+c.Draw()
+c.SaveAs("rebinning.png")
+
 
 fSignal.Close()
 fSignal1.Close()
