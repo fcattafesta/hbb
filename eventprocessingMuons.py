@@ -5,7 +5,7 @@ def getFlowMuons(flow):
     ### Analysis for muons ###
 
     ## Muon pair selection ##
-    flow.Selection("twoMuons", "nSelectedMuon==2")
+    flow.Selection("twoMuons", "nSelectedMuon==2 && nSelectedElectron==0")
     flow.Define("SelectedMuon_p4", "@p4v(SelectedMuon)")
     flow.Distinct("MuMu", "SelectedMuon")
     flow.Define(

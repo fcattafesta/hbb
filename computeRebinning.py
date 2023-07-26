@@ -49,7 +49,7 @@ hSignal.Add(fSignal1.Get(variable + f"___{SR}").Clone(), samples[signalSample]["
 
 
 xMax = 10. if variable == "atanhDNN_Score" else 1.
-binMinWidth = 0.35 if variable == "atanhDNN_Score" else 0.03
+binMinWidth = 0.15 if variable == "atanhDNN_Score" else 0.03
 Nbins_binning = hSignal.GetNbinsX()
 MinNumberOfBin_inBinning = int(binMinWidth / xMax * Nbins_binning)
 binLimitDown = Nbins_binning
