@@ -18,6 +18,7 @@ parser.add_argument(
 )
 parser.add_argument("--blind", help="Blind data in plots", action="store_true")
 parser.add_argument("--sf", default=False, help="Scale Factor", action="store_true")
+parser.add_argument("--bit", default=False, help="Btag bit", action="store_true")
 parser.add_argument(
     "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
 )

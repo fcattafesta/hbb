@@ -80,19 +80,29 @@ while binLimitDown > 0:
     )
     minNumberOfEventPerBin += delta
 
-print("    '" + variable + "' :")
-print("[0")
-for n in range(len(binning_DNN) - 1, 0, -1):
-    print(",", binning_DNN[n])
+print("'" + variable + "' :")
+#invert the list
+binning_DNN += [0]
+binning_DNN.reverse()
 
-print("],")
+print("[")
+for i in range(len(binning_DNN)):
+    print(binning_DNN[i], end=", ")
+
+print("\n],")
 print(len(binning_DNN))
 
-hSignal.Rebin(len(binning_DNN) - 1, "hSignal_rebinned", array.array("d", binning_DNN))
+# binning_DNN=[0, 0.125, 0.276, 0.427, 0.578, 0.729, 0.88, 1.031, 1.182, 1.333, 1.484, 1.635, 1.786, 1.937, 2.088, 2.239, 2.39, 2.545, 2.779, 3.0, 3.3, 3.6, 4.0, 10.0, ]
+binning_DNN=[0, 0.88, 1.4, 1.937, 2.545,   3.0, 3.3, 3.6, 4.0, 10.0]
+print("len", len(binning_DNN))
+h_rebin=hSignal.Rebin(len(binning_DNN) - 1, "hSignal_rebinned", array.array("d", binning_DNN))
 c=ROOT.TCanvas("c","c",800,800)
-hSignal.Draw()
+h_rebin.Draw()
 
-c.Draw()
+# c.Draw()
+# # wait for input to keep the GUI (which lives on a ROOT event dispatcher) alive
+# ROOT.gApplication.Run()
+
 c.SaveAs("rebinning.png")
 
 

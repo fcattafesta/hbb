@@ -10,7 +10,7 @@ from collections import defaultdict
 import copy
 import ctypes
 
-ROOT.gVerboseLevel = ROOT.kError
+ROOT.gErrorIgnoreLevel = ROOT.kError
 
 # NOTE: gr is the sample name and hn is the variable name
 
@@ -42,7 +42,6 @@ if __name__ == "__main__":
 
     btag_label = labelBtag[args.btag]
     Special_variables = ["atanhDNN_Score"]
-
 
     colors = [
         ROOT.kRed,
@@ -201,8 +200,12 @@ if __name__ == "__main__":
                 labelLeptons[hn.split("___")[1]]
                 + btag_label
                 + (" SF" if args.sf else "")
+                + (" BtagBit" if args.bit else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
-                else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
+                else hn.split("___")[1]
+                + btag_label
+                + (" SF" if args.sf else "")
+                + (" BtagBit" if args.bit else ""),
                 42,
                 size=0.04,
             )
@@ -235,10 +238,10 @@ if __name__ == "__main__":
 
         h.SetTitle("")
         w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
-        h.GetYaxis().SetLabelSize(w*0.5 if isSys else w)
-        h.GetXaxis().SetLabelSize(w*0.5 if isSys else w)
-        h.GetYaxis().SetTitleSize(w*0.8 if isSys else w)
-        h.GetXaxis().SetTitleSize(w*0.8 if isSys else w)
+        h.GetYaxis().SetLabelSize(w * 0.5 if isSys else w)
+        h.GetXaxis().SetLabelSize(w * 0.5 if isSys else w)
+        h.GetYaxis().SetTitleSize(w * 0.8 if isSys else w)
+        h.GetXaxis().SetTitleSize(w * 0.8 if isSys else w)
         h.GetYaxis().SetMaxDigits(2)
         if isRatio or isSys:
             h.GetYaxis().SetTitle("Data/MC - 1" if isRatio else "Sys/Nom - 1")
@@ -266,7 +269,7 @@ if __name__ == "__main__":
                 h.GetXaxis().SetTitle(
                     labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
                 )
-                #logger.info("noData xKey %s", xKey)
+                # logger.info("noData xKey %s", xKey)
             else:
                 h.GetXaxis().SetLabelSize(0)
                 h.GetXaxis().SetTitleSize(0)
@@ -798,7 +801,7 @@ if __name__ == "__main__":
                 h = f[d].Get(hn)
                 histoSingleSyst[hn][d] = {}
                 if h:
-                    #logger.info("Adding %s %s" % (d, hn))
+                    # logger.info("Adding %s %s" % (d, hn))
                     if hn.split("___")[0] in list(model.rebin.keys()):
                         # print "Rebin",hn
                         h = h.Rebin(
@@ -1117,9 +1120,9 @@ if __name__ == "__main__":
         # draw the histo for each systematic
         if sample == "total":
             histo = histosum[hn]
-            histoSys  = histosumSyst[hn]
+            histoSys = histosumSyst[hn]
         else:
-            histo =all_histo_all_syst_grouped[sample][hn]["nom"]
+            histo = all_histo_all_syst_grouped[sample][hn]["nom"]
             histoSys = all_histo_all_syst_grouped[sample][hn]
 
         histo.SetFillStyle(3003)
@@ -1147,7 +1150,7 @@ if __name__ == "__main__":
             c_sys.cd(1)
             myLegend_sys = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
             max_value = max(histo.GetMaximum(), histoSys[systematic[0]].GetMaximum())
-            min_value=max(0.1, 0.1 * histo.GetMinimum())
+            min_value = max(0.1, 0.1 * histo.GetMinimum())
             max_value_old = histo.GetMaximum()
             min_value_old = histo.GetMinimum()
 
@@ -1488,8 +1491,12 @@ if __name__ == "__main__":
                 labelLeptons[hn.split("___")[1]]
                 + btag_label
                 + (" SF" if args.sf else "")
+                + (" BtagBit" if args.bit else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
-                else hn.split("___")[1] + btag_label + (" SF" if args.sf else ""),
+                else hn.split("___")[1]
+                + btag_label
+                + (" SF" if args.sf else "")
+                + (" BtagBit" if args.bit else ""),
                 42,
                 size=0.04,
             )
@@ -1707,7 +1714,6 @@ if __name__ == "__main__":
                 tot_dataset.update(model.background)
                 tot_dataset.update(model.data)
 
-
                 for gr in tot_dataset:
                     all_histo_all_syst_grouped[gr] = {}
                     all_histo_all_syst_grouped[gr][hn] = {}
@@ -1802,13 +1808,15 @@ if __name__ == "__main__":
         #    print("DEBUG", model, all_histo_all_syst, year)
         if model.background and model.signal and model.data:
             import WorkSpace as WorkSpace
-            WorkSpace.createWorkSpace(model, all_histo_all_syst, year, args.btag, outdir)
+
+            WorkSpace.createWorkSpace(
+                model, all_histo_all_syst, year, args.btag+ ("_BtagBit" if args.bit else ""), outdir
+            )
     else:
         from multiprocessing import Pool
 
         runpool = Pool(30)
         runpool.map(makeplot, his[1:])
-
 
     tot = 0
     for s in totevCount:

@@ -511,7 +511,8 @@ def createWorkSpace(model, all_histo_all_syst, year, btag, outdir="workspace/"):
     region = collections.OrderedDict(sorted(region.items()))
 
     os.system("mkdir -p " + outdir)
-    datacard = open(outdir + "/datacard" + year + model.name + "_" + btag + ".txt", "w")
+    datacard_name = outdir + "/datacard" + year + model.name + "_" + btag + ".txt"
+    datacard = open(datacard_name, "w")
 
     datacard.write(
         "imax " + str(len(list(all_histo_all_syst.keys()))) + "  number of channels\n"
@@ -653,8 +654,9 @@ def createWorkSpace(model, all_histo_all_syst, year, btag, outdir="workspace/"):
     logger.info("model.systematicDetail 7 %s" % model.systematicDetail)
     printSystematicGrouping(model.systematicDetail, outdir + "/grouping7.py")
 
+    systematic_file=outdir + "/fileCombine" + year + model.name + "_" + btag + ".root"
     writeSystematic(
-        outdir + "/fileCombine" + year + model.name + "_" + btag + ".root",
+        systematic_file,
         region,
         varName,
         model.systematicDetail,
@@ -667,4 +669,8 @@ def createWorkSpace(model, all_histo_all_syst, year, btag, outdir="workspace/"):
     for x in list(region.keys()):
         datacard.write(region[x] + " autoMCStats 0 1\n\n")
 
+    datacard.close()
+    work_dir=f"workspace/{model.name}_{btag}/"
+    os.system(f"mkdir -p {work_dir}")
+    os.system(f"cp {systematic_file} {datacard_name} {work_dir}")
     logger.info("WorkSpace end")
