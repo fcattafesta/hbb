@@ -41,7 +41,6 @@ if __name__ == "__main__":
     from logger import setup_logger
 
     btag_label = labelBtag[args.btag]
-    Special_variables = ["atanhDNN_Score"]
 
     colors = [
         ROOT.kRed,
@@ -74,6 +73,9 @@ if __name__ == "__main__":
 
     logger = setup_logger(outpath + f"/logger_{date_time}.log")
     logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
+    
+    Special_variables = ["atanhDNN_Score"] if not args.variablesToFit else args.variablesToFit
+    logger.info("Special_variables: %s", Special_variables)
 
     def d_value(h1, h2):
         hSignal = h1.Clone()
@@ -127,7 +129,7 @@ if __name__ == "__main__":
                 Significance.SetBinContent(
                     i,
                     Significance.GetBinContent(i)
-                    / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)),
+                    / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)+0.5),
                 )
             except ZeroDivisionError:
                 Significance.SetBinContent(i, 0)

@@ -1,3 +1,7 @@
+# [0.0, 0.8099999999999999, 1.6199999999999999, 1.905, 2.13, 2.34, 2.5349999999999997, 2.715, 2.94, 3.3, 10]
+# new_histo_content [0.8485512535380314, 4.383495129583348, 2.747284548676875, 2.405946694539244, 2.3386751692457755, 2.3030540730695988, 2.1161810676834087, 2.4635075345617445, 3.0687765287028705, 5.856188600518083]
+# sig_sum 9.91484272553397
+
 import ROOT
 import os
 import argparse
@@ -98,14 +102,56 @@ def significance_sum(significance_list):
     return significance
 
 
-hSignal.Rebin(10)
-hBackground.Rebin(10)
+# hSignal.Rebin(50)
+# hBackground.Rebin(50)
+
+# if bBackground.GetBinContent(i) < 0.1 merge with the previous bin
+i = 1
+while i in range(1, hBackground.GetNbinsX() + 1):
+    if hBackground.GetBinContent(i) < 0.0001 or hSignal.GetBinContent(i) < 0.0001:
+        # print("merging bin", i)
+        new_bin_edges = [
+            hBackground.GetBinLowEdge(j)
+            for j in range(1, hBackground.GetNbinsX() + 1)
+            if hBackground.GetBinLowEdge(j) != hBackground.GetBinLowEdge(i)
+        ]
+        #print(new_bin_edges)
+
+        hBackground = hBackground.Rebin(
+            len(new_bin_edges) - 1, "hBackground", array.array("d", new_bin_edges)
+        )
+        hSignal = hSignal.Rebin(
+            len(new_bin_edges) - 1, "hSignal", array.array("d", new_bin_edges)
+        )
+        bkg_list=[hBackground.GetBinContent(j) for j in range(1, hBackground.GetNbinsX() + 1)]
+        sig_list=[hSignal.GetBinContent(j) for j in range(1, hSignal.GetNbinsX() + 1)]
+        # print   (bkg_list, sum(bkg_list))
+        # print   (hBackground.GetNbinsX())
+        # print   (sig_list, sum(sig_list))
+        # print   (hSignal.GetNbinsX())
+        # hBackground.SetBinContent(i - 1, hBackground.GetBinContent(i) + hBackground.GetBinContent(i - 1))
+        # hBackground.SetBinContent(i, 0)
+
+        # hSignal.SetBinContent(i - 1, hSignal.GetBinContent(i) + hSignal.GetBinContent(i - 1))
+        # hSignal.SetBinContent(i, 0)
+        i -= 1
+    else:
+        i += 1
+
 
 hSignificance = hSignal.Clone()
 for i in range(1, hSignificance.GetNbinsX() + 1):
-    if hBackground.GetBinContent(i) <= 0:
-        # print("bin", i, "has {} background events".format(hBackground.GetBinContent(i)))
-        hBackground.SetBinContent(i, 0)
+    # if hBackground.GetBinContent(i) <= 0:
+    #     # print("bin", i, "has {} background events".format(hBackground.GetBinContent(i)))
+    #     hBackground.SetBinContent(i, 0)
+
+    print(
+        "bin",
+        i,
+        "has {} background events and {} signal events".format(
+            hBackground.GetBinContent(i), hSignal.GetBinContent(i)
+        ),
+    )
 
     hSignificance.SetBinContent(
         i,
@@ -277,8 +323,9 @@ histo = [
 bin_edges = [
     hSignificance.GetBinLowEdge(i) for i in range(1, hSignificance.GetNbinsX() + 1)
 ]
-print("histo", histo)
-print("bin_edges", bin_edges)
+print("histo", histo, len(histo))
+print("bin_edges", bin_edges, len(bin_edges))
+
 histo = optimal_rebinning(
     histo,
     desired_bins
@@ -287,123 +334,25 @@ histo = optimal_rebinning(
 print("histo", histo)
 print("len histo", len(histo))
 
-# histo = [
-#     [
-#         0.0024306537202443933,
-#         0.008856992588505032,
-#         0.016774297868251364,
-#         0.027486091941398127,
-#         0.03951775962367267,
-#         0.05878229634538258,
-#         0.07888107605241809,
-#         0.10701883397959275,
-#         0.15796041081060272,
-#         0.19182688750859475,
-#         0.2545146403905067,
-#     ],
-#     [0.2991443198299341, 0.3534865321089538, 0.40732890076140926],
-#     [0.47368681036505994, 0.5029821334205813],
-#     [0.5324952682820122, 0.5931157553804793, 0.6070531633252153, 0.5445106081020352],
-#     [0.5285307191558829, 0.441495995773525],
-#     [0.4396487882598152, 0.3826199498600505, 0.2960329956009849],
-#     [
-#         0.3026907191184752,
-#         0.25924329870492013,
-#         0.2407221961417,
-#         0.2919321692533317,
-#         0.13432497261851228,
-#         0.14085368214412008,
-#         0.08796619899450754,
-#         0.06909840618789642,
-#         0.11660475224858484,
-#         0.04233277908327024,
-#         0.042324901220232476,
-#         0.03194543943312698,
-#         0.028873279563590336,
-#         0.0027189619049965193,
-#         0.008404608113568109,
-#         0.002161555618196868,
-#         0.003720252520827842,
-#         0.0013753838802501358,
-#         0.00481672519143292,
-#         0.0009621875326441154,
-#         7.371733344373806e-05,
-#         0.0012154601782428482,
-#         0.0018165317997415132,
-#         0.0001705991430281374,
-#         0.00020009968274746064,
-#         0.000633017776577034,
-#         0.00015633198983000104,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0027272308108986652,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#         0.0,
-#     ],
-# ]
-
-
 # compute the new bin-edges
 new_bin_num = [0]
 for i, new_bin in enumerate(histo[:-1]):
     j = len(new_bin)
     if i == 0:
-        to_add = j + 1
+        to_add = j #+ 1
     else:
         to_add = j + new_bin_num[-1]
     new_bin_num.append(to_add)
 
-print("new_bin_num", new_bin_num)
+#new_bin_num =[0, 529, 1021, 1208, 1374, 1533, 1668, 1774, 2056, 2405]
+print("new_bin_num", new_bin_num, len(new_bin_num))
+#new_bin_num [0, 529, 1021, 1208, 1374, 1533, 1668, 1774, 2056, 2406]
 
 new_bin_edges = [bin_edges[i] for i in new_bin_num] + [10]
-print("new_bin_edges", new_bin_edges)
-# new_bin_edges =[0.0, 1.7999999999999998, 2.25, 2.55,  3.15, 3.4499999999999997, 3.9, 10]
+print("new_bin_edges", new_bin_edges, len(new_bin_edges))
 
 new_histo_content = [sum(new_bin) for new_bin in histo]
-print("new_histo_content", new_histo_content)
+print("new_histo_content", new_histo_content, len(new_histo_content))
 
 
 new_histo = ROOT.TH1F(

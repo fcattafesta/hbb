@@ -4,16 +4,31 @@ import subprocess
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("-d", "--dir", help="Directory", type=str, default=".")
+parser.add_argument("-d", "--datacard", help="Datacard name", type=str, default="datacard.txt")
+parser.add_argument("-c", "--combine", help="Combine datacards", action="store_true")
 args = parser.parse_args()
 
-workdir = args.dir + "/"
+if args.combine:
+    datacards = ""
+    # find the datacard file recursevely
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if "datacard" in file and ".txt" in file:
+                datacards+=os.path.join(root, file) + " "
 
-datacard = os.path.splitext(
-    [f for f in os.listdir(workdir) if f.startswith("datacard")][0]
-)[0]
+    print("Found datacards: ", datacards)
+    print("Combining datacards...")
+    subprocess.run(f"combineCards.py {datacards} > {args.datacard}", shell=True)
 
-name = datacard.split("2018")[1] if "2018" in datacard else datacard
+workdir = os.path.dirname(args.datacard)
+workdir = workdir + "/" if workdir else ""
+
+datacard = os.path.splitext(args.datacard)[0]
+
+print("workdir: ", workdir)
+print("datacard: ", datacard)
+
+name = datacard.replace("datacard_", "").replace("datacard", "")
 
 # Define the file name for the output log
 log_file = 'output.log'
@@ -40,3 +55,6 @@ with open(log_file, 'w') as f:
         print("\n\n")
         f.write(output)
         f.write('\n\n')
+
+
+# combineCards.py datacard1.txt datacard2.txt > datacard_combined.txt

@@ -31,7 +31,7 @@ elif [[ $suffix == *deepflav* ]]; then
 fi
 
 sf=""
-if [[ $suffix == *_sf* ]]; then
+if [[ $suffix == *_sf* || $suffix == *_sys* ]]; then
     sf="--sf"
 fi
 
