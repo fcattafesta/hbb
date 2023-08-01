@@ -88,6 +88,8 @@ for file in files_to_open:
         hBackground.Add(h)
         fBackground1.Close()
 
+
+
 def figure_of_merit(hs, hb, print_stuff=False):
     significance_list = []
     for i in range(1, len(hs)):
@@ -112,8 +114,29 @@ def significance_sum(significance_list):
     return significance
 
 
-# hSignal.Rebin(5)
-# hBackground.Rebin(5)
+hSignal.Rebin(5)
+hBackground.Rebin(5)
+
+hS_notsmooth = hSignal.Clone()
+hB_notsmooth = hBackground.Clone()
+
+print("smoothing")
+hSignal.Smooth()
+hBackground.Smooth()
+
+
+c_compare = ROOT.TCanvas("c_compare", "c_compare", 800, 800)
+c_compare.cd()
+hSignal.SetLineColor(ROOT.kRed)
+hSignal.Draw("hist")
+# hBackground.SetLineColor(ROOT.kBlue)
+# hBackground.Draw("hist same")
+hS_notsmooth.SetLineColor(ROOT.kGreen)
+hS_notsmooth.Draw("EP same")
+# hB_notsmooth.SetLineColor(ROOT.kOrange)
+# hB_notsmooth.Draw("hist same")
+c_compare.SaveAs("compare.png")
+
 
 # if bBackground.GetBinContent(i) < 0.1 merge with the previous bin
 i = 1

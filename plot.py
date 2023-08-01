@@ -1546,9 +1546,9 @@ if __name__ == "__main__":
                 if hn in datasum.keys():
                     min_value = datasum[hn].GetMinimum()
                     max_value = datasum[hn].GetMaximum()
-                    datasum[hn].SetMinimum(
-                        max(0.1 * datasum[hn].GetMinimum(), 0.1)
-                    )  # zoom out y axis
+                    datasum[hn].SetMinimum(0.1 * datasum[hn].GetMinimum())
+                    #     max(0.1 * datasum[hn].GetMinimum(), 0.1)
+                    # )  # zoom out y axis
                     if i == 0:
                         datasum[hn].SetMaximum(
                             max(datasum[hn].GetMaximum(), histosum[hn].GetMaximum()) * 2
