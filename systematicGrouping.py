@@ -106,7 +106,7 @@ def systematicGrouping(background, signal, jesList, year):
         f"JER": {
             # f"JER{type}": {
             "type": "shape",
-            "value": 1.0,
+            "value": 1.0, #0.5,
             "decorrelate": {"": Hbb + DY_bb + DY_b + DY_c + DY_udsg + VV_ + TT + ST},  # NOTE: ok?
         }
         # for type in ["Up", "Down"]

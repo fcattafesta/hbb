@@ -297,6 +297,9 @@ def runSample(ar):
             traceback.print_exc()
             logger.error("FAIL", s)
             return 1
+        except KeyboardInterrupt:
+            logger.error("Interrupted", s)
+            sys.exit(1)
     else:
         logger.info("Null file %s" % s)
 
@@ -369,7 +372,7 @@ elif "model" in args.model[:5]:
         logger.info("%s\t%s" % (x, samples[x]["lumi"]))
 
     toproc = [
-        (s, samples[s]["files"]) for s in sams if s in allmc + alldata  # + sys.argv[3:]
+        (s, samples[s]["files"]) for s in sams if s in allmc + alldata  
     ]
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]

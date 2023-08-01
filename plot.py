@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     logger = setup_logger(outpath + f"/logger_{date_time}.log")
     logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
-    
+
     Special_variables = ["atanhDNN_Score"] if not args.variablesToFit else args.variablesToFit
     logger.info("Special_variables: %s", Special_variables)
 
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
         if not btag_rescale:
             SignificanceSum_str = (
-                " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}}#right)^{2}} = "
+                " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}+0.5}#right)^{2}} = "
                 + str("%.2f" % SignificanceSum)
                 + (
                     f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})"
