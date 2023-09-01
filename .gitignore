@@ -165,3 +165,4 @@ workspace/
 figure/
 *.out
 test*
+!rescale_btag.json
