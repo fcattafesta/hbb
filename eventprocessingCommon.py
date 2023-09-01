@@ -10,7 +10,14 @@ def getFlowCommon(flow, btag, btag_bit):
         "SelectedMuon",
         "Muon",
         sel="Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
-    )
+    ) # HELP: Muon_pt > 20 and not 5?
+      # Note that the pt cut is applied also in the 2mu channel
+      # in which we have a cut in pt>15 which becomes useless
+      # in the data maybe there is a cut in pt>3
+
+     # HELP: Muon_dz<0.1 and not 1.0 as in AN?
+
+      # the cut on the pt>20 substitutes the cut on the pt>15
 
     ## Electrons ##
     flow.Define("Electron_iso", "(Electron_pfRelIso03_all)")
@@ -18,7 +25,13 @@ def getFlowCommon(flow, btag, btag_bit):
         "SelectedElectron",
         "Electron",
         sel="Electron_iso < 0.06 && Electron_mvaFall17V2Iso_WP90 && abs(Electron_eta) < 2.4 && Electron_dxy < 0.05 && Electron_dz < 0.2",
-    )
+    ) # HELP: why not Electron_pt > 7?
+      # is it underlined in the dataset?
+      # in the data maybe there is a cut in pt>5
+
+      # if think it's ok if i accepts in the region ONLY 2 leptons, but it's just less efficient since the cuts on pt are done later
+      # this is a problem if i accept 3 leptons... but i don't accept 3 leptons
+
 
     ### Preselction for Jets ###
     # NOTE: JEC?
@@ -98,7 +111,7 @@ def getFlowCommon(flow, btag, btag_bit):
 
     # define a variable that count the number of events
     flow.Define("number_of_events", "1")
-    
+
 
     # B-tagging working points
     flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_score, btag_wp[0]))

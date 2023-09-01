@@ -5,7 +5,7 @@ def getFlowElectrons(flow):
     ### Analysis for electrons ###
 
     ## Electron pair selection ##
-    flow.Selection("twoElectrons", "nSelectedElectron==2 && nSelectedMuon==0")
+    flow.Selection("twoElectrons", "nSelectedElectron==2 && nSelectedMuon==0") # HELP: why not nSelectedElectron==2 && nSelectedMuon<2?
     flow.Define("SelectedElectron_p4", "@p4v(SelectedElectron)")
     flow.Distinct("ElEl", "SelectedElectron")
     flow.Define(

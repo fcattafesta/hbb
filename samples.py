@@ -4,6 +4,10 @@ import glob
 from flavourSplitting import *
 
 
+
+# NOTE: xsec in pt bins are obtained using the xsec.py file in the preliminar_lhe directory
+# in which the xsec is computed using the ratio between the sum of weights of the events in the bin
+# and the sum of weights of all the events in the sample.
 samples = {
     "DYM50": {
         "xsec": 5765.40,
