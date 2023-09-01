@@ -372,7 +372,7 @@ elif "model" in args.model[:5]:
         logger.info("%s\t%s" % (x, samples[x]["lumi"]))
 
     toproc = [
-        (s, samples[s]["files"]) for s in sams if s in allmc + alldata  
+        (s, samples[s]["files"]) for s in sams if s in allmc + alldata
     ]
 elif args.model != "":
     toproc = [(s, samples[s]["files"]) for s in sams if s in args.model.split(",")]

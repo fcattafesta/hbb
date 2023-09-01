@@ -49,7 +49,7 @@ def getFlowSysJER(flow, sys):
         for name in ["Nom", "Down", "Up"] if not args.sf_only else ["Nom"]:
             flow.Define(
                 "Jet_pt_jer%s" % (name),
-                "Jet_genPt+(Jet_pt-Jet_genPt)*(2*Jet_jer%sSF-Jet_jerNomSF)" % (name),
+                "Jet_genPt+(Jet_pt-Jet_genPt)*Jet_jer%sSF" % (name), #"Jet_genPt+(Jet_pt-Jet_genPt)*(2*Jet_jer%sSF-Jet_jerNomSF)" if doublejer
             )
             if name != "Nom":
                 flow.Systematic(

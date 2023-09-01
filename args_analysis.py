@@ -21,7 +21,7 @@ parser.add_argument(
     type=int,
 )
 parser.add_argument(
-    "-p", "--num-processes", default=4, help="Number of processes", type=int
+    "-p", "--num-processes", default=3, help="Number of processes", type=int
 )  # 27 samples
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 parser.add_argument(
