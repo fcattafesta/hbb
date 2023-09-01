@@ -23,6 +23,8 @@ if args.history:
     from plot_history import read_from_txt, plot_history
 
 
+# python train.py -e 200 -n 8 -d $in_dir/hbb_DNN_input/flav_el/btagscore_deepflav/Snapshots/  $in_dir/hbb_DNN_input/flav_mu/btagscore_deepflav/Snapshots/ --eval --histos -o --name deepflav_bit -g 0
+
 if __name__ == "__main__":
     start_time = time.time()
 
