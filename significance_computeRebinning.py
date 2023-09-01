@@ -1,4 +1,3 @@
-
 # new_bin_num [0, 1, 207, 249, 286, 320, 348, 379, 441, 535] 10
 # new_bin_edges [0.0, 0.0075, 1.5525, 1.8675, 2.145, 2.4, 2.6174999999999997, 2.85, 3.3225, 4.3275, 10] 11
 # new_histo_s [0.007215708254781813, 50.019729538779764, 16.57155753818742, 11.967472432695121, 8.982256093157455, 6.144879546477957, 4.949213263746416, 5.847191019914706, 3.977848449593
@@ -9,6 +8,23 @@
 # 0.9111388834293984, 0.8230209464416844, 0.0]
 # sig_sum 1.9616338948462193
 
+
+### with no rebinning
+# new_bin_num [0, 1, 1004, 1190, 1361, 1521, 1663, 1763, 2055, 2404] 10
+# new_bin_edges [0.0, 0.0015, 1.5090000000000001, 1.7925, 2.058, 2.316, 2.5665, 2.763, 3.3000000000000003, 4.338, 10] 11
+# new_histo_s [0.0002147951612369218, 47.59502703667189, 15.264485625363129, 12.211448288715431, 9.686295976594394, 7.620805917877405, 4.5795965245129, 7.352280992534794, 4.17367806706442, 0.7074096971705958] 10
+# new_histo_b [149.80816181325008, 12272.459895079222, 460.12342798538947, 244.24412711867913, 133.59439135110264, 72.16609001716803, 29.633337327437324, 39.20058970358218, 13.647402999363493, 0.029419566070579717] 10
+# significance_list [1.0823584704741846e-05, 0.03860926722248333, 0.29774652991612705, 0.41399676288287035, 0.5332255589514733, 0.65434028267415, 0.6837302509166012, 0.9322050538473008, 0.9403853543505636, 1.0534037799227807, 0.0]
+# sig_sum 2.0747301391520683
+
+
+# smooth rebin 50
+# new_bin_num [0, 1, 21, 26, 30, 34, 37, 41, 45, 51] 10
+# new_bin_edges [0.0, 0.075, 1.575, 1.95, 2.25, 2.55, 2.775, 3.0749999999999997, 3.375, 3.8249999999999997, 10] 11
+# new_histo_s [0.30340376328729585, 49.94921537980642, 19.11091359559637, 12.07373386853263, 9.424729286720193, 5.269893705568059, 4.802978103319674, 2.8750278206761406, 2.3507560206972853, 1.9768930813673942] 10
+# new_histo_b [1918.2776134025753, 10464.093981360209, 486.19556345123937, 188.73157242868314, 97.91901251840237, 36.22143062048034, 25.88575847063353, 12.453146985016065, 8.677218342691445, 3.8344331667401086] 10
+# significance_list [0.0015380575975614888, 0.047484869575197604, 0.35465504252794233, 0.506370322577497, 0.6535320729403307, 0.7003795180859421, 0.7736185992750344, 0.6777232150283392, 0.6583171098697804, 0.7922275759527236, 0.0]
+# sig_sum 1.8495632899507137
 
 
 
@@ -51,18 +67,23 @@ files_to_open = [
     and data not in x
 ]
 # print(files_to_open)
+histos = []
 
 signalSample = "ZH"
 fSignal = ROOT.TFile.Open(f"{histodir}/{signalSample}_Histos.root")
-hs = fSignal.Get(variable + f"___{SR}").Clone()
+hs = fSignal.Get(variable + f"___{SR}")  # .Clone()
 hs.Scale(samples[signalSample]["xsec"] * samples[data]["lumi"])
+# hs.Smooth()
 hSignal = hs.Clone()
+histos.append(hSignal.Clone())
 
 bkgSample = "DYZpt-400To650"
 fBackground = ROOT.TFile.Open(f"{histodir}/{bkgSample}_Histos.root")
-hb = fBackground.Get(variable + f"___{SR}").Clone()
+hb = fBackground.Get(variable + f"___{SR}")  # .Clone()
 hb.Scale(samples[bkgSample]["xsec"] * samples[data]["lumi"])
+# hb.Smooth()
 hBackground = hb.Clone()
+histos.append(hBackground.Clone())
 
 files_to_open.remove(f"{signalSample}_Histos.root")
 files_to_open.remove(f"{bkgSample}_Histos.root")
@@ -75,25 +96,32 @@ for file in files_to_open:
             name.replace(ss, "")
     if name in ["ggZH"]:
         fSignal1 = ROOT.TFile.Open(f"{histodir}/{file}")
-        h = fSignal1.Get(variable + f"___{SR}").Clone()
+        h = fSignal1.Get(variable + f"___{SR}")  # .Clone()
+        h.SetDirectory(0)
         h.Scale(samples[name]["xsec"] * samples[data]["lumi"])
+        # h.Smooth()
         hSignal.Add(h)
-        fSignal1.Close()
+        histos.append(h)
 
+        fSignal1.Close()
     else:
         fBackground1 = ROOT.TFile.Open(f"{histodir}/{file}")
-        h = fBackground1.Get(variable + f"___{SR}").Clone()
+        h = fBackground1.Get(variable + f"___{SR}")  # .Clone()
+        h.SetDirectory(0)
         h.Scale(samples[name]["xsec"] * samples[data]["lumi"])
-
+        # h.Smooth()
         hBackground.Add(h)
+        histos.append(h)
         fBackground1.Close()
 
+for h in histos:
+    print(h.GetName(), h.Integral())
 
 
 def figure_of_merit(hs, hb, print_stuff=False):
     significance_list = []
     for i in range(1, len(hs)):
-        significance = hs[i] / (ROOT.TMath.Sqrt(hb[i] + 0.01 * hb[i]**2) + 0.5)
+        significance = hs[i] / (ROOT.TMath.Sqrt(hb[i] + 0.01 * hb[i] ** 2) + 0.5)
         significance_list.append(significance)
     if print_stuff:
         print("significance_list", significance_list)
@@ -114,15 +142,15 @@ def significance_sum(significance_list):
     return significance
 
 
-hSignal.Rebin(5)
-hBackground.Rebin(5)
+# hSignal.Rebin(50)
+# hBackground.Rebin(50)
 
 hS_notsmooth = hSignal.Clone()
 hB_notsmooth = hBackground.Clone()
 
 print("smoothing")
-hSignal.Smooth()
-hBackground.Smooth()
+hSignal.Smooth(5)
+hBackground.Smooth(5)
 
 
 c_compare = ROOT.TCanvas("c_compare", "c_compare", 800, 800)
@@ -137,12 +165,15 @@ hS_notsmooth.Draw("EP same")
 # hB_notsmooth.Draw("hist same")
 c_compare.SaveAs("compare.png")
 
+print("hsignal len", hSignal.GreetNbinsX())
 
 # if bBackground.GetBinContent(i) < 0.1 merge with the previous bin
+tot_histos = [hSignal, hBackground] + histos
 i = 1
 while i in range(1, hBackground.GetNbinsX() + 1):
+    # print("merging bin", i)
+
     if hBackground.GetBinContent(i) < 0.0001 or hSignal.GetBinContent(i) < 0.0001:
-        # print("merging bin", i)
         new_bin_edges = [
             hBackground.GetBinLowEdge(j)
             for j in range(1, hBackground.GetNbinsX() + 1)
@@ -150,16 +181,40 @@ while i in range(1, hBackground.GetNbinsX() + 1):
         ]
         # print(new_bin_edges)
 
-        hBackground = hBackground.Rebin(
+        hBackground=hBackground.Rebin(
             len(new_bin_edges) - 1, "hBackground", array.array("d", new_bin_edges)
         )
-        hSignal = hSignal.Rebin(
+        hSignal=hSignal.Rebin(
             len(new_bin_edges) - 1, "hSignal", array.array("d", new_bin_edges)
         )
-        bkg_list = [
-            hBackground.GetBinContent(j) for j in range(1, hBackground.GetNbinsX() + 1)
-        ]
-        sig_list = [hSignal.GetBinContent(j) for j in range(1, hSignal.GetNbinsX() + 1)]
+
+    # if any([h.GetBinContent(i) < 1e-4 for h in tot_histos]):
+    #     new_bin_edges = [
+    #         tot_histos[0].GetBinLowEdge(j)
+    #         for j in range(1, tot_histos[0].GetNbinsX() + 1)
+    #         if tot_histos[0].GetBinLowEdge(j) != tot_histos[0].GetBinLowEdge(i)
+    #     ]
+    #     print(new_bin_edges)
+    #     for i in range(len(tot_histos)):
+    #         tot_histos[i] = tot_histos[i].Rebin(
+    #             len(new_bin_edges) - 1,
+    #             tot_histos[i].GetName(),
+    #             array.array("d", new_bin_edges),
+    #         )  # .Clone()
+    #         if i == 0:
+    #             print(
+    #                 "\n\n new bin edges ",
+    #                 i,
+    #                 [
+    #                     tot_histos[i].GetBinLowEdge(j)
+    #                     for j in range(1, tot_histos[i].GetNbinsX() + 1)
+    #                 ],
+    #             )
+
+        # bkg_list = [
+        #     hBackground.GetBinContent(j) for j in range(1, hBackground.GetNbinsX() + 1)
+        # ]
+        # sig_list = [hSignal.GetBinContent(j) for j in range(1, hSignal.GetNbinsX() + 1)]
         # print   (bkg_list, sum(bkg_list))
         # print   (hBackground.GetNbinsX())
         # print   (sig_list, sum(sig_list))
@@ -176,6 +231,210 @@ while i in range(1, hBackground.GetNbinsX() + 1):
 
 desired_events_per_bin = 1
 desired_bins = 10
+
+
+
+def optimal_rebinning(histo_s, histo_b, target_bins):
+    n_bins = len(histo_s)
+
+    # Base case: If the number of target bins is equal to the number of bins in the histo_s,
+    # return the histo_s as it is.
+    if target_bins == n_bins:
+        return histo_s, histo_b
+
+    # Initialize an array to store the maximum figure of merit for each combination of bins.
+    max_merits = [[float("-inf")] * (n_bins + 1) for _ in range(target_bins + 1)]
+
+    # print("max_merits 0", max_merits)
+    # Initialize an array to store the split indices corresponding to each combination of bins.
+    split_indices = [[0] * (n_bins + 1) for _ in range(target_bins + 1)]
+
+    # print("split_indices", split_indices)
+    # Calculate the figure of merit for single bins (base case of the dynamic programming).
+    for i in range(1, n_bins + 1):
+        max_merits[1][i] = figure_of_merit([histo_s[i - 1]], [histo_b[i - 1]])
+    # print("max_merits 1", max_merits[1])
+    # Calculate the maximum figure of merit for all combinations of target_bins and number of bins.
+    for bins in range(2, target_bins + 1):
+        for i in range(1, n_bins + 1):
+            for j in range(i):
+                current_merit = max_merits[bins - 1][j] + figure_of_merit(
+                    histo_s[j:i], histo_b[j:i]
+                )
+                if current_merit > max_merits[bins][i]:
+                    # print("current_merit ",bins, i, j,  current_merit)
+                    max_merits[bins][i] = current_merit
+                    split_indices[bins][i] = j
+    # print("max_merits", max_merits)
+    # Backtrack to find the optimal rebinning.
+    result_bins_s = []
+    result_bins_b = []
+
+    i = n_bins
+    for bins in range(target_bins, 0, -1):
+        j = split_indices[bins][i]
+        result_bins_s.insert(0, histo_s[j:i])
+        result_bins_b.insert(0, histo_b[j:i])
+        i = j
+
+    return result_bins_s, result_bins_b
+
+
+# histo = rebin_histogram(
+#     hSignificance,
+#     significance_sum,
+#     desired_events_per_bin,
+#     desired_bins
+#     # hSignificance, desired_events_per_bin, desired_bins
+# )
+
+# merge adjacent bins so that the number of bins is 1/100 of the number it is now
+
+histo_s = [hSignal.GetBinContent(i) for i in range(1, hSignal.GetNbinsX() + 1)]
+histo_b = [hBackground.GetBinContent(i) for i in range(1, hBackground.GetNbinsX() + 1)]
+bin_edges = [hSignal.GetBinLowEdge(i) for i in range(1, hSignal.GetNbinsX() + 1)]
+print("histo_s", histo_s, len(histo_s))
+print("histo_b", histo_b, len(histo_b))
+print("bin_edges", bin_edges, len(bin_edges))
+
+new_histo_s, new_histo_b = optimal_rebinning(
+    histo_s,
+    histo_b,
+    desired_bins
+)
+
+
+# for i in range(len(tot_histos)):
+#     h_list=[tot_histos[i].GetBinContent(i) for i in range(1, tot_histos[i].GetNbinsX() + 1)]
+#     print("h_list  ",i,  h_list, len(h_list))
+
+# bin_edges = [tot_histos[0].GetBinLowEdge(i) for i in range(1, tot_histos[0].GetNbinsX() + 1)]
+
+
+# new_histo_s, new_histo_b = optimal_rebinning(
+#     tot_histos[0],#histo_s,
+#     tot_histos[1],#histo_b,
+#     desired_bins
+# )
+
+
+print("new_histo_s", new_histo_s, len(new_histo_s))
+print("new_histo_b", new_histo_b, len(new_histo_b))
+
+
+# compute the new bin-edges
+new_bin_num = [0]
+for i, new_bin in enumerate(new_histo_s[:-1]):
+    j = len(new_bin)
+    if i == 0:
+        to_add = j  # + 1
+    else:
+        to_add = j + new_bin_num[-1]
+    new_bin_num.append(to_add)
+
+# new_bin_num =[0, 529, 1021, 1208, 1374, 1533, 1668, 1774, 2056, 2405]
+print("new_bin_num", new_bin_num, len(new_bin_num))
+# new_bin_num [0, 529, 1021, 1208, 1374, 1533, 1668, 1774, 2056, 2406]
+
+new_bin_edges = [bin_edges[i] for i in new_bin_num] + [10]
+print("new_bin_edges", new_bin_edges, len(new_bin_edges))
+
+new_histo_s = [sum(new_bin) for new_bin in new_histo_s]
+new_histo_b = [sum(new_bin) for new_bin in new_histo_b]
+print("new_histo_s", new_histo_s, len(new_histo_s))
+print("new_histo_b", new_histo_b, len(new_histo_b))
+
+histo_rebin_s = ROOT.TH1F(
+    "histo_rebin_s",
+    "histo_rebin_s",
+    len(new_bin_edges) - 1,
+    array.array("d", new_bin_edges),
+)
+for i, new_bin in enumerate(new_histo_s):
+    histo_rebin_s.SetBinContent(i + 1, new_bin)
+
+histo_rebin_b = ROOT.TH1F(
+    "histo_rebin_b",
+    "histo_rebin_b",
+    len(new_bin_edges) - 1,
+    array.array("d", new_bin_edges),
+)
+for i, new_bin in enumerate(new_histo_b):
+    histo_rebin_b.SetBinContent(i + 1, new_bin)
+
+sig_sum = figure_of_merit(histo_rebin_s, histo_rebin_b, True)
+print("sig_sum", sig_sum)
+
+
+
+hSignificance = histo_rebin_s.Clone()
+for i in range(1, hSignificance.GetNbinsX() + 1):
+    # if hBackground.GetBinContent(i) <= 0:
+    #     # print("bin", i, "has {} background events".format(hBackground.GetBinContent(i)))
+    #     hBackground.SetBinContent(i, 0)
+
+    print(
+        "bin",
+        i,
+        "has {} background events and {} signal events".format(
+            histo_rebin_b.GetBinContent(i), histo_rebin_s.GetBinContent(i)
+        ),
+    )
+
+    hSignificance.SetBinContent(
+        i,
+        hSignificance.GetBinContent(i)
+        / (
+            math.sqrt(
+                histo_rebin_b.GetBinContent(i)
+                + (0.1 * histo_rebin_b.GetBinContent(i)) ** 2
+            )
+            + 0.5
+        ),
+    )
+    print("bin", i, "has {} significance".format(hSignificance.GetBinContent(i)))
+
+significance_content = [
+    hSignificance.GetBinContent(i) for i in range(1, hSignificance.GetNbinsX() + 1)
+]
+print("hSignificance", significance_content, len(significance_content))
+print("significance sum", significance_sum(significance_content))
+
+canvas = ROOT.TCanvas("canvas", "canvas", 800, 800)
+hSignificance.Draw()
+# canvas.Draw()
+# wait for input to keep the GUI (which lives on a ROOT event dispatcher) alive
+# ROOT.gApplication.Run()
+canvas.SaveAs("rebinning_sig.png")
+
+c_sig = ROOT.TCanvas("c_sig", "c_sig", 800, 800)
+c_sig.cd()
+# log scale
+c_sig.SetLogy()
+histo_rebin_s.Draw()
+c_sig.SaveAs("rebinning_sig_s.png")
+
+c_bkg = ROOT.TCanvas("c_bkg", "c_bkg", 800, 800)
+c_bkg.cd()
+# log scale
+c_bkg.SetLogy()
+histo_rebin_b.Draw()
+c_bkg.SaveAs("rebinning_sig_b.png")
+
+
+fSignal.Close()
+fBackground.Close()
+
+
+
+
+
+
+
+
+
+
+
 
 
 # def rebin_histogram(
@@ -274,117 +533,8 @@ desired_bins = 10
 #     return hs
 
 
-def optimal_rebinning(histo_s, histo_b, target_bins):
-    n_bins = len(histo_s)
-
-    # Base case: If the number of target bins is equal to the number of bins in the histo_s,
-    # return the histo_s as it is.
-    if target_bins == n_bins:
-        return histo_s, histo_b
-
-    # Initialize an array to store the maximum figure of merit for each combination of bins.
-    max_merits = [[float("-inf")] * (n_bins + 1) for _ in range(target_bins + 1)]
-
-    # print("max_merits 0", max_merits)
-    # Initialize an array to store the split indices corresponding to each combination of bins.
-    split_indices = [[0] * (n_bins + 1) for _ in range(target_bins + 1)]
-
-    # print("split_indices", split_indices)
-    # Calculate the figure of merit for single bins (base case of the dynamic programming).
-    for i in range(1, n_bins + 1):
-        max_merits[1][i] = figure_of_merit([histo_s[i - 1]], [histo_b[i - 1]])
-    # print("max_merits 1", max_merits[1])
-    # Calculate the maximum figure of merit for all combinations of target_bins and number of bins.
-    for bins in range(2, target_bins + 1):
-        for i in range(1, n_bins + 1):
-            for j in range(i):
-                current_merit = max_merits[bins - 1][j] + figure_of_merit(
-                    histo_s[j:i], histo_b[j:i]
-                )
-                if current_merit > max_merits[bins][i]:
-                    # print("current_merit ",bins, i, j,  current_merit)
-                    max_merits[bins][i] = current_merit
-                    split_indices[bins][i] = j
-    # print("max_merits", max_merits)
-    # Backtrack to find the optimal rebinning.
-    result_bins_s = []
-    result_bins_b = []
-
-    i = n_bins
-    for bins in range(target_bins, 0, -1):
-        j = split_indices[bins][i]
-        result_bins_s.insert(0, histo_s[j:i])
-        result_bins_b.insert(0, histo_b[j:i])
-        i = j
-
-    return result_bins_s, result_bins_b
 
 
-# histo = rebin_histogram(
-#     hSignificance,
-#     significance_sum,
-#     desired_events_per_bin,
-#     desired_bins
-#     # hSignificance, desired_events_per_bin, desired_bins
-# )
-
-# merge adjacent bins so that the number of bins is 1/100 of the number it is now
-# hSignificance.Rebin(100)
-histo_s = [hSignal.GetBinContent(i) for i in range(1, hSignal.GetNbinsX() + 1)]
-histo_b = [
-    hBackground.GetBinContent(i) for i in range(1, hBackground.GetNbinsX() + 1)
-]
-bin_edges = [hSignal.GetBinLowEdge(i) for i in range(1, hSignal.GetNbinsX() + 1)]
-print("histo_s", histo_s, len(histo_s))
-print("histo_b", histo_b, len(histo_b))
-print("bin_edges", bin_edges, len(bin_edges))
-
-new_histo_s, new_histo_b = optimal_rebinning(
-    histo_s,
-    histo_b,
-    desired_bins
-    # hSignificance, desired_events_per_bin, desired_bins
-)
-print("new_histo_s", new_histo_s, len(new_histo_s))
-print("new_histo_b", new_histo_b, len(new_histo_b))
-
-
-# compute the new bin-edges
-new_bin_num = [0]
-for i, new_bin in enumerate(new_histo_s[:-1]):
-    j = len(new_bin)
-    if i == 0:
-        to_add = j  # + 1
-    else:
-        to_add = j + new_bin_num[-1]
-    new_bin_num.append(to_add)
-
-# new_bin_num =[0, 529, 1021, 1208, 1374, 1533, 1668, 1774, 2056, 2405]
-print("new_bin_num", new_bin_num, len(new_bin_num))
-# new_bin_num [0, 529, 1021, 1208, 1374, 1533, 1668, 1774, 2056, 2406]
-
-new_bin_edges = [bin_edges[i] for i in new_bin_num] + [10]
-print("new_bin_edges", new_bin_edges, len(new_bin_edges))
-
-new_histo_s = [sum(new_bin) for new_bin in new_histo_s]
-new_histo_b = [sum(new_bin) for new_bin in new_histo_b]
-print("new_histo_s", new_histo_s, len(new_histo_s))
-print("new_histo_b", new_histo_b, len(new_histo_b))
-
-histo_rebin_s = ROOT.TH1F(
-    "histo_rebin_s", "histo_rebin_s", len(new_bin_edges) - 1, array.array("d", new_bin_edges)
-)
-for i, new_bin in enumerate(new_histo_s):
-    histo_rebin_s.SetBinContent(i + 1, new_bin)
-
-histo_rebin_b = ROOT.TH1F(
-    "histo_rebin_b", "histo_rebin_b", len(new_bin_edges) - 1, array.array("d", new_bin_edges)
-)
-for i, new_bin in enumerate(new_histo_b):
-    histo_rebin_b.SetBinContent(i + 1, new_bin)
-
-sig_sum = figure_of_merit(histo_rebin_s,   histo_rebin_b, True)
-print("sig_sum", sig_sum)
 
 
 # if a bin has 0 content merge it with the previous bin and create a unique bin
@@ -411,60 +561,3 @@ print("sig_sum", sig_sum)
 
 
 # print("number of bins", histo.GetNbinsX())
-
-
-
-hSignificance = histo_rebin_s.Clone()
-for i in range(1, hSignificance.GetNbinsX() + 1):
-    # if hBackground.GetBinContent(i) <= 0:
-    #     # print("bin", i, "has {} background events".format(hBackground.GetBinContent(i)))
-    #     hBackground.SetBinContent(i, 0)
-
-    print(
-        "bin",
-        i,
-        "has {} background events and {} signal events".format(
-            histo_rebin_b.GetBinContent(i), histo_rebin_s.GetBinContent(i)
-        ),
-    )
-
-    hSignificance.SetBinContent(
-        i,
-        hSignificance.GetBinContent(i)
-        / (
-            math.sqrt(
-                histo_rebin_b.GetBinContent(i) + (0.1 * histo_rebin_b.GetBinContent(i)) ** 2
-            )
-            + 0.5
-        ),
-    )
-    print("bin", i, "has {} significance".format(hSignificance.GetBinContent(i)))
-
-significance_content=[hSignificance.GetBinContent(i) for i in range(1, hSignificance.GetNbinsX() + 1)]
-print("hSignificance", significance_content, len(significance_content))
-print("significance sum", significance_sum(significance_content))
-
-canvas = ROOT.TCanvas("canvas", "canvas", 800, 800)
-hSignificance.Draw()
-# canvas.Draw()
-# wait for input to keep the GUI (which lives on a ROOT event dispatcher) alive
-# ROOT.gApplication.Run()
-canvas.SaveAs("rebinning_sig.png")
-
-c_sig = ROOT.TCanvas("c_sig", "c_sig", 800, 800)
-c_sig.cd()
-# log scale
-c_sig.SetLogy()
-histo_rebin_s.Draw()
-c_sig.SaveAs("rebinning_sig_s.png")
-
-c_bkg = ROOT.TCanvas("c_bkg", "c_bkg", 800, 800)
-c_bkg.cd()
-# log scale
-c_bkg.SetLogy()
-histo_rebin_b.Draw()
-c_bkg.SaveAs("rebinning_sig_b.png")
-
-
-fSignal.Close()
-fBackground.Close()

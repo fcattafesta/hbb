@@ -51,12 +51,13 @@ else:
         "LHE_Nb",
         "genWeight",
         "SelectedJet_hadronFlavour",
+	    "SelectedJet_btagDeepFlavB" if args.btag=="deepflav" else "SelectedJet_btagDeepB",
     ]
 
-    # if args.sys:
-    #     histosMC += ["btagWeightCentral"]
-    #     histosMC += btag_sys
-    #     histosMC += jet_btag_sys + ["SelectedJet_btagWeight_central"]
+    if args.sf_only:
+         histosMC += ["btagWeightCentral"]
+         histosMC += btag_sys
+         histosMC += jet_btag_sys + ["SelectedJet_btagWeight_central"]
     #     histosMC += [
     #         "Jet_pt_jerUp",
     #         "Jet_pt_jerDown",

@@ -17,6 +17,7 @@ binningRules = [
     ("LHE_Nb", "6, -0.5, 5.5"),
     (".*btagWeight.*", "100, 0, 10"),
     ("number_of_events", "1, 0.5, 1.5"),
+    ("SelectedJet_btagDeep.*B", "100, 0,1")
 ]
 binningRules += [(".*_pt_.*", "30, 0, 300")]
 binningRules += [

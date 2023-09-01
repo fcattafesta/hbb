@@ -74,7 +74,9 @@ if __name__ == "__main__":
     logger = setup_logger(outpath + f"/logger_{date_time}.log")
     logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
-    Special_variables = ["atanhDNN_Score"] if not args.variablesToFit else args.variablesToFit
+    Special_variables = (
+        ["atanhDNN_Score"] if not args.variablesToFit else args.variablesToFit
+    )
     logger.info("Special_variables: %s", Special_variables)
 
     def d_value(h1, h2):
@@ -129,7 +131,9 @@ if __name__ == "__main__":
                 Significance.SetBinContent(
                     i,
                     Significance.GetBinContent(i)
-                    / (sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2)+0.5),
+                    / (
+                        sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2) + 0.5
+                    ),
                 )
             except ZeroDivisionError:
                 Significance.SetBinContent(i, 0)
@@ -791,6 +795,7 @@ if __name__ == "__main__":
         integral[gr]["nom"] = 0
         error[gr] = 0
         lumi = 59000
+        sum_bins=[0]*10
         for n in range(len(samplesToPlot[gr])):
             d = samplesToPlot[gr][n]
             if lumis:
@@ -819,15 +824,15 @@ if __name__ == "__main__":
                         h.SetLineColor(ROOT.kBlack)
                     else:
                         # if postfit : addFitVariation( h, fitVariation(model, f, d, hn, h, histoSingleSyst))
-                        logger.info(
-                            "%s %s %s %s"
-                            % (
-                                h.GetSumOfWeights(),
-                                h.GetEntries(),
-                                lumi * samples[d]["xsec"],
-                                d,
-                            )
-                        )
+                        # logger.info(
+                        #     "%s %s %s %s"
+                        #     % (
+                        #         h.GetSumOfWeights(),
+                        #         h.GetEntries(),
+                        #         lumi * samples[d]["xsec"],
+                        #         d,
+                        #     )
+                        # )
                         h.Scale(samples[d]["xsec"] * lumi)
                         error_b = ctypes.c_double(0)
                         integral[gr]["nom"] += h.IntegralAndError(
@@ -838,6 +843,9 @@ if __name__ == "__main__":
                         )
                         # non funziona: d==samplesToPlot[gr][-1])
                         setHistoStyle(h, gr)
+                    if "atanhDNN" in hn:
+                        for b in range(1, h.GetNbinsX() + 1):
+                            sum_bins[b-1]+=h.GetBinContent(b)
                     if hn not in SumTH1:
                         SumTH1[hn] = h.Clone()
                         stackSys[hn] = {}
@@ -1111,6 +1119,7 @@ if __name__ == "__main__":
                 error,
                 SumTH1[hn].Integral(0, SumTH1[hn].GetNbinsX() + 1),
             )
+        logger.info("hn %s gr %s , bins %s" % (hn, gr, sum_bins))
         # if not data :
         # ftxt.write("%s\t%s +- %s\t%s \n"%(gr,integral[gr]["nom"], error[gr],integral[gr]["nom"]/datasum[hn].Integral(0,datasum[hn].GetNbinsX()+1)))
         # for sy in integral[gr].keys() : ftxt.write("%s\t%s +- %s\t%s \n"%(gr,integral[gr]["nom"], error[gr],integral[gr]["nom"]/datasum[hn].Integral(0,datasum[hn].GetNbinsX()+1)))
@@ -1546,8 +1555,16 @@ if __name__ == "__main__":
                 if hn in datasum.keys():
                     min_value = datasum[hn].GetMinimum()
                     max_value = datasum[hn].GetMaximum()
-                    datasum[hn].SetMinimum(0.1 * datasum[hn].GetMinimum())
-                    #     max(0.1 * datasum[hn].GetMinimum(), 0.1)
+                    if datasum[hn].GetMinimum() != 0 or histosum[hn].GetMinimum() != 0:
+                        datasum[hn].SetMinimum(
+                            max(
+                                0.1 * datasum[hn].GetMinimum(),
+                                0.1 * histosum[hn].GetMinimum(),
+                            )
+                        )
+                    else:
+                        datasum[hn].SetMinimum(0.1)
+                    # max(0.1 * datasum[hn].GetMinimum(), 0.1)
                     # )  # zoom out y axis
                     if i == 0:
                         datasum[hn].SetMaximum(
@@ -1812,7 +1829,11 @@ if __name__ == "__main__":
             import WorkSpace as WorkSpace
 
             WorkSpace.createWorkSpace(
-                model, all_histo_all_syst, year, args.btag+ ("_BtagBit" if args.bit else ""), outdir
+                model,
+                all_histo_all_syst,
+                year,
+                args.btag + ("_BtagBit" if args.bit else ""),
+                outdir,
             )
     else:
         from multiprocessing import Pool

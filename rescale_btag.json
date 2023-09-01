@@ -4,7 +4,20 @@
             "up_cferr1":1.218640,
             "down_cferr1":0.766472,
             "up_cferr2":1.115522,
-            "down_cferr2":0.877739
+            "down_cferr2":0.877739,
+            "up_hf":1.0,
+            "down_hf":1.0,
+            "up_lf":1.0,
+            "down_lf":1.0,
+            "up_hfstats1":1.0,
+            "down_hfstats1":1.0,
+            "up_hfstats2":1.0,
+            "down_hfstats2":1.0,
+            "up_lfstats1":1.0,
+            "down_lfstats1":1.0,
+            "up_lfstats2":1.0,
+            "down_lfstats2":1.0,
+            "central":1.0
         },
         "5":{
             "up_hf":0.995648,
@@ -19,7 +32,11 @@
             "down_lfstats1":1.001446,
             "up_lfstats2":0.992656,
             "down_lfstats2":1.000303,
-            "central":0.996528
+            "central":0.996528,
+            "up_cferr1":1.0,
+            "down_cferr1":1.0,
+            "up_cferr2":1.0,
+            "down_cferr2":1.0
         },
         "0":{
             "up_hf":1.017962,
@@ -34,7 +51,11 @@
             "down_lfstats1":1.035063,
             "up_lfstats2":1.021214,
             "down_lfstats2":1.034045,
-            "central":1.027653
+            "central":1.027653,
+            "up_cferr1":1.0,
+            "down_cferr1":1.0,
+            "up_cferr2":1.0,
+            "down_cferr2":1.0
         }
     },
     "deepcsv":{
@@ -42,7 +63,20 @@
             "up_cferr1":1.152412,
             "down_cferr1":0.863153,
             "up_cferr2":1.031727,
-            "down_cferr2":0.970585
+            "down_cferr2":0.970585,
+            "up_hf":1.0,
+            "down_hf":1.0,
+            "up_lf":1.0,
+            "down_lf":1.0,
+            "up_hfstats1":1.0,
+            "down_hfstats1":1.0,
+            "up_hfstats2":1.0,
+            "down_hfstats2":1.0,
+            "up_lfstats1":1.0,
+            "down_lfstats1":1.0,
+            "up_lfstats2":1.0,
+            "down_lfstats2":1.0,
+            "central":1.0
         },
         "5":{
             "up_hf":0.995193,
@@ -57,7 +91,11 @@
             "down_lfstats1":1.000407,
             "up_lfstats2":0.992402,
             "down_lfstats2":0.998967,
-            "central":0.995710
+            "central":0.995710,
+            "up_cferr1":1.0,
+            "down_cferr1":1.0,
+            "up_cferr2":1.0,
+            "down_cferr2":1.0
         },
         "0":{
             "up_hf":1.010393,
@@ -72,7 +110,11 @@
             "down_lfstats1":1.027786,
             "up_lfstats2":1.014403,
             "down_lfstats2":1.025640,
-            "central":1.020061
+            "central":1.020061,
+            "up_cferr1":1.0,
+            "down_cferr1":1.0,
+            "up_cferr2":1.0,
+            "down_cferr2":1.0
         }
     }
 }
