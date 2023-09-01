@@ -10,8 +10,8 @@ correctionlib.register_pyroot_binding()
 sf_btag = (
     {
         "Central": ["central"],
-        # "Up": ["up_cferr1", "up_hf", "up_lfstats1", "up_lf"],
-        # "Down": ["down_cferr1", "down_hf", "down_lfstats1", "down_lf"],
+        "Up": ["up_" + x for x in unc_btag],
+        "Down": ["down_" + x for x in unc_btag],
     }
     if args.sf_only
     else {
@@ -62,15 +62,17 @@ def getFlowSysBtag(flow, btag):
                 bool correct_flav = false;
                 // check if the flav matches the input flavor
                 int *match_flav = std::find(std::begin(flav), std::end(flav), hadronFlavour[i]);
+                std::string h_f=std::to_string(hadronFlavour[i]);
+                float rescale_factor = btag_rescale_avg[btag_name][h_f][name];
+                std::cout << btag_name << " " << h_f << " " << name << " " << rescale_factor << std::endl;
                 if (match_flav != std::end(flav)) {
-                    std::string h_f=std::to_string(hadronFlavour[i]);
                     // Calculate the scale factor using the btag_shape_corr object
-                    sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]})/btag_shape_corr[btag_name][h_f][name];
+                    sf[i]=btag_shape_corr->evaluate({name, hadronFlavour[i], abs(eta[i]), pt[i], btag[i]})/rescale_factor;
                     correct_flav = true;
                 }
                 // If no matching flavor is found, set the scale factor to the central value
                 if (!correct_flav) {
-                    sf[i]=btag_shape_corr->evaluate({"central", hadronFlavour[i], abs(eta[i]), pt[i], btag[i]})/btag_shape_corr[btag_name][hadronFlavour[i]][name];
+                    sf[i]=btag_shape_corr->evaluate({"central", hadronFlavour[i], abs(eta[i]), pt[i], btag[i]})/rescale_factor;
                 }
             }
             // Return the vector of scale factors
