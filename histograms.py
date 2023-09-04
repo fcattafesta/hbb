@@ -45,19 +45,19 @@ else:
         histosData.append("atanhDNN_Score")
 
     histosMC = histosData + [
-        "GenJet_pt",
+        #"GenJet_pt",
         "hadronFlavour_btag_max",
         "hadronFlavour_btag_min",
-        "LHE_Nb",
-        "genWeight",
+        #"LHE_Nb",
+        #"genWeight",
         "SelectedJet_hadronFlavour",
-	    "SelectedJet_btagDeepFlavB" if args.btag=="deepflav" else "SelectedJet_btagDeepB",
+        "SelectedJet_btagDeepFlavB" if args.btag=="deepflav" else "SelectedJet_btagDeepB",
     ]
 
-    if args.sf_only:
-         histosMC += ["btagWeightCentral"]
-         histosMC += btag_sys
-         histosMC += jet_btag_sys + ["SelectedJet_btagWeight_central"]
+    #if args.sf_only:
+         #histosMC += ["btagWeightCentral"]
+         #histosMC += btag_sys
+         #histosMC += jet_btag_sys + ["SelectedJet_btagWeight_central"]
     #     histosMC += [
     #         "Jet_pt_jerUp",
     #         "Jet_pt_jerDown",
