@@ -2,7 +2,7 @@ import argparse
 import matplotlib.pyplot as plt
 import mplhep as hep
 from scipy.ndimage import uniform_filter1d
-
+import os
 
 def read_from_txt(file):
     # get accuracy and loss and separate them between training and validation
@@ -48,40 +48,46 @@ def plot_history(
         "accuracy": {"train": train_accuracy[:lenght], "val": val_accuracy[:lenght]},
         "loss": {"train": train_loss[:lenght], "val": val_loss[:lenght]},
     }
+    line_style={
+        "accuracy": "--",
+        "loss": "-",
+    }
 
+    plt.figure(figsize=(13, 10))
     for type, info in infos_dict.items():
         print("len info train: ", len(info["train"]))
         print("len info val: ", len(info["val"]))
-        plt.figure(figsize=(13, 10))
         plt.plot(
             range(len(info["train"])),
             uniform_filter1d(info["train"], size=uniform_filter),
             label=f"Training {type}",
             color="blue",
+            line_style=line_style[type],
         )
         plt.plot(
             range(len(info["val"])),
             uniform_filter1d(info["val"], size=uniform_filter),
             label=f"Validation {type}",
             color="orange",
+            line_style=line_style[type],
         )
 
-        plt.xlabel("Step")
-        plt.ylabel(type.capitalize())
-        plt.legend()
-        hep.style.use("CMS")
-        hep.cms.label("Preliminary")
-        hep.cms.label(year="UL18")
-        plt.savefig(f"{dir}/{type}.png")
-        if show:
-            plt.show()
+    plt.xlabel("Step")
+    plt.ylabel(type.capitalize())
+    plt.legend()
+    hep.style.use("CMS")
+    hep.cms.label("Preliminary")
+    hep.cms.label(year="UL18")
+    plt.savefig(f"{dir}/{type}.png")
+    if show:
+        plt.show()
 
 
 if __name__ == "__main__":
     # plot the history for the training and validation losses and accuracies
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-i", "--input-dir", type=str, help="path to tensorboard log file"
+        "-i", "--input-path", type=str, help="path to log file"
     )
     parser.add_argument(
         "-u",
@@ -107,7 +113,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-        f"{args.input_dir}/logger.log"
+        {args.input_path}
     )
 
     plot_history(
@@ -115,7 +121,7 @@ if __name__ == "__main__":
         train_loss,
         val_accuracy,
         val_loss,
-        args.input_dir,
+        os.path.dirname(args.input_path),
         args.show,
         args.uniform_filter,
         args.lenght,
