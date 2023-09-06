@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import argparse
 import numpy as np
 import mplhep as hep
+from scipy import stats
 
 
 def handle_arrays(score_lbl_tensor):
@@ -41,7 +42,7 @@ def plot_sig_bkg_distributions(
         histtype="step",
         label="Background (training)",
         density=True,
-        color="red",
+        color="r",
         fill=False,
         hatch="\\\\",
     )
@@ -49,7 +50,7 @@ def plot_sig_bkg_distributions(
     legend_test_list = []
     for score, color, label in zip(
         [sig_score_test, bkg_score_test],
-        ["blue", "red"],
+        ["blue", "r"],
         ["Signal (test)", "Background (test)"],
     ):
         counts, bins, _ = plt.hist(
@@ -84,23 +85,46 @@ def plot_sig_bkg_distributions(
                 linestyle="None",
             )
         )
+    ks_statistic_sig, p_value_sig = stats.ks_2samp(sig_score_train, sig_score_test)
+    ks_statistic_bkg, p_value_bkg = stats.ks_2samp(bkg_score_train, bkg_score_test)
+
+    # print the KS test results on the plot
+    plt.text(
+        0.5,
+        0.925,
+        f"KS test: p-value (sig) = {p_value_sig:.2f}",
+        fontsize=20,
+        transform=plt.gca().transAxes,
+    )
+    plt.text(
+        0.5,
+        0.85,
+        f"KS test: p-value (bkg) = {p_value_bkg:.2f}",
+        fontsize=20,
+        transform=plt.gca().transAxes,
+    )
 
     plt.xlabel("DNN output", fontsize=20, loc="right")
     plt.ylabel("Normalized counts", fontsize=20, loc="top")
     plt.legend(
-        loc="upper center",
+        # loc="upper center",
+        loc="center",
+        bbox_to_anchor=(0.3, 0.9),
         fontsize=20,
         handles=[
             sig_train[2][0],
-            bkg_train[2][0],
             legend_test_list[0],
+            bkg_train[2][0],
             legend_test_list[1],
         ],
+        frameon=False,
     )
+    # plt.plot([0.09, 0.88], [8.35, 8.35], color="lightgray", linestyle="-", transform=plt.gca().transAxes)
+
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
-    plt.savefig(f"{dir}/sig_bkg_distributions.png")
+    plt.savefig(f"{dir}/sig_bkg_distributions.png", bbox_inches="tight")
     if show:
         plt.show()
 
