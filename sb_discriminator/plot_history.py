@@ -53,7 +53,7 @@ def plot_history(
         "loss": "-",
     }
 
-    plt.figure(figsize=(13, 10))
+    plt.figure(figsize=(15, 15))
     for type, info in infos_dict.items():
         print("len info train: ", len(info["train"]))
         print("len info val: ", len(info["val"]))
@@ -69,16 +69,16 @@ def plot_history(
             uniform_filter1d(info["val"], size=uniform_filter),
             label=f"Validation {type}",
             color="orange",
-            line_style=line_style[type],
+            linestyle=line_style[type],
         )
 
     plt.xlabel("Step")
-    plt.ylabel(type.capitalize())
+    #plt.ylabel(type.capitalize())
     plt.legend()
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
     hep.cms.label(year="UL18")
-    plt.savefig(f"{dir}/{type}.png")
+    plt.savefig(f"{dir}/{type}.png", bbox_inches="tight")
     if show:
         plt.show()
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_accuracy, train_loss, val_accuracy, val_loss = read_from_txt(
-        {args.input_path}
+        args.input_path
     )
 
     plot_history(
