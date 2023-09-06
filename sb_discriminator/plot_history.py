@@ -62,7 +62,7 @@ def plot_history(
             uniform_filter1d(info["train"], size=uniform_filter),
             label=f"Training {type}",
             color="blue",
-            line_style=line_style[type],
+            linestyle=line_style[type],
         )
         plt.plot(
             range(len(info["val"])),
