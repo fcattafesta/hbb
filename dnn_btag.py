@@ -140,7 +140,7 @@ def plt_fts(out_dir, name, fig_handle, show, type):
 
 
 def plotting_function(out_dir, variables, type):
-    fig_handle = plt.figure(figsize=(13, 10))
+    fig_handle = plt.figure(figsize=(13, 13))
 
     # plot scatter plot
     plt.hist2d(

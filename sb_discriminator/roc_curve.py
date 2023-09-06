@@ -210,7 +210,7 @@ def plotting_function(out_dir, networks):
     :param    networks :  networks to plot
     """
 
-    fig_handle = plt.figure(figsize=(13, 10))
+    fig_handle = plt.figure(figsize=(13, 13))
     for network, rates in networks.items():
         plt.plot(
             rates[1],

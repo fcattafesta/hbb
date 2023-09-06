@@ -265,7 +265,7 @@ def plot_data(
     sig_sum_list_mu,
     sig_sum_list_el,
 ):
-    fig_handle = plt.figure(figsize=(13, 10))
+    fig_handle = plt.figure(figsize=(13, 13))
 
     # compute the average of the two channels and plot it
     sig_sum_list_average = [

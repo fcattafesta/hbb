@@ -21,7 +21,7 @@ def plot_sig_bkg_distributions(
     sig_score_train, bkg_score_train = handle_arrays(score_lbl_tensor_train)
     sig_score_test, bkg_score_test = handle_arrays(score_lbl_tensor_test)
 
-    plt.figure(figsize=(13, 10))
+    plt.figure(figsize=(13, 13))
     sig_train = plt.hist(
         sig_score_train,
         bins=30,
