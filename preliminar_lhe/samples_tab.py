@@ -3,7 +3,7 @@ import ROOT
 ROOT.EnableImplicitMT()
 
 
-file = "/scratchnvme/malucchi/hbb_samples/ggZH/106X_upgrade2018_realistic_v16_L1v1-v1/2520000/1412A75E-6CBA-5142-914D-2FE8356F680C.root"
+file = "/scratchnvme/malucchi/hbb_samples/ST_s-channel_4f_LD/106X_upgrade2018_realistic_v16_L1v1-v1/120000/6F471BFE-BFD5-0847-8C5A-626A7C865EF0.root"
 xsec = 0.0072158061930000005
 n_samples = 4891000
 
