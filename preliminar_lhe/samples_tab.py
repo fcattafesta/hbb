@@ -100,7 +100,7 @@ for i in range(len(files)):
     num_tot = rdf.Count().GetValue()
     frac_neg_w.append(num_neg_w / num_tot)
     # Effective luminosity
-    eff_lumi.append(n_samples[i] / xsecs[i]) * (1 - 2 * frac_neg_w[i]) ** 2
+    eff_lumi.append((n_samples[i] / xsecs[i]) * (1 - 2 * frac_neg_w[i]) ** 2)
     # Sum of weights
     sum_of_weights.append(rdf.Sum("genWeight").GetValue())
 
