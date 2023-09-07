@@ -17,8 +17,8 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-from samplesDY import *
-
+#from samplesDY import *
+from samples import *
 if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
     sys.exit(1)
