@@ -168,7 +168,7 @@ def plt_fts(out_dir, name, fig_handle, show):
     plt.xlabel("b-jet efficiency", fontsize=20, loc="right")
     plt.ylabel("mis-id rate", fontsize=20, loc="top")
     plt.xlim([0.5, 1.0005])
-    plt.ylim([0.0005, 1.005])
+    plt.ylim([0.0001, 1.005])
     plt.text(
         0.05,
         0.6,
