@@ -216,7 +216,7 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     if sample.endswith("Full"):
-        samples[sample]["files"] = [
+        files = [
             x
             for x in glob.glob(
                 "/scratchnvme/malucchi/hbb_samples/%s/**/*.root"
@@ -224,6 +224,15 @@ for sample in samples:
                 recursive=True,
             )
         ]
+        if sample == "DYZpt-0To50Full":
+            files.remove(
+                "/scratchnvme/malucchi/hbb_samples/DYZpt-0To50/106X_upgrade2018_realistic_v16_L1v1-v1/40000/C69E7CE2-4C90-AD40-BCF7-CBD024956640.root"
+            )
+        elif sample == "DYZpt-50To100Full":
+            files.remove(
+                "/scratchnvme/malucchi/hbb_samples/DYZpt-50To100/106X_upgrade2018_realistic_v16_L1v1-v1/40000/51C14FFE-9AFF-374E-8A53-61AF6E4E1B77.root"
+            )
+        samples[sample]["files"] = files
     elif sample.startswith("DYZpt") and not sample.endswith("Full"):
         files = [
             x
@@ -232,26 +241,21 @@ for sample in samples:
                 recursive=True,
             )
         ]
-        files.remove(
-            "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/40000/C69E7CE2-4C90-AD40-BCF7-CBD024956640.root"
-        )
-        files.remove(
-            "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/40000/51C14FFE-9AFF-374E-8A53-61AF6E4E1B77.root"
-        )
+        if sample == "DYZpt-0To50":
+            files.remove(
+                "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/40000/C69E7CE2-4C90-AD40-BCF7-CBD024956640.root"
+            )
+        elif sample == "DYZpt-50To100":
+            files.remove(
+                "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/40000/51C14FFE-9AFF-374E-8A53-61AF6E4E1B77.root"
+            )
         samples[sample]["files"] = files
     else:
-        files = [
+        samples[sample]["files"] = [
             x
             for x in glob.glob(
                 "/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample,
                 recursive=True,
             )
         ]
-        files.remove(
-            "/scratchnvme/malucchi/hbb_samples/DYZpt-0To50/106X_upgrade2018_realistic_v16_L1v1-v1/40000/C69E7CE2-4C90-AD40-BCF7-CBD024956640.root"
-        )
-        files.remove(
-            "/scratchnvme/malucchi/hbb_samples/DYZpt-50To100/106X_upgrade2018_realistic_v16_L1v1-v1/40000/51C14FFE-9AFF-374E-8A53-61AF6E4E1B77.root"
-        )
-        samples[sample]["files"] = files
 samples.update(addSubSamples)
