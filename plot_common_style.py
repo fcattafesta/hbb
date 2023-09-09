@@ -26,7 +26,7 @@ def plot_common_style(signal, background):
             "ggZH": ROOT.kRed - 3,
         }
     )
-    fillcolor.update({bkg: ROOT.kAzure + i for i, bkg in zip([7, 0, 3], background)})
+    # fillcolor.update({bkg: ROOT.kAzure + i for i, bkg in zip([7, 0, 3], background)})
     linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
     linecolorOverlayed = {}
     markercolor = fillcolor

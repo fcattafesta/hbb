@@ -1251,6 +1251,23 @@ if __name__ == "__main__":
                 histosumRescaledDict[hn] = {}
                 histoSigsumRescaledDict[hn] = {}
 
+            for gr in model.signal:
+                h = fill_datasum(
+                    f,
+                    gr,
+                    model.signal,
+                    SumTH1=histoSigsum,
+                    stack=histosSig,
+                    stackSys=histoSigsumSyst,
+                    hn=hn,
+                    myLegend=myLegend_1,
+                    ftxt=ftxt,
+                    lumis=lumis,
+                    SumTH1Rescaled=histoSigsumRescaled,
+                    SumTH1RescaledDict=histoSigsumRescaledDict,
+                )
+                dictLegendSignal[gr] = h
+
             for gr in model.backgroundSorted:
                 h = fill_datasum(
                     f,
@@ -1268,23 +1285,6 @@ if __name__ == "__main__":
                     normalize=args.normalize,
                 )
                 dictLegendBackground[gr] = h
-
-            for gr in model.signal:
-                h = fill_datasum(
-                    f,
-                    gr,
-                    model.signal,
-                    SumTH1=histoSigsum,
-                    stack=histosSig,
-                    stackSys=histoSigsumSyst,
-                    hn=hn,
-                    myLegend=myLegend_1,
-                    ftxt=ftxt,
-                    lumis=lumis,
-                    SumTH1Rescaled=histoSigsumRescaled,
-                    SumTH1RescaledDict=histoSigsumRescaledDict,
-                )
-                dictLegendSignal[gr] = h
 
             # myLegend.AddEntry(None, "", "")
             for gr in model.backgroundSortedForLegend:
