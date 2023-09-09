@@ -17,7 +17,13 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-from samplesDY import *
+if args.sample == "Flash":
+    from samplesDY import *
+elif args.sample == "Full":
+    from samples import *
+else:
+    print("Model must be 'Flash' or 'Full'")
+    sys.exit(1)
 
 if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
