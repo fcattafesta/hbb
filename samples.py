@@ -1,6 +1,8 @@
 # This file contains the samples used in the analysis.
 import glob
 
+print("Loading samples.py")
+
 # NOTE: change order of flavsplit?
 flavourSplitting = {
     "bb": "TwoB",

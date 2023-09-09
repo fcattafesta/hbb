@@ -43,6 +43,12 @@ parser.add_argument(
     action="store_true",
     help="Apply scale factors and systematics",
 )
+parser.add_argument(
+    "--sample",
+    default="",
+    help="Sample to run on",
+    type=str,
+)
 parser.print_help()
 args = parser.parse_args()
 print(args)
