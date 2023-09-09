@@ -74,3 +74,4 @@ signal = {
 ) = plot_common_style(signal, background)
 
 rescaleSample = {}
+linestyleOverlayed = {}
