@@ -23,9 +23,9 @@ histosData = [
     "SoftActivityJetNjets5",
 ]
 histosData += [
-    "GenJet_pt",
-    "Jet_pt",
-    "Jet_pt_Nom",
+    # "GenJet_pt",
+    # "Jet_pt",
+    # "Jet_pt_Nom",
 ]
 
 if args.eval_model:
