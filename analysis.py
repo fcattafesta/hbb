@@ -308,6 +308,8 @@ if args.model == "fix":
 elif "model" in args.model[:5]:
     import importlib
 
+    print(args.model)
+    print(args.model.replace(".py", ""))
     model = importlib.import_module(args.model.replace(".py", ""))
     # 	samples=model.samples
 
