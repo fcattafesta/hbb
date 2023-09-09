@@ -1440,9 +1440,9 @@ if __name__ == "__main__":
 
             t1 = makeText(0.28, 0.95, "CMS", 61)
             t2 = makeText(0.38, 0.95, str(year), 42)
-            # t3 = makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t3 = makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             # without lumi
-            t3 = makeText(0.8, 0.95, " (13 TeV)", 42)
+            # t3 = makeText(0.8, 0.95, " (13 TeV)", 42)
 
             t4 = makeText(
                 0.25,
