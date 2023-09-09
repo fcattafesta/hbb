@@ -198,6 +198,3 @@ for sample in samples:
         )
     ]
 samples.update(addSubSamples)
-
-for x in samples:
-    print(x, samples[x])
