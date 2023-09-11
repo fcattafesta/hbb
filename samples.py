@@ -22,10 +22,6 @@ number_of_b = {
 }
 
 samples = {
-    "testOver": {
-        "xsec": 88.36,
-        "files" : ["/scratchnvme/cattafe/flashsim_test/test_oversampling.root"]
-    },
     "DYM50": {
         "xsec": 5765.40,
         "subsamples": flavourSplitting,
@@ -45,9 +41,6 @@ samples = {
         "xsec": 88.36,
         "subsamples": flavourSplitting,
         "snapshot": True,
-	"files" : [ f"/scratchnvme/cattafe/FlashSim-Oversampled/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2530000/{file}" for file in ["B24D7292-7CA2-804F-9082-BCFDC95CFDC5.root", "4BBD5E35-A5A2-1A4E-AE2A-3370831CDFA1.root", "182E2B4F-601D-724B-8E03-6C94BB0B460A.root", "921BED74-E7D5-C14D-B1BB-3535DCF70568.root", "775A0CA9-967C-9E44-97FE-8BB85FF1D36B.root"]
-        ]
-
     },
     "DYZpt-250To400": {
         "xsec": 3.52,
@@ -197,12 +190,21 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     if not "files" in samples[sample].keys():
-      samples[sample]["files"] = [
-        x
-        for x in glob.glob(
-            "/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample, recursive=True
-        )
-      ]
+        if sample == "DYZpt-100To250":
+            samples[sample]["files"] = [
+                x
+                for x in glob.glob(
+                    "/scratchnvme/cattafe/FlashSim-Oversampled/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root"
+                )
+            ]
+        else:
+            samples[sample]["files"] = [
+                x
+                for x in glob.glob(
+                    "/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample,
+                    recursive=True,
+                )
+            ]
 samples.update(addSubSamples)
 
 # for x in samples:
