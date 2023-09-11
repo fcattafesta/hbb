@@ -35,10 +35,7 @@ public:
         current(nSlots, -1),
         fFinalHisto(std::make_shared<TH>(std::string(name).c_str(),
                                          std::string(title).c_str(), nbin, xmin,
-                                         xmax)) {
-    //     cout << "bins" <<  fFinalHisto->GetNbinsX() << std::endl;
-    // cout << "nSlots: " << nSlots << endl;
-  }
+                                         xmax)) {}
 
   // Move constructor and deletion of copy constructor
   OversampledTH(OversampledTH &&) = default;
