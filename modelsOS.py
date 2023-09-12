@@ -23,7 +23,7 @@ data = {}
 
 signal = {}
 
-fillcolor = {"DYZpt-100To250": ROOT.KAzure + 1}
+fillcolor = {"DYZpt-100To250": ROOT.kAzure + 1}
 linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
 markercolor = fillcolor
 
