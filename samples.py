@@ -37,11 +37,6 @@ samples = {
         "subsamples": flavourSplitting,
         "snapshot": True,
     },
-    "DYZpt-100To250": {
-        "xsec": 88.36,
-        "subsamples": flavourSplitting,
-        "snapshot": True,
-    },
     "DYZpt-250To400": {
         "xsec": 3.52,
         "subsamples": flavourSplitting,
@@ -58,6 +53,61 @@ samples = {
         "snapshot": True,
     },
 }
+
+samples.update(
+    {
+        "DYZpt-100To250-0": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-1": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-2": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-3": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-4": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-5": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-6": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-7": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-8": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+        "DYZpt-100To250-9": {
+            "xsec": 88.36 / 10.0,
+            "subsamples": flavourSplitting,
+            "snapshot": True,
+        },
+    }
+)
 
 samples.update(
     {
@@ -182,7 +232,7 @@ samples.update(
         },
     }
 )
-
+i = 0
 addSubSamples = {}
 # get the files from the directory named as the sample name with the suffix /scratchnvme/malucchi/hbb_samples/
 for sample in samples:
@@ -190,13 +240,14 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     if not "files" in samples[sample].keys():
-        if sample == "DYZpt-100To250":
+        if sample.startswith("DYZpt-100To250"):
             samples[sample]["files"] = [
                 x
                 for x in glob.glob(
                     "/scratchnvme/cattafe/FlashSim-Oversampled/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root"
                 )
-            ]
+            ][10 * (i) :: 10 * (i + 1)]
+            i += 1
         else:
             samples[sample]["files"] = [
                 x
