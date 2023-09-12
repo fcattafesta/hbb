@@ -23,20 +23,28 @@ data = {}
 
 signal = {}
 
-(
-    fillcolor,
-    linecolor,
-    linecolorOverlayed,
-    linestyleOverlayed,
-    markercolor,
-    backgroundSortedForLegend,
-    backgroundSorted,
-    histosOverlayed_list,
-    signalSortedForLegend,
-    signalSorted,
-    systematicsToPlot,
-    systematicsForDC,
-    systematicDetail,
-) = plot_common_style(signal, background)
+fillcolor = {"DYZpt-100To250": ROOT.KAzure + 1}
+linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
+markercolor = fillcolor
 
-fillcolor = {"DYZpt-100To250": ROOT.KOrange + 8}
+histosOverlayed_list = []
+linecolorOverlayed = {}
+linestyleOverlayed = {}
+
+# legend sorting
+backgroundSortedForLegend = []
+backgroundSortedForLegend += [
+    x for x in background if x not in backgroundSortedForLegend
+]
+backgroundSorted = backgroundSortedForLegend
+
+signalSortedForLegend = []
+signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
+signalSorted = signalSortedForLegend
+
+from rebinning import *
+
+systematicsToPlot = []
+systematicDetail = {}
+systematicsForDC = []
+rescaleSample = {}
