@@ -1523,8 +1523,8 @@ if __name__ == "__main__":
             for i, c in enumerate(canvas_tuple):
                 if hn in datasum.keys():
                     c.Divide(1, 2)
-                    c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.20)
-                    c.GetPad(1).SetPad(0.0, 0.25, 0.90, 1.0)
+                    c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
+                    c.GetPad(1).SetPad(0.0, 0.2, 0.90, 1.0)
 
                     ROOT.gStyle.SetPadLeftMargin(0.18)
                     c.GetPad(2).SetBottomMargin(0.35)
