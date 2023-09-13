@@ -248,8 +248,8 @@ if __name__ == "__main__":
         h.GetXaxis().SetLabelSize(w * 0.5 if isSys else w)
         h.GetYaxis().SetTitleSize(w * 0.8 if isSys else w)
         h.GetXaxis().SetTitleSize(w * 0.8 if isSys else w)
-        h.GetYaxis().SetMaxDigits(2)
         if isRatio or isSys:
+            h.GetYaxis().SetMaxDigits(5)
             h.GetYaxis().SetTitle("Data/MC - 1" if isRatio else "Sys/Nom - 1")
             h.GetYaxis().SetTitleOffset(0.5)
             #        h.GetXaxis().SetTitle(str(h.GetName()).split("___")[0])
@@ -258,6 +258,7 @@ if __name__ == "__main__":
                 labelVariable[xKey] if xKey in list(labelVariable.keys()) else xKey
             )
         else:
+            h.GetYaxis().SetMaxDigits(1)
             # check if all bins are the same width
             if all(
                 h1.GetBinWidth(1) == h1.GetBinWidth(i)
@@ -1522,8 +1523,8 @@ if __name__ == "__main__":
             for i, c in enumerate(canvas_tuple):
                 if hn in datasum.keys():
                     c.Divide(1, 2)
-                    c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
-                    c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
+                    c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.20)
+                    c.GetPad(1).SetPad(0.0, 0.25, 0.90, 1.0)
 
                     ROOT.gStyle.SetPadLeftMargin(0.18)
                     c.GetPad(2).SetBottomMargin(0.35)
@@ -1687,15 +1688,16 @@ if __name__ == "__main__":
                         42,
                         0.025,
                     )
-                    tKS = makeText(
-                        0.29,
-                        0.26,
-                        "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
-                        42,
-                        0.025,
-                    )
                     tchi2.Draw()
-                    tKS.Draw()
+
+                    # tKS = makeText(
+                    #     0.29,
+                    #     0.26,
+                    #     "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
+                    #     42,
+                    #     0.025,
+                    # )
+                    # tKS.Draw()
 
                     c.GetPad(2).SetGridy()
 
@@ -1780,7 +1782,10 @@ if __name__ == "__main__":
 
     variablesToFit = []
     makeWorkspace = False
-    systematicsSetToUse = model.systematicsToPlot
+    if args.sys:
+        systematicsSetToUse = model.systematicsToPlot
+    else:
+        systematicsSetToUse = []
     if args.variablesToFit != None:
         variablesToFit = args.variablesToFit
         makeWorkspace = True

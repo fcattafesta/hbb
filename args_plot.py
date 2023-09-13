@@ -22,6 +22,9 @@ parser.add_argument("--bit", default=False, help="Btag bit", action="store_true"
 parser.add_argument(
     "-b", "--btag", default="deepflav", help="Btagging algorithm (deepflav or deepcsv)"
 )
+parser.add_argument(
+    "-s", "--sys", default=False, help="Show systematics", action="store_true"
+)
 
 parser.print_help()
 args = parser.parse_args()
