@@ -238,8 +238,8 @@ if __name__ == "__main__":
         h.GetXaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
         h.GetXaxis().SetTitleSize(w)
-        h.GetYaxis().SetMaxDigits(2)
         if isRatio:
+            h.GetYaxis().SetMaxDigits(5)
             h.GetYaxis().SetTitle("Data/MC - 1")
             h.GetYaxis().SetTitleOffset(0.5)
             #        h.GetXaxis().SetTitle(str(h.GetName()).split("___")[0])
@@ -1633,7 +1633,7 @@ if __name__ == "__main__":
                         0.025,
                     )
                     tchi2.Draw()
-                    tKS.Draw()
+                    # tKS.Draw()
 
                     c.GetPad(2).SetGridy()
 
