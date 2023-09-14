@@ -205,12 +205,12 @@ if __name__ == "__main__":
                 0.8,
                 labelLeptons[hn.split("___")[1]]
                 + btag_label
-                + (" SF" if args.sf else "")
+                #+ (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
                 else hn.split("___")[1]
                 + btag_label
-                + (" SF" if args.sf else "")
+                #+ (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else ""),
                 42,
                 size=0.04,
@@ -1502,12 +1502,12 @@ if __name__ == "__main__":
                 0.8,
                 labelLeptons[hn.split("___")[1]]
                 + btag_label
-                + (" SF" if args.sf else "")
+                #+ (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
                 else hn.split("___")[1]
                 + btag_label
-                + (" SF" if args.sf else "")
+                #+ (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else ""),
                 42,
                 size=0.04,
@@ -1558,9 +1558,10 @@ if __name__ == "__main__":
                     max_value = datasum[hn].GetMaximum()
                     if datasum[hn].GetMinimum() != 0 or histosum[hn].GetMinimum() != 0:
                         datasum[hn].SetMinimum(
-                            max(
+                            min(
                                 0.1 * datasum[hn].GetMinimum(),
                                 0.1 * histosum[hn].GetMinimum(),
+                                0.1,
                             )
                         )
                     else:
