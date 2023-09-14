@@ -1,3 +1,5 @@
+import numpy as np
+
 rebin = {
     "atanhDNN_Score": [
         0,
@@ -46,6 +48,8 @@ rebin = {
         0.9699,
         1.0,
     ],
+    "Z_mass": np.arange(60, 121, 5).tolist(),
+    "Dijets_mass": np.arange(50, 201, 5).tolist(),
 }
 
 # "atanhDNN_Score": [
