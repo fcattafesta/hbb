@@ -62,6 +62,7 @@ signal = {
     fillcolor,
     linecolor,
     linecolorOverlayed,
+    linestyleOverlayed,
     markercolor,
     backgroundSortedForLegend,
     backgroundSorted,
