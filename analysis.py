@@ -131,7 +131,7 @@ def sumwsents(files):
                 sumws += hw.GetSumOfWeights()
 
             hn = ROOT.TH1I("hn", "", 5, 0, 5)
-            run.Project("hn", "1", "genEventCount")  # !!!!!!!!!
+            run.Project("hn", "1", "genEventCount")
             nevents += int(hn.GetSumOfWeights())
 
     if sumws < 1:
@@ -226,8 +226,9 @@ def runSample(ar):
                 hname = h.GetName()
                 h.GetValue()
                 outFile.cd()
+                print(s, hname, sumws, h.GetSumOfWeights(), h.GetBinContent(1))
                 h.Scale(1.0 / normalization / sumws)
-                print(f"Sum of weights: {sumws}")
+                print("bin 1:", h.GetBinContent(1))
                 h.Write()
             sumWeights = getattr(ROOT, "TParameter<double>")("sumWeights", sumws)
             sumWeights.Write()
