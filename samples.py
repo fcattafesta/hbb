@@ -37,6 +37,11 @@ samples = {
         "subsamples": flavourSplitting,
         "snapshot": True,
     },
+    "DYZpt-100To250": {
+        "xsec": 88.36,
+        "subsamples": flavourSplitting,
+        "snapshot": True,
+    },
     "DYZpt-250To400": {
         "xsec": 3.52,
         "subsamples": flavourSplitting,
