@@ -4,7 +4,11 @@ from plot_common_style import *
 
 name = "OS"
 
-background = {"DYZpt-100To250"}
+background = {
+    "DYZpt-100To250": [
+        "DYZpt-100To250",
+    ],
+}
 
 data = {}
 
