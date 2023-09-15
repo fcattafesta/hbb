@@ -5,27 +5,27 @@ from selections import selsMu, selsEle
 ### List of histograms to be plotted ###
 histosData = [
     "Z_mass",
-    "Z_pt",
-    "Dijets_mass",
-    "Dijets_pt",
-    "MET_pt",
-    "ZH_dphi",
-    "ZH_deta",
-    "ZH_dr",
-    "HZ_ptRatio",
-    "btag_max",
-    "btag_min",
-    "jj_dphi",
-    "jj_deta",
-    "jj_dr",
-    "JetBtagMax_pt",
-    "JetBtagMin_pt",
-    "SoftActivityJetNjets5",
+    # "Z_pt",
+    # "Dijets_mass",
+    # "Dijets_pt",
+    # "MET_pt",
+    # "ZH_dphi",
+    # "ZH_deta",
+    # "ZH_dr",
+    # "HZ_ptRatio",
+    # "btag_max",
+    # "btag_min",
+    # "jj_dphi",
+    # "jj_deta",
+    # "jj_dr",
+    # "JetBtagMax_pt",
+    # "JetBtagMin_pt",
+    # "SoftActivityJetNjets5",
 ]
 histosData += [
-    "GenJet_pt",
-    "Jet_pt",
-    "Jet_pt_Nom",
+    # "GenJet_pt",
+    # "Jet_pt",
+    # "Jet_pt_Nom",
 ]
 
 if args.eval_model:
@@ -33,11 +33,11 @@ if args.eval_model:
     histosData.append("atanhDNN_Score")
 
 histosMC = histosData + [
-    "hadronFlavour_btag_max",
-    "hadronFlavour_btag_min",
-    "LHE_Nb",
-    "genWeight",
-    "Jet_hadronFlavour",
+    # "hadronFlavour_btag_max",
+    # "hadronFlavour_btag_min",
+    # "LHE_Nb",
+    # "genWeight",
+    # "Jet_hadronFlavour",
 ]
 if args.sf:
     histosMC += ["btagWeightCentral"]
@@ -55,7 +55,7 @@ if args.sf:
 ### Dictionary of histograms per selection ###
 histosPerSelectionMuonMC = {sel: histosMC for sel in selsMu}
 histosPerSelectionElectronMC = {sel: histosMC for sel in selsEle}
-histosPerSelectionElectronMC.update({"SR_ee": ["SubLeadingGenJet_pt"]})
+# histosPerSelectionElectronMC.update({"SR_ee": ["SubLeadingGenJet_pt"]})
 
 histosPerSelectionElectronData = {sel: histosData for sel in selsEle}
 histosPerSelectionMuonData = {sel: histosData for sel in selsMu}

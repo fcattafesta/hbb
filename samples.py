@@ -246,8 +246,9 @@ for sample in samples:
                 for x in glob.glob(
                     "/scratchnvme/cattafe/FlashSim-Oversampled/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root"
                 )
-            ][10 * (i) :: 10 * (i + 1)]
-            i += 1
+            ][:1]
+            # [10 * (i) :: 10 * (i + 1)]
+            # i += 1
         else:
             samples[sample]["files"] = [
                 x
