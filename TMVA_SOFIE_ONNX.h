@@ -14,8 +14,8 @@ void TMVA_SOFIE_ONNX(std::string inputFile = "") {
   // Generating inference code
   model.Generate();
 
-  // std::string outputFile = inputFile.substr(0, inputFile.find_last_of('.')) +
-  // ".hxx";
+  std::string outputFile =
+      inputFile.substr(0, inputFile.find_last_of('.')) + ".hxx";
 
   model.OutputGenerated(outputFile);
 
