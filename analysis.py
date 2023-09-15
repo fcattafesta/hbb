@@ -17,7 +17,7 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-ROOT.TH1.AddDirectory(ROOT.kFALSE)
+# ROOT.TH1.AddDirectory(ROOT.kFALSE)
 
 # from samplesDY import *
 from samples import *
