@@ -73,4 +73,5 @@ labelLegend = {
     "DY250To400": "250 < p_{T} < 400 GeV",
     "DY400To650": "400 < p_{T} < 650 GeV",
     "DY650ToInf": "p_{T} > 650 GeV",
+    "DYZpt-100To250": "100 < p_{T} < 250 GeV",
 }
