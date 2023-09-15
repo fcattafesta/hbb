@@ -234,7 +234,10 @@ def runSample(ar):
                     [h.GetBinContent(i) for i in range(1, h.GetNbinsX() + 1)],
                 )
                 h.Scale(1.0 / normalization / sumws)
-                print("bin 1:", h.GetBinContent(1))
+                print(
+                    "bin content:",
+                    [h.GetBinContent(i) for i in range(1, h.GetNbinsX() + 1)],
+                )
                 h.Write()
             sumWeights = getattr(ROOT, "TParameter<double>")("sumWeights", sumws)
             sumWeights.Write()

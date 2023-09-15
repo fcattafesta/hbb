@@ -3,7 +3,7 @@ from btagging_sys import btag_sys
 binningRules = [
     (".*_pt", "60 , 0, 300"),
     ("Dijets_mass", "3000, 50, 200"),
-    ("Z.*_mass", "3000, 10, 150"),
+    ("Z.*_mass", "20, 10, 150"),
     (".*_dphi", "30, 0, 3.2"),
     (".*_deta", "30, 0, 5"),
     (".*_dr", "30, 0, 10"),
