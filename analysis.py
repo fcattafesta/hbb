@@ -17,8 +17,9 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-#from samplesDY import *
+# from samplesDY import *
 from samples import *
+
 if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
     sys.exit(1)
@@ -226,6 +227,7 @@ def runSample(ar):
                 h.GetValue()
                 outFile.cd()
                 h.Scale(1.0 / normalization / sumws)
+                print(f"Sum of weights: {sumws}")
                 h.Write()
             sumWeights = getattr(ROOT, "TParameter<double>")("sumWeights", sumws)
             sumWeights.Write()
