@@ -96,7 +96,7 @@ logger.info("Histograms with systematics: %s" % histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
     "eventProcessorMC",
-    [flavourSplitting[x] for x in flavourSplitting],
+    [],  # [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
     "",
@@ -131,7 +131,7 @@ def sumwsents(files):
                 sumws += hw.GetSumOfWeights()
 
             hn = ROOT.TH1I("hn", "", 5, 0, 5)
-            run.Project("hn", "1", "genEventCount")
+            run.Project("hn", "1", "genEventCount")  # !!!!!!!!!
             nevents += int(hn.GetSumOfWeights())
 
     if sumws < 1:
