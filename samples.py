@@ -249,7 +249,7 @@ for sample in samples:
             samples[sample]["files"] = [
                 x
                 for x in glob.glob(
-                    "/scratchnvme/cattafe/FlashSim-Oversampled/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root"
+                    "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root"
                 )
             ][:1]
             print(samples[sample]["files"])
