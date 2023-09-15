@@ -17,6 +17,8 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
+ROOT.TH1.AddDirectory(ROOT.kFALSE)
+
 # from samplesDY import *
 from samples import *
 
@@ -223,9 +225,9 @@ def runSample(ar):
             normalization = 1.0
 
             for h in out.histos:
+                outFile.cd()
                 hname = h.GetName()
                 h.GetValue()
-                outFile.cd()
                 print(
                     s,
                     hname,
