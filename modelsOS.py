@@ -6,10 +6,10 @@ name = "OS"
 
 background = {
     "DYZpt-100To250": [
-        "DYZpt-100To250-0",
-        "DYZpt-100To250-1",
-        "DYZpt-100To250-2",
-        "DYZpt-100To250-3",
+        # "DYZpt-100To250-0",
+        # "DYZpt-100To250-1",
+        # "DYZpt-100To250-2",
+        # "DYZpt-100To250-3",
         "DYZpt-100To250-4",
         "DYZpt-100To250-5",
         "DYZpt-100To250-6",
