@@ -36,8 +36,8 @@ if args.train:
 
 else:
     histosData += [
-        "Jet_pt",
-        "Jet_pt_jerNom",
+        # "Jet_pt",
+        # "Jet_pt_jerNom",
     ]
 
     if args.eval_model:
@@ -50,8 +50,8 @@ else:
         "hadronFlavour_btag_min",
         #"LHE_Nb",
         #"genWeight",
-        "SelectedJet_hadronFlavour",
-        "SelectedJet_btagDeepFlavB" if args.btag=="deepflav" else "SelectedJet_btagDeepB",
+        # "SelectedJet_hadronFlavour",
+        # "SelectedJet_btagDeepFlavB" if args.btag=="deepflav" else "SelectedJet_btagDeepB",
     ]
 
     #if args.sf_only:
