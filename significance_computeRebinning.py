@@ -174,7 +174,7 @@ hS_notsmooth.Draw("EP same")
 # hB_notsmooth.Draw("hist same")
 c_compare.SaveAs("compare.png")
 
-print("hsignal len", hSignal.GreetNbinsX())
+print("hsignal len", hSignal.GetNbinsX())
 
 # if bBackground.GetBinContent(i) < 0.1 merge with the previous bin
 tot_histos = [hSignal, hBackground] + histos
