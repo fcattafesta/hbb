@@ -28,7 +28,7 @@ datacard = os.path.splitext(args.datacard)[0]
 print("workdir: ", workdir)
 print("datacard: ", datacard)
 
-name = datacard.replace("datacard_", "").replace("datacard", "")
+name = os.path.basename(datacard.replace("datacard_", "").replace("datacard", ""))
 
 # Define the file name for the output log
 log_file = 'output.log'
