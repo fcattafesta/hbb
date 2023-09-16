@@ -42,7 +42,7 @@ cmd_list = [
     f"combineTool.py -M Impacts -d {workdir}{datacard}.root -m 125 --doInitialFit --robustFit 1 -t -1 --expectSignal=1",
     f"combineTool.py -M Impacts -d {workdir}{datacard}.root -m 125 --robustFit 1 --doFits --parallel 30 -t -1 --expectSignal=1",
     f"combineTool.py -M Impacts -d {workdir}{datacard}.root -m 125 -o {workdir}impacts_{name}.json -t -1 --expectSignal=1",
-    f"plotImpacts.py -i {workdir}impacts_{name}.json -o {workdir}impacts_{name}",
+    f"plotImpacts.py -i {workdir}impacts_{name}.json -o {workdir}impacts_{name} -t rename_fit.json",
 ]
 
 # Open the log file for writing
