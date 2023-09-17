@@ -54,13 +54,13 @@ var_list = [
 ]
 
 # wp L, M, T, UT
-# thresholds = (
-#     [0.0490, 0.2783, 0.7100, 0.7988]
-#     if args.btag == "DeepFlav"
-#     else [0.1047, 0.3787, 0.7563, 0.8486]
-# )
+thresholds = (
+    [0.0420, 0.2551, 0.6855, 0.7988]
+    if args.btag == "DeepFlav"
+    else [0.1047, 0.3787, 0.7563, 0.8486]
+)
 
-thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag)
+# thresholds = read_txt_file("sb_discriminator/roc_curve/roc_data.txt", args.btag)
 print(thresholds)
 
 bins = [
@@ -103,6 +103,10 @@ def load_data(dir_mu, dir_el, variables_list):
     for i, file in enumerate(glob.glob("%s/**/*_SR_*.root" % dir_mu, recursive=True)):
         if i < 10000:
             files.append(file)
+    for i, file in enumerate(glob.glob("%s/**/*_SR_*.root" % dir_el, recursive=True)):
+        if i < 10000:
+            files.append(file)
+    print(f"Loading files: {files}")
 
     var_tot = np.array([[], [], []])
     # open each file and get the Events tree using uproot
