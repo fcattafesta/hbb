@@ -6,17 +6,20 @@ ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
 
 
 # Get the DNN score histograms
-f1 = ROOT.TFile.Open(
-    "/gpfs/ddn/cms/user/cattafe/hbb_out/el/deepflav_sys_eval_rescalebtag/DYZpt-100To250_Histos.root"
-)
+# f1 = ROOT.TFile.Open(
+#     "/gpfs/ddn/cms/user/cattafe/hbb_out/el/deepflav_sys_eval_rescalebtag/DYZpt-100To250_Histos.root"
+# )
+f1 = ROOT.TFile.Open("/home/filippo/Downloads/full.root")
 full = f1.Get("atanhDNN_Score___SR_ee")
-f2 = ROOT.TFile.Open(
-    "/gpfs/ddn/cms/user/cattafe/hbb_out/el/DNN_deepflav_NOsnap_eval//DYZpt-100To250_Histos.root"
-)
+# f2 = ROOT.TFile.Open(
+#     "/gpfs/ddn/cms/user/cattafe/hbb_out/el/DNN_deepflav_NOsnap_eval//DYZpt-100To250_Histos.root"
+# )
+f2 = ROOT.TFile.Open("/home/filippo/Downloads/flash.root")
 flash = f2.Get("atanhDNN_Score___SR_ee")
-f3 = ROOT.TFile.Open(
-    "/gpfs/ddn/cms/user/cattafe/hbb_out/el/OversamplingFinal_deepflav_NOsnap_eval/DYZpt-100To250_Histos.root"
-)
+# f3 = ROOT.TFile.Open(
+#     "/gpfs/ddn/cms/user/cattafe/hbb_out/el/OversamplingFinal_deepflav_NOsnap_eval/DYZpt-100To250_Histos.root"
+# )
+f3 = ROOT.TFile.Open("/home/filippo/Downloads/overflash.root")
 overflash = f3.Get("atanhDNN_Score___SR_ee")
 
 # Make 3 random filled histograms
@@ -98,14 +101,14 @@ c.GetPad(3).Draw()
 
 c.GetPad(1).cd()
 c.GetPad(1).SetLogy()
-legend = makeLegend(0.75, 0.9, 0.8, 0.95)
+legend = makeLegend(0.65, 0.9, 0.8, 0.95)
 
 full.Draw("hist")
 flash.Draw("hist same")
 overflash.Draw("hist same")
 
 full.SetMaximum(5e4)
-full.SetMinimum(1e-1)
+full.SetMinimum(2e-1)
 
 legend.AddEntry(full, "FullSim", "f")
 legend.AddEntry(flash, "FlashSim", "f")
@@ -156,44 +159,54 @@ for i in range(1, error1.GetNbinsX() + 1):
     error2.SetBinContent(i, flash.GetBinError(i) / flash.GetBinContent(i))
     error3.SetBinContent(i, overflash.GetBinError(i) / overflash.GetBinContent(i))
 
-error1.SetMarkerStyle(20)
-error1.SetMarkerColor(ROOT.kBlack)
-error1.SetLineColor(ROOT.kBlack)
-error1.SetLineWidth(2)
-error1.SetLineStyle(2)
-# error1.Draw("P hist same")
-
-error2.SetMarkerStyle(21)
-error2.SetMarkerColor(ROOT.kOrange + 8)
-error2.SetLineColor(ROOT.kOrange + 8)
-error2.SetLineWidth(2)
-error2.SetLineStyle(1)
-# error2.Draw("P hist same")
-
 error3.SetMarkerStyle(22)
 error3.SetMarkerColor(ROOT.kAzure + 1)
+error3.SetMarkerSize(1.1)
 error3.SetLineColor(ROOT.kAzure + 1)
 error3.SetLineWidth(2)
 error3.SetLineStyle(1)
 error3.Draw("P hist same")
 
-error1.SetMaximum(0.3)
-error1.SetMinimum(0.0)
+error1.SetMarkerStyle(20)
+error1.SetMarkerColor(ROOT.kBlack)
+error1.SetLineColor(ROOT.kBlack)
+error1.SetLineWidth(2)
+error1.SetLineStyle(2)
+error1.Draw("P hist same")
 
-error1.GetYaxis().SetTitle("Rel. Unc.")
-error1.GetYaxis().SetTitleSize(0.075)
-error1.GetYaxis().SetTitleOffset(0.6)
-error1.GetYaxis().SetLabelSize(0.07)
-error1.GetYaxis().SetMaxDigits(2)
-# error1.GetYaxis().SetRangeUser(0, 0.04)
-error1.GetYaxis().SetNdivisions(5)
+error2.SetMarkerStyle(21)
+error2.SetMarkerColor(ROOT.kOrange + 8)
+error2.SetMarkerSize(1.1)
+error2.SetLineColor(ROOT.kOrange + 8)
+error2.SetLineWidth(2)
+error2.SetLineStyle(1)
+error2.Draw("P hist same")
 
-error1.GetXaxis().SetTitle("atanh(DNN Score)")
-error1.GetXaxis().SetTitleSize(0.1)
-error1.GetXaxis().SetTitleOffset(1.1)
-error1.GetXaxis().SetLabelSize(0.07)
+error1.SetMarkerStyle(20)
+error1.SetMarkerColor(ROOT.kBlack)
+error1.SetLineColor(ROOT.kBlack)
+error1.SetLineWidth(2)
+error1.SetLineStyle(2)
+error1.Draw("P hist same")
 
-c.Update()
+
+error3.SetMaximum(0.3)
+error3.SetMinimum(-0.1)
+
+error3.GetYaxis().SetTitle("Rel. Unc.")
+error3.GetYaxis().SetTitleSize(0.075)
+error3.GetYaxis().SetTitleOffset(0.6)
+error3.GetYaxis().SetLabelSize(0.07)
+error3.GetYaxis().SetMaxDigits(5)
+# error3.GetYaxis().SetRangeUser(0, 0.04)
+error3.GetYaxis().SetNdivisions(10)
+
+error3.GetXaxis().SetTitle("atanh(DNN Score)")
+error3.GetXaxis().SetTitleSize(0.1)
+error3.GetXaxis().SetTitleOffset(1.1)
+error3.GetXaxis().SetLabelSize(0.07)
+
+c.GetPad(3).Update()
 
 
 # Text
