@@ -16,7 +16,7 @@ parser.add_argument(
 parser.add_argument(
     "-fsub", "--foldersuffix", default="", help="Folder suffix for annotations"
 )
-parser.add_argument("--blind", help="Blind data in plots", action="store_true")
+parser.add_argument("--unblind", help="Unblind data in plots", action="store_true", default=False)
 parser.add_argument("--sf", default=False, help="Scale Factor", action="store_true")
 parser.add_argument("--bit", default=False, help="Btag bit", action="store_true")
 parser.add_argument(

@@ -57,7 +57,6 @@ $CMD \
     --histfolder ${histodir} \
     --outfolder ${plotdir} \
     --workspace ${plotdir}/ \
-    --blind \
     ${btag} \
     ${sf} \
     ${bit} \

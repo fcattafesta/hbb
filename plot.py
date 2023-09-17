@@ -1470,7 +1470,7 @@ if __name__ == "__main__":
                         if i < firstBlind:
                             firstBlind = i
                         lastBlind = i
-                if args.blind and hn in datasum.keys():
+                if not args.unblind and hn in datasum.keys():
                     for i in range(firstBlind, lastBlind + 1):
                         datastack[hn].GetStack().Last().SetBinContent(i, 0)
                         datasum[hn].SetBinContent(i, 0)
@@ -1559,10 +1559,10 @@ if __name__ == "__main__":
                     max_value = datasum[hn].GetMaximum()
                     if datasum[hn].GetMinimum() != 0 or histosum[hn].GetMinimum() != 0:
                         datasum[hn].SetMinimum(
-                            min(
-                                0.1 * datasum[hn].GetMinimum(),
-                                0.1 * histosum[hn].GetMinimum(),
-                                0.1,
+                            max(
+                                0.01 * datasum[hn].GetMinimum(),
+                                0.01 * histosum[hn].GetMinimum(),
+                                #0.1,
                             )
                         )
                     else:
