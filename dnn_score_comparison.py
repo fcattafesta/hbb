@@ -148,8 +148,8 @@ ratio1.GetYaxis().SetNdivisions(5)
 c.GetPad(3).cd()
 c.GetPad(3).SetGridy()
 error1 = full.Clone("error1")
-error2 = full.Clone("error2")
-error3 = full.Clone("error3")
+error2 = error1.Clone("error2")
+error3 = error2.Clone("error3")
 
 for i in range(1, error1.GetNbinsX() + 1):
     error1.SetBinContent(i, full.GetBinError(i) / full.GetBinContent(i))
