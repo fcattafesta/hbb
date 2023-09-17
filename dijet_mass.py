@@ -36,7 +36,7 @@ for type, names in root_files.items():
             histos_pt[pt] = files[type].Get(pt)#.Rebin(len(rebinning)-1, "hnew"+pt, array("d", rebinning))
 
 print(histos_pt)
-colors=[ROOT.kBlack, ROOT.kBlue, ROOT.kRed, ROOT.kGreen, ROOT.kOrange]
+colors=[ROOT.kBlack, ROOT.kGreen, ROOT.kRed, ROOT.kBlue, ROOT.kOrange]
 
 gen_weight=histos["Jet_pt"].GetSumOfWeights()/histos["Jet_pt"].GetEntries()
 
@@ -72,7 +72,7 @@ legend.Draw()
 t0.Draw()
 t1.Draw()
 c.Draw()
-c.SaveAs("dijet_mass.png")
+c.SaveAs("dijet_mass.pdf")
 c.SaveAs("dijet_mass.root")
 
 

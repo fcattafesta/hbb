@@ -6,6 +6,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("-d", "--datacard", help="Datacard name", type=str, default="datacard.txt")
 parser.add_argument("-c", "--combine", help="Combine datacards", action="store_true")
+parser.add_argument("-u", "--unblind", help="Unlind analysis", action="store_true")
 args = parser.parse_args()
 
 if args.combine:
@@ -23,6 +24,11 @@ if args.combine:
 workdir = os.path.dirname(args.datacard)
 workdir = workdir + "/" if workdir else ""
 
+if args.unblind:
+    asimov=""
+else:
+    asimov="-t -1"
+
 datacard = os.path.splitext(args.datacard)[0]
 
 print("workdir: ", workdir)
@@ -37,11 +43,11 @@ if os.path.exists(log_file):
     os.remove(log_file)
 
 cmd_list = [
-    f"combine -M Significance {datacard}.txt -t -1 --expectSignal=1",
+    f"combine -M Significance {datacard}.txt {asimov} --expectSignal=1",
     f"text2workspace.py {datacard}.txt -m 125",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --doInitialFit --robustFit 1 -t -1 --expectSignal=1",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --robustFit 1 --doFits --parallel 30 -t -1 --expectSignal=1",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 -o {workdir}impacts_{name}.json -t -1 --expectSignal=1",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --doInitialFit --robustFit 1 {asimov} --expectSignal=1",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --robustFit 1 --doFits --parallel 30 {asimov} --expectSignal=1",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 -o {workdir}impacts_{name}.json {asimov} --expectSignal=1",
     f"plotImpacts.py -i {workdir}impacts_{name}.json -o {workdir}impacts_{name} -t rename_fit.json",
 ]
 

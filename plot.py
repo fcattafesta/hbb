@@ -1120,7 +1120,8 @@ if __name__ == "__main__":
                 error,
                 SumTH1[hn].Integral(0, SumTH1[hn].GetNbinsX() + 1),
             )
-        logger.info("hn %s gr %s , bins %s" % (hn, gr, sum_bins))
+        if "atanhDNN_Score___SR" in hn:
+            logger.info("hn %s gr %s , bins %s" % (hn, gr, sum_bins))
         # if not data :
         # ftxt.write("%s\t%s +- %s\t%s \n"%(gr,integral[gr]["nom"], error[gr],integral[gr]["nom"]/datasum[hn].Integral(0,datasum[hn].GetNbinsX()+1)))
         # for sy in integral[gr].keys() : ftxt.write("%s\t%s +- %s\t%s \n"%(gr,integral[gr]["nom"], error[gr],integral[gr]["nom"]/datasum[hn].Integral(0,datasum[hn].GetNbinsX()+1)))

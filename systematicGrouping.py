@@ -68,10 +68,10 @@ def systematicGrouping(background, signal, jesList, year):
             "decorrelate": {
                 "ZH": ["ZH"],
                 "ggZH": ["ggZH"],
-                "DY_bb": DY_bb,
-                "DY_b": DY_b,
-                "DY_c": DY_c,
-                "DY_udsg": DY_udsg,
+                "Z+b#bar{b}": DY_bb,
+                "Z+b": DY_b,
+                "Z+c": DY_c,
+                "Z+udsg": DY_udsg,
                 "VV": VV_,
                 "TT": TT,
                 "ST": ST,
@@ -79,10 +79,10 @@ def systematicGrouping(background, signal, jesList, year):
             "groupValues": {
                 "ZH": 1.006,  # 1.010,
                 "ggZH": 1.25,  # 1.010,
-                "DY_bb": 1.15,  # 1.010, #NOTE?
-                "DY_b": 1.15,  # 1.010, #NOTE?
-                "DY_c": 1.15,  # 1.010, #NOTE?
-                "DY_udsg": 1.15,  # 1.010, #NOTE?
+                "Z+b#bar{b}": 1.15,  # 1.010, #NOTE?
+                "Z+b": 1.15,  # 1.010, #NOTE?
+                "Z+c": 1.15,  # 1.010, #NOTE?
+                "Z+udsg": 1.15,  # 1.010, #NOTE?
                 "VV": 1.15,  # 1.010,
                 "TT": 1.15,  # 1.005, #NOTE?
                 "ST": 1.15,  # 1.005,
