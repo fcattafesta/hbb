@@ -150,7 +150,7 @@ def sum_last_n_elements(data, n):
 fractions_max = sum_last_n_elements(fractions_max, discard-1)
 fractions_min = sum_last_n_elements(fractions_min, discard-1)
 
-sig_list = [(x**2 + y**2) / 1 for x, y in zip(sig_list_el, sig_list_mu)]
+sig_list = [math.sqrt(x**2 + y**2) / 1 for x, y in zip(sig_list_el, sig_list_mu)]
 
 # print("sig_list", sig_list)
 

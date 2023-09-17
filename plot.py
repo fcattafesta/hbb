@@ -1680,17 +1680,18 @@ if __name__ == "__main__":
                     if len(systematicsSetToUse) > 0:
                         myLegend_sy.Draw()
 
-                    tchi2 = makeText(
-                        0.19,
-                        0.26,
-                        "#chi^{2}="
-                        + str(
-                            round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)
-                        ),
-                        42,
-                        0.025,
-                    )
-                    tchi2.Draw()
+                    if args.unblind:
+                        tchi2 = makeText(
+                            0.19,
+                            0.26,
+                            "#chi^{2}="
+                            + str(
+                                round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)
+                            ),
+                            42,
+                            0.025,
+                        )
+                        tchi2.Draw()
 
                     # tKS = makeText(
                     #     0.29,

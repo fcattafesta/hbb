@@ -131,7 +131,7 @@ def plt_fts(out_dir, name, fig_handle, show, type):
     :param    fig_handle : figure handle
     """
 
-    plt.xlabel(f"btag {type} score {args.btag}", fontsize=20, loc="right")
+    plt.xlabel("$btag_{" + type + "}$ " + args.btag, fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
     minorLocator = MultipleLocator(0.05)
