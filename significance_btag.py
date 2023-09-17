@@ -377,7 +377,7 @@ def plot_data(
         xerr=df_point[2],
         yerr=sig_ratio_std_dev,
         fmt="o",
-        label="DeepFlav",
+        label="DeepFlavour",
         color="blue",
     )
 
