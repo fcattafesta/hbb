@@ -177,8 +177,8 @@ error3.SetLineWidth(2)
 error3.SetLineStyle(1)
 error3.Draw("P hist same")
 
-error1.SetMaximum(error2.GetMaximum() * 1.1)
-error1.SetMinimum(error1.GetMinimum() * 0.9)
+error1.SetMaximum(0.3)
+error1.SetMinimum(0.0)
 
 error1.GetYaxis().SetTitle("Rel. Unc.")
 error1.GetYaxis().SetTitleSize(0.075)
