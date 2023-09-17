@@ -104,6 +104,9 @@ full.Draw("hist")
 flash.Draw("hist same")
 overflash.Draw("hist same")
 
+full.SetMaximum(5e4)
+full.SetMinimum(1e-1)
+
 legend.AddEntry(full, "FullSim", "f")
 legend.AddEntry(flash, "FlashSim", "f")
 legend.AddEntry(overflash, "FlashSim (#times 5)", "f")
@@ -135,7 +138,7 @@ ratio1.GetXaxis().SetTitleSize(0)
 ratio1.GetXaxis().SetLabelSize(0)
 
 ratio1.GetYaxis().SetTitle("Ratio")
-ratio1.GetYaxis().SetTitleSize(0.15)
+ratio1.GetYaxis().SetTitleSize(0.14)
 ratio1.GetYaxis().SetTitleOffset(0.3)
 ratio1.GetYaxis().SetLabelSize(0.15)
 ratio1.GetYaxis().SetRangeUser(0.5, 1.5)
@@ -173,6 +176,9 @@ error3.SetLineColor(ROOT.kAzure + 1)
 error3.SetLineWidth(2)
 error3.SetLineStyle(1)
 error3.Draw("P hist same")
+
+error1.SetMaximum(200e-3)
+error1.SetMinimum(0)
 
 error1.GetYaxis().SetTitle("Rel. Unc.")
 error1.GetYaxis().SetTitleSize(0.075)
