@@ -31,6 +31,15 @@ overflash = f3.Get("atanhDNN_Score___SR_ee")
 lumi = 59970
 xsec = 88.36
 
+# Rebin the histograms
+bins = array.array(
+    "d", [0, 0.029, 0.379, 0.729, 1.079, 1.429, 1.779, 2.129, 2.479, 2.829, 10.0]
+)
+full = full.Rebin(len(bins) - 1, "full", bins)
+flash = flash.Rebin(len(bins) - 1, "flash", bins)
+overflash = overflash.Rebin(len(bins) - 1, "overflash", bins)
+
+
 # Normalize the histograms
 full.Scale(lumi * xsec)
 flash.Scale(lumi * xsec)
