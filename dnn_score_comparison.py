@@ -188,11 +188,12 @@ error1.GetYaxis().SetMaxDigits(2)
 # error1.GetYaxis().SetRangeUser(0, 0.04)
 error1.GetYaxis().SetNdivisions(5)
 
-c.cd()
 error1.GetXaxis().SetTitle("atanh(DNN Score)")
 error1.GetXaxis().SetTitleSize(0.1)
 error1.GetXaxis().SetTitleOffset(1.1)
 error1.GetXaxis().SetLabelSize(0.07)
+
+c.update()
 
 
 # Text
