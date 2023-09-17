@@ -159,12 +159,12 @@ if __name__ == "__main__":
         if not btag_rescale:
             SignificanceSum_str = (
                 " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}+0.5}#right)^{2}} = "
-                + str("%.2f" % SignificanceSum)
-                + (
-                    f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})"
-                    if rescale
-                    else ""
-                )
+                + str("%.2f" % SignificanceSum) if not rescale else ""
+                # + (
+                #     f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})"
+                #     if rescale
+                #     else ""
+                # )
             )
             # write the significance histogram to a file
             fR = ROOT.TFile.Open(

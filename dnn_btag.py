@@ -43,7 +43,9 @@ def read_txt_file(filename, name):
     return threshold_list
 
 
-main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/{args.dir}/Snapshots/"
+# main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/{args.dir}/Snapshots/"
+main_dir_mu = f"/gpfs/ddn/cms/user/malucchi/hbb_out/mu/{args.dir}/Snapshots/"
+main_dir_el = f"/gpfs/ddn/cms/user/malucchi/hbb_out/el/{args.dir}/Snapshots/"
 
 var_list = [
     "btag_max",
@@ -92,13 +94,13 @@ bins = [
 ]
 
 
-def load_data(dir, variables_list):
+def load_data(dir_mu, dir_el, variables_list):
     # list of all the files
     files = []
-    print(dir)
+    print(dir_mu)
     print(variables_list)
 
-    for i, file in enumerate(glob.glob("%s/**/*_SR_*.root" % dir, recursive=True)):
+    for i, file in enumerate(glob.glob("%s/**/*_SR_*.root" % dir_mu, recursive=True)):
         if i < 10000:
             files.append(file)
 
@@ -174,7 +176,7 @@ def plotting_function(out_dir, variables, type):
 
     plt_fts(
         out_dir,
-        f"btag_VS_DNN_{args.lep}_{args.btag}_{type}",
+        f"btag_VS_DNN_{args.btag}_{type}",
         fig_handle,
         args.show,
         type,
@@ -214,7 +216,7 @@ def fractions(out_dir, variables, type):
 if "__main__" == __name__:
     os.makedirs(args.out_dir, exist_ok=True)
 
-    variables = load_data(main_dir, var_list)
+    variables = load_data(main_dir_mu, main_dir_el, var_list)
 
     variables_max = np.array([variables[0], variables[2]])
     variables_min = np.array([variables[1], variables[2]])
@@ -226,7 +228,7 @@ if "__main__" == __name__:
     fractions_min = fractions(args.out_dir, variables_min, "min")
 
     # write fractions to file
-    with open(f"{args.out_dir}/fractions_{args.btag}_{args.lep}.csv", "w") as f:
+    with open(f"{args.out_dir}/fractions_{args.btag}.csv", "w") as f:
         writer = csv.writer(f)
         writer.writerow(["fractions_max", fractions_max])
         writer.writerow(["fractions_min", fractions_min])
