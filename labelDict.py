@@ -67,6 +67,7 @@ labelLegend = {
     "bkg_2b": "bkg_{2b}",
     "FullSim": "FullSim",
     "FlashSim": "FlashSim",
+    "Oversampling": "FlashSim (#times 10000)",
     "DY0To50": "p_{T} < 50 GeV",
     "DY50To100": "50 < p_{T} < 100 GeV",
     "DY100To250": "100 < p_{T} < 250 GeV",
