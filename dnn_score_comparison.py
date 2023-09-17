@@ -161,14 +161,14 @@ error1.SetMarkerColor(ROOT.kBlack)
 error1.SetLineColor(ROOT.kBlack)
 error1.SetLineWidth(2)
 error1.SetLineStyle(2)
-error1.Draw("P hist same")
+# error1.Draw("P hist same")
 
 error2.SetMarkerStyle(21)
 error2.SetMarkerColor(ROOT.kOrange + 8)
 error2.SetLineColor(ROOT.kOrange + 8)
 error2.SetLineWidth(2)
 error2.SetLineStyle(1)
-error2.Draw("P hist same")
+# error2.Draw("P hist same")
 
 error3.SetMarkerStyle(22)
 error3.SetMarkerColor(ROOT.kAzure + 1)
@@ -193,7 +193,7 @@ error1.GetXaxis().SetTitleSize(0.1)
 error1.GetXaxis().SetTitleOffset(1.1)
 error1.GetXaxis().SetLabelSize(0.07)
 
-c.update()
+c.Update()
 
 
 # Text
