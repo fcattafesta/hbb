@@ -6,15 +6,18 @@ ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
 
 
 # Get the DNN score histograms
-full = ROOT.TFile.Open(
+f1 = ROOT.TFile.Open(
     "/gpfs/ddn/cms/user/cattafe/hbb_out/el/deepflav_sys_eval_rescalebtag/DYZpt-100To250_Histos.root"
-).Get("atanhDNN_Score___SR_ee.root")
-flash = ROOT.TFile.Open(
+)
+full = f1.Get("atanhDNN_Score___SR_ee")
+f2 = ROOT.TFile.Open(
     "/gpfs/ddn/cms/user/cattafe/hbb_out/el/DNN_deepflav_NOsnap_eval//DYZpt-100To250_Histos.root"
-).Get("atanhDNN_Score___SR_ee.root")
-overflash = ROOT.TFile.Open(
+)
+flash = f2.Get("atanhDNN_Score___SR_ee")
+f3 = ROOT.TFile.Open(
     "/gpfs/ddn/cms/user/cattafe/hbb_out/el/OversamplingFinal_deepflav_NOsnap_eval/DYZpt-100To250_Histos.root"
-).Get("atanhDNN_Score___SR_ee.root")
+)
+overflash = f3.Get("atanhDNN_Score___SR_ee")
 
 # Make 3 random filled histograms
 # full = ROOT.TH1F("full", "full", 10, -1, 1)
