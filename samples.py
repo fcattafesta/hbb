@@ -3,10 +3,10 @@ import glob
 
 # NOTE: change order of flavsplit?
 flavourSplitting = {
-    "bb": "TwoB",
-    "b": "OneB",
-    "c": "C",
-    "udsg": "Light",
+    # "bb": "TwoB",
+    # "b": "OneB",
+    # "c": "C",
+    # "udsg": "Light",
 }
 
 flavourVVSplitting = {
