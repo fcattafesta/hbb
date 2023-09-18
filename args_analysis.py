@@ -9,9 +9,9 @@ parser.add_argument("-m", "--model", default="", help="Model to use")
 parser.add_argument(
     "-r",
     "--range",
-    default=-1,
+    default=[-1, -1],
     help="Number of events to process",
-    type=int,
+    type=list,
 )
 parser.add_argument(
     "-n",

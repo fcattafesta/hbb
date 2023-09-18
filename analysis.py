@@ -166,8 +166,8 @@ def runSample(ar):
         logger.info("Start sample %s: nevents %s" % (s, nevents))
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
-    if args.range != -1:
-        rdf = rdf.Range(args.range)
+    if -1 not in args.range:
+        rdf = rdf.Range(args.range[0], args.range[1])
     subs = {}
     if rdf:
         try:
