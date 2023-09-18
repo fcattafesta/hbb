@@ -17,7 +17,7 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-# ROOT.TH1.AddDirectory(ROOT.kFALSE)
+ROOT.TH1.AddDirectory(ROOT.kFALSE)
 
 # from samplesDY import *
 from samples import *
@@ -98,7 +98,7 @@ logger.info("Histograms with systematics: %s" % histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
     "eventProcessorMC",
-    [],  # [flavourSplitting[x] for x in flavourSplitting],
+    [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
     "",
@@ -115,6 +115,7 @@ procData = flowData.CreateProcessor(
 
 
 def sumwsents(files):
+    ROOT.TH1.AddDirectory(ROOT.kTRUE)
     sumws = 1e-9
     nevents = 0
     LHEPdfSumw = []
@@ -141,6 +142,7 @@ def sumwsents(files):
     if nevents < 1:
         nevents = 1
 
+    ROOT.TH1.AddDirectory(ROOT.kFALSE)
     return sumws, LHEPdfSumw, nevents
 
 

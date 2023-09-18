@@ -69,6 +69,7 @@ public:
       return;
     }
     if ((fHistos[genEvent].find(slot) == fHistos[genEvent].end())) {
+      TH1::SetDirectory(0);
       TH *h = (TH *)fFinalHisto->Clone();
       fHistos[genEvent].emplace(slot, h);
       fHistos[genEvent][slot]->Reset();
