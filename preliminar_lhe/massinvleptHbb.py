@@ -1,10 +1,5 @@
 import os
-from args_analysis import args
-
-if args.oversampling:
-    from nail.nail import *
-else:
-    from nail.nailOriginal import *
+from nail import *
 import ROOT
 import sys
 

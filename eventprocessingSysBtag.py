@@ -1,10 +1,4 @@
-from args_analysis import args
-
-if args.oversampling:
-    from nail.nail import *
-else:
-    from nail.nailOriginal import *
-
+from nail.nail import *
 import correctionlib
 
 from btagging_sys import unc_btag
