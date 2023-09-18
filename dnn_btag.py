@@ -102,26 +102,29 @@ def load_data(dir_mu, dir_el, variables_list):
     print(variables_list)
 
     for i, file in enumerate(glob.glob("%s/**/*_SR_*.root" % dir_mu, recursive=True)):
-        if i < 10000:
+        if i < 10000 and "SingleMuon" not in file and "EGamma" not in file:
             files.append(file)
     for i, file in enumerate(glob.glob("%s/**/*_SR_*.root" % dir_el, recursive=True)):
-        if i < 10000:
+        if i < 10000 and "SingleMuon" not in file and "EGamma" not in file:
             files.append(file)
-    print(f"Loading files: {files}")
+    # print(f"Loading files: {files}")
 
-    var_tot = np.array([[], [], []])
+    var_tot = np.array([[], [], [], []])
     # open each file and get the Events tree using uproot
     for file in files:
         try:
             print(f"Loading file {file}")
             sample_name = file.split("/")[-1].split("_SR")[0].split("_CR")[0]
+            print(f"Sample name: {sample_name}")
             file = uproot.open(f"{file}:Events")
             variables = np.array(
                 [file[input].array(library="np") for input in variables_list]
             )
             variables = np.concatenate(
-                variables,
-                samples[sample_name]["xsec"] * np.ones((1, variables.shape[1])),
+                (
+                    variables,
+                    samples[sample_name]["xsec"] * np.ones((1, variables.shape[1])),
+                ),
                 axis=0,
             )
             print(variables, variables.shape)
@@ -216,13 +219,15 @@ def fractions(out_dir, variables, type):
                         np.logical_and(
                             variables[0][mask] > thresholds[j],
                             variables[0][mask] < thresholds[j + 1],
-                        )*variables[2][mask]
+                        )
+                        * variables[2][mask]
                     )
                     / np.sum(variables[2][mask])
                 )
             else:
                 fractions[i].append(
-                    np.sum((variables[0][mask] > thresholds[j]) * variables[2][mask]) / np.sum(variables[2][mask])
+                    np.sum((variables[0][mask] > thresholds[j]) * variables[2][mask])
+                    / np.sum(variables[2][mask])
                 )
     print(fractions)
 
