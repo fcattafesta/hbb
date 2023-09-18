@@ -9,6 +9,7 @@ import mplhep as hep
 import glob
 import matplotlib as mpl
 import csv
+from samples import samples
 
 
 # plt.rcParams["text.usetex"] = True
@@ -82,10 +83,10 @@ bins = [
         0.0,
         # 0.0015,
         1.425,
-        1.7085000000000001,
+        1.7085,
         1.9155,
         2.1195,
-        2.3265000000000002,
+        2.3265,
         2.568,
         2.7315,
         3.024,
@@ -112,12 +113,19 @@ def load_data(dir_mu, dir_el, variables_list):
     # open each file and get the Events tree using uproot
     for file in files:
         try:
-            # print(f"Loading file {file}")
+            print(f"Loading file {file}")
+            sample_name = file.split("/")[-1].split("_SR")[0].split("_CR")[0]
             file = uproot.open(f"{file}:Events")
             variables = np.array(
                 [file[input].array(library="np") for input in variables_list]
             )
-            # print(variables.shape)
+            variables = np.concatenate(
+                variables,
+                samples[sample_name]["xsec"] * np.ones((1, variables.shape[1])),
+                axis=0,
+            )
+            print(variables, variables.shape)
+
             # mask = np.array(variables[2, :]>2.829)
             # variables = variables[:, mask]
             var_tot = np.concatenate((var_tot, variables), axis=1)
@@ -170,6 +178,7 @@ def plotting_function(out_dir, variables, type):
         density=True,
         range=[[0, 1], [0, 10]],
         norm=mpl.colors.LogNorm(),
+        weights=variables[2],
     )
     ax = plt.gca()
     cmap = mpl.cm.jet
@@ -197,6 +206,9 @@ def fractions(out_dir, variables, type):
         )
         print(mask)
         print(variables[0][mask])
+        print(variables[1][mask])
+        print(variables[2][mask])
+
         for j in range(len(thresholds)):
             if j + 1 < len(thresholds):
                 fractions[i].append(
@@ -204,13 +216,13 @@ def fractions(out_dir, variables, type):
                         np.logical_and(
                             variables[0][mask] > thresholds[j],
                             variables[0][mask] < thresholds[j + 1],
-                        )
+                        )*variables[2][mask]
                     )
-                    / len(variables[0][mask])
+                    / np.sum(variables[2][mask])
                 )
             else:
                 fractions[i].append(
-                    np.sum(variables[0][mask] > thresholds[j]) / len(variables[0][mask])
+                    np.sum((variables[0][mask] > thresholds[j]) * variables[2][mask]) / np.sum(variables[2][mask])
                 )
     print(fractions)
 
@@ -222,8 +234,8 @@ if "__main__" == __name__:
 
     variables = load_data(main_dir_mu, main_dir_el, var_list)
 
-    variables_max = np.array([variables[0], variables[2]])
-    variables_min = np.array([variables[1], variables[2]])
+    variables_max = np.array([variables[0], variables[2], variables[3]])
+    variables_min = np.array([variables[1], variables[2], variables[3]])
 
     for v, s in zip([variables_min, variables_max], ["min", "max"]):
         plotting_function(args.out_dir, v, s)
