@@ -98,7 +98,7 @@ logger.info("Histograms with systematics: %s" % histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
     "eventProcessorMC",
-    [flavourSplitting[x] for x in flavourSplitting],
+    [],  # [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
     "",
