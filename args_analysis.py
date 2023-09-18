@@ -49,6 +49,12 @@ parser.add_argument(
     help="Sample to run on",
     type=str,
 )
+parser.add_argument(
+    "--oversampling",
+    default=False,
+    action="store_true",
+    help="Apply oversampling",
+)
 parser.print_help()
 args = parser.parse_args()
 print(args)

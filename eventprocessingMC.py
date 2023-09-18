@@ -1,4 +1,9 @@
-from nail.nail import *
+from args_analysis import args
+
+if args.oversampling:
+    from nail.nail import *
+else:
+    from nail.nailOriginal import *
 import correctionlib
 
 correctionlib.register_pyroot_binding()
@@ -17,12 +22,6 @@ def getFlowMC(flow):
     )
 
     flow.CentralWeight("genWeight")  # add a central weight
-
-    flow.SubCollection(
-        "SelectedGenJet",
-        "GenJet",
-        sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
-    )
 
     ## Defining subsamples
     flow.Define(

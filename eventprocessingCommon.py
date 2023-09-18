@@ -1,4 +1,9 @@
-from nail.nail import *
+from args_analysis import args
+
+if args.oversampling:
+    from nail.nail import *
+else:
+    from nail.nailOriginal import *
 
 
 def getFlowCommon(flow, btag):
@@ -55,10 +60,13 @@ def getFlowCommon(flow, btag):
     )
 
     # Define p4
-    flow.Define("SelectedJet_p4","vector_map_t<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<float> >        >(SelectedJet_pt_Nom , SelectedJet_eta, SelectedJet_phi, SelectedJet_mass)")
-    #flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
+    flow.Define(
+        "SelectedJet_p4",
+        "vector_map_t<ROOT::Math::LorentzVector<ROOT::Math::PtEtaPhiM4D<float> >        >(SelectedJet_pt_Nom , SelectedJet_eta, SelectedJet_phi, SelectedJet_mass)",
+    )
+    # flow.Define("SelectedJet_p4", "@p4v(SelectedJet)")
 
-    btag_score="btagDeepFlavB" if btag == "deepflav" else "btagDeepB"
+    btag_score = "btagDeepFlavB" if btag == "deepflav" else "btagDeepB"
 
     # Order by btag score
     flow.Define("SelectedJetBTagOrderIndices", "Argsort(-SelectedJet_%s)" % btag_score)
@@ -89,7 +97,9 @@ def getFlowCommon(flow, btag):
     )
     flow.Define("jj_dr", "TMath::Sqrt(jj_deta*jj_deta + jj_dphi*jj_dphi)")
 
-    btag_wp=[0.0490, 0.2783, 0.7100] if btag == "deepflav" else [0.1208, 0.4168, 0.7665]
+    btag_wp = (
+        [0.0490, 0.2783, 0.7100] if btag == "deepflav" else [0.1208, 0.4168, 0.7665]
+    )
 
     # B-tagging working points
     flow.Selection("JetBtagMaxLoose", "JetBtagMax_%s > %f" % (btag_score, btag_wp[0]))

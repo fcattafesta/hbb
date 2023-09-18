@@ -1,4 +1,9 @@
-from nail.nail import *
+from args_analysis import args
+
+if args.oversampling:
+    from nail.nail import *
+else:
+    from nail.nailOriginal import *
 import correctionlib
 
 from btagging_sys import unc_btag
@@ -73,7 +78,9 @@ def getFlowSysBtag(flow, btag):
                 'sf_btag("%s", SelectedJet_hadronFlavour, SelectedJet_eta, SelectedJet_pt, %s)'
                 % (
                     name,
-                    "SelectedJet_btagDeepFlavB" if btag == "deepflav" else "SelectedJet_btagDeepB",
+                    "SelectedJet_btagDeepFlavB"
+                    if btag == "deepflav"
+                    else "SelectedJet_btagDeepB",
                 ),
             )
             if suffix == "Central":
@@ -81,7 +88,7 @@ def getFlowSysBtag(flow, btag):
                     "btagWeight%s" % (suffix),
                     "ROOT::VecOps::Product(SelectedJet_btagWeight_%s)" % name,
                 )
-                flow.CentralWeight("btagWeightCentral", ["twoJets"]) #HERE
+                flow.CentralWeight("btagWeightCentral", ["twoJets"])  # HERE
             else:
                 flow.Define(
                     "btagWeight_%s%s" % (unc, suffix),
