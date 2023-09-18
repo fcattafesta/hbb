@@ -2,7 +2,6 @@ from multiprocessing import Pool
 import psutil
 import copy
 import sys
-from nail.nail import *
 import ROOT
 import traceback
 import time
@@ -16,6 +15,11 @@ from args_analysis import args
 from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
+
+if args.oversampling:
+    from nail.nail import *
+else:
+    from nail.nailOriginal import *
 
 # ROOT.TH1.AddDirectory(ROOT.kFALSE)
 

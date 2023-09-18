@@ -1,4 +1,9 @@
-from nail.nail import *
+from args_analysis import args
+
+if args.oversampling:
+    from nail.nail import *
+else:
+    from nail.nailOriginal import *
 import correctionlib
 
 correctionlib.register_pyroot_binding()
