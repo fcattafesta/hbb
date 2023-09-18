@@ -21,6 +21,7 @@ histosData = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
+    "Jet_genJetIdx",
 ]
 histosData += [
     # "GenJet_pt",
