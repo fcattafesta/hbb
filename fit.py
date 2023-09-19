@@ -7,6 +7,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-d", "--datacard", help="Datacard name", type=str, default="datacard.txt")
 parser.add_argument("-c", "--combine", help="Combine datacards", action="store_true", default=False)
 parser.add_argument("-u", "--unblind", help="Unlind analysis", action="store_true", default=False)
+parser.add_argument("-t", "--threads", help="Number of threads", type=int, default=30)
+parser.add_argument("-r", "--rename", help="Rename POI file", type=str, default="../../rename_fit.json")
 args = parser.parse_args()
 
 if args.combine:
@@ -46,9 +48,9 @@ cmd_list = [
     f"combine -M Significance {datacard}.txt {asimov} --expectSignal=1",
     f"text2workspace.py {datacard}.txt -m 125",
     f"combineTool.py -M Impacts -d {datacard}.root -m 125 --doInitialFit --robustFit 1 {asimov} --expectSignal=1",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --robustFit 1 --doFits --parallel 30 {asimov} --expectSignal=1",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --robustFit 1 --doFits --parallel {args.threads} {asimov} --expectSignal=1",
     f"combineTool.py -M Impacts -d {datacard}.root -m 125 -o {workdir}impacts_{name}.json {asimov} --expectSignal=1",
-    f"plotImpacts.py -i {workdir}impacts_{name}.json -o {workdir}impacts_{name} -t rename_fit.json",
+    f"plotImpacts.py -i {workdir}impacts_{name}.json -o {workdir}impacts_{name} -t {args.rename}",
 ]
 
 # Open the log file for writing
