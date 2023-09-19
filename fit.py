@@ -5,8 +5,8 @@ import subprocess
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-d", "--datacard", help="Datacard name", type=str, default="datacard.txt")
-parser.add_argument("-c", "--combine", help="Combine datacards", action="store_true")
-parser.add_argument("-u", "--unblind", help="Unlind analysis", action="store_true")
+parser.add_argument("-c", "--combine", help="Combine datacards", action="store_true", default=False)
+parser.add_argument("-u", "--unblind", help="Unlind analysis", action="store_true", default=False)
 args = parser.parse_args()
 
 if args.combine:

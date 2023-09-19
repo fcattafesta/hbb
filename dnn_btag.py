@@ -20,7 +20,7 @@ parser.add_argument(
     default="deepflav_eval_newSR",
 )
 parser.add_argument(
-    "-b", "--btag", default="DeepFlav", help="Btagging algorithm (DeepFlav or DeepCSV)"
+    "-b", "--btag", default="DeepFlavour", help="Btagging algorithm (DeepFlavour or DeepCSV)"
 )
 parser.add_argument("-l", "--lep", default="mu", help="Lepton channel (mu or el)")
 
@@ -57,7 +57,7 @@ var_list = [
 # wp L, M, T, UT
 thresholds = (
     [0.0420, 0.2551, 0.6855, 0.7988]
-    if args.btag == "DeepFlav"
+    if args.btag == "DeepFlavour"
     else [0.1047, 0.3787, 0.7563, 0.8486]
 )
 

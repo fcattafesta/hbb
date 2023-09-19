@@ -189,7 +189,7 @@ if __name__ == "__main__":
             Significance.SetMaximum(2 * Significance.GetMaximum())  # zoom out y axis
             Significance.Draw("hist")
             t1 = makeText(0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42)
+            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.04)
 
             t3 = makeText(
                 0.25,
@@ -1075,9 +1075,9 @@ if __name__ == "__main__":
                     if gr in model.rescaleSample and any(
                         [x in hn for x in Special_variables]
                     ):
-                        logger.info(
-                            "rescale %s %s %s " % (hn, gr, model.rescaleSample[gr][0])
-                        )
+                        # logger.info(
+                        #     "rescale %s %s %s " % (hn, gr, model.rescaleSample[gr][0])
+                        # )
                         hr = h.Clone()
                         hr.Scale(model.rescaleSample[gr][0])
                         if hn not in SumTH1Rescaled:
@@ -1425,32 +1425,10 @@ if __name__ == "__main__":
                                 SignificanceSum_rescaled,
                             ]
                         )
-            if model.signal:
-                histosum[hn].Add(
-                    histoSigsum[hn]
-                )  # NOTE: is this the right place for this?
-
-            for gr in model.signalSortedForLegend:
-                h = histosSignal[hn][gr]
-                histos[hn].Add(h.Clone())
-                h.SetLineColor(model.linecolor[gr])
-                h.SetFillStyle(0)
-                h.SetLineWidth(3)
-                h.SetLineStyle(2)
-                # h.Scale(5000.0)
-                myLegend_1.AddEntry(h, labelLegend[gr], "l")
-
-            for gr in model.histosOverlayed_list:
-                h = histosOverlayed[hn][gr]
-                h.SetLineColor(model.linecolorOverlayed[gr])
-                h.SetFillStyle(0)
-                h.SetLineWidth(3)
-                h.SetLineStyle(1)
-                myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
             firstBlind = 100000
             lastBlind = -1
-            if model.signal:
+            if model.signal and any([x in hn for x in Special_variables]):
                 for i in range(histosSig[hn].GetStack().Last().GetNbinsX() + 1):
                     if (
                         histosSig[hn].GetStack().Last().GetBinContent(i)
@@ -1476,6 +1454,29 @@ if __name__ == "__main__":
                         datastack[hn].GetStack().Last().SetBinContent(i, 0)
                         datasum[hn].SetBinContent(i, 0)
                         logger.info("blinded %s bin %i" % (hn, i))
+
+            if model.signal:
+                histosum[hn].Add(
+                    histoSigsum[hn]
+                )  # NOTE: is this the right place for this?
+
+            for gr in model.signalSortedForLegend:
+                h = histosSignal[hn][gr]
+                histos[hn].Add(h.Clone())
+                h.SetLineColor(model.linecolor[gr])
+                h.SetFillStyle(0)
+                h.SetLineWidth(3)
+                h.SetLineStyle(2)
+                # h.Scale(5000.0)
+                myLegend_1.AddEntry(h, labelLegend[gr], "l")
+
+            for gr in model.histosOverlayed_list:
+                h = histosOverlayed[hn][gr]
+                h.SetLineColor(model.linecolorOverlayed[gr])
+                h.SetFillStyle(0)
+                h.SetLineWidth(3)
+                h.SetLineStyle(1)
+                myLegend_1.AddEntry(h, labelLegend[gr], "l")
 
             if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
                 myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")

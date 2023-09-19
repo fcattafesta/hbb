@@ -621,38 +621,38 @@ def createWorkSpace(model, all_histo_all_syst, year, btag, outdir="workspace/"):
     logger.info("\n ---------------------------- \n")
 
     # print("model.systematicDetail 0", model.systematicDetail)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping0.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping0.py")
 
     createNewSystematicForMergeWithOption(model.systematicDetail)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping1.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping1.py")
     # print("model.systematicDetail 1", model.systematicDetail)
 
     divideShapeAndNormalization(model.systematicDetail)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping2.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping2.py")
     # decorrelateNormOnly (model.systematicDetail, availableSamples)
     # print("model.systematicDetail 2", model.systematicDetail)
 
     modifySystematicDetail(
         model.systematicDetail, listAllSample_noYear, all_histo_all_syst
     )
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping3.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping3.py")
     # print("model.systematicDetail 3", model.systematicDetail)
 
     removeUnusedSystematics(model.systematicDetail, all_histo_all_syst)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping4.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping4.py")
     # print("model.systematicDetail 4", model.systematicDetail)
 
     valuesFromPlots(model.systematicDetail, all_histo_all_syst, region)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping5.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping5.py")
     # print("model.systematicDetail 5", model.systematicDetail)
 
     ScaleShapeOnlyPlot(model.systematicDetail, all_histo_all_syst)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping6.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping6.py")
     # print("model.systematicDetail 6", model.systematicDetail)
 
     mergeToSys(model.systematicDetail, listAllSample_noYear)
     logger.info("model.systematicDetail 7 %s" % model.systematicDetail)
-    printSystematicGrouping(model.systematicDetail, outdir + "/grouping7.py")
+    # printSystematicGrouping(model.systematicDetail, outdir + "/grouping7.py")
 
     systematic_file=outdir + "/fileCombine" + year + model.name + "_" + btag + ".root"
     writeSystematic(

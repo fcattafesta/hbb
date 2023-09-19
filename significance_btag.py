@@ -10,18 +10,18 @@ from scipy.interpolate import splrep, BSpline
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--sf",
-    default=False,
-    action="store_true",
+    default=True,
+    action="store_false",
     help="use scale factors",
 )
 parser.add_argument(
     "--frac-el",
-    default="btag_files/fractions_DeepFlav_el.csv",
+    default="btag_files/fractions_DeepFlav.csv",
     help="file name with fractions in el channel",
 )
 parser.add_argument(
     "--frac-mu",
-    default="btag_files/fractions_DeepFlav_mu.csv",
+    default="btag_files/fractions_DeepFlav.csv",
     help="file name with fractions in mu channel",
 )
 parser.add_argument("--out-dir", default="btag_files")
@@ -149,8 +149,9 @@ def sum_last_n_elements(data, n):
 # fractions_max = [lst[:discard] for lst in fractions_max]
 # fractions_min = [lst[:discard] for lst in fractions_min]
 
-fractions_max = sum_last_n_elements(fractions_max, discard - 1)
-fractions_min = sum_last_n_elements(fractions_min, discard - 1)
+#HERE
+# fractions_max = sum_last_n_elements(fractions_max, discard - 1)
+# fractions_min = sum_last_n_elements(fractions_min, discard - 1)
 
 sig_list = [math.sqrt(x**2 + y**2) / 1 for x, y in zip(sig_list_el, sig_list_mu)]
 
@@ -178,24 +179,21 @@ def read_txt_file(filename, name):
 roc_file = "sb_discriminator/roc_curve/roc_data.txt"
 roc_m100_file = "sb_discriminator/roc_curve/roc_data_m100.txt"
 
+
+
+# wp L, M, T, UT
+eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
+eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
+eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
+pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
+pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
+
+#HERE
 # eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")[:discard]
 # eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")[:discard]
 # eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "CMSSWDeepFlavour")[:discard]
 # pn_list_wp = read_txt_file(roc_m100_file, "ParticleNet")[:discard]
 # pe_list_wp = read_txt_file(roc_m100_file, "ParticleEdgeOk Full")[:discard]
-
-# print("eff_df_list_wp", eff_df_list_wp)
-# print("eff_csv_list_wp", eff_csv_list_wp)
-
-
-# wp L, M, T, UT
-
-eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
-eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
-
-eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
-pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
-pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
 
 eff_pn_list_wp = [
     x * y / z for x, y, z in zip(pn_list_wp, eff_df_list_wp, eff_dfCMSSW_list_wp)
@@ -249,7 +247,7 @@ rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
 
 
 # mu, el
-sig_df_list = [1.85, 1.63] if args.sf else [1.99, 1.78]
+sig_df_list = [1.69, 1.46] if args.sf else [0,0] # [1.85, 1.63] if args.sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
@@ -386,7 +384,7 @@ def plot_data(
     plt.vlines(
         x=rescale_fin_pn,
         ymin=1,
-        ymax=1.3,  # BSpline(*csv_spline_av)(rescale_fin_pn),
+        ymax=1.35,  # BSpline(*csv_spline_av)(rescale_fin_pn),
         # label="ParticleNet",
         color="black",
         linestyle="--",
@@ -395,7 +393,7 @@ def plot_data(
     plt.vlines(
         x=rescale_fin_pe,
         ymin=1,
-        ymax=1.3,  # BSpline(*csv_spline_av)(rescale_fin_pe),
+        ymax=1.35,  # BSpline(*csv_spline_av)(rescale_fin_pe),
         # label="ParticleEdge",
         color="green",
         linestyle="--",
@@ -456,7 +454,7 @@ def plot_data(
     # )
 
     plt.xlabel(r"$\varepsilon$", fontsize=20, loc="right")
-    plt.ylabel("Sig / Sig DeepCSV", fontsize=20, loc="top")
+    plt.ylabel( r"$Z_{tot}\; / \; Z_{tot}^{DeepCSV}$", fontsize=20, loc="top")
     plt.grid(which="both")
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
