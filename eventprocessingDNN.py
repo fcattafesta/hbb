@@ -11,7 +11,6 @@ if "DNN_weight" in DNN_input_variables:
     DNN_input_variables.remove("DNN_weight")
 
 
-
 def getFlowDNN(model, flow=None):
     if model.endswith(".onnx"):
         if flow:
@@ -27,7 +26,7 @@ def getFlowDNN(model, flow=None):
     nl = "\n"
     if flow:
         flow.AddCppCode(f'{nl}#include "{modelName}.hxx"{nl}')
-        flow.AddCppCode('\n#include <TMVA/SOFIEHelpers.hxx>\n')
+        flow.AddCppCode("\n#include <TMVA/SOFIEHelpers.hxx>\n")
         flow.AddCppCode(
             f"{nl}auto sofie_functor = TMVA::Experimental::SofieFunctor<{len(DNN_input_variables)},TMVA_SOFIE_"
             + os.path.basename(modelName)
@@ -40,7 +39,6 @@ def getFlowDNN(model, flow=None):
             + os.path.basename(modelName)
             + "::Session>(0);"
         )
-
 
     if flow:
         eval_string = "sofie_functor(__slot,"
@@ -56,25 +54,23 @@ def getFlowDNN(model, flow=None):
             eval_string += i + ", "
         eval_string = eval_string[:-2] + ")"
 
-        rdf = ROOT.RDataFrame("Events", "~/ggZH_Snapshot.root").Range(100)
+        rdf = ROOT.RDataFrame(
+            "Events",
+            "/gpfs/ddn/cms/user/cattafe/hbb_out/el/Snapshot10Files_deepflav_eval/Snapshots/DYZpt-100To250_SR_ee_Snapshot.root",
+        ).Range(100)
         print("branches in the tree:")
         for i in rdf.GetColumnNames():
             print(i)
-        rdf=rdf.Define("DNN_Score", eval_string)
-        rdf=rdf.Define("atanhDNN_Score", "atanh(DNN_Score)")
-        h1 = rdf.Histo1D(
-            ("h_sig", "", 50, 0, 1), "DNN_Score"
-        )
-        h2 = rdf.Histo1D(
-            ("h_sig", "", 50, 0, 5), "atanhDNN_Score"
-        )
+        rdf = rdf.Define("DNN_Score", eval_string)
+        rdf = rdf.Define("atanhDNN_Score", "atanh(DNN_Score)")
+        h1 = rdf.Histo1D(("h_sig", "", 50, 0, 1), "DNN_Score")
+        h2 = rdf.Histo1D(("h_sig", "", 50, 0, 5), "atanhDNN_Score")
         c1 = ROOT.TCanvas()
         h1.Draw()
         c1.SaveAs("test.png")
         c2 = ROOT.TCanvas()
         h2.Draw()
         c2.SaveAs("test2.png")
-
 
     return flow
 
