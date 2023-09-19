@@ -94,7 +94,8 @@ def load_data(file):
         sig_list,
     )
 
-discard=-4
+
+discard = -4
 
 if args.sf:
     sf = "_sf"
@@ -139,16 +140,17 @@ def sum_last_n_elements(data, n):
         print("lst[n:]", lst[n:])
         last_n_sum = sum(lst[n:])
         print("last_n_sum", last_n_sum)
-        new_lst = lst[:n] + [last_n_sum] #+ lst[-n+1:]
+        new_lst = lst[:n] + [last_n_sum]  # + lst[-n+1:]
         print("new_lst", new_lst)
         result.append(new_lst)
     return result
 
+
 # fractions_max = [lst[:discard] for lst in fractions_max]
 # fractions_min = [lst[:discard] for lst in fractions_min]
 
-fractions_max = sum_last_n_elements(fractions_max, discard-1)
-fractions_min = sum_last_n_elements(fractions_min, discard-1)
+fractions_max = sum_last_n_elements(fractions_max, discard - 1)
+fractions_min = sum_last_n_elements(fractions_min, discard - 1)
 
 sig_list = [math.sqrt(x**2 + y**2) / 1 for x, y in zip(sig_list_el, sig_list_mu)]
 
@@ -176,31 +178,31 @@ def read_txt_file(filename, name):
 roc_file = "sb_discriminator/roc_curve/roc_data.txt"
 roc_m100_file = "sb_discriminator/roc_curve/roc_data_m100.txt"
 
-eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")[:discard]
-eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")[:discard]
-eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "CMSSWDeepFlavour")[:discard]
-pn_list_wp = read_txt_file(roc_m100_file, "ParticleNet")[:discard]
-pe_list_wp = read_txt_file(roc_m100_file, "ParticleEdgeOk Full")[:discard]
+# eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")[:discard]
+# eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")[:discard]
+# eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "CMSSWDeepFlavour")[:discard]
+# pn_list_wp = read_txt_file(roc_m100_file, "ParticleNet")[:discard]
+# pe_list_wp = read_txt_file(roc_m100_file, "ParticleEdgeOk Full")[:discard]
 
-print("eff_df_list_wp", eff_df_list_wp)
-print("eff_csv_list_wp", eff_csv_list_wp)
+# print("eff_df_list_wp", eff_df_list_wp)
+# print("eff_csv_list_wp", eff_csv_list_wp)
 
 
 # wp L, M, T, UT
 
-# eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
-# eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
+eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
+eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
 
-# eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
-# pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
-# pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
+eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
+pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
+pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
 
 eff_pn_list_wp = [
-    y * z / x for x, y, z in zip(eff_dfCMSSW_list_wp, pn_list_wp, eff_df_list_wp)
+    x * y / z for x, y, z in zip(pn_list_wp, eff_df_list_wp, eff_dfCMSSW_list_wp)
 ]
 print("eff_pn_list_wp", eff_pn_list_wp)
 eff_pe_list_wp = [
-    y * z / x for x, y, z in zip(eff_dfCMSSW_list_wp, pe_list_wp, eff_df_list_wp)
+    x * y / z for x, y, z in zip(pe_list_wp, eff_df_list_wp, eff_dfCMSSW_list_wp)
 ]
 print("eff_pe_list_wp", eff_pe_list_wp)
 
