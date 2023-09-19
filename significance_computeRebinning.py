@@ -161,8 +161,8 @@ def significance_sum(significance_list):
     return significance
 
 
-# hSignal.Rebin(50)
-# hBackground.Rebin(50)
+hSignal.Rebin(10)
+hBackground.Rebin(10)
 
 hS_notsmooth = hSignal.Clone()
 hB_notsmooth = hBackground.Clone()
