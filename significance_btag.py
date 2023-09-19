@@ -247,6 +247,8 @@ rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
 
 
 # mu, el
+# root square sum flav significance con sf= 2.23332 /// significance fit combineation mu el = 2.27635
+# root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 2.12043   
 sig_df_list = [1.69, 1.46] if args.sf else [0,0] # [1.85, 1.63] if args.sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
