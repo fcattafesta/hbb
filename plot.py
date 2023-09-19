@@ -132,7 +132,7 @@ if __name__ == "__main__":
                     i,
                     Significance.GetBinContent(i)
                     / (
-                        sqrt(B.GetBinContent(i) + (0.1 * B.GetBinContent(i)) ** 2) + 0.5
+                        sqrt(B.GetBinContent(i) + (0.15 * B.GetBinContent(i)) ** 2) + 0.5
                     ),
                 )
             except ZeroDivisionError:
@@ -1627,11 +1627,11 @@ if __name__ == "__main__":
                 t4.Draw()
                 # td.Draw()
                 if SignificanceSum_str:
-                    t_sig = makeText(0.25, 0.72, SignificanceSum_str, 42, size=0.023)
+                    t_sig = makeText(0.25, 0.72, SignificanceSum_str, 42, size=0.03)
                     t_sig.Draw()
                 if SignificanceSum_str_rescaled:
                     t_sig_rescaled = makeText(
-                        0.25, 0.61, SignificanceSum_str_rescaled, 42, size=0.023
+                        0.25, 0.61, SignificanceSum_str_rescaled, 42, size=0.03
                     )
                     t_sig_rescaled.Draw()
 
