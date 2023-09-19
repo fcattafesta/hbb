@@ -38,7 +38,7 @@ fi
 
 eval=""
 if [[ $suffix == *_eval* ]]; then
-    eval="--eval model_"${btag}".onnx"
+    eval="--eval model_"${btag}".hxx"
 fi
 
 btag="--btag "${btag}
