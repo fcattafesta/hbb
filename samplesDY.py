@@ -242,7 +242,7 @@ for sample in samples:
                 f"/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-{sample.replace('DYZpt-', '', 1)}_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
                 recursive=True,
             )
-        ]
+        ][:10]
         if sample == "DYZpt-0To50":
             files.remove(
                 "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-0To50_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/40000/C69E7CE2-4C90-AD40-BCF7-CBD024956640.root"
