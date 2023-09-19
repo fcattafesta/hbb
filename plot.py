@@ -159,7 +159,7 @@ if __name__ == "__main__":
         if not btag_rescale:
             SignificanceSum_str = (
                 # " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}+0.5}#right)^{2}} = "
-                "Z_{tot} = "
+                "#font[12]{Z_{tot}} = "
                 + str("%.2f" % SignificanceSum) if not rescale else ""
                 # + (
                 #     f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})"
@@ -189,7 +189,7 @@ if __name__ == "__main__":
             Significance.SetMaximum(2 * Significance.GetMaximum())  # zoom out y axis
             Significance.Draw("hist")
             t1 = makeText(0.22, 0.95, "CMS", 61)
-            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
+            t2 = makeText(0.77, 0.97, SignificanceSum_str, 42)
 
             t3 = makeText(
                 0.25,
@@ -1627,11 +1627,11 @@ if __name__ == "__main__":
                 t4.Draw()
                 # td.Draw()
                 if SignificanceSum_str:
-                    t_sig = makeText(0.25, 0.72, SignificanceSum_str, 42, size=0.03)
+                    t_sig = makeText(0.25, 0.72, SignificanceSum_str, 42)
                     t_sig.Draw()
                 if SignificanceSum_str_rescaled:
                     t_sig_rescaled = makeText(
-                        0.25, 0.61, SignificanceSum_str_rescaled, 42, size=0.03
+                        0.25, 0.61, SignificanceSum_str_rescaled, 42
                     )
                     t_sig_rescaled.Draw()
 
