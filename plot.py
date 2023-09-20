@@ -240,8 +240,12 @@ if __name__ == "__main__":
         h.GetXaxis().SetTitleSize(w)
         h.GetYaxis().SetMaxDigits(2)
         if isRatio:
-            h.GetYaxis().SetTitle("Data/MC - 1")
-            h.GetYaxis().SetTitleOffset(0.5)
+            if args.FlashRatio:
+                h.GetYaxis().SetTitleOffset(0.5)
+                h.GetYaxis().SetTitle("Ratio")
+            else:
+                h.GetYaxis().SetTitle("Data/MC - 1")
+                h.GetYaxis().SetTitleOffset(0.5)
             #        h.GetXaxis().SetTitle(str(h.GetName()).split("___")[0])
             xKey = str(h.GetName()).split("___")[0]
             h.GetXaxis().SetTitle(
@@ -1388,7 +1392,7 @@ if __name__ == "__main__":
                     h.SetLineStyle(model.linestyleOverlayed[gr])
                 else:
                     h.SetLineStyle(1)
-                myLegend_1.AddEntry(h, labelLegend[gr], "l")
+                myLegend_1.AddEntry(h, labelLegend[gr], "F")
 
             firstBlind = 100000
             lastBlind = -1
@@ -1478,7 +1482,7 @@ if __name__ == "__main__":
                     myLegend_1.Draw()  # NEW
                     myLegend_2.Draw()  # NEW
 
-                    c.cd(1)                    
+                    c.cd(1)
                 else:
                     c.Divide(1, 2)
                     c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.01)
@@ -1568,6 +1572,7 @@ if __name__ == "__main__":
                     ratio.GetYaxis().SetNdivisions(5)
                     c.GetPad(2).SetGridy()
 
+                c.cd(1)
                 t0.Draw()
                 t1.Draw()
                 t2.Draw()
