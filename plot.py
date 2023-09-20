@@ -1536,7 +1536,7 @@ if __name__ == "__main__":
                             (histosum[hn].GetMaximum()) ** 2,
                         )
                     histos[hn].Draw("hist")
-                    setStyle(histos[hn], noData=True)
+                    setStyle(histos[hn], noData=False if args.FlashRatio else True)
 
                 #  histos[hn].Draw("hist")
                 histosum[hn].SetLineWidth(0)
