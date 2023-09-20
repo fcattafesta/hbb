@@ -1201,6 +1201,8 @@ if __name__ == "__main__":
             ratio_sys.SetFillStyle(0)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
+            max_vals=[]
+            min_vals=[]
             for i, sy in enumerate(
                 systematic,
             ):
@@ -1210,7 +1212,12 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("hist same")
-            ratio_sys.SetAxisRange(ratio_sys_list[-1].GetMinimum()*1.5, ratio_sys_list[-1].GetMaximum()*1.5, "Y")
+                max_vals.append(ratio_sys_list[-1].GetMaximum())
+                min_vals.append(ratio_sys_list[-1].GetMinimum())
+
+            max_val=max(max_vals)
+            min_val=min(min_vals)
+            ratio_sys.SetAxisRange(min_val*1.5, max_val*1.5, "Y")
             # ratio_sys.SetMaximum(ratio_sys.GetMaximum())
             # ratio_sys.SetMinimum(-ratio_sys.GetMaximum())
             ratio_sys.GetYaxis().SetNdivisions(5)
