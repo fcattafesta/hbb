@@ -236,13 +236,8 @@ if __name__ == "__main__":
         w = 0.055 * (2.5 if isRatio else 0.8)
         h.GetYaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
-        if args.FlashRatio and not isRatio:
-            h.GetXaxis().SetLabelSize(0)
-            h.GetXaxis().SetTitleSize(0)
-        else:
-            h.GetXaxis().SetLabelSize(w)
-            h.GetXaxis().SetTitleSize(w)
-
+        h.GetXaxis().SetLabelSize(w)
+        h.GetXaxis().SetTitleSize(w)
         h.GetYaxis().SetMaxDigits(2)
         if isRatio:
             if args.FlashRatio:
@@ -1547,7 +1542,8 @@ if __name__ == "__main__":
                 histosum[hn].SetLineWidth(0)
                 histosum[hn].SetFillColor(ROOT.kBlack)
                 histosum[hn].SetFillStyle(3004)
-                setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
+                # setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
+                setStyle(histos[hn].GetStack().Last(), noData=False)                
                 c.Update()
                 if not all(
                     [model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]
