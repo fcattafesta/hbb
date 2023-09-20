@@ -1196,12 +1196,9 @@ if __name__ == "__main__":
             c_sys.cd(2)
             ratio_sys = histo.Clone()
             ratio_sys.Add(histo, -1)
+
             setStyle(ratio_sys, isSys=True)
             ratio_sys.SetFillStyle(0)
-            # ratio_sys.SetAxisRange(-ratio_sys.GetMaximum(), ratio_sys.GetMaximum(), "Y")
-            ratio_sys.SetMaximum(ratio_sys.GetMaximum())
-            ratio_sys.SetMinimum(-ratio_sys.GetMaximum())
-            ratio_sys.GetYaxis().SetNdivisions(5)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
             for i, sy in enumerate(
@@ -1213,6 +1210,10 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("hist same")
+            ratio_sys.SetAxisRange(-ratio_sys_list[-2].GetMaximum(), ratio_sys_list[-2].GetMaximum(), "Y")
+            # ratio_sys.SetMaximum(ratio_sys.GetMaximum())
+            # ratio_sys.SetMinimum(-ratio_sys.GetMaximum())
+            ratio_sys.GetYaxis().SetNdivisions(5)
             c_sys.cd()
             c_sys.GetPad(2).SetGridy()
 
