@@ -160,6 +160,7 @@ def runSample(ar):
             % nthreads
         )
     s, files = ar
+    print(files)
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
