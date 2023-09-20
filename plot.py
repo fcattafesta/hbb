@@ -235,9 +235,14 @@ if __name__ == "__main__":
         h.SetTitle("")
         w = 0.055 * (2.5 if isRatio else 0.8)
         h.GetYaxis().SetLabelSize(w)
-        h.GetXaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
-        h.GetXaxis().SetTitleSize(w)
+        if args.FlashRatio:
+            h.GetXaxis().SetLabelSize(0)
+            h.GetXaxis().SetTitleSize(0)
+        else:
+            h.GetXaxis().SetLabelSize(w)
+            h.GetXaxis().SetTitleSize(w)
+
         h.GetYaxis().SetMaxDigits(2)
         if isRatio:
             if args.FlashRatio:
@@ -1575,7 +1580,7 @@ if __name__ == "__main__":
                     ratio2.SetLineStyle(2)
                     ratio2.SetFillStyle(0)
                     ratio2.Draw("hist same")
-                    ratio.Draw("E1 P")
+                    ratio.Draw("E1 P same")
                     ratio.SetAxisRange(0.5, 1.5, "Y")
                     ratio.GetYaxis().SetNdivisions(5)
                     c.GetPad(2).SetGridy()
