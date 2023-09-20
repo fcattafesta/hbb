@@ -1464,7 +1464,7 @@ if __name__ == "__main__":
                     histosumSyst[hn][sy].Add(histoSigsumSyst[hn][sy])
 
             for i, c in enumerate(canvas_tuple):
-                if hn in datasum.keys():
+                if hn in datasum.keys() or args.FlashRatio:
                     c.Divide(1, 2)
                     c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.25)
                     c.GetPad(1).SetPad(0.0, 0.20, 0.90, 1.0)
@@ -1478,7 +1478,7 @@ if __name__ == "__main__":
                     myLegend_1.Draw()  # NEW
                     myLegend_2.Draw()  # NEW
 
-                    c.cd(1)
+                    c.cd(1)                    
                 else:
                     c.Divide(1, 2)
                     c.GetPad(2).SetPad(0.0, 0.0, 0.90, 0.01)
@@ -1555,6 +1555,18 @@ if __name__ == "__main__":
                         histosOverlayed[hn][gr].Draw("E1 hist same")
                     else:
                         histosOverlayed[hn][gr].Draw("hist same")
+
+                if args.FlashRatio:
+                    ratio = histosOverlayed[hn][model.histosOverlayed_list[1]].Clone()
+                    ratio.Divide(histosOverlayed[hn][model.histosOverlayed_list[0]])
+                    ratio.SetMarkerStyle(20)
+                    ratio.SetMarkerColor(ROOT.kOrange + 8)
+                    c.cd(2)
+                    setStyle(ratio, isRatio=True)
+                    ratio.Draw("E1 P")
+                    ratio.SetAxisRange(0.5, 1.5, "Y")
+                    ratio.GetYaxis().SetNdivisions(5)
+                    c.GetPad(2).SetGridy()
 
                 t0.Draw()
                 t1.Draw()
