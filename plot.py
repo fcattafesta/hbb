@@ -43,8 +43,8 @@ if __name__ == "__main__":
     btag_label = labelBtag[args.btag]
 
     colors = [
-        ROOT.kRed,
         ROOT.kBlue,
+        ROOT.kRed,
     ]
     model = importlib.import_module(args.model.replace(".py", ""))
     samples = model.samples
@@ -1210,7 +1210,7 @@ if __name__ == "__main__":
                 ratio_sys_list[-1].SetLineColor(colors[i])
                 ratio_sys_list[-1].SetFillStyle(0)
                 ratio_sys_list[-1].Draw("hist same")
-            ratio_sys.SetAxisRange(-ratio_sys_list[-2].GetMaximum(), ratio_sys_list[-2].GetMaximum(), "Y")
+            ratio_sys.SetAxisRange(ratio_sys_list[-1].GetMinimum()*1.5, ratio_sys_list[-1].GetMaximum()*1.5, "Y")
             # ratio_sys.SetMaximum(ratio_sys.GetMaximum())
             # ratio_sys.SetMinimum(-ratio_sys.GetMaximum())
             ratio_sys.GetYaxis().SetNdivisions(5)
