@@ -23,8 +23,6 @@ histosData = [
     "SoftActivityJetNjets5",
     "JetBtagMax_genJetIdx",
     "JetBtagMin_genJetIdx",
-    "JetBtagMax_pt",
-    "JetBtagMin_pt",
     "JetBtagMax_eta",
     "JetBtagMin_eta",
     "JetBtagMax_phi",
