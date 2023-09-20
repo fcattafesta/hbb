@@ -46,6 +46,9 @@ histosData = [
     "GenJet_mass",
     "GenJet_partonFlavour",
     "GenJet_hadronFlavour",
+    "Jet_pt",
+    "Jet_eta",
+    "Jet_phi",
 ]
 histosData += [
     # "GenJet_pt",
