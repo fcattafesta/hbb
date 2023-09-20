@@ -1558,9 +1558,9 @@ if __name__ == "__main__":
                     if args.MCUncert:
                         histosOverlayed[hn][gr].Draw("E1 hist same")
                     else:
+                        histosOverlayed[hn][gr].Draw("hist same")
                         histosOverlayed[hn][gr].SetLabelSize(0)
                         histosOverlayed[hn][gr].SetTitleSize(0)
-                        histosOverlayed[hn][gr].Draw("hist same")
 
                 if args.FlashRatio:
                     ratio = histosOverlayed[hn][model.histosOverlayed_list[1]].Clone()
@@ -1569,7 +1569,13 @@ if __name__ == "__main__":
                     ratio.SetMarkerColor(ROOT.kOrange + 8)
                     c.cd(2)
                     setStyle(ratio, isRatio=True)
+                    ratio2 = histosOverlayed[hn][model.histosOverlayed_list[0]].Clone()
+                    ratio2.Divide(histosOverlayed[hn][model.histosOverlayed_list[0]])
+                    ratio2.SetLineColor(ROOT.kBlack)
+                    ratio2.SetLineStyle(2)
+                    ratio2.SetFillStyle(0)
                     ratio.Draw("E1 P")
+                    ratio2.Draw("hist same")
                     ratio.SetAxisRange(0.5, 1.5, "Y")
                     ratio.GetYaxis().SetNdivisions(5)
                     c.GetPad(2).SetGridy()
