@@ -40,6 +40,12 @@ histosData = [
     "GenPart_status",
     "GenPart_statusFlags",
     "nGenPart",
+    "GenJet_pt",
+    "GenJet_eta",
+    "GenJet_phi",
+    "GenJet_mass",
+    "GenJet_partonFlavour",
+    "GenJet_hadronFlavour",
 ]
 histosData += [
     # "GenJet_pt",
