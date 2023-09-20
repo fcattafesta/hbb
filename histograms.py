@@ -49,6 +49,7 @@ histosData = [
     "Jet_pt",
     "Jet_eta",
     "Jet_phi",
+    "Jet_genJetIdx",
 ]
 histosData += [
     # "GenJet_pt",
