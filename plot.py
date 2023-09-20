@@ -1543,7 +1543,7 @@ if __name__ == "__main__":
                 histosum[hn].SetFillColor(ROOT.kBlack)
                 histosum[hn].SetFillStyle(3004)
                 # setStyle(histos[hn].GetStack().Last(), noData=hn not in datasum.keys())
-                setStyle(histos[hn].GetStack().Last(), noData=False)                
+                setStyle(histos[hn].GetStack().Last(), noData=False)
                 c.Update()
                 if not all(
                     [model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]
@@ -1577,8 +1577,8 @@ if __name__ == "__main__":
                     setStyle(ratio2, isRatio=True)
                     ratio2.Draw("hist")
                     ratio.Draw("E1 P same")
-                    ratio.SetAxisRange(0.5, 1.5, "Y")
-                    ratio.GetYaxis().SetNdivisions(5)
+                    ratio2.SetAxisRange(0.5, 1.5, "Y")
+                    ratio2.GetYaxis().SetNdivisions(5)
                     c.GetPad(2).SetGridy()
 
                 c.cd(1)
