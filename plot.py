@@ -132,7 +132,8 @@ if __name__ == "__main__":
                     i,
                     Significance.GetBinContent(i)
                     / (
-                        sqrt(B.GetBinContent(i) + (0.15 * B.GetBinContent(i)) ** 2) + 0.5
+                        sqrt(B.GetBinContent(i) + (0.15 * B.GetBinContent(i)) ** 2)
+                        + 0.5
                     ),
                 )
             except ZeroDivisionError:
@@ -159,8 +160,9 @@ if __name__ == "__main__":
         if not btag_rescale:
             SignificanceSum_str = (
                 # " #sqrt{#sum #left(#frac{S}{#sqrt{B+0.01B^{2}}+0.5}#right)^{2}} = "
-                "#font[12]{Z_{tot}} = "
-                + str("%.2f" % SignificanceSum) if not rescale else ""
+                "#font[12]{Z_{tot}} = " + str("%.2f" % SignificanceSum)
+                if not rescale
+                else ""
                 # + (
                 #     f"  (rescaled by {model.rescaleSample['bkg_1b'][0]})"
                 #     if rescale
@@ -204,14 +206,12 @@ if __name__ == "__main__":
             t4 = makeText(
                 0.25,
                 0.8,
-                labelLeptons[hn.split("___")[1]]
-                + btag_label
-                #+ (" SF" if args.sf else "")
+                labelLeptons[hn.split("___")[1]] + btag_label
+                # + (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
-                else hn.split("___")[1]
-                + btag_label
-                #+ (" SF" if args.sf else "")
+                else hn.split("___")[1] + btag_label
+                # + (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else ""),
                 42,
                 size=0.04,
@@ -245,10 +245,10 @@ if __name__ == "__main__":
 
         h.SetTitle("")
         w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
-        h.GetYaxis().SetLabelSize( w)
+        h.GetYaxis().SetLabelSize(w)
         h.GetXaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
-        h.GetXaxis().SetTitleSize( w)
+        h.GetXaxis().SetTitleSize(w)
         if isRatio or isSys:
             h.GetYaxis().SetMaxDigits(5)
             h.GetYaxis().SetTitle("Data/MC - 1" if isRatio else "Sys/Nom - 1")
@@ -797,7 +797,7 @@ if __name__ == "__main__":
         integral[gr]["nom"] = 0
         error[gr] = 0
         lumi = 59000
-        sum_bins=[0]*10
+        sum_bins = [0] * 10
         for n in range(len(samplesToPlot[gr])):
             d = samplesToPlot[gr][n]
             if lumis:
@@ -847,7 +847,7 @@ if __name__ == "__main__":
                         setHistoStyle(h, gr)
                     if "atanhDNN" in hn:
                         for b in range(1, h.GetNbinsX() + 1):
-                            sum_bins[b-1]+=h.GetBinContent(b)
+                            sum_bins[b - 1] += h.GetBinContent(b)
                     if hn not in SumTH1:
                         SumTH1[hn] = h.Clone()
                         stackSys[hn] = {}
@@ -1201,8 +1201,8 @@ if __name__ == "__main__":
             ratio_sys.SetFillStyle(0)
             ratio_sys.Draw("hist")
             ratio_sys_list = []
-            max_vals=[]
-            min_vals=[]
+            max_vals = []
+            min_vals = []
             for i, sy in enumerate(
                 systematic,
             ):
@@ -1215,9 +1215,9 @@ if __name__ == "__main__":
                 max_vals.append(ratio_sys_list[-1].GetMaximum())
                 min_vals.append(ratio_sys_list[-1].GetMinimum())
 
-            max_val=max(max_vals)
-            min_val=min(min_vals)
-            ratio_sys.SetAxisRange(min_val*1.5, max_val*1.5, "Y")
+            max_val = max(max_vals)
+            min_val = min(min_vals)
+            ratio_sys.SetAxisRange(min_val * 1.5, max_val * 1.5, "Y")
             # ratio_sys.SetMaximum(ratio_sys.GetMaximum())
             # ratio_sys.SetMinimum(-ratio_sys.GetMaximum())
             ratio_sys.GetYaxis().SetNdivisions(5)
@@ -1513,14 +1513,12 @@ if __name__ == "__main__":
             t4 = makeText(
                 0.25,
                 0.8,
-                labelLeptons[hn.split("___")[1]]
-                + btag_label
-                #+ (" SF" if args.sf else "")
+                labelLeptons[hn.split("___")[1]] + btag_label
+                # + (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else "")
                 if hn.split("___")[1] in list(labelLeptons.keys())
-                else hn.split("___")[1]
-                + btag_label
-                #+ (" SF" if args.sf else "")
+                else hn.split("___")[1] + btag_label
+                # + (" SF" if args.sf else "")
                 + (" BtagBit" if args.bit else ""),
                 42,
                 size=0.04,
@@ -1574,7 +1572,7 @@ if __name__ == "__main__":
                             max(
                                 0.01 * datasum[hn].GetMinimum(),
                                 0.01 * histosum[hn].GetMinimum(),
-                                #0.1,
+                                # 0.1,
                             )
                         )
                     else:
@@ -1692,13 +1690,19 @@ if __name__ == "__main__":
                     if len(systematicsSetToUse) > 0:
                         myLegend_sy.Draw()
 
-                    if args.unblind:
+                    if (
+                        (not any([x in hn for x in Special_variables]))
+                        or (any([x in hn for x in Special_variables])
+                        and args.unblind)
+                    ):
                         tchi2 = makeText(
                             0.19,
                             0.26,
                             "#chi^{2}="
                             + str(
-                                round(datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2)
+                                round(
+                                    datasum[hn].Chi2Test(histosum[hn], "UWCHI2/NDF"), 2
+                                )
                             ),
                             42,
                             0.025,
