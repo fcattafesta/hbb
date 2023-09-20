@@ -245,10 +245,10 @@ if __name__ == "__main__":
 
         h.SetTitle("")
         w = 0.055 * (2.5 if (isRatio or isSys) else 0.8)
-        h.GetYaxis().SetLabelSize(w * 0.5 if isSys else w)
-        h.GetXaxis().SetLabelSize(w * 0.5 if isSys else w)
-        h.GetYaxis().SetTitleSize(w * 0.8 if isSys else w)
-        h.GetXaxis().SetTitleSize(w * 0.8 if isSys else w)
+        h.GetYaxis().SetLabelSize( w)
+        h.GetXaxis().SetLabelSize(w)
+        h.GetYaxis().SetTitleSize(w)
+        h.GetXaxis().SetTitleSize( w)
         if isRatio or isSys:
             h.GetYaxis().SetMaxDigits(5)
             h.GetYaxis().SetTitle("Data/MC - 1" if isRatio else "Sys/Nom - 1")
@@ -1760,10 +1760,10 @@ if __name__ == "__main__":
                     for sy_base, systematic in systematics.items():
                         t5 = makeText(
                             0.25,
-                            0.75,
+                            0.7,
                             "Total",
                             42,
-                            size=0.03,
+                            # size=0.03,
                         )
                         plot_sys(
                             hn,
@@ -1775,10 +1775,10 @@ if __name__ == "__main__":
                         for gr in all_histo_all_syst_grouped:
                             t5 = makeText(
                                 0.25,
-                                0.75,
+                                0.7,
                                 gr,
                                 42,
-                                size=0.03,
+                                # size=0.03,
                             )
                             plot_sys(
                                 hn,
