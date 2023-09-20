@@ -184,6 +184,19 @@ samples.update(
 )
 samples.update(
     {
+        "ZHFull": {
+            "xsec": 0.880 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
+            "training": True,
+        },  # 0.04718 (AN)
+        "ggZHFull": {
+            "xsec": 0.123 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
+            "training": True,
+        },  # 0.01437 (AN)
+    }
+)
+
+samples.update(
+    {
         "ZH": {
             "xsec": 0.880 * 58.09 * (3.3632 + 3.3662 + 3.3696) / 10000.0,
             "training": True,
@@ -194,6 +207,7 @@ samples.update(
         },  # 0.01437 (AN)
     }
 )
+
 samples.update(
     {
         "SingleMuon_2018": {
@@ -217,7 +231,7 @@ for sample in samples:
     if "subsamples" in samples[sample].keys():
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
-    if sample.endswith("Full"):
+    if sample.startswith("DYZpt") and sample.endswith("Full"):
         files = [
             x
             for x in glob.glob(
@@ -252,6 +266,41 @@ for sample in samples:
                 "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-50To100_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/40000/51C14FFE-9AFF-374E-8A53-61AF6E4E1B77.root"
             )
         samples[sample]["files"] = files
+    elif sample == "ZH":
+        files = [
+            x
+            for x in glob.glob(
+                "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/ZH_HToBB_ZToLL_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
+                recursive=True,
+            )
+        ]
+        samples[sample]["files"] = files
+    elif sample == "ggZH":
+        files = [
+            x
+            for x in glob.glob(
+                "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/ggZH_HToBB_ZToLL_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
+                recursive=True,
+            )
+        ]
+        samples[sample]["files"] = files
+
+    elif sample == "ZHFull":
+        samples[sample]["files"] = [
+            x
+            for x in glob.glob(
+                "/scratchnvme/malucchi/hbb_samples/ZH/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
+                recursive=True,
+            )
+        ]
+    elif sample == "ggZHFull":
+        samples[sample]["files"] = [
+            x
+            for x in glob.glob(
+                "/scratchnvme/malucchi/hbb_samples/ggZH/106X_upgrade2018_realistic_v16_L1v1-v1/**/*.root",
+                recursive=True,
+            )
+        ]
     else:
         samples[sample]["files"] = [
             x
