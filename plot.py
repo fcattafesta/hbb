@@ -236,7 +236,7 @@ if __name__ == "__main__":
         w = 0.055 * (2.5 if isRatio else 0.8)
         h.GetYaxis().SetLabelSize(w)
         h.GetYaxis().SetTitleSize(w)
-        if args.FlashRatio:
+        if args.FlashRatio and not isRatio:
             h.GetXaxis().SetLabelSize(0)
             h.GetXaxis().SetTitleSize(0)
         else:
