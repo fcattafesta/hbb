@@ -48,8 +48,8 @@ rebin = {
         0.9699,
         1.0,
     ],
-    "Z_mass": np.arange(60, 121, 5).tolist(),
-    "Dijets_mass": np.arange(50, 201, 5).tolist(),
+    "Z_mass": np.arange(75, 106, 2).tolist(),
+    "Dijets_mass": np.arange(90, 151, 2).tolist(),
 }
 
 # "atanhDNN_Score": [

@@ -13,7 +13,7 @@ labelLeptons = {
     "CR_Zee_bjets": "Electrons",
     "CR_Zee_lightjets": "Electrons",
     "CR_ee_ttbar": "Electrons",
-    "SR_mm": "Muons",
+    "SR_mm": "Muons Drell-Yan",
     "CR_Zmm_bjets": "Muons",
     "CR_Zmm_lightjets": "Muons",
     "CR_mm_ttbar": "Muons",
