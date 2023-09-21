@@ -24,11 +24,11 @@ number_of_b = {
 }
 
 samples = {
-    "DYM50": {
-        "xsec": 5765.40,
-        "subsamples": flavourSplitting,
-        "snapshot": True,
-    },
+    # "DYM50": {
+    #     "xsec": 5765.40,
+    #     "subsamples": flavourSplitting,
+    #     "snapshot": True,
+    # },
     "DYZpt-0To50": {
         "xsec": 1341.42,
         "subsamples": flavourSplitting,
