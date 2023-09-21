@@ -5,17 +5,25 @@ from rebinning import rebin
 from labelDict import labelVariable
 
 ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
+ROOT.gStyle.SetOptStat(0)
 
+histo_list = [
+    "atanhDNN_Score",
+    "Z_mass",
+    "Z_pt",
+    "Dijets_mass",
+    "Dijets_pt",
+    "JetBtagMax_pt",
+    "JetBtagMin_pt",
+    "HZ_ptRatio",
+]
+lumi = 1  # 59970
+xsec = 1  # 88.36
 
-histos = []
-
-lumi = 59970
-xsec = 88.36
-
-for histo in histos:
-    f1 = ROOT.TFile.Open("single_oversampled.root")
+for histo in histo_list:
+    f1 = ROOT.TFile.Open("/home/filippo/Downloads/oversampling_single.root")
     oversampled = f1.Get(histo + "___SR_ee")
-    f2 = ROOT.TFile.Open("single_full.root")
+    f2 = ROOT.TFile.Open("/home/filippo/Downloads/full_single.root")
     full = f2.Get(histo + "___SR_ee")
 
     # Rebin the histograms
@@ -49,6 +57,9 @@ for histo in histos:
 
     full.Draw("hist")
     oversampled.Draw("hist same")
+
+    full.SetMaximum(1.5 * max(full.GetMaximum(), oversampled.GetMaximum()))
+    full.SetMinimum(0.1)
 
     full.GetXaxis().SetTitle(labelVariable[histo])
     full.GetXaxis().SetTitleSize(0.05)
