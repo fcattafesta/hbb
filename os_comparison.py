@@ -4,6 +4,9 @@ from plot import makeText, makeLegend
 from rebinning import rebin
 from labelDict import labelVariable, labelStatUncRange
 
+ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
+
+
 histo_list = [
     "atanhDNN_Score",
     "Z_mass",
