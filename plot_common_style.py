@@ -32,7 +32,7 @@ def plot_common_style(signal, background, bkg_list=None):
     )
     if bkg_list:
         fillcolor.update(
-            {f"bkg_{bkg}": ROOT.kBlack + i for i, bkg in enumerate(bkg_list)}
+            {bkg: ROOT.kBlack + i for i, bkg in enumerate(bkg_list)}
         )
 
     linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
