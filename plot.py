@@ -75,7 +75,7 @@ if __name__ == "__main__":
     logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()))
 
     Special_variables = (
-        ["atanhDNN_Score"] if not args.variablesToFit else args.variablesToFit
+        ["atanhDNN_Score___SR"] if not args.variablesToFit else args.variablesToFit
     )
     logger.info("Special_variables: %s", Special_variables)
 

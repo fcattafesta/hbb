@@ -7,7 +7,7 @@ from systematicGrouping import *
 
 
 # Color palette
-def plot_common_style(signal, background, bkg_list=None):
+def plot_common_style(signal, background, overlay=False, bkg_list=None):
     fillcolor = {
         f"Z+{flavour}": ROOT.kGreen + i
         for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
@@ -34,10 +34,17 @@ def plot_common_style(signal, background, bkg_list=None):
         fillcolor.update(
             {bkg: ROOT.kBlack + i for i, bkg in enumerate(bkg_list)}
         )
+    linecolorOverlayed = {}
+
+    if overlay:
+        linecolorOverlayed=fillcolor.copy()
+        for key in fillcolor.keys():
+            fillcolor[key] = ROOT.kWhite
+
 
     linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
-    linecolorOverlayed = {}
     markercolor = fillcolor
+
 
     # legend sorting
     backgroundSortedForLegend = []
@@ -47,6 +54,8 @@ def plot_common_style(signal, background, bkg_list=None):
     backgroundSorted = backgroundSortedForLegend
 
     histosOverlayed_list = []
+    if overlay:
+        histosOverlayed_list=list(signal.keys())+list(background.keys())
 
     signalSortedForLegend = []
     signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
