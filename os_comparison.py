@@ -2,7 +2,7 @@ import ROOT
 import array
 from plot import makeText, makeLegend
 from rebinning import rebin
-from labelDict import labelVariable
+from labelDict import labelVariable, labelStatUncRange
 
 histo_list = [
     "atanhDNN_Score",
@@ -20,11 +20,11 @@ lumi = 59970
 xsec = 88.36
 
 for histo in histo_list:
-    f1 = ROOT.TFile.Open("/home/filippo/Downloads/full.root")
+    f1 = ROOT.TFile.Open("/home/filippo/Downloads/full_nosf20.root")
     full = f1.Get(histo + "___SR_ee")
-    f2 = ROOT.TFile.Open("/home/filippo/Downloads/flash.root")
+    f2 = ROOT.TFile.Open("/home/filippo/Downloads/flash_20.root")
     flash = f2.Get(histo + "___SR_ee")
-    f3 = ROOT.TFile.Open("/home/filippo/Downloads/overflash.root")
+    f3 = ROOT.TFile.Open("/home/filippo/Downloads/overflash_20.root")
     overflash = f3.Get(histo + "___SR_ee")
 
     # Rebin the histograms
@@ -145,9 +145,20 @@ for histo in histo_list:
     error3 = error2.Clone("error3")
 
     for i in range(1, error1.GetNbinsX() + 1):
-        error1.SetBinContent(i, full.GetBinError(i) / full.GetBinContent(i))
-        error2.SetBinContent(i, flash.GetBinError(i) / flash.GetBinContent(i))
-        error3.SetBinContent(i, overflash.GetBinError(i) / overflash.GetBinContent(i))
+        if full.GetBinContent(i) == 0:
+            error1.SetBinContent(i, -5)
+        else:
+            error1.SetBinContent(i, full.GetBinError(i) / full.GetBinContent(i))
+        if flash.GetBinContent(i) == 0:
+            error2.SetBinContent(i, -5)
+        else:
+            error2.SetBinContent(i, flash.GetBinError(i) / flash.GetBinContent(i))
+        if overflash.GetBinContent(i) == 0:
+            error3.SetBinContent(i, -5)
+        else:
+            error3.SetBinContent(
+                i, overflash.GetBinError(i) / overflash.GetBinContent(i)
+            )
 
     error3.SetMarkerStyle(22)
     error3.SetMarkerColor(ROOT.kAzure + 1)
@@ -155,14 +166,12 @@ for histo in histo_list:
     error3.SetLineColor(ROOT.kAzure + 1)
     error3.SetLineWidth(2)
     error3.SetLineStyle(1)
-    error3.Draw("P hist same")
 
     error1.SetMarkerStyle(20)
     error1.SetMarkerColor(ROOT.kBlack)
     error1.SetLineColor(ROOT.kBlack)
     error1.SetLineWidth(2)
     error1.SetLineStyle(2)
-    error1.Draw("P hist same")
 
     error2.SetMarkerStyle(21)
     error2.SetMarkerColor(ROOT.kOrange + 8)
@@ -170,17 +179,9 @@ for histo in histo_list:
     error2.SetLineColor(ROOT.kOrange + 8)
     error2.SetLineWidth(2)
     error2.SetLineStyle(1)
-    error2.Draw("P hist same")
 
-    error1.SetMarkerStyle(20)
-    error1.SetMarkerColor(ROOT.kBlack)
-    error1.SetLineColor(ROOT.kBlack)
-    error1.SetLineWidth(2)
-    error1.SetLineStyle(2)
-    error1.Draw("P hist same")
-
-    error3.SetMaximum(0.3)
-    error3.SetMinimum(-0.1)
+    # error3.SetMaximum(0.3)
+    # error3.SetMinimum(-0.1)
 
     error3.GetYaxis().SetTitle("Rel. Unc.")
     error3.GetYaxis().SetTitleSize(0.075)
@@ -195,7 +196,15 @@ for histo in histo_list:
     error3.GetXaxis().SetTitleOffset(1.1)
     error3.GetXaxis().SetLabelSize(0.07)
 
-    c.GetPad(3).Update()
+    error3.Draw("P hist")
+    error2.Draw("P hist same")
+    error1.Draw("P hist same")
+
+    error3.GetYaxis().SetRangeUser(-0.1, 0.3)
+    error3.GetYaxis().UnZoom()
+    error3.GetYaxis().SetRangeUser(
+        *labelStatUncRange[histo] if histo in labelStatUncRange.keys() else (-0.1, 0.3)
+    )
 
     # Text
     t0 = makeText(
@@ -203,15 +212,15 @@ for histo in histo_list:
         0.92,
         "Signal Region",
         42,
-        size=0.04,
+        size=0.03,
     )
     t1 = makeText(0.18, 0.97, "CMS", 61)
     t2 = makeText(
         0.2,
         0.87,
-        "Electrons DY 100 <#p_{T} < 250 GeV",
+        "Electrons DY 100 < p^{Z}_{T} < 250 GeV",
         42,
-        size=0.04,
+        size=0.03,
     )
     t3 = makeText(0.7, 0.97, "(13 TeV)", 42)
     t4 = makeText(0.38, 0.97, "2018", 42)
@@ -226,4 +235,4 @@ for histo in histo_list:
 
     legend.Draw()
 
-    c.SaveAs(f"{histo}.pdf")
+    c.SaveAs(f"figures_os/{histo}.pdf")

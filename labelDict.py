@@ -45,8 +45,8 @@ labelVariable = {
     "jj_dphi": "#Delta#phi(jj)",
     "jj_deta": "#Delta#eta(jj)",
     "jj_dr": "#DeltaR(jj)",
-    "JetBtagMax_pt": "p_{T}^{max}",
-    "JetBtagMin_pt": "p_{T}^{min}",
+    "JetBtagMax_pt": "p_{T}^{max} (GeV)",
+    "JetBtagMin_pt": "p_{T}^{min} (GeV)",
     "SoftActivityJetNjets5": "N_{jets}^{soft} (p_{T} > 5 GeV)",
     "atanhDNN_Score": "atanh(DNN Score)",
 }
@@ -75,4 +75,11 @@ labelLegend = {
     "DY400To650": "400 < p_{T} < 650 GeV",
     "DY650ToInf": "p_{T} > 650 GeV",
     "DYZpt-100To250": "100 < p_{T} < 250 GeV",
+}
+
+labelStatUncRange = {
+    "Z_pt": (-0.1, 0.8),
+    "Z_mass": (-0.1, 0.15),
+    "JetBtagMax_pt": (-0.1, 0.5),
+    "JetBtagMin_pt": (-0.1, 0.5),
 }
