@@ -1477,18 +1477,18 @@ if __name__ == "__main__":
                 histosum[hn].Add(
                     histoSigsum[hn]
                 )  # NOTE: is this the right place for this?
-
-            for gr in model.signalSortedForLegend:
-                h = histosSignal[hn][gr]
-                histos[hn].Add(h.Clone())
-                h.SetLineColor(model.linecolor[gr])
-                h.SetFillStyle(0)
-                h.SetLineWidth(3)
-                h.SetLineStyle(2)
-                # h.Scale(5000.0)
-                myLegend_1.AddEntry(
-                    h, labelLegend[gr] if gr in labelLegend else gr, "l"
-                )
+            if not model.histosOverlayed_list:
+                for gr in model.signalSortedForLegend:
+                    h = histosSignal[hn][gr]
+                    histos[hn].Add(h.Clone())
+                    h.SetLineColor(model.linecolor[gr])
+                    h.SetFillStyle(0)
+                    h.SetLineWidth(3)
+                    h.SetLineStyle(2)
+                    # h.Scale(5000.0)
+                    myLegend_1.AddEntry(
+                        h, labelLegend[gr] if gr in labelLegend else gr, "l"
+                    )
 
             for gr in model.histosOverlayed_list:
                 h = histosOverlayed[hn][gr]
@@ -1496,9 +1496,14 @@ if __name__ == "__main__":
                 h.SetFillStyle(0)
                 h.SetLineWidth(3)
                 h.SetLineStyle(1)
-                myLegend_1.AddEntry(
-                    h, labelLegend[gr] if gr in labelLegend else gr, "l"
-                )
+                if gr in model.signal:
+                    myLegend_1.AddEntry(
+                        h, labelLegend[gr] if gr in labelLegend else gr, "l"
+                    )
+                if gr in model.background:
+                    myLegend_2.AddEntry(
+                        h, labelLegend[gr] if gr in labelLegend else gr, "l"
+                    )
 
             if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
                 myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
@@ -1703,7 +1708,9 @@ if __name__ == "__main__":
                         myLegend_sy.Draw()
 
                     if (not any([x in hn for x in Special_variables])) or (
-                        any([x in hn for x in Special_variables]) and args.unblind
+                        any([x in hn for x in Special_variables])
+                        and args.unblind
+                        and not model.histosOverlayed_list
                     ):
                         tchi2 = makeText(
                             0.19,
