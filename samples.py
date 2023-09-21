@@ -203,10 +203,13 @@ for sample in samples:
     if "subsamples" in samples[sample].keys():
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
-    samples[sample]["files"] = [
-        x
-        for x in glob.glob(
-            "/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample, recursive=True
-        )
-    ]
+
+    if "files" not in samples[sample].keys():
+        samples[sample]["files"] = [
+            x
+            for x in glob.glob(
+                "/scratchnvme/malucchi/hbb_samples/%s/**/*.root" % sample,
+                recursive=True,
+            )
+        ]
 samples.update(addSubSamples)
