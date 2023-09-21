@@ -202,11 +202,9 @@ for sample in samples:
         for ss in samples[sample]["subsamples"]:
             addSubSamples["%s_%s" % (sample, ss)] = {"xsec": samples[sample]["xsec"]}
     if sample == "DYZpt-100To250SingleFile":
-        samples[sample]["files"] = (
-            [
-                "/scratchnvme/malucchi/hbb_samples/DYZpt-100To250/106X_upgrade2018_realistic_v16_L1v1-v1/2530000/B24D7292-7CA2-804F-9082-BCFDC95CFDC5.root"
-            ],
-        )
+        samples[sample]["files"] = [
+            "/scratchnvme/malucchi/hbb_samples/DYZpt-100To250/106X_upgrade2018_realistic_v16_L1v1-v1/2530000/B24D7292-7CA2-804F-9082-BCFDC95CFDC5.root",
+        ]
     else:
         samples[sample]["files"] = [
             x
