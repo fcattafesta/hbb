@@ -64,7 +64,14 @@ VV_lists = [
     for flavours in flavourVVSplitting.values()
     for flavour in flavours
 ]
-VV_list = [item for sublist in VV_lists for item in sublist]
+VV_list = [item for sublist in VV_lists for item in sublist] + [
+    "WWTo2L2Nu",
+    "WZTo2Q2L",
+    "WZTo3LNu",
+    "ZZTo2L2Nu",
+    "ZZTo2Q2L",
+    "ZZTo4L",
+]
 
 
 DY_lists = [
@@ -78,7 +85,14 @@ DY_lists = [
     ]
     for flavour in flavourSplitting.keys()
 ]
-DY_list = [item for sublist in DY_lists for item in sublist]
+DY_list = [item for sublist in DY_lists for item in sublist] + [
+    "DYZpt-0To50",
+    "DYZpt-50To100",
+    "DYZpt-100To250",
+    "DYZpt-250To400",
+    "DYZpt-400To650",
+    "DYZpt-650ToInf",
+]
 
 
 st_list = [
@@ -93,9 +107,9 @@ st_list = [
 ]
 tt_list = ["TTTo2L2Nu", "TTToHadronic", "TTToSemiLeptonic"]
 
-background.update(
-    {dataset: [dataset] for dataset in VV_list + DY_list + st_list + tt_list}
-)
+bkg_list = VV_list + DY_list + st_list + tt_list
+
+background.update({dataset: [dataset] for dataset in bkg_list})
 
 data = {}
 
@@ -117,6 +131,6 @@ signal = {
     systematicsToPlot,
     systematicsForDC,
     systematicDetail,
-) = plot_common_style(signal, background, VV_list + DY_list + st_list + tt_list)
+) = plot_common_style(signal, background, bkg_list)
 
 rescaleSample = {}
