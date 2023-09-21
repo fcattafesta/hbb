@@ -33,6 +33,6 @@ signal = {}
     systematicsToPlot,
     systematicsForDC,
     systematicDetail,
-) = plot_common_style(signal, background)
+) = plot_common_style(signal, background, overlay=True)
 
 rescaleSample = {}
