@@ -22,11 +22,11 @@ number_of_b = {
     "2b": ["bb"],
 }
 samples = {
-    "DYM50": {
-        "xsec": 5765.40,
-        "subsamples": flavourSplitting,
-        "training": True,
-    },
+    # "DYM50": {
+    #     "xsec": 5765.40,
+    #     "subsamples": flavourSplitting,
+    #     "training": True,
+    # },
     "DYZpt-0To50": {
         "xsec": 1341.42,
         "subsamples": flavourSplitting,
@@ -61,11 +61,11 @@ samples = {
 
 samples.update(
     {
-        "DYM50Full": {
-            "xsec": 5765.40,
-            "subsamples": flavourSplitting,
-            "training": True,
-        },
+        # "DYM50Full": {
+        #     "xsec": 5765.40,
+        #     "subsamples": flavourSplitting,
+        #     "training": True,
+        # },
         "DYZpt-0To50Full": {
             "xsec": 1341.42,
             "subsamples": flavourSplitting,
