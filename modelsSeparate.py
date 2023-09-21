@@ -3,7 +3,7 @@ from collections import defaultdict
 from samples import *
 from plot_common_style import *
 
-name = "HBB_mm"
+name = "HBB_separate"
 
 
 VV_background_list = [

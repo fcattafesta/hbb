@@ -16,12 +16,12 @@ parser.add_argument(
 )
 parser.add_argument(
     "--frac-el",
-    default="btag_files/fractions_DeepFlav.csv",
+    default="btag_files/fractions_DeepFlav2.csv",
     help="file name with fractions in el channel",
 )
 parser.add_argument(
     "--frac-mu",
-    default="btag_files/fractions_DeepFlav.csv",
+    default="btag_files/fractions_DeepFlav2.csv",
     help="file name with fractions in mu channel",
 )
 parser.add_argument("--out-dir", default="btag_files")
@@ -103,16 +103,16 @@ else:
     sf = ""
 
 sig_csv_el_file = (
-    f"btag_files/atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list{sf}.csv"
+    f"btag_files/atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list{sf} (copy).csv"
 )
 sig_csv_mu_file = (
-    f"btag_files/atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list{sf}.csv"
+    f"btag_files/atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list{sf} (copy).csv"
 )
 sig_flav_el_file = (
-    f"btag_files/atanhDNN_Score___SR_ee_deepflav_SignificanceSum_list{sf}.csv"
+    f"btag_files/atanhDNN_Score___SR_ee_deepflav_SignificanceSum_list{sf} (copy).csv"
 )
 sig_flav_mu_file = (
-    f"btag_files/atanhDNN_Score___SR_mm_deepflav_SignificanceSum_list{sf}.csv"
+    f"btag_files/atanhDNN_Score___SR_mm_deepflav_SignificanceSum_list{sf} (copy).csv"
 )
 
 _, _, _, _, fractions_max_el, fractions_min_el, _ = load_data(args.frac_el)
@@ -248,7 +248,7 @@ rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
 
 # mu, el
 # root square sum flav significance con sf= 2.23332 /// significance fit combineation mu el = 2.27635
-# root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 2.12043   
+# root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 2.12043
 sig_df_list = [1.69, 1.46] if args.sf else [0,0] # [1.85, 1.63] if args.sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
@@ -416,7 +416,8 @@ def plot_data(
         label="ParticleEdge",
         color="green",
     )
-    print(BSpline(*csv_spline_av)(rescale_fin_pe))
+    print("ParticleNet", BSpline(*csv_spline_av)(rescale_fin_pn))
+    print("ParticleEdge", BSpline(*csv_spline_av)(rescale_fin_pe))
 
     # plt.errorbar(
     #     rescale_fin_pn,

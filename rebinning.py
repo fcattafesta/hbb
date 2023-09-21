@@ -142,5 +142,5 @@ rebin = {
         1.0,
     ],
     "Z_mass": np.arange(10, 150).tolist(),
-    "DiJets_mass": np.arange(50, 200).tolist(),
+    "Dijets_mass": np.arange(50, 200).tolist(),
 }
