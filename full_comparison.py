@@ -20,11 +20,11 @@ lumi = 59970
 xsec = 88.36
 
 for histo in histo_list:
-    f1 = ROOT.TFile.Open("/home/filippo/Downloads/full_nosf20.root")
+    f1 = ROOT.TFile.Open("/home/filippo/Downloads/full_nosf30.root")
     full = f1.Get(histo + "___SR_ee")
-    f2 = ROOT.TFile.Open("/home/filippo/Downloads/flash_20.root")
+    f2 = ROOT.TFile.Open("/home/filippo/Downloads/flash_30.root")
     flash = f2.Get(histo + "___SR_ee")
-    f3 = ROOT.TFile.Open("/home/filippo/Downloads/overflash_20.root")
+    f3 = ROOT.TFile.Open("/home/filippo/Downloads/full_nosf30match.root")
     overflash = f3.Get(histo + "___SR_ee")
 
     # Rebin the histograms
@@ -51,7 +51,7 @@ for histo in histo_list:
     flash.SetLineStyle(1)
 
     overflash.SetTitle("")
-    overflash.SetLineColor(ROOT.kAzure + 1)
+    overflash.SetLineColor(ROOT.kGreen - 2)
     overflash.SetLineWidth(2)
     overflash.SetLineStyle(1)
 
@@ -102,7 +102,7 @@ for histo in histo_list:
 
     legend.AddEntry(full, "FullSim", "f")
     legend.AddEntry(flash, "FlashSim", "f")
-    legend.AddEntry(overflash, "FlashSim (#times 5)", "f")
+    legend.AddEntry(overflash, "FullSim (GenJetMatch)", "f")
 
     # Draw the ratio histograms in the middle pad
     c.GetPad(2).cd()
@@ -116,7 +116,7 @@ for histo in histo_list:
     ratio2 = overflash.Clone("ratio2")
     ratio2.Divide(full)
     ratio2.SetMarkerStyle(20)
-    ratio2.SetMarkerColor(ROOT.kAzure + 1)
+    ratio2.SetMarkerColor(ROOT.kGreen - 2)
     ratio2.Draw("E1 same")
 
     # draw a black dotted line at 1
@@ -161,9 +161,9 @@ for histo in histo_list:
             )
 
     error3.SetMarkerStyle(22)
-    error3.SetMarkerColor(ROOT.kAzure + 1)
+    error3.SetMarkerColor(ROOT.kGreen - 2)
     error3.SetMarkerSize(1.1)
-    error3.SetLineColor(ROOT.kAzure + 1)
+    error3.SetLineColor(ROOT.kGreen - 2)
     error3.SetLineWidth(2)
     error3.SetLineStyle(1)
 
@@ -210,7 +210,7 @@ for histo in histo_list:
     t0 = makeText(
         0.2,
         0.92,
-        "Signal Region",
+        "Signal Region p_{T}^{ jet} > 30 GeV",
         42,
         size=0.03,
     )
@@ -218,7 +218,7 @@ for histo in histo_list:
     t2 = makeText(
         0.2,
         0.87,
-        "Electrons DY 100 < p^{  Z}_{  T} < 250 GeV",
+        "Electrons DY 100 < p^{ Z}_{T} < 250 GeV",
         42,
         size=0.03,
     )
@@ -235,4 +235,4 @@ for histo in histo_list:
 
     legend.Draw()
 
-    c.SaveAs(f"figures_os/{histo}.pdf")
+    c.SaveAs(f"figures_os/30pt/{histo}.pdf")
