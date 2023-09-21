@@ -36,7 +36,7 @@ def getFlowCommon(flow, btag):
         sel="CleanJet_pt_Nom > 30. && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0",
     )
 
-    flow.Define("event_unsigned_long", "(unsigned long)event)")
+    flow.Define("event_unsigned_long", "(unsigned long)event")
     flow.Selection("twoJets", "nSelectedJet >= 2 && event_unsigned_long == 80119208")
 
     # Define LeadingJet and SubLeadingJet
