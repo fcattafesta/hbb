@@ -7,7 +7,7 @@ from systematicGrouping import *
 
 
 # Color palette
-def plot_common_style(signal, background):
+def plot_common_style(signal, background, bkg_list=None):
     fillcolor = {
         f"Z+{flavour}": ROOT.kGreen + i
         for i, flavour in zip([3, -2, -6, -9], flavourSplitting)
@@ -30,6 +30,11 @@ def plot_common_style(signal, background):
     fillcolor.update(
         {f"bkg_{num_b}": ROOT.kAzure + i for i, num_b in zip([7, 0, 3], number_of_b)}
     )
+    if bkg_list:
+        fillcolor.update(
+            {f"bkg_{bkg}": ROOT.kBlack + i for i, bkg in enumerate(bkg_list)}
+        )
+
     linecolor = fillcolor  # {key: ROOT.kBlack for key in fillcolor.keys()}
     linecolorOverlayed = {}
     markercolor = fillcolor

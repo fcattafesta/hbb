@@ -118,6 +118,6 @@ signal = {
     systematicsToPlot,
     systematicsForDC,
     systematicDetail,
-) = plot_common_style(signal, background)
+) = plot_common_style(signal, background, VV_list + DY_list + st_list + tt_list)
 
 rescaleSample = {}
