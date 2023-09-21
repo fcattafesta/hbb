@@ -97,7 +97,6 @@ background.update(
     {dataset: [dataset] for dataset in VV_list + DY_list + st_list + tt_list}
 )
 
-print(background)
 data = {}
 
 signal = {
