@@ -36,6 +36,9 @@ for histo in histo_list:
     full.Scale(lumi * xsec)
     oversampled.Scale(lumi * xsec)
 
+    full.Scale(1 / full.Integral())
+    oversampled.Scale(1 / oversampled.Integral())
+
     # Set histogram styles
     full.SetTitle("")
     full.SetLineColor(ROOT.kBlack)
