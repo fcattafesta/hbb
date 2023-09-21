@@ -66,7 +66,7 @@ samples.update(
         "DYZpt-100To250-1b": {
             "xsec": 88.36,
             "files": [
-                "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2530000/B24D7292-7CA2-804F-9082-BCFDC95CFDC5.root"
+                "/scratchnvme/malucchi/DYZpt-100To250/106X_upgrade2018_realistic_v16_L1v1-v1/2530000/B24D7292-7CA2-804F-9082-BCFDC95CFDC5.root"
             ],
             "subsamples": flavourSplitting,
         },

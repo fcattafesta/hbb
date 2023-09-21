@@ -2,6 +2,8 @@ from multiprocessing import Pool
 import psutil
 import copy
 import sys
+
+from nail.nail import *
 import ROOT
 import traceback
 import time
@@ -16,18 +18,10 @@ from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
 from histograms import histosData, histosMC
 
-if args.oversampling:
-    from nail.nail import *
-else:
-    from nail.nailOriginal import *
+# ROOT.TH1.AddDirectory(ROOT.kFALSE)
 
-if args.sample == "Flash":
-    from samplesDY import *
-elif args.sample == "Full":
-    from samples import *
-else:
-    print("Model must be 'Flash' or 'Full'")
-    sys.exit(1)
+# from samplesDY import *
+from samples import *
 
 if args.btag not in ["deepcsv", "deepflav"]:
     print("Btagging algo must be 'deepflav' or 'deepcsv'")
@@ -105,7 +99,7 @@ logger.info("Histograms with systematics: %s" % histosWithSystematicsMC)
 
 procMC = flowMC.CreateProcessor(
     "eventProcessorMC",
-    [flavourSplitting[x] for x in flavourSplitting],
+    [],  # [flavourSplitting[x] for x in flavourSplitting],
     histosWithSystematicsMC,
     [],
     "",
@@ -122,6 +116,7 @@ procData = flowData.CreateProcessor(
 
 
 def sumwsents(files):
+    # ROOT.TH1.AddDirectory(ROOT.kTRUE)
     sumws = 1e-9
     nevents = 0
     LHEPdfSumw = []
@@ -148,6 +143,7 @@ def sumwsents(files):
     if nevents < 1:
         nevents = 1
 
+    # ROOT.TH1.AddDirectory(ROOT.kFALSE)
     return sumws, LHEPdfSumw, nevents
 
 
@@ -164,6 +160,7 @@ def runSample(ar):
             % nthreads
         )
     s, files = ar
+    print(files)
     #    print(files)
     if not "lumi" in samples[s].keys():  # is MC
         sumws, LHEPdfSumw, nevents = sumwsents(files)
@@ -173,8 +170,8 @@ def runSample(ar):
         logger.info("Start sample %s: nevents %s" % (s, nevents))
     #    import jsonreader
     rdf = ROOT.RDataFrame("Events", files)
-    if args.range != -1:
-        rdf = rdf.Range(args.range)
+    if -1 not in args.range:
+        rdf = rdf.Range(args.range[0], args.range[1])
     subs = {}
     if rdf:
         try:
@@ -232,10 +229,21 @@ def runSample(ar):
             normalization = 1.0
 
             for h in out.histos:
+                outFile.cd()
                 hname = h.GetName()
                 h.GetValue()
-                outFile.cd()
+                print(
+                    s,
+                    hname,
+                    sumws,
+                    h.GetSumOfWeights(),
+                    [h.GetBinContent(i) for i in range(1, h.GetNbinsX() + 1)],
+                )
                 h.Scale(1.0 / normalization / sumws)
+                print(
+                    "bin content:",
+                    [h.GetBinContent(i) for i in range(1, h.GetNbinsX() + 1)],
+                )
                 h.Write()
             sumWeights = getattr(ROOT, "TParameter<double>")("sumWeights", sumws)
             sumWeights.Write()
@@ -312,8 +320,6 @@ if args.model == "fix":
 elif "model" in args.model[:5]:
     import importlib
 
-    print(args.model)
-    print(args.model.replace(".py", ""))
     model = importlib.import_module(args.model.replace(".py", ""))
     # 	samples=model.samples
 
