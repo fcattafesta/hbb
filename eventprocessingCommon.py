@@ -38,7 +38,7 @@ def getFlowCommon(flow, btag):
     flow.SubCollection(
         "SelectedJet",
         "CleanJet",
-        sel="CleanJet_pt_Nom > 30 && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0 ",
+        sel="CleanJet_pt_Nom > 30 && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0 && CleanJet_genJetIdx >= 0 ",
     )
 
     flow.Selection("twoJets", "nSelectedJet >= 2")
