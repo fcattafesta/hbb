@@ -61,7 +61,8 @@ logger.info("args:\n - %s", "\n - ".join(str(it) for it in args.__dict__.items()
 
 # Create the flow
 flowMC = SampleProcessing(
-    "Analysis", "/scratchnvme/malucchi/1574B1FB-8C40-A24E-B059-59A80F397A0F.root"
+    "Analysis",
+    "/scratchnvme/cattafe/FlashSim/RunIISummer20UL18NanoAODv9/DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_upgrade2018_realistic_v16_L1v1-v1/2530000/B24D7292-7CA2-804F-9082-BCFDC95CFDC5.root",
 )
 
 # Add binning rules
