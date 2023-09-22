@@ -24,11 +24,11 @@ signal = {}
 (
     fillcolor,
     linecolor,
-    linecolorOverlayed,
+    linecolorOverlaid,
     markercolor,
     backgroundSortedForLegend,
     backgroundSorted,
-    histosOverlayed_list,
+    histosOverlaid_list,
     signalSortedForLegend,
     signalSorted,
     systematicsToPlot,

@@ -34,10 +34,10 @@ def plot_common_style(signal, background, overlay=False, bkg_list=None):
         fillcolor.update(
             {bkg: ROOT.kBlack + i for i, bkg in enumerate(bkg_list)}
         )
-    linecolorOverlayed = {}
+    linecolorOverlaid = {}
 
     if overlay:
-        linecolorOverlayed=fillcolor.copy()
+        linecolorOverlaid=fillcolor.copy()
         for key in fillcolor.keys():
             fillcolor[key] = ROOT.kWhite
 
@@ -53,9 +53,9 @@ def plot_common_style(signal, background, overlay=False, bkg_list=None):
     ]
     backgroundSorted = backgroundSortedForLegend
 
-    histosOverlayed_list = []
+    histosOverlaid_list = []
     if overlay:
-        histosOverlayed_list=list(signal.keys())+list(background.keys())
+        histosOverlaid_list=list(signal.keys())+list(background.keys())
 
     signalSortedForLegend = []
     signalSortedForLegend = [z for z in signal if z not in signalSortedForLegend]
@@ -71,11 +71,11 @@ def plot_common_style(signal, background, overlay=False, bkg_list=None):
     return (
         fillcolor,
         linecolor,
-        linecolorOverlayed,
+        linecolorOverlaid,
         markercolor,
         backgroundSortedForLegend,
         backgroundSorted,
-        histosOverlayed_list,
+        histosOverlaid_list,
         signalSortedForLegend,
         signalSorted,
         systematicsToPlot,

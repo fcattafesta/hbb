@@ -740,7 +740,7 @@ if __name__ == "__main__":
     histosumSyst = {}
     histoSigsumSyst = {}
     histosSignal = {}
-    histosOverlayed = {}
+    histosOverlaid = {}
     all_histo_all_syst = {}
     all_histo_all_syst_grouped = {}
 
@@ -835,7 +835,7 @@ if __name__ == "__main__":
                         #         d,
                         #     )
                         # )
-                        if not model.histosOverlayed_list:
+                        if not model.histosOverlaid_list:
                             h.Scale(samples[d]["xsec"] * lumi)
                         # else:
                         #     try:
@@ -1115,11 +1115,11 @@ if __name__ == "__main__":
                         histosSignal[hn][gr] = h.Clone()
                     else:
                         histosSignal[hn][gr].Add(h)
-                if gr in model.histosOverlayed_list:
-                    if gr not in list(histosOverlayed[hn].keys()):
-                        histosOverlayed[hn][gr] = h.Clone()
+                if gr in model.histosOverlaid_list:
+                    if gr not in list(histosOverlaid[hn].keys()):
+                        histosOverlaid[hn][gr] = h.Clone()
                     else:
-                        histosOverlayed[hn][gr].Add(h)
+                        histosOverlaid[hn][gr].Add(h)
         if not data:
             writeYields(
                 ftxt,
@@ -1302,7 +1302,7 @@ if __name__ == "__main__":
 
             histoSingleSyst[hn] = {}
             histosSignal[hn] = {}
-            histosOverlayed[hn] = {}
+            histosOverlaid[hn] = {}
             for gr in model.data:
                 h = fill_datasum(
                     f,
@@ -1484,7 +1484,7 @@ if __name__ == "__main__":
                 histosum[hn].Add(
                     histoSigsum[hn]
                 )  # NOTE: is this the right place for this?
-            if not model.histosOverlayed_list:
+            if not model.histosOverlaid_list:
                 for gr in model.signalSortedForLegend:
                     h = histosSignal[hn][gr]
                     histos[hn].Add(h.Clone())
@@ -1497,10 +1497,10 @@ if __name__ == "__main__":
                         h, labelLegend[gr] if gr in labelLegend else gr, "l"
                     )
 
-            for gr in model.histosOverlayed_list:
-                h = histosOverlayed[hn][gr]
-                h.Scale(1/h.Integral(0, h.GetNbinsX() + 1))
-                h.SetLineColor(model.linecolorOverlayed[gr])
+            for gr in model.histosOverlaid_list:
+                h = histosOverlaid[hn][gr]
+                h.Scale(1/h.Integral(0, h.GetNbinsX() + 1), "width")
+                h.SetLineColor(model.linecolorOverlaid[gr])
                 h.SetFillStyle(0)
                 h.SetLineWidth(3)
                 h.SetLineStyle(1)
@@ -1637,9 +1637,9 @@ if __name__ == "__main__":
                         histos[hn].SetMaximum(
                             (histosum[hn].GetMaximum()) ** 2,
                         )
-                    if model.histosOverlayed_list:
+                    if model.histosOverlaid_list:
                         histos[hn].SetMinimum(0)
-                        histos[hn].SetMaximum(1.5)
+                        histos[hn].SetMaximum(1)
                     histos[hn].Draw("hist")
                     setStyle(histos[hn], noData=True)
 
@@ -1659,8 +1659,8 @@ if __name__ == "__main__":
                     datasum[hn].Draw("E P same")
                 for gr in model.signal:
                     histosSignal[hn][gr].Draw("hist same")
-                for gr in model.histosOverlayed_list:
-                    histosOverlayed[hn][gr].Draw("hist same")
+                for gr in model.histosOverlaid_list:
+                    histosOverlaid[hn][gr].Draw("hist same")
 
                 t0.Draw()
                 t1.Draw()
@@ -1726,7 +1726,7 @@ if __name__ == "__main__":
                     if (not any([x in hn for x in Special_variables])) or (
                         any([x in hn for x in Special_variables])
                         and args.unblind
-                        and not model.histosOverlayed_list
+                        and not model.histosOverlaid_list
                     ):
                         tchi2 = makeText(
                             0.19,
