@@ -1523,7 +1523,7 @@ if __name__ == "__main__":
             # canvas[hn].SetRightMargin(.0);
             canvas_log = ROOT.TCanvas("canvas_log_" + hn, "", 1200, 1000)
             # canvas[hn].SetRightMargin(.0);
-            canvas_tuple = (canvas[hn], canvas_log)
+            canvas_tuple = (canvas[hn], canvas_log) if not  model.histosOverlaid_list else (canvas[hn],)
 
             t0 = makeText(
                 0.25,
@@ -1535,8 +1535,8 @@ if __name__ == "__main__":
                 size=0.04,
             )
 
-            t1 = makeText(0.28, 0.95, "CMS", 61)
-            t2 = makeText(0.38, 0.95, str(year), 42)
+            t1 = makeText(0.3, 0.95, "CMS", 61)
+            t2 = makeText(0.4, 0.95, str(year), 42)
             t3 = (
                 makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
                 if lumitot > 0.1
