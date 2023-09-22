@@ -1627,6 +1627,7 @@ if __name__ == "__main__":
                 else:
                     min_value = histos[hn].GetMinimum()
                     max_value = histos[hn].GetMaximum()
+
                     histos[hn].SetMinimum(
                         max(0.01 * histos[hn].GetMinimum(), 0.01)
                     )  # zoom out y axis
@@ -1636,6 +1637,9 @@ if __name__ == "__main__":
                         histos[hn].SetMaximum(
                             (histosum[hn].GetMaximum()) ** 2,
                         )
+                    if model.histosOverlayed_list:
+                        histos[hn].SetMinimum(0)
+                        histos[hn].SetMaximum(1.5)
                     histos[hn].Draw("hist")
                     setStyle(histos[hn], noData=True)
 
