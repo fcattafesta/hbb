@@ -1526,7 +1526,11 @@ if __name__ == "__main__":
 
             t1 = makeText(0.28, 0.95, "CMS", 61)
             t2 = makeText(0.38, 0.95, str(year), 42)
-            t3 = makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+            t3 = (
+                makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
+                if lumitot > 0.1
+                else makeText(0.6, 0.95, " (13 TeV)", 42)
+            )
             t4 = makeText(
                 0.25,
                 0.8,
@@ -1581,7 +1585,7 @@ if __name__ == "__main__":
                     c.cd(1)
 
                 histos[hn].SetTitle("")
-                if hn in datasum.keys() and not model.histosOverlayed_list:
+                if hn in datasum.keys():
                     min_value = datasum[hn].GetMinimum()
                     max_value = datasum[hn].GetMaximum()
                     if datasum[hn].GetMinimum() != 0 or histosum[hn].GetMinimum() != 0:
