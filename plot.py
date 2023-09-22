@@ -835,7 +835,8 @@ if __name__ == "__main__":
                         #         d,
                         #     )
                         # )
-                        h.Scale(samples[d]["xsec"] * lumi)
+                        if not model.histosOverlayed_list:
+                            h.Scale(samples[d]["xsec"] * lumi)
                         error_b = ctypes.c_double(0)
                         integral[gr]["nom"] += h.IntegralAndError(
                             0, h.GetNbinsX() + 1, error_b
@@ -1492,7 +1493,6 @@ if __name__ == "__main__":
 
             for gr in model.histosOverlayed_list:
                 h = histosOverlayed[hn][gr]
-                h.Scale(1/(samples[d]["xsec"] * lumi))
                 h.SetLineColor(model.linecolorOverlayed[gr])
                 h.SetFillStyle(0)
                 h.SetLineWidth(3)
