@@ -21,9 +21,9 @@ lumi = 1  # 59970
 xsec = 1  # 88.36
 
 for histo in histo_list:
-    f1 = ROOT.TFile.Open("/home/filippo/Downloads/oversampling_single.root")
+    f1 = ROOT.TFile.Open("/home/filippo/Downloads/oversampling485723929_single.root")
     oversampled = f1.Get(histo + "___SR_ee")
-    f2 = ROOT.TFile.Open("/home/filippo/Downloads/full_single.root")
+    f2 = ROOT.TFile.Open("/home/filippo/Downloads/full485723929_single.root")
     full = f2.Get(histo + "___SR_ee")
 
     # Rebin the histograms
@@ -31,6 +31,11 @@ for histo in histo_list:
         bins = array.array("d", rebin[histo])
         full = full.Rebin(len(bins) - 1, "full", bins)
         oversampled = oversampled.Rebin(len(bins) - 1, "oversampled", bins)
+
+    for i in range(1, full.GetNbinsX() + 1):
+        scale = full.GetBinContent(i)
+        if scale != 0:
+            lumi = 1 / scale
 
     # Normalize the histograms
     full.Scale(lumi * xsec)
@@ -51,8 +56,9 @@ for histo in histo_list:
     oversampled.SetLineStyle(1)
 
     full.GetYaxis().SetTitle("Entries")
-    full.GetYaxis().SetTitleSize(0.05)
+    full.GetYaxis().SetTitleSize(0.04)
     full.GetYaxis().SetTitleOffset(1.1)
+    full.GetYaxis().SetLabelSize(0.03)
 
     # Make the plot
     c = ROOT.TCanvas("c", "c", 800, 800)
@@ -61,36 +67,36 @@ for histo in histo_list:
     full.Draw("hist")
     oversampled.Draw("hist same")
 
-    full.SetMaximum(1.5 * max(full.GetMaximum(), oversampled.GetMaximum()))
-    full.SetMinimum(0.1)
+    full.SetMaximum(20)
+    full.SetMinimum(1e-5)
 
     full.GetXaxis().SetTitle(labelVariable[histo])
-    full.GetXaxis().SetTitleSize(0.05)
+    full.GetXaxis().SetTitleSize(0.04)
     full.GetXaxis().SetTitleOffset(1.1)
-    full.GetXaxis().SetLabelSize(0.04)
+    full.GetXaxis().SetLabelSize(0.03)
 
     # Make the legend
-    leg = makeLegend(0.65, 0.9, 0.8, 0.95)
+    leg = makeLegend(0.68, 0.93, 0.75, 0.9)
     leg.AddEntry(full, "FullSim", "f")
     leg.AddEntry(oversampled, "FlashSim (#times 10000)", "f")
 
     t0 = makeText(
         0.2,
-        0.92,
-        "Signal Region",
+        0.88,
+        "Signal Region (1 Event)",
         42,
         size=0.03,
     )
-    t1 = makeText(0.18, 0.97, "CMS", 61)
+    t1 = makeText(0.18, 0.95, "CMS", 61)
     t2 = makeText(
         0.2,
-        0.87,
+        0.83,
         "Electrons DY 100 < p^{  Z}_{  T} < 250 GeV",
         42,
         size=0.03,
     )
-    t3 = makeText(0.7, 0.97, "(13 TeV)", 42)
-    t4 = makeText(0.38, 0.97, "2018", 42)
+    t3 = makeText(0.7, 0.95, "(13 TeV)", 42)
+    t4 = makeText(0.38, 0.95, "2018", 42)
 
     # Draw the text
     c.cd()
