@@ -1639,7 +1639,7 @@ if __name__ == "__main__":
                         )
                     if model.histosOverlaid_list:
                         histos[hn].SetMinimum(0)
-                        histos[hn].SetMaximum(1)
+                        histos[hn].SetMaximum(1.5)
                     histos[hn].Draw("hist")
                     setStyle(histos[hn], noData=True)
 
