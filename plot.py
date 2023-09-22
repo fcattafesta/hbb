@@ -796,7 +796,7 @@ if __name__ == "__main__":
         integral[gr] = {}
         integral[gr]["nom"] = 0
         error[gr] = 0
-        lumi = 59000
+        lumi = 59970
         sum_bins = [0] * 10
         for n in range(len(samplesToPlot[gr])):
             d = samplesToPlot[gr][n]
@@ -1492,6 +1492,7 @@ if __name__ == "__main__":
 
             for gr in model.histosOverlayed_list:
                 h = histosOverlayed[hn][gr]
+                h.Scale(1/(samples[d]["xsec"] * lumi))
                 h.SetLineColor(model.linecolorOverlayed[gr])
                 h.SetFillStyle(0)
                 h.SetLineWidth(3)
