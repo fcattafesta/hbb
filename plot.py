@@ -1496,7 +1496,7 @@ if __name__ == "__main__":
                     myLegend_1.AddEntry(
                         h, labelLegend[gr] if gr in labelLegend else gr, "l"
                     )
-
+            max_overlay=0
             for gr in model.histosOverlaid_list:
                 h = histosOverlaid[hn][gr]
                 h.Scale(1/h.Integral(0, h.GetNbinsX() + 1), "width")
@@ -1512,6 +1512,9 @@ if __name__ == "__main__":
                     myLegend_2.AddEntry(
                         h, labelLegend[gr] if gr in labelLegend else gr, "l"
                     )
+                if h.GetMaximum() > max_overlay:
+                    max_overlay=h.GetMaximum()
+
 
             if not all([model.fillcolor[gr] == ROOT.kWhite for gr in model.fillcolor]):
                 myLegend_2.AddEntry(histosum[hn], "MC uncert. (stat.)", "FL")
@@ -1639,7 +1642,7 @@ if __name__ == "__main__":
                         )
                     if model.histosOverlaid_list:
                         histos[hn].SetMinimum(0)
-                        histos[hn].SetMaximum(1.5)
+                        histos[hn].SetMaximum(max_overlay*1.5)
                     histos[hn].Draw("hist")
                     setStyle(histos[hn], noData=True)
 
