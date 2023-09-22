@@ -1620,7 +1620,7 @@ if __name__ == "__main__":
                     min_value = histos[hn].GetMinimum()
                     max_value = histos[hn].GetMaximum()
                     histos[hn].SetMinimum(
-                        max(0.1 * histos[hn].GetMinimum(), 0.1)
+                        max(0.01 * histos[hn].GetMinimum(), 0.01)
                     )  # zoom out y axis
                     if i == 0:
                         histos[hn].SetMaximum(histosum[hn].GetMaximum() * 2)
