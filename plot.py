@@ -837,6 +837,8 @@ if __name__ == "__main__":
                         # )
                         if not model.histosOverlayed_list:
                             h.Scale(samples[d]["xsec"] * lumi)
+                        else:
+                            h.Scale(1.0 / h.Integral(0, h.GetNbinsX() + 1))
                         error_b = ctypes.c_double(0)
                         integral[gr]["nom"] += h.IntegralAndError(
                             0, h.GetNbinsX() + 1, error_b
