@@ -1581,7 +1581,7 @@ if __name__ == "__main__":
                     c.cd(1)
 
                 histos[hn].SetTitle("")
-                if hn in datasum.keys():
+                if hn in datasum.keys() and not model.histosOverlayed_list:
                     min_value = datasum[hn].GetMinimum()
                     max_value = datasum[hn].GetMaximum()
                     if datasum[hn].GetMinimum() != 0 or histosum[hn].GetMinimum() != 0:
