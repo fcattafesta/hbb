@@ -4,10 +4,10 @@ import glob
 print("Loading samplesDY.py")
 
 flavourSplitting = {
-    "bb": "TwoB",
-    "b": "OneB",
-    "c": "C",
-    "udsg": "Light",
+    # "bb": "TwoB",
+    # "b": "OneB",
+    # "c": "C",
+    # "udsg": "Light",
 }
 
 flavourVVSplitting = {
