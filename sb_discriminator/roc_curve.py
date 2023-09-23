@@ -60,7 +60,7 @@ def load_data(dirs, variables_list):
 
     networks_dict = {
         "DeepCSV": [np.array([]), np.array([]), "r"],
-        "DeepFlav": [np.array([]), np.array([]), "b"],
+        "DeepFlavour": [np.array([]), np.array([]), "b"],
     }
 
     # open each file and get the Events tree using uproot
@@ -236,7 +236,7 @@ if "__main__" == __name__:
                 fpr, tpr, roc_auc, threshold = get_rates(
                     data[1], data[0], labels[0], labels[1]
                 )
-                rates_dict[f"{net} {tag_type}"] = [
+                rates_dict[f"{net}"] = [
                     fpr,
                     tpr,
                     roc_auc,

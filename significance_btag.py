@@ -16,12 +16,12 @@ parser.add_argument(
 )
 parser.add_argument(
     "--frac-el",
-    default="btag_files/fractions_DeepFlav2.csv",
+    default="btag_files/fractions_DeepFlav.csv",
     help="file name with fractions in el channel",
 )
 parser.add_argument(
     "--frac-mu",
-    default="btag_files/fractions_DeepFlav2.csv",
+    default="btag_files/fractions_DeepFlav.csv",
     help="file name with fractions in mu channel",
 )
 parser.add_argument("--out-dir", default="btag_files")
@@ -103,21 +103,23 @@ else:
     sf = ""
 
 sig_csv_el_file = (
-    f"btag_files/atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list{sf} (copy).csv"
+    f"btag_files/atanhDNN_Score___SR_ee_deepcsv_SignificanceSum_list{sf}.csv"
 )
 sig_csv_mu_file = (
-    f"btag_files/atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list{sf} (copy).csv"
+    f"btag_files/atanhDNN_Score___SR_mm_deepcsv_SignificanceSum_list{sf}.csv"
 )
 sig_flav_el_file = (
-    f"btag_files/atanhDNN_Score___SR_ee_deepflav_SignificanceSum_list{sf} (copy).csv"
+    f"btag_files/atanhDNN_Score___SR_ee_deepflav_SignificanceSum_list{sf}.csv"
 )
 sig_flav_mu_file = (
-    f"btag_files/atanhDNN_Score___SR_mm_deepflav_SignificanceSum_list{sf} (copy).csv"
+    f"btag_files/atanhDNN_Score___SR_mm_deepflav_SignificanceSum_list{sf}.csv"
 )
 
-_, _, _, _, fractions_max_el, fractions_min_el, _ = load_data(args.frac_el)
+frac_file = f"btag_files/fractions_DeepFlav{sf}.csv"
+
+_, _, _, _, fractions_max_el, fractions_min_el, _ = load_data(frac_file)
 _, _, _, _, _, _, sig_list_el = load_data(sig_flav_el_file)
-_, _, _, _, fractions_max_mu, fractions_min_mu, _ = load_data(args.frac_mu)
+_, _, _, _, fractions_max_mu, fractions_min_mu, _ = load_data(frac_file)
 _, _, _, _, _, _, sig_list_mu = load_data(sig_flav_mu_file)
 
 fractions_max = []
@@ -149,7 +151,7 @@ def sum_last_n_elements(data, n):
 # fractions_max = [lst[:discard] for lst in fractions_max]
 # fractions_min = [lst[:discard] for lst in fractions_min]
 
-#HERE
+# HERE
 # fractions_max = sum_last_n_elements(fractions_max, discard - 1)
 # fractions_min = sum_last_n_elements(fractions_min, discard - 1)
 
@@ -180,7 +182,6 @@ roc_file = "sb_discriminator/roc_curve/roc_data.txt"
 roc_m100_file = "sb_discriminator/roc_curve/roc_data_m100.txt"
 
 
-
 # wp L, M, T, UT
 eff_csv_list_wp = [0.9127, 0.7903, 0.6014, 0.5309]
 eff_df_list_wp = [0.9405, 0.8440, 0.6883, 0.6295]
@@ -188,7 +189,7 @@ eff_dfCMSSW_list_wp = [0.9340, 0.8213, 0.6547, 0.5966]
 pn_list_wp = [0.9463, 0.8504, 0.7146, 0.6656]
 pe_list_wp = [0.9519, 0.8673, 0.7458, 0.7069]
 
-#HERE
+# HERE
 # eff_csv_list_wp = read_txt_file(roc_file, "DeepCSV")[:discard]
 # eff_df_list_wp = read_txt_file(roc_file, "DeepFlav")[:discard]
 # eff_dfCMSSW_list_wp = read_txt_file(roc_m100_file, "CMSSWDeepFlavour")[:discard]
@@ -246,10 +247,12 @@ rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
 # rescale_fin_pe = (btag_pe_list_wp[-1] + btag_pe_list_wp[-2]) / 2
 
 
-# mu, el
 # root square sum flav significance con sf= 2.23332 /// significance fit combineation mu el = 2.27635
 # root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 2.12043
-sig_df_list = [1.69, 1.46] if args.sf else [0,0] # [1.85, 1.63] if args.sf else [1.99, 1.78]
+# mu, el
+sig_df_list = (
+    [1.69, 1.46] if args.sf else [1.85, 1.62]
+)  # old one-> [1.85, 1.63] if args.sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
@@ -373,11 +376,19 @@ def plot_data(
     sig_ratio_av = np.average(sig_ratio)
     sig_ratio_std_dev = np.std(sig_ratio, ddof=0)
 
+    sig_df_sum2=math.sqrt(sig_df_list[0]**2 + sig_df_list[1]**2)
+    print("sig_df_sum2", sig_df_sum2)
+    sig_csv_sum2=math.sqrt(csv_sig_mu**2 + csv_sig_el**2)
+    print("sig_csv_sum2", sig_csv_sum2)
+    sig_ratio2 = sig_df_sum2 / sig_csv_sum2
+    print("sig_ratio2", sig_ratio2)
+
     plt.errorbar(
         df_point[0],
         sig_ratio_av,
+        # sig_ratio2,
         xerr=df_point[2],
-        yerr=sig_ratio_std_dev,
+        # yerr=sig_ratio_std_dev,
         fmt="o",
         label="DeepFlavour",
         color="blue",
@@ -457,7 +468,7 @@ def plot_data(
     # )
 
     plt.xlabel(r"$\varepsilon$", fontsize=20, loc="right")
-    plt.ylabel( r"$Z_{tot}\; / \; Z_{tot}^{DeepCSV}$", fontsize=20, loc="top")
+    plt.ylabel(r"$Z_{tot}\; / \; Z_{tot}^{DeepCSV}$", fontsize=20, loc="top")
     plt.grid(which="both")
     hep.style.use("CMS")
     hep.cms.label("Preliminary")
