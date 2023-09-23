@@ -70,7 +70,7 @@ labelLegend = {
     "Oversampling": "FlashSim (#times 10000)",
     "DYZpt-0To50": "p_{T}^{Z} < 50 GeV",
     "DYZpt-50To100": "50 < p_{T}^{Z} < 100 GeV",
-    "DYZpt-100To250": "100 < p_{T}^{Z} < 250 GeV (FlashSim #times 5)",
+    "DYZpt-100To250": "100 < p_{T}^{Z} < 250 GeV",
     "DYZpt-250To400": "250 < p_{T}^{Z} < 400 GeV",
     "DYZpt-400To650": "400 < p_{T}^{Z} < 650 GeV",
     "DYZpt-650ToInf": "p_{T}^{Z} > 650 GeV",

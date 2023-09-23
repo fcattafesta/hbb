@@ -24,6 +24,10 @@ files = [
     for sample in samples
 ]
 
+# files = [
+#     f"/home/filippo/Downloads/MCUncert/{sample}Full_Histos.root" for sample in samples
+# ]
+
 colors = [
     ROOT.kMagenta + 1,
     ROOT.kBlue + 1,
@@ -75,7 +79,7 @@ for i in range(len(samples)):
     if i == 0:
         sum_histo = new_histo.Clone()
     else:
-        sum_histo.Add(new_histo)
+        sum_histo.Add(sum_histo, new_histo)
     for j in range(1, bins + 1):
         uncert_histo.SetBinContent(j, histos[samples[i]].GetBinError(j) ** 2)
         uncert_histo.SetBinError(j, 0)
@@ -121,11 +125,25 @@ t0 = makeText(
     42,
     size=0.03,
 )
-t1 = makeText(0.18, 0.95, "CMS", 61)
+t1 = makeText(0.26, 0.95, "CMS", 61)
 t2 = makeText(
     0.2,
     0.85,
     "Electrons Drell-Yan p_{  T}^{  Z} Binned",
+    42,
+    size=0.03,
+)
+t21 = makeText(
+    0.2,
+    0.81,
+    "100-250 GeV Flash Simulated",
+    42,
+    size=0.03,
+)
+t22 = makeText(
+    0.2,
+    0.77,
+    "Oversampling Factor = 5",
     42,
     size=0.03,
 )
@@ -182,7 +200,7 @@ c2.SaveAs("figures/dy_zpt_flash_binned_uncert_log.pdf")
 for i in range(len(uncert_list)):
     sum2 = sum_histo.Clone()
     sum2.Multiply(sum_histo, sum_histo)
-    uncert_list[i].Divide(sum_histo)
+    uncert_list[i].Divide(sum2)
     rel_uncert.Add(uncert_list[i])
 
 c3 = ROOT.TCanvas("c3", "", 800, 800)
@@ -200,13 +218,16 @@ rel_uncert.GetXaxis().SetTitle("DNN Score Bin")
 t0.Draw()
 t1.Draw()
 t2.Draw()
+t21.Draw()
+t22.Draw()
 t3.Draw()
 t4.Draw()
 
 legend_2.Draw()
 
 # Linear
-rel_uncert.SetMaximum(1.15)
+rel_uncert.SetMaximum(1e-2)
+rel_uncert.GetYaxis().SetMaxDigits(2)
 c3.SaveAs("figures/dy_zpt_flash_binned_rel_uncert.pdf")
 
 # Log
