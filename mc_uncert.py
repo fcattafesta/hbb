@@ -24,9 +24,9 @@ files = [
     for sample in samples
 ]
 
-# files = [
-#     f"/home/filippo/Downloads/MCUncert/{sample}Full_Histos.root" for sample in samples
-# ]
+files = [
+    f"/home/filippo/Downloads/MCUncert/{sample}Full_Histos.root" for sample in samples
+]
 
 colors = [
     ROOT.kMagenta + 1,
@@ -160,13 +160,13 @@ legend.Draw()
 
 # Linear
 histos[samples[0]].GetYaxis().SetRangeUser(0, max * 1.2)
-c1.SaveAs("figures/dy_zpt_flash_binned.pdf")
+c1.SaveAs("figures/dy_zpt_binned.pdf")
 
 # Log
 c1.SetLogy()
 histos[samples[0]].SetMaximum(1e6)
 histos[samples[0]].SetMinimum(1e-1)
-c1.SaveAs("figures/dy_zpt_flash_binned_log.pdf")
+c1.SaveAs("figures/dy_zpt_binned_log.pdf")
 
 c2 = ROOT.TCanvas("c2", "", 800, 800)
 
@@ -189,13 +189,13 @@ legend_2.Draw()
 
 # Linear
 uncert.SetMaximum(3500)
-c2.SaveAs("figures/dy_zpt_flash_binned_uncert.pdf")
+c2.SaveAs("figures/dy_zpt_binned_uncert.pdf")
 
 # Log
 c2.SetLogy()
 uncert.SetMaximum(1e4)
 uncert.SetMinimum(3.3e-1)
-c2.SaveAs("figures/dy_zpt_flash_binned_uncert_log.pdf")
+c2.SaveAs("figures/dy_zpt_binned_uncert_log.pdf")
 
 for i in range(len(uncert_list)):
     sum2 = sum_histo.Clone()
@@ -215,23 +215,47 @@ rel_uncert.GetXaxis().SetTitleSize(0.05)
 rel_uncert.GetXaxis().SetLabelSize(0.04)
 rel_uncert.GetXaxis().SetTitle("DNN Score Bin")
 
+# Make 4 orizontal lines at 0.01, 0.064, 0.0036, 0.0016 and write 10%, 8%, 6%, 4%
+
+values = [0.01, 0.0064, 0.0036, 0.0016]
+texts = ["10%", "8%", "6%", "4%"]
+lines = []
+ys = [0.54, 0.395, 0.283, 0.2]
+ts = []
+
+for i in range(len(values)):
+    print(values[i])
+    line = ROOT.TLine(0.5, values[i], 10.5, values[i])
+    line.SetLineStyle(2)
+    line.SetLineWidth(1)
+    line.SetLineColor(ROOT.kBlack)
+    if i == 0:
+        line.Draw()
+    else:
+        line.Draw("same")
+    c3.Update()
+    ROOT.gPad.Update()
+    ts.append(makeText(0.5, ys[i], texts[i], 42, size=0.03))
+    ts[i].Draw()
+    lines.append(line)
+
 t0.Draw()
 t1.Draw()
 t2.Draw()
-t21.Draw()
-t22.Draw()
+# t21.Draw()
+# t22.Draw()
 t3.Draw()
 t4.Draw()
 
 legend_2.Draw()
 
 # Linear
-rel_uncert.SetMaximum(1e-2)
+rel_uncert.SetMaximum(20e-3)
 rel_uncert.GetYaxis().SetMaxDigits(2)
-c3.SaveAs("figures/dy_zpt_flash_binned_rel_uncert.pdf")
+c3.SaveAs("figures/dy_zpt_binned_rel_uncert.pdf")
 
 # Log
 c3.SetLogy()
 rel_uncert.SetMaximum(2e1)
 rel_uncert.SetMinimum(1e-3)
-c3.SaveAs("figures/dy_zpt_flash_binned_rel_uncert_log.pdf")
+c3.SaveAs("figures/dy_zpt_binned_rel_uncert_log.pdf")
