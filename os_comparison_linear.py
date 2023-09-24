@@ -186,7 +186,7 @@ for histo in histo_list:
     error3.GetYaxis().SetTitleSize(0.075)
     error3.GetYaxis().SetTitleOffset(0.7)
     error3.GetYaxis().SetLabelSize(0.07)
-    error3.GetYaxis().SetMaxDigits(1)
+    error3.GetYaxis().SetMaxDigits(5)
     # error3.GetYaxis().SetRangeUser(0, 0.04)
     error3.GetYaxis().SetNdivisions(10)
 
@@ -233,5 +233,5 @@ for histo in histo_list:
     t4.Draw()
 
     legend.Draw()
-    full.GetYaxis().SetRangeUser(0, 1.5e3)
+    full.GetYaxis().SetRangeUser(0, 6e2)
     c.SaveAs(f"figures_os/{histo}_lin.pdf")
