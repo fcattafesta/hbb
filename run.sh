@@ -64,7 +64,8 @@ fi
 
 btag="--btag ${btag}"
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
+# histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
+histodir="/scratchnvme/malucchi/hbb_out/${lep}/${suffix}/"
 
 $CMD \
     --model ${model} \

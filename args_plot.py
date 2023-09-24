@@ -14,7 +14,7 @@ parser.add_argument(
     "-w", "--workspace", default="workspace/", help="Workspace output folder"
 )
 parser.add_argument(
-    "-fsub", "--foldersuffix", default="", help="Folder suffix for annotations"
+    "-suf", "--foldersuffix", default="", help="Folder suffix for annotations"
 )
 parser.add_argument("--unblind", help="Unblind data in plots", action="store_true", default=False)
 parser.add_argument("--sf", default=False, help="Scale Factor", action="store_true")

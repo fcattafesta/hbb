@@ -67,8 +67,8 @@ if __name__ == "__main__":
 
     date_time = time.strftime("%m%d-%H%M%S")
 
-    outpath = f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}_{date_time}"
-    outdir = f"{args.workspace}/{year}/{model.name}_{args.foldersuffix}_{date_time}/workspace/"
+    outpath = f"{args.outfolder}/{year}/{model.name}_{args.foldersuffix}"#_{date_time}"
+    outdir = f"{args.workspace}/{year}/{model.name}_{args.foldersuffix}/workspace/"
     os.system("mkdir -p " + outpath)
 
     logger = setup_logger(outpath + f"/logger_{date_time}.log")

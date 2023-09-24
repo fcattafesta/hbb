@@ -49,8 +49,12 @@ if [[ $fit == true ]]; then
     fit_vars="-v atanhDNN_Score___SR_${region} jj_dr___CR_Z${region}_bjets jj_dr___CR_Z${region}_lightjets jj_dr___CR_${region}_ttbar"
 fi
 
-histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
-plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots/${lep}/${suffix}${fs}/"
+# histodir="/gpfs/ddn/cms/user/malucchi/hbb_out/${lep}/${suffix}/"
+# plotdir="/gpfs/ddn/cms/user/malucchi/hbb_plots/${lep}/${suffix}${fs}/"
+
+histodir="/scratchnvme/malucchi/hbb_out/${lep}/${suffix}/"
+plotdir="/scratchnvme/malucchi/hbb_plots/${lep}/${suffix}${fs}/"
+
 
 $CMD \
     --model ${model} \

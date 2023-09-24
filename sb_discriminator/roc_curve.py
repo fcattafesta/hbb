@@ -250,7 +250,7 @@ if "__main__" == __name__:
     # save the fpr, tpr and threshold for each network to a file
     with open(f"{args.out_dir}/roc_data.txt", "w") as f:
         for net, rates in rates_dict.items():
-            if "udsg" in net:
+            if True: #"udsg" in net:
                 f.write("network: %s\n" % net)
                 print_dict = {x: True for x in wp_lists}
 
