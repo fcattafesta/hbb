@@ -9,10 +9,10 @@ from scipy.interpolate import splrep, BSpline
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--sf",
-    default=True,
-    action="store_false",
-    help="use scale factors",
+    "--no-sf",
+    default=False,
+    action="store_true",
+    help="not use scale factors",
 )
 parser.add_argument(
     "--frac-el",
@@ -97,7 +97,7 @@ def load_data(file):
 
 discard = -4
 
-if args.sf:
+if not args.no_sf:
     sf = "_sf"
 else:
     sf = ""
@@ -251,8 +251,8 @@ rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
 # root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 2.12043
 # mu, el
 sig_df_list = (
-    [1.69, 1.46] if args.sf else [1.85, 1.62]
-)  # old one-> [1.85, 1.63] if args.sf else [1.99, 1.78]
+    [1.69, 1.46] if not args.no_sf else [1.85, 1.62]
+)  # old one-> [1.85, 1.63] if not args.no_sf else [1.99, 1.78]
 sig_df_average = np.average(sig_df_list)
 sig_df_std_dev = np.std(sig_df_list, ddof=0)
 
@@ -376,6 +376,10 @@ def plot_data(
     sig_ratio_av = np.average(sig_ratio)
     sig_ratio_std_dev = np.std(sig_ratio, ddof=0)
 
+    print("sig_ratio", sig_ratio)
+    print("sig_ratio_av", sig_ratio_av)
+    print("sig_ratio_std_dev", sig_ratio_std_dev)
+
     sig_df_sum2=math.sqrt(sig_df_list[0]**2 + sig_df_list[1]**2)
     print("sig_df_sum2", sig_df_sum2)
     sig_csv_sum2=math.sqrt(csv_sig_mu**2 + csv_sig_el**2)
@@ -388,7 +392,7 @@ def plot_data(
         sig_ratio_av,
         # sig_ratio2,
         xerr=df_point[2],
-        # yerr=sig_ratio_std_dev,
+        yerr=sig_ratio_std_dev,
         fmt="o",
         label="DeepFlavour",
         color="blue",

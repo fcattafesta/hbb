@@ -1745,16 +1745,16 @@ if __name__ == "__main__":
                             42,
                             0.025,
                         )
-                        tchi2.Draw()
+                        # tchi2.Draw()
 
-                    # tKS = makeText(
-                    #     0.29,
-                    #     0.26,
-                    #     "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
-                    #     42,
-                    #     0.025,
-                    # )
-                    # tKS.Draw()
+                        tKS = makeText(
+                            0.29,
+                            0.26,
+                            "KS=" + str(round(datasum[hn].KolmogorovTest(histosum[hn]), 2)),
+                            42,
+                            0.025,
+                        )
+                        # tKS.Draw()
 
                     c.GetPad(2).SetGridy()
 
@@ -1805,7 +1805,7 @@ if __name__ == "__main__":
                                 all_histo_all_syst_grouped[gr][hn][syst].Add(
                                     all_histo_all_syst[hn][d][syst].Clone()
                                 )
-                if systematics:
+                if systematics and args.sys:
                     for sy_base, systematic in systematics.items():
                         t5 = makeText(
                             0.25,
