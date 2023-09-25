@@ -29,7 +29,7 @@ workdir = workdir + "/" if workdir else ""
 if args.unblind:
     asimov=""
 else:
-    asimov="-t -1"
+    asimov="-t -1 --expectSignal=1"
 
 datacard = os.path.splitext(args.datacard)[0]
 
@@ -45,11 +45,11 @@ if os.path.exists(log_file):
     os.remove(log_file)
 
 cmd_list = [
-    f"combine -M Significance {datacard}.txt {asimov} --expectSignal=1",
+    f"combine -M Significance {datacard}.txt {asimov}",
     f"text2workspace.py {datacard}.txt -m 125",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --doInitialFit --robustFit 1 {asimov} --expectSignal=1",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --robustFit 1 --doFits --parallel {args.threads} {asimov} --expectSignal=1",
-    f"combineTool.py -M Impacts -d {datacard}.root -m 125 -o {workdir}impacts_{name}.json {asimov} --expectSignal=1",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --doInitialFit --robustFit 1 {asimov}",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 --robustFit 1 --doFits --parallel {args.threads} {asimov}",
+    f"combineTool.py -M Impacts -d {datacard}.root -m 125 -o {workdir}impacts_{name}.json {asimov}",
     f"plotImpacts.py -i {workdir}impacts_{name}.json -o {workdir}impacts_{name} -t {args.rename}",
 ]
 

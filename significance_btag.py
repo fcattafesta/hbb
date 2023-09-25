@@ -392,7 +392,7 @@ def plot_data(
         sig_ratio_av,
         # sig_ratio2,
         xerr=df_point[2],
-        yerr=sig_ratio_std_dev,
+        # yerr=sig_ratio_std_dev,
         fmt="o",
         label="DeepFlavour",
         color="blue",
