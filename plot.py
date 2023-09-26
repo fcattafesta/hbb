@@ -183,7 +183,7 @@ if __name__ == "__main__":
             Significance.SetLineWidth(3)
             Significance.SetLineStyle(1)
             Significance.SetLineColor(ROOT.kRed)
-            Significance.GetYaxis().SetTitle("#font[12]{Z}")
+            Significance.GetYaxis().SetTitle("#font[12]{Z_{i}}")
             xkey = hn.split("___")[0]
             Significance.GetXaxis().SetTitle(
                 labelVariable[xkey] if xkey in list(labelVariable.keys()) else xkey
