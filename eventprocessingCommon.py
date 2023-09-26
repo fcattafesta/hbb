@@ -17,21 +17,38 @@ def getFlowCommon(flow, btag):
         sel="Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
     )
 
-    flow.Define("nMuon_iso", "Sum(Muon_iso < 0.06)")
-    flow.Define("nMuon_looseId", "Sum(Muon_iso < 0.06 && Muon_looseId)")
-    flow.Define("nMuon_pt", "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20.)")
+    flow.Define("nMuon_pt", "Sum(Muon_pt > 20.)")
+    flow.Define("nMuon_eta", "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4)")
     flow.Define(
-        "nMuon_eta",
-        "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4)",
+        "nMuon_iso", "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06)"
+    )
+    flow.Define(
+        "nMuon_looseId",
+        "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06 && Muon_looseId)",
     )
     flow.Define(
         "nMuon_dxy",
-        "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5)",
+        "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06 && Muon_looseId && Muon_dxy < 0.5)",
     )
     flow.Define(
         "nMuon_dz",
-        "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1)",
+        "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06 && Muon_looseId && Muon_dxy < 0.5 && Muon_dz < 0.1)",
     )
+    # flow.Define("nMuon_iso", "Sum(Muon_iso < 0.06)")
+    # flow.Define("nMuon_looseId", "Sum(Muon_iso < 0.06 && Muon_looseId)")
+    # flow.Define("nMuon_pt", "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20.)")
+    # flow.Define(
+    #     "nMuon_eta",
+    #     "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4)",
+    # )
+    # flow.Define(
+    #     "nMuon_dxy",
+    #     "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5)",
+    # )
+    # flow.Define(
+    #     "nMuon_dz",
+    #     "Sum(Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1)",
+    # )
 
     ## Electrons ##
     flow.Define("Electron_iso", "(Electron_pfRelIso03_all)")
