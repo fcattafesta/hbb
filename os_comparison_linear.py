@@ -8,14 +8,14 @@ ROOT.gROOT.ProcessLine(".x setTDRStyle.C")
 
 
 histo_list = [
-    "atanhDNN_Score",
-    "Z_mass",
-    "Z_pt",
+    # "atanhDNN_Score",
+    # "Z_mass",
+    # "Z_pt",
     "Dijets_mass",
-    "Dijets_pt",
-    "JetBtagMax_pt",
-    "JetBtagMin_pt",
-    "HZ_ptRatio",
+    # "Dijets_pt",
+    # "JetBtagMax_pt",
+    # "JetBtagMin_pt",
+    # "HZ_ptRatio",
 ]
 
 
@@ -234,4 +234,5 @@ for histo in histo_list:
 
     legend.Draw()
     full.GetYaxis().SetRangeUser(0, 6e2)
+    c.SetCanvasSize(800, 993)
     c.SaveAs(f"figures_os/{histo}_lin.pdf")
