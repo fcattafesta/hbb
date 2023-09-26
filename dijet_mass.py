@@ -9,20 +9,21 @@ ROOT.gStyle.SetOptStat(0)
 #/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH/
 #/gpfs/ddn/cms/user/malucchi/hbb_out/mu/deepflav_testZH_sf/
 root_files = {
-    "Jet_pt":["ZH_Histos.root", "Dijets_mass___SR_mm"],
-    "Jet_pt_jerNom":["ZH_Histos_sf_2.root", "Dijets_mass___SR_mm"],
-    "Jet_pt_jerUp"  :["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
-    "Jet_pt_jerDown":["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
+    "p_{T}(jet)":["ZH_Histos.root", "Dijets_mass___SR_mm"],
+    "p_{T}^{JER}(jet)":["ZH_Histos_sf_2.root", "Dijets_mass___SR_mm"],
+    #"Jet_pt_jerUp"  :["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERUp___SR_mm__syst__JERUp"],
+    #"Jet_pt_jerDown":["ZH_Histos_sf_2.root", "Dijets_mass__syst__JERDown___SR_mm__syst__JERDown"],
 }
 
 t0 = makeText(0.2, 0.95, "CMS", 61)
 t1 = makeText(0.8, 0.95,"(13 TeV)", 42)
+t2=makeText(0.2, 0.85, "ZH", 42)
 
 histos={}
 histos_pt={}
 
 pts=["GenJet_pt___SR_mm", "Jet_pt___SR_mm", "Jet_pt_jerNom___SR_mm", "Jet_pt_jerUp___SR_mm", "Jet_pt_jerDown___SR_mm"]
-rebinning=list(np.linspace(50, 200, 40))
+rebinning=list(np.linspace(50, 200, 70))
 files={}
 sumws={}
 # Loop over the file names and add them to the dictionary
@@ -38,10 +39,10 @@ for type, names in root_files.items():
 print(histos_pt)
 colors=[ROOT.kBlack, ROOT.kGreen, ROOT.kRed, ROOT.kBlue, ROOT.kOrange]
 
-gen_weight=histos["Jet_pt"].GetSumOfWeights()/histos["Jet_pt"].GetEntries()
+gen_weight=1#histos["Jet_pt"].GetSumOfWeights()/histos["Jet_pt"].GetEntries()
 
 c=ROOT.TCanvas()
-legend= makeLegend(0.75, 0.85, 0.7, 0.92, size=1.5)
+legend= makeLegend(0.7, 0.85, 0.7, 0.92, size=2)
 for i, type in enumerate(histos):
     h=histos[type]
     h.SetTitle("")
@@ -71,6 +72,7 @@ for i, type in enumerate(histos):
 legend.Draw()
 t0.Draw()
 t1.Draw()
+t2.Draw()
 c.Draw()
 c.SaveAs("dijet_mass.pdf")
 c.SaveAs("dijet_mass.root")
