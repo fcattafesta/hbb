@@ -17,6 +17,12 @@ def getFlowCommon(flow, btag):
         sel="Muon_iso < 0.15 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
     )
 
+    flow.SubCollection(
+        "PreselectedMuon",
+        "Muon",
+        sel="Muon_pt > 20. && abs(Muon_eta) < 2.4 &&",
+    )
+
     flow.Define("nMuon_pt", "Sum(Muon_pt > 20.)")
     flow.Define("nMuon_eta", "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4)")
     flow.Define(
