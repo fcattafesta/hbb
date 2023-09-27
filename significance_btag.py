@@ -247,8 +247,8 @@ rescale_fin_pe, rescale_err_pe = rescale(btag_pe_list_wp)
 # rescale_fin_pe = (btag_pe_list_wp[-1] + btag_pe_list_wp[-2]) / 2
 
 
-# root square sum flav significance con sf= 2.23332 /// significance fit combineation mu el = 2.27007
-# root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 2.12028
+# root square sum flav significance con sf= 2.23332 /// significance fit combineation mu el = 2.13917 (old=2.27007)
+# root square sum csv significance con sf = 1.90245 /// significance fit combineation mu el = 1.98938 (old=2.12028)
 # mu, el
 sig_df_list = (
     [1.69, 1.46] if not args.no_sf else [1.85, 1.62]
