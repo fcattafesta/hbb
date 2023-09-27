@@ -21,6 +21,7 @@ binningRules = [
     (".*_dxy", "30, 0, 0.6"),
     (".*_dz", "30, 0, 0.6"),
     ("nMuon.*", "10, -0.5, 9.5"),
+    ("nElectron.*", "10, -0.5, 9.5"),
 ]
 binningRules += [(".*_pt_.*", "30, 0, 300")]
 binningRules += [
