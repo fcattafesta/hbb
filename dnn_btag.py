@@ -45,8 +45,8 @@ def read_txt_file(filename, name):
 
 
 # main_dir = f"/gpfs/ddn/cms/user/malucchi/hbb_out/{args.lep}/{args.dir}/Snapshots/"
-main_dir_mu = f"/gpfs/ddn/cms/user/malucchi/hbb_out/mu/{args.dir}/Snapshots/"
-main_dir_el = f"/gpfs/ddn/cms/user/malucchi/hbb_out/el/{args.dir}/Snapshots/"
+main_dir_mu = f"/scratchnvme/malucchi/hbb_out/mu/{args.dir}/Snapshots/"
+main_dir_el = f"/scratchnvme/malucchi/hbb_out/el/{args.dir}/Snapshots/"
 
 var_list = [
     "btag_max",
