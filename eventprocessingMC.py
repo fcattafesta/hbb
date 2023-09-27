@@ -18,8 +18,10 @@ def getFlowMC(flow):
     flow.SubCollection(
         "SelectedGenJet",
         "GenJet",
-        sel="GenJet_pt > 25. && abs(GenJet_eta) < 2.5",
+        sel="GenJet_pt > 15. && abs(GenJet_eta) < 2.5",
     )
+
+    #TODO: GenJet_pt > 25
 
     ## Defining subsamples
     flow.Define(

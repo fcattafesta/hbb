@@ -361,6 +361,8 @@ def plot_data(
         label="DeepCSV",
         color="red",
     )
+    plt.xlim([0.975, 1.425])
+    plt.ylim([0.975, 1.385])
 
     # plt.errorbar(
     #     df_point[0],
@@ -400,8 +402,16 @@ def plot_data(
 
     plt.vlines(
         x=rescale_fin_pn,
-        ymin=1,
-        ymax=1.35,  # BSpline(*csv_spline_av)(rescale_fin_pn),
+        ymin=0.975,
+        ymax= BSpline(*csv_spline_av)(rescale_fin_pn),
+        # label="ParticleNet",
+        color="black",
+        linestyle="--",
+    )
+    plt.hlines(
+        y=BSpline(*csv_spline_av)(rescale_fin_pn),
+        xmin=0.975,
+        xmax= rescale_fin_pn,
         # label="ParticleNet",
         color="black",
         linestyle="--",
@@ -409,12 +419,21 @@ def plot_data(
 
     plt.vlines(
         x=rescale_fin_pe,
-        ymin=1,
-        ymax=1.35,  # BSpline(*csv_spline_av)(rescale_fin_pe),
+        ymin=0.975,
+        ymax=BSpline(*csv_spline_av)(rescale_fin_pe),
         # label="ParticleEdge",
         color="green",
         linestyle="--",
     )
+    plt.hlines(
+        y=BSpline(*csv_spline_av)(rescale_fin_pe),
+        xmin=0.975,
+        xmax= rescale_fin_pe,
+        # label="ParticleNet",
+        color="green",
+        linestyle="--",
+    )
+
 
     plt.plot(
         rescale_fin_pn,
