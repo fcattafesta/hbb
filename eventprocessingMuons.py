@@ -31,7 +31,7 @@ def getFlowMuons(flow):
     #     "At(OppositeSignMuMu,0,-200)",
     #     requires=["twoOppositeSignMuons"],
     # )
-    # flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
+    flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
 
     ### Z boson from muons ###
     flow.Define("Z", "Mu0_p4+Mu1_p4", requires=["PtSelMu"])
