@@ -15,21 +15,23 @@ def getFlowMuons(flow):
     ## Muon pair selection ##
     flow.Selection("twoMuons", "nSelectedMuon==2 & nSelectedElectron==0")
     flow.Define("SelectedMuon_p4", "@p4v(SelectedMuon)")
-    flow.Distinct("MuMu", "SelectedMuon")
-    flow.Define(
-        "OppositeSignMuMu",
-        "Nonzero(MuMu0_charge != MuMu1_charge)",
-        requires=["twoMuons"],
-    )
+    flow.SubCollection("Mu0", "SelectedMuon", sel="At(SelectedMuon,0)")
+    flow.SubCollection("Mu1", "SelectedMuon", sel="At(SelectedMuon,1)")
+    # flow.Distinct("MuMu", "SelectedMuon")
+    # flow.Define(
+    #     "OppositeSignMuMu",
+    #     "Nonzero(MuMu0_charge != MuMu1_charge)",
+    #     requires=["twoMuons"],
+    # )
     # flow.Selection("twoOppositeSignMuons", "OppositeSignMuMu.size() > 0")
-    flow.TakePair(
-        "Mu",
-        "SelectedMuon",
-        "MuMu",
-        "At(OppositeSignMuMu,0,-200)",
-        #   requires=["twoOppositeSignMuons"],
-    )
-    flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
+    # flow.TakePair(
+    #     "Mu",
+    #     "SelectedMuon",
+    #     "MuMu",
+    #     "At(OppositeSignMuMu,0,-200)",
+    #     requires=["twoOppositeSignMuons"],
+    # )
+    # flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
 
     ### Z boson from muons ###
     flow.Define("Z", "Mu0_p4+Mu1_p4", requires=["PtSelMu"])
