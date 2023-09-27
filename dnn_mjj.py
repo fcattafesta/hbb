@@ -17,7 +17,7 @@ from samples import samples
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--dir",
-    default="deepflav_eval_newSR",
+    default="deepcsv_sys_eval_rescalebtag",
 )
 parser.add_argument(
     "-b", "--btag", default="DeepFlavour", help="Btagging algorithm (DeepFlavour or DeepCSV)"
@@ -110,7 +110,7 @@ def plt_fts(out_dir, name, fig_handle, show, type):
     :param    fig_handle : figure handle
     """
 
-    plt.xlabel("$btag_{" + type + "}$ " + args.btag, fontsize=20, loc="right")
+    plt.xlabel("m_jj", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
     minorLocator = MultipleLocator(0.05)
@@ -154,7 +154,7 @@ def plotting_function(out_dir, variables, type):
 
     plt_fts(
         out_dir,
-        f"btag_VS_DNN_{args.btag}_{type}",
+        f"mjj_VS_DNN_{args.btag}_{type}",
         fig_handle,
         args.show,
         type,
