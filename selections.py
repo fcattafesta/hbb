@@ -1,7 +1,7 @@
 ### List of selections for muons and electrons ###
 selsMu = [
     "twoMuons",
-    "twoOppositeSignMuons",
+    # "twoOppositeSignMuons",
     "PtSelMu",
     "CommonSelMu",
     "SR_mm",
