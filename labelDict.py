@@ -9,11 +9,13 @@ labelRegion = {
     "CR_mm_ttbar": "t#bar{t} Region",
 }
 labelLeptons = {
-    "SR_ee": "Z(ee)H(bb)",
+    "SR_ee": "Electrons Drell-Yan",
+    # "SR_ee": "Z(ee)H(bb)",
     "CR_Zee_bjets": "Electrons",
     "CR_Zee_lightjets": "Electrons",
     "CR_ee_ttbar": "Electrons",
-    "SR_mm": "Z(#mu#mu)H(bb)",
+    "SR_mm": "Muons Drell-Yan",
+    # "SR_mm": "Z(#mu#mu)H(bb)",
     "CR_Zmm_bjets": "Muons",
     "CR_Zmm_lightjets": "Muons",
     "CR_mm_ttbar": "Muons",
