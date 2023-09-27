@@ -17,7 +17,7 @@ from samples import samples
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--dir",
-    default="deepcsv_sys_eval_rescalebtag",
+    default="deepflav_sys_eval_rescalebtag",
 )
 parser.add_argument(
     "-b", "--btag", default="DeepFlavour", help="Btagging algorithm (DeepFlavour or DeepCSV)"
@@ -40,7 +40,7 @@ var_list = [
 
 
 bins = [
-    np.linspace(90,150, 50),
+    np.linspace(80,160, 60),
     [  # smooth rebin 10
         0.0,
         # 0.015,
@@ -89,7 +89,7 @@ def load_data(dir_mu, dir_el, variables_list):
                 ),
                 axis=0,
             )
-            print(variables, variables.shape)
+            # print(variables, variables.shape)
 
             # mask = np.array(variables[2, :]>2.829)
             # variables = variables[:, mask]
@@ -98,7 +98,7 @@ def load_data(dir_mu, dir_el, variables_list):
             print(f"File {file} empty")
             continue
 
-    print("var_tot", var_tot, var_tot.shape)
+    # print("var_tot", var_tot, var_tot.shape)
 
     return var_tot
 
