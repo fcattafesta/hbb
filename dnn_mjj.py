@@ -40,7 +40,7 @@ var_list = [
 
 
 bins = [
-    np.linspace(80,160, 60),
+    np.linspace(90,150, 50),
     [  # smooth rebin 10
         0.0,
         # 0.015,
@@ -141,7 +141,7 @@ def plotting_function(out_dir, variables, type):
         bins=bins,  # [50, 50],
         cmap=plt.cm.jet,
         density=True,
-        range=[[0, 1], [0, 10]],
+        range=[[90,150], [0, 10]],
         norm=mpl.colors.LogNorm(),
         weights=variables[2],
     )
