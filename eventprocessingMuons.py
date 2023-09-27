@@ -15,8 +15,12 @@ def getFlowMuons(flow):
     ## Muon pair selection ##
     flow.Selection("twoMuons", "nSelectedMuon==2 & nSelectedElectron==0")
     flow.Define("SelectedMuon_p4", "@p4v(SelectedMuon)")
-    flow.SubCollection("Mu0", "SelectedMuon", sel="At(SelectedMuon,0)")
-    flow.SubCollection("Mu1", "SelectedMuon", sel="At(SelectedMuon,1)")
+    flow.SubCollection(
+        "Mu0", "SelectedMuon", sel="At(SelectedMuon,0)", requires=["twoMuons"]
+    )
+    flow.SubCollection(
+        "Mu1", "SelectedMuon", sel="At(SelectedMuon,1)", requires=["twoMuons"]
+    )
     # flow.Distinct("MuMu", "SelectedMuon")
     # flow.Define(
     #     "OppositeSignMuMu",
