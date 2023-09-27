@@ -14,31 +14,31 @@ def getFlowCommon(flow, btag):
     flow.SubCollection(
         "SelectedMuon",
         "Muon",
-        sel="Muon_iso < 0.15 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
+        sel="Muon_iso < 0.25 && Muon_looseId && Muon_pt > 25. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
     )
 
     flow.SubCollection(
         "PreselectedMuon",
         "Muon",
-        sel="Muon_pt > 20. && abs(Muon_eta) < 2.4 ",
+        sel="Muon_pt > 25. && abs(Muon_eta) < 2.4 ",
     )
 
-    flow.Define("nMuon_pt", "Sum(Muon_pt > 20.)")
-    flow.Define("nMuon_eta", "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4)")
+    flow.Define("nMuon_pt", "Sum(Muon_pt > 25.)")
+    flow.Define("nMuon_eta", "Sum(Muon_pt > 25 && abs(Muon_eta) < 2.4)")
     flow.Define(
-        "nMuon_iso", "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06)"
+        "nMuon_iso", "Sum(Muon_pt > 25 && abs(Muon_eta) < 2.4 && Muon_iso < 0.25)"
     )
     flow.Define(
         "nMuon_looseId",
-        "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06 && Muon_looseId)",
+        "Sum(Muon_pt > 25 && abs(Muon_eta) < 2.4 && Muon_iso < 0.25 && Muon_looseId)",
     )
     flow.Define(
         "nMuon_dxy",
-        "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06 && Muon_looseId && Muon_dxy < 0.5)",
+        "Sum(Muon_pt > 25 && abs(Muon_eta) < 2.4 && Muon_iso < 0.25 && Muon_looseId && Muon_dxy < 0.5)",
     )
     flow.Define(
         "nMuon_dz",
-        "Sum(Muon_pt > 20 && abs(Muon_eta) < 2.4 && Muon_iso < 0.06 && Muon_looseId && Muon_dxy < 0.5 && Muon_dz < 0.1)",
+        "Sum(Muon_pt > 25 && abs(Muon_eta) < 2.4 && Muon_iso < 0.25 && Muon_looseId && Muon_dxy < 0.5 && Muon_dz < 0.1)",
     )
     # flow.Define("nMuon_iso", "Sum(Muon_iso < 0.06)")
     # flow.Define("nMuon_looseId", "Sum(Muon_iso < 0.06 && Muon_looseId)")
@@ -62,6 +62,31 @@ def getFlowCommon(flow, btag):
         "SelectedElectron",
         "Electron",
         sel="Electron_iso < 0.06 && Electron_mvaFall17V2Iso_WP90 && abs(Electron_eta) < 2.4 && Electron_dxy < 0.05 && Electron_dz < 0.2",
+    )
+
+    flow.SubCollection(
+        "PreselectedElectron",
+        "Electron",
+        sel="Electron_pt > 17 && abs(Electron_eta) < 2.4",
+    )
+
+    flow.Define("nElectron_pt", "Sum(Electron_pt > 17.)")
+    flow.Define("nElectron_eta", "Sum(Electron_pt > 17 && abs(Electron_eta) < 2.4)")
+    flow.Define(
+        "nElectron_iso",
+        "Sum(Electron_pt > 17 && abs(Electron_eta) < 2.4 && Electron_iso < 0.06)",
+    )
+    flow.Define(
+        "nElectron_mvaFall17V2Iso_WP90",
+        "Sum(Electron_pt > 17 && abs(Electron_eta) < 2.4 && Electron_iso < 0.06 && Electron_mvaFall17V2Iso_WP90)",
+    )
+    flow.Define(
+        "nElectron_dxy",
+        "Sum(Electron_pt > 17 && abs(Electron_eta) < 2.4 && Electron_iso < 0.06 && Electron_mvaFall17V2Iso_WP90 && Electron_dxy < 0.05)",
+    )
+    flow.Define(
+        "nElectron_dz",
+        "Sum(Electron_pt > 17 && abs(Electron_eta) < 2.4 && Electron_iso < 0.06 && Electron_mvaFall17V2Iso_WP90 && Electron_dxy < 0.05 && Electron_dz < 0.2)",
     )
 
     ### Preselction for Jets ###
