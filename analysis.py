@@ -36,6 +36,7 @@ if args.btag not in ["deepcsv", "deepflav"]:
 from eventprocessingCommon import getFlowCommon
 from eventprocessingSysBtag import getFlowSysBtag
 from eventprocessingSysJER import getFlowSysJER
+from eventprocessingLHEScale import getFlowLHEScale1, getFlowLHEScale7
 
 if args.lep == "mu":
     from eventprocessingMuons import getFlowMuons as getFlow
@@ -94,6 +95,13 @@ flowMC = getFlow(flowMC)
 if args.eval_model:
     flowMC = getFlowDNN(args.eval_model, flowMC)
 flowMC = getFlowMC(flowMC)
+if args.lhescale == 1:
+    flowMC = getFlowLHEScale1(flowMC)
+elif args.lhescale == 7:
+    flowMC = getFlowLHEScale7(flowMC)
+else:
+    logger.info("No LHE scale variation")
+
 
 # systematics
 systematics = flowMC.variations

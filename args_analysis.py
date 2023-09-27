@@ -55,6 +55,12 @@ parser.add_argument(
     action="store_true",
     help="Apply oversampling",
 )
+parser.add_argument(
+    "--lhescale",
+    default=-1,
+    help="LHE scale",
+    type=int,
+)
 parser.print_help()
 args = parser.parse_args()
 print(args)
