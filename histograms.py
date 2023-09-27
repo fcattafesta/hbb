@@ -21,6 +21,7 @@ histosData = [
     "JetBtagMax_pt",
     "JetBtagMin_pt",
     "SoftActivityJetNjets5",
+    "SelectedMuon_pt",
     # "Muon_pt",
     # "Muon_eta",
     # "Muon_phi",
