@@ -21,13 +21,13 @@ def getFlowMuons(flow):
         "Nonzero(MuMu0_charge != MuMu1_charge)",
         requires=["twoMuons"],
     )
-    flow.Selection("twoOppositeSignMuons", "OppositeSignMuMu.size() > 0")
+    # flow.Selection("twoOppositeSignMuons", "OppositeSignMuMu.size() > 0")
     flow.TakePair(
         "Mu",
         "SelectedMuon",
         "MuMu",
         "At(OppositeSignMuMu,0,-200)",
-        requires=["twoOppositeSignMuons"],
+        #   requires=["twoOppositeSignMuons"],
     )
     flow.Selection("PtSelMu", "Mu0_pt > 25 && Mu1_pt > 15")
 
