@@ -40,7 +40,7 @@ var_list = [
 
 
 bins = [
-    np.linspace(90,150, 50),
+    np.linspace(90,150, 20),
     [  # smooth rebin 10
         0.0,
         # 0.015,
@@ -91,8 +91,6 @@ def load_data(dir_mu, dir_el, variables_list):
             )
             # print(variables, variables.shape)
 
-            # mask = np.array(variables[2, :]>2.829)
-            # variables = variables[:, mask]
             var_tot = np.concatenate((var_tot, variables), axis=1)
         except uproot.exceptions.KeyInFileError:
             print(f"File {file} empty")
@@ -113,9 +111,9 @@ def plt_fts(out_dir, name, fig_handle, show, type):
     plt.xlabel("m_jj", fontsize=20, loc="right")
     plt.ylabel("atanh(DNN score)", fontsize=20, loc="top")
 
-    minorLocator = MultipleLocator(0.05)
-    ax = plt.gca()
-    ax.xaxis.set_minor_locator(minorLocator)
+    # minorLocator = MultipleLocator(0.1)
+    # ax = plt.gca()
+    # ax.xaxis.set_minor_locator(minorLocator)
 
     # plt.tick_params(axis="x", labelsize=16)
     # plt.tick_params(axis="y", labelsize=16)
@@ -134,6 +132,9 @@ def plt_fts(out_dir, name, fig_handle, show, type):
 def plotting_function(out_dir, variables, type):
     fig_handle = plt.figure(figsize=(13, 13))
 
+    print("mjj", variables[0])
+    print("DNN", variables[1])
+    # variables=variables[:, variables[1]>90]
     # plot scatter plot
     plt.hist2d(
         variables[0],
