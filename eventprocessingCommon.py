@@ -9,7 +9,7 @@ def getFlowCommon(flow, btag, btag_bit):
     flow.SubCollection(
         "SelectedMuon",
         "Muon",
-        sel="Muon_iso < 0.15 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
+        sel="Muon_iso < 0.06 && Muon_looseId && Muon_pt > 20. && abs(Muon_eta) < 2.4 && Muon_dxy < 0.5 && Muon_dz < 0.1",
     ) # HELP: Muon_pt > 20 and not 5?
       # Note that the pt cut is applied also in the 2mu channel
       # in which we have a cut in pt>15 which becomes useless
@@ -19,14 +19,14 @@ def getFlowCommon(flow, btag, btag_bit):
 
       # the cut on the pt>20 substitutes the cut on the pt>15
 
-      #TODO: Muon_iso < 0.06
+      #TODO: Muon_iso < 0.15
 
     ## Electrons ##
     flow.Define("Electron_iso", "(Electron_pfRelIso03_all)")
     flow.SubCollection(
         "SelectedElectron",
         "Electron",
-        sel="Electron_iso < 0.15 && Electron_mvaFall17V2Iso_WP90 && abs(Electron_eta) < 2.4 && Electron_dxy < 0.05 && Electron_dz < 0.2 && Electron_pt > 20",
+        sel="Electron_iso < 0.06 && Electron_mvaFall17V2Iso_WP90 && abs(Electron_eta) < 2.4 && Electron_dxy < 0.05 && Electron_dz < 0.2",
     ) # HELP: why not Electron_pt > 7?
       # is it underlined in the dataset?
       # in the data maybe there is a cut in pt>5
@@ -34,7 +34,7 @@ def getFlowCommon(flow, btag, btag_bit):
       # if think it's ok if i accepts in the region ONLY 2 leptons, but it's just less efficient since the cuts on pt are done later
       # this is a problem if i accept 3 leptons... but i don't accept 3 leptons
 
-      #TODO: Electron_iso < 0.06
+      #TODO: Electron_iso < 0.15
       #TODO: Electron_pt > 20? not
 
     ### Preselction for Jets ###
@@ -50,9 +50,9 @@ def getFlowCommon(flow, btag, btag_bit):
     flow.SubCollection(
         "SelectedJet",
         "CleanJet",
-        sel="CleanJet_pt_jerNom > 30. && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0",
+        sel="CleanJet_pt_jerNom > 20. && abs(CleanJet_eta) < 2.5 && CleanJet_jetId > 0 && CleanJet_puId > 0",
     )
-    #TODO: CleanJet_pt_jerNom > 20?
+    #TODO: CleanJet_pt_jerNom > 30?
 
     flow.Selection("twoJets", "nSelectedJet >= 2")
 
