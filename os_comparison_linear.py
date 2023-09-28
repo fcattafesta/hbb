@@ -233,6 +233,5 @@ for histo in histo_list:
     t4.Draw()
 
     legend.Draw()
-    full.GetYaxis().SetRangeUser(0, 6e2)
-    c.SetCanvasSize(800, 993)
+    full.GetYaxis().SetRangeUser(1.8e2, 6e2)
     c.SaveAs(f"figures_os/{histo}_lin.pdf")

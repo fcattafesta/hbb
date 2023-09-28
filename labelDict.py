@@ -82,4 +82,5 @@ labelStatUncRange = {
     "Z_mass": (-0.1, 0.15),
     "JetBtagMax_pt": (-0.1, 0.5),
     "JetBtagMin_pt": (-0.1, 0.5),
+    "Dijets_mass": (-0, 0.08),
 }
