@@ -16,6 +16,7 @@ from args_analysis import args
 
 from eventprocessingMC import getFlowMC
 from eventprocessingDNN import getFlowDNN
+from eventprocessingLHEScale import getFlowLHEScale1, getFlowLHEScale7
 from histograms import histosData, histosMC
 
 # ROOT.TH1.AddDirectory(ROOT.kFALSE)
@@ -89,6 +90,13 @@ flowMC = getFlow(flowMC)
 if args.eval_model:
     flowMC = getFlowDNN(args.eval_model, flowMC)
 flowMC = getFlowMC(flowMC)
+if args.lhescale == 1:
+    flowMC = getFlowLHEScale1(flowMC)
+elif args.lhescale == 7:
+    flowMC = getFlowLHEScale7(flowMC)
+else:
+    logger.info("No LHE scale variation")
+
 
 # systematics
 systematics = flowMC.variations
