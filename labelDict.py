@@ -78,9 +78,11 @@ labelLegend = {
 }
 
 labelStatUncRange = {
-    "Z_pt": (-0.1, 0.8),
+    "Z_pt": (-0.05, 0.5),
     "Z_mass": (-0.1, 0.15),
-    "JetBtagMax_pt": (-0.1, 0.5),
-    "JetBtagMin_pt": (-0.1, 0.5),
-    "Dijets_mass": (-0, 0.08),
+    "JetBtagMax_pt": (-0.05, 0.45),
+    "JetBtagMin_pt": (-0.05, 0.45),
+    "Dijets_mass": (-0, 0.1),
+    "HZ_ptRatio": (-0.01, 0.3),
+    "Dijets_pt": (-0.05, 0.25),
 }

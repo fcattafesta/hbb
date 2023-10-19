@@ -52,13 +52,13 @@ lumi = 59970
 
 # Drell-Yan Histogram
 for sample in model["DY"]:
-    # f = ROOT.TFile.Open(
-    #     f"/home/filippo/Downloads/FlashSimFinal_deepflav_NOsnap_eval/{sample}Full_Histos.root"
-    # )
     f = ROOT.TFile.Open(
-        f"/home/filippo/Downloads/MuonFlashNoOppositeSign_deepflav_NOsnap_eval//{sample}Full_Histos.root"
+        f"/home/filippo/Downloads/FlashSimFinal_deepflav_NOsnap_eval/{sample}Full_Histos.root"
     )
-    tmp_full_dy = f.Get("atanhDNN_Score___SR_mm")
+    # f = ROOT.TFile.Open(
+    #     f"/home/filippo/Downloads/MuonFlashNoOppositeSign_deepflav_NOsnap_eval//{sample}Full_Histos.root"
+    # )
+    tmp_full_dy = f.Get("atanhDNN_Score___SR_ee")
     tmp_full_dy.AddDirectory(ROOT.kFALSE)
     bins = array.array("d", rebin["atanhDNN_Score"])
     tmp_full_dy = tmp_full_dy.Rebin(len(bins) - 1, "full_dy", bins)
@@ -68,13 +68,13 @@ for sample in model["DY"]:
     else:
         full_dy.Add(tmp_full_dy)
 
-    # f_flash = ROOT.TFile.Open(
-    #     f"/home/filippo/Downloads/FlashSimFinal_deepflav_NOsnap_eval/{sample}_Histos.root"
-    # )
     f_flash = ROOT.TFile.Open(
-        f"/home/filippo/Downloads/MuonFlashNoOppositeSign_deepflav_NOsnap_eval//{sample}_Histos.root"
+        f"/home/filippo/Downloads/FlashSimFinal_deepflav_NOsnap_eval/{sample}_Histos.root"
     )
-    tmp_flash_dy = f_flash.Get("atanhDNN_Score___SR_mm")
+    # f_flash = ROOT.TFile.Open(
+    #     f"/home/filippo/Downloads/MuonFlashNoOppositeSign_deepflav_NOsnap_eval//{sample}_Histos.root"
+    # )
+    tmp_flash_dy = f_flash.Get("atanhDNN_Score___SR_ee")
     tmp_flash_dy.AddDirectory(ROOT.kFALSE)
     tmp_flash_dy = tmp_flash_dy.Rebin(len(bins) - 1, "flash_dy", bins)
     tmp_flash_dy.Scale(lumi * samples[sample]["xsec"])
@@ -86,13 +86,13 @@ for sample in model["DY"]:
 
 # ZH Histogram
 for sample in model["ZH"]:
-    # f = ROOT.TFile.Open(
-    #     f"/home/filippo/Downloads/FlashSignal_deepflav_NOsnap_eval/{sample}Full_Histos.root"
-    # )
     f = ROOT.TFile.Open(
-        f"/home/filippo/Downloads/MuonFlashSignalNoOppositeSign_deepflav_NOsnap_eval/{sample}Full_Histos.root"
+        f"/home/filippo/Downloads/FlashSignal_deepflav_NOsnap_eval/{sample}Full_Histos.root"
     )
-    tmp_full_zh = f.Get("atanhDNN_Score___SR_mm")
+    # f = ROOT.TFile.Open(
+    #     f"/home/filippo/Downloads/MuonFlashSignalNoOppositeSign_deepflav_NOsnap_eval/{sample}Full_Histos.root"
+    # )
+    tmp_full_zh = f.Get("atanhDNN_Score___SR_ee")
     tmp_full_zh.AddDirectory(ROOT.kFALSE)
     bins = array.array("d", rebin["atanhDNN_Score"])
     tmp_full_zh = tmp_full_zh.Rebin(len(bins) - 1, "full_zh", bins)
@@ -102,13 +102,13 @@ for sample in model["ZH"]:
     else:
         full_zh.Add(tmp_full_zh)
 
-    # f_flash = ROOT.TFile.Open(
-    #     f"/home/filippo/Downloads/FlashSignal_deepflav_NOsnap_eval/{sample}_Histos.root"
-    # )
     f_flash = ROOT.TFile.Open(
-        f"/home/filippo/Downloads/MuonFlashSignalNoOppositeSign_deepflav_NOsnap_eval/{sample}_Histos.root"
+        f"/home/filippo/Downloads/FlashSignal_deepflav_NOsnap_eval/{sample}_Histos.root"
     )
-    tmp_flash_zh = f_flash.Get("atanhDNN_Score___SR_mm")
+    # f_flash = ROOT.TFile.Open(
+    #     f"/home/filippo/Downloads/MuonFlashSignalNoOppositeSign_deepflav_NOsnap_eval/{sample}_Histos.root"
+    # )
+    tmp_flash_zh = f_flash.Get("atanhDNN_Score___SR_ee")
     tmp_flash_zh.AddDirectory(ROOT.kFALSE)
     tmp_flash_zh = tmp_flash_zh.Rebin(len(bins) - 1, "flash_zh", bins)
     tmp_flash_zh.Scale(lumi * samples[sample]["xsec"])
@@ -197,22 +197,26 @@ t0 = makeText(
     42,
     size=0.04,
 )
-t1 = makeText(0.26, 0.95, "CMS", 61)
+t1 = makeText(0.18, 0.95, "CMS", 61)
+tl = makeText(0.3, 0.95, "Private Work", 52)
 t2 = makeText(
     0.2,
     0.85,
-    "Muons",
+    # "Muons",
+    "Electrons",
     42,
     size=0.04,
 )
-t3 = makeText(0.7, 0.95, "(13 TeV)", 42)
-t4 = makeText(0.38, 0.95, "2018", 42)
+t3 = makeText(0.8, 0.95, "(13 TeV)", 42)
+t4 = makeText(0.65, 0.95, "2018", 42)
 
 t0.Draw()
 t1.Draw()
 t2.Draw()
 t3.Draw()
 t4.Draw()
+tl.Draw()
 
 c.SetLogy()
-c.SaveAs("DNN_plot_mm.pdf")
+c.SaveAs("DNN_plot.pdf")
+c.SaveAs("DNN_plot.png")

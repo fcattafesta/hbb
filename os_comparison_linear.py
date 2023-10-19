@@ -119,7 +119,7 @@ for histo in histo_list:
     ratio2.Draw("E1 same")
 
     # draw a black dotted line at 1
-    line = ROOT.TLine(ratio1.GetXaxis().GetXmin(), 1, ratio1.GetXaxis().GetXmax(), 1)
+    line = ROOT.TLine(100, 1, 140, 1)
     line.SetLineColor(ROOT.kBlack)
     line.SetLineStyle(2)
     line.SetLineWidth(2)
@@ -188,7 +188,6 @@ for histo in histo_list:
     error3.GetYaxis().SetLabelSize(0.07)
     error3.GetYaxis().SetMaxDigits(5)
     # error3.GetYaxis().SetRangeUser(0, 0.04)
-    error3.GetYaxis().SetNdivisions(10)
 
     error3.GetXaxis().SetTitle(labelVariable[histo])
     error3.GetXaxis().SetTitleSize(0.1)
@@ -204,6 +203,7 @@ for histo in histo_list:
     error3.GetYaxis().SetRangeUser(
         *labelStatUncRange[histo] if histo in labelStatUncRange.keys() else (-0.1, 0.3)
     )
+    error3.GetYaxis().SetNdivisions(5)
 
     # Text
     t0 = makeText(
@@ -214,6 +214,7 @@ for histo in histo_list:
         size=0.03,
     )
     t1 = makeText(0.18, 0.97, "CMS", 61)
+    tl = makeText(0.3, 0.97, "Private Work", 52)
     t2 = makeText(
         0.2,
         0.87,
@@ -221,8 +222,8 @@ for histo in histo_list:
         42,
         size=0.03,
     )
-    t3 = makeText(0.7, 0.97, "(13 TeV)", 42)
-    t4 = makeText(0.38, 0.97, "2018", 42)
+    t3 = makeText(0.8, 0.97, "(13 TeV)", 42)
+    t4 = makeText(0.65, 0.97, "2018", 42)
 
     # Draw the text
     c.cd()
@@ -230,8 +231,13 @@ for histo in histo_list:
     t1.Draw()
     t2.Draw()
     t3.Draw()
+    tl.Draw()
     t4.Draw()
 
     legend.Draw()
-    full.GetYaxis().SetRangeUser(1.8e2, 6e2)
+    full.GetYaxis().SetRangeUser(130, 3e2)
+    full.GetXaxis().SetRangeUser(100, 140)
+    error3.GetXaxis().SetRangeUser(100, 140)
+    ratio1.GetXaxis().SetRangeUser(100, 140)
+    c.SaveAs(f"figures_os/{histo}_lin.png")
     c.SaveAs(f"figures_os/{histo}_lin.pdf")

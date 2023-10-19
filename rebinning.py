@@ -49,7 +49,8 @@ rebin = {
         1.0,
     ],
     "Z_mass": np.arange(60, 121, 5).tolist(),
-    "Dijets_mass": np.arange(50, 201, 5).tolist(),
+    # "Dijets_mass": np.arange(50, 201, 5).tolist(),
+    "Dijets_mass": np.linspace(80, 160, int(80 / 2.5)).tolist(),
 }
 
 # "atanhDNN_Score": [

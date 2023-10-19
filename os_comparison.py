@@ -214,6 +214,7 @@ for histo in histo_list:
         size=0.03,
     )
     t1 = makeText(0.18, 0.97, "CMS", 61)
+    tl = makeText(0.3, 0.97, "Private Work", 52)
     t2 = makeText(
         0.2,
         0.87,
@@ -221,8 +222,8 @@ for histo in histo_list:
         42,
         size=0.03,
     )
-    t3 = makeText(0.7, 0.97, "(13 TeV)", 42)
-    t4 = makeText(0.38, 0.97, "2018", 42)
+    t3 = makeText(0.8, 0.97, "(13 TeV)", 42)
+    t4 = makeText(0.65, 0.97, "2018", 42)
 
     # Draw the text
     c.cd()
@@ -231,6 +232,7 @@ for histo in histo_list:
     t2.Draw()
     t3.Draw()
     t4.Draw()
+    tl.Draw()
 
     legend.Draw()
     c.GetPad(1).SetLogy()

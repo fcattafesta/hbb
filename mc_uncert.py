@@ -18,15 +18,17 @@ samples = [
 ]
 
 files = [
-    f"/home/filippo/Downloads/MCUncert/mu/{sample}Full_Histos.root"
+    # f"/home/filippo/Downloads/MCUncert/mu/{sample}Full_Histos.root"
+    f"/home/filippo/Downloads/MCUncert/{sample}Full_Histos.root"
     if sample != "DYZpt-100To250"
-    # else "/home/filippo/Downloads/overflash_20.root" electrons
-    else "/home/filippo/Downloads/oversampling_mu.root"
+    else "/home/filippo/Downloads/overflash_20.root"  # electrons
+    # else "/home/filippo/Downloads/oversampling_mu.root"
     for sample in samples
 ]
 
 # files = [
-#     f"/home/filippo/Downloads/MCUncert/mu/{sample}Full_Histos.root"
+#     # f"/home/filippo/Downloads/MCUncert/mu/{sample}Full_Histos.root"
+#     f"/home/filippo/Downloads/MCUncert/{sample}Full_Histos.root"
 #     for sample in samples
 # ]
 
@@ -63,7 +65,7 @@ max = -1
 for i in range(len(samples)):
     print(samples[i])
     f = ROOT.TFile.Open(files[i])
-    histos[samples[i]] = f.Get("atanhDNN_Score___SR_mm")
+    histos[samples[i]] = f.Get("atanhDNN_Score___SR_ee")
     histos[samples[i]].AddDirectory(ROOT.kFALSE)
     new_bins = array.array("d", rebin["atanhDNN_Score"])
     histos[samples[i]] = histos[samples[i]].Rebin(
@@ -128,10 +130,12 @@ t0 = makeText(
     size=0.03,
 )
 t1 = makeText(0.26, 0.95, "CMS", 61)
+tl = makeText(0.38, 0.95, "Private Work", 52)
 t2 = makeText(
     0.2,
     0.85,
-    "Muons Drell-Yan p_{  T}^{  Z} Binned",
+    # "Muons Drell-Yan p_{  T}^{  Z} Binned",
+    "Electrons Drell-Yan p_{  T}^{  Z} Binned",
     42,
     size=0.03,
 )
@@ -149,26 +153,34 @@ t22 = makeText(
     42,
     size=0.03,
 )
-t3 = makeText(0.7, 0.95, "(13 TeV)", 42)
-t4 = makeText(0.38, 0.95, "2018", 42)
+t3 = makeText(0.8, 0.95, "(13 TeV)", 42)
+t4 = makeText(0.65, 0.95, "2018", 42)
 
 t0.Draw()
 t1.Draw()
 t2.Draw()
 t3.Draw()
 t4.Draw()
+tl.Draw()
 
 legend.Draw()
 
 # Linear
 histos[samples[0]].GetYaxis().SetRangeUser(0, max * 1.2)
-c1.SaveAs("figures/mu/dy_zpt_flash_binned.pdf")
+# c1.SaveAs("figures/mu/dy_zpt_flash_binned.pdf")
+# c1.SaveAs("figures/mu/dy_zpt_binned.pdf")
+# c1.SaveAs("figures/dy_zpt_binned.pdf")
+c1.SaveAs("figures/dy_zpt_flash_binned.pdf")
 
 # Log
 c1.SetLogy()
 histos[samples[0]].SetMaximum(1e6)
 histos[samples[0]].SetMinimum(1e-1)
-c1.SaveAs("figures/mu/dy_zpt_flash_binned_log.pdf")
+# c1.SaveAs("figures/mu/dy_zpt_flash_binned_log.pdf")
+# c1.SaveAs("figures/mu/dy_zpt_binned_log.pdf")
+# c1.SaveAs("figures/dy_zpt_binned_log.pdf")
+c1.SaveAs("figures/dy_zpt_flash_binned_log.pdf")
+
 
 c2 = ROOT.TCanvas("c2", "", 800, 800)
 
@@ -186,18 +198,26 @@ t1.Draw()
 t2.Draw()
 t3.Draw()
 t4.Draw()
+tl.Draw()
 
 legend_2.Draw()
 
 # Linear
 uncert.SetMaximum(3500)
-c2.SaveAs("figures/mu/dy_zpt_flash_binned_uncert.pdf")
+# c2.SaveAs("figures/mu/dy_zpt_flash_binned_uncert.pdf")
+# c2.SaveAs("figures/mu/dy_zpt_binned_uncert.pdf")
+# c2.SaveAs("figures/dy_zpt_binned_uncert.pdf")
+c2.SaveAs("figures/dy_zpt_flash_binned_uncert.pdf")
+
 
 # Log
 c2.SetLogy()
 uncert.SetMaximum(1e4)
 uncert.SetMinimum(3.3e-1)
-c2.SaveAs("figures/mu/dy_zpt_flash_binned_uncert_log.pdf")
+# c2.SaveAs("figures/mu/dy_zpt_flash_binned_uncert_log.pdf")
+# c2.SaveAs("figures/mu/dy_zpt_binned_uncert_log.pdf")
+# c2.SaveAs("figures/dy_zpt_binned_uncert_log.pdf")
+c2.SaveAs("figures/dy_zpt_flash_binned_uncert_log.pdf")
 
 for i in range(len(uncert_list)):
     sum2 = sum_histo.Clone()
@@ -248,16 +268,24 @@ t21.Draw()
 t22.Draw()
 t3.Draw()
 t4.Draw()
+tl.Draw()
 
 legend_2.Draw()
 
 # Linear
 rel_uncert.SetMaximum(20e-3)
 rel_uncert.GetYaxis().SetMaxDigits(2)
-c3.SaveAs("figures/mu/dy_zpt_flash_binned_rel_uncert.pdf")
+# c3.SaveAs("figures/mu/dy_zpt_flash_binned_rel_uncert.pdf")
+# c3.SaveAs("figures/mu/dy_zpt_binned_rel_uncert.pdf")
+# c3.SaveAs("figures/dy_zpt_binned_rel_uncert.pdf")
+c3.SaveAs("figures/dy_zpt_flash_binned_rel_uncert.pdf")
+
 
 # Log
 c3.SetLogy()
 rel_uncert.SetMaximum(2e1)
 rel_uncert.SetMinimum(1e-3)
-c3.SaveAs("figures/mu/dy_zpt_flash_binned_rel_uncert_log.pdf")
+# c3.SaveAs("figures/mu/dy_zpt_flash_binned_rel_uncert_log.pdf")
+# c3.SaveAs("figures/mu/dy_zpt_binned_rel_uncert_log.pdf")
+# c3.SaveAs("figures/dy_zpt_binned_rel_uncert_log.pdf")
+c3.SaveAs("figures/dy_zpt_flash_binned_rel_uncert_log.pdf")
