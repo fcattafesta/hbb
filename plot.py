@@ -182,6 +182,7 @@ if __name__ == "__main__":
             Significance.SetMaximum(2 * Significance.GetMaximum())  # zoom out y axis
             Significance.Draw("hist")
             t1 = makeText(0.22, 0.95, "CMS", 61)
+            tl = makeText(0.45, 0.95, "Private Work", 52)
             t2 = makeText(0.77, 0.97, SignificanceSum_str, 42, size=0.017)
 
             t3 = makeText(
@@ -209,6 +210,7 @@ if __name__ == "__main__":
             t2.Draw()
             t3.Draw()
             t4.Draw()
+            tl.Draw()
 
             c_significance.SaveAs(
                 outpath
@@ -1439,7 +1441,8 @@ if __name__ == "__main__":
             )
 
             t1 = makeText(0.28, 0.95, "CMS", 61)
-            t2 = makeText(0.38, 0.95, str(year), 42)
+            tl = makeText(0.38, 0.91, "Private Work", 52)
+            t2 = makeText(0.58, 0.95, str(year), 42)
             t3 = makeText(0.6, 0.95, lumi % (lumitot / 1000.0) + "  (13 TeV)", 42)
             t4 = makeText(
                 0.25,
@@ -1558,6 +1561,7 @@ if __name__ == "__main__":
                 t2.Draw()
                 t3.Draw()
                 t4.Draw()
+                tl.Draw()
                 # td.Draw()
                 if SignificanceSum_str:
                     t_sig = makeText(0.25, 0.72, SignificanceSum_str, 42, size=0.023)
